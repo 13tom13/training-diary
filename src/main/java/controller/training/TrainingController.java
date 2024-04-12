@@ -2,11 +2,11 @@ package controller.training;
 
 import model.Training;
 
-import java.util.List;
+import java.util.TreeSet;
 
 public interface TrainingController {
 
-    List<Training> getAllTrainings (String userEmail);
+    TreeSet<Training> getAllTrainings (String userEmail);
 
     Training getTrainingByNumber(String userEmail, int trainingNumber);
 

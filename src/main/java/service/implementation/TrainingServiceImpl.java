@@ -6,6 +6,7 @@ import repository.TrainingRepository;
 import service.TrainingService;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public class TrainingServiceImpl implements TrainingService {
 
@@ -16,12 +17,8 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public List<Training> getAllTrainings(String userEmail) {
-        List<Training> trainings = trainingRepository.getAllTrainingsFromUser(userEmail);
-        if (trainings.isEmpty()) {
-            System.err.println("Список тренировок пользователя с email " + userEmail + " пуст");
-        }
-        return trainings;
+    public TreeSet<Training> getAllTrainings(String userEmail) {
+        return trainingRepository.getAllTrainingsFromUser(userEmail);
     }
 
     @Override

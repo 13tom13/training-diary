@@ -1,6 +1,7 @@
 import controller.AuthorizationController;
 import controller.training.implementation.TrainingControllerImpl;
 import controller.UserController;
+import out.TrainingDiary;
 import repository.TrainingRepository;
 import repository.UserRepository;
 import repository.implementation.TrainingRepositoryImpl;

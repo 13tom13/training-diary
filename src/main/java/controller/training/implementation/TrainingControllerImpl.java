@@ -4,7 +4,7 @@ import controller.training.TrainingController;
 import model.Training;
 import service.TrainingService;
 
-import java.util.List;
+import java.util.TreeSet;
 
 public class TrainingControllerImpl implements TrainingController {
 
@@ -15,7 +15,7 @@ public class TrainingControllerImpl implements TrainingController {
     }
 
     @Override
-    public List<Training> getAllTrainings(String userEmail) {
+    public TreeSet<Training> getAllTrainings(String userEmail) {
         return trainingService.getAllTrainings(userEmail);
     }
 

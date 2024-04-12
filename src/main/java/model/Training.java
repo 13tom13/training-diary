@@ -4,8 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
-public class Training {
+public class Training implements Comparable<Training> {
 
     public static final String DATE_FORMAT = "dd.MM.yy";
 
@@ -75,4 +76,21 @@ public class Training {
                 + duration + " min" + " calories burned: " + caloriesBurned + " kcal";
     }
 
+    @Override
+    public int compareTo(Training other) {
+        return this.date.compareTo(other.date);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Training training = (Training) o;
+        return Objects.equals(name, training.name) && Objects.equals(date, training.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, date);
+    }
 }

@@ -2,10 +2,10 @@ package service;
 
 import model.Training;
 
-import java.util.List;
+import java.util.TreeSet;
 
 public interface TrainingService {
-    List<Training> getAllTrainings(String userEmail);
+    TreeSet<Training> getAllTrainings(String userEmail);
 
     Training getTrainingByNumber(String userEmail, int trainingNumber);
 

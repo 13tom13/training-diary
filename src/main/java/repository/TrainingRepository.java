@@ -3,10 +3,10 @@ package repository;
 import exception.RepositoryException;
 import model.Training;
 
-import java.util.List;
+import java.util.TreeSet;
 
 public interface TrainingRepository {
-    List<Training> getAllTrainingsFromUser(String userEmail);
+    TreeSet<Training> getAllTrainingsFromUser(String userEmail);
 
     Training getTrainingByNumber(String userEmail, int trainingNumber) throws RepositoryException;
 

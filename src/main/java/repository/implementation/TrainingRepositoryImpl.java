@@ -12,18 +12,19 @@ import static model.Training.DATE_FORMAT;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private final Map<String, List<Training>> trainingRepository = new HashMap<>();
+    private final Map<String, TreeSet<Training>> userTrainingMap = new HashMap<>();
 
     @Override
-    public List<Training> getAllTrainingsFromUser(String userEmail) {
-        return trainingRepository.getOrDefault(userEmail, Collections.emptyList());
+    public TreeSet<Training> getAllTrainingsFromUser(String userEmail) {
+        return userTrainingMap.get(userEmail);
     }
 
     @Override
     public Training getTrainingByNumber(String userEmail, int trainingNumber) throws RepositoryException {
-        List<Training> userTrainings = trainingRepository.get(userEmail);
+        TreeSet<Training> userTrainings = userTrainingMap.get(userEmail);
         if (userTrainings != null && trainingNumber >= 0 && trainingNumber < userTrainings.size()) {
-            return userTrainings.get(trainingNumber);
+            // Получение тренировки по номеру из TreeSet, который автоматически сортирует тренировки по дате
+            return new ArrayList<>(userTrainings).get(trainingNumber);
         } else {
             throw new RepositoryException("Тренировка с номером " + trainingNumber + " не найдена для пользователя с email " + userEmail);
         }
@@ -31,11 +32,11 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public Training createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) {
-        if (!trainingRepository.containsKey(userEmail)) {
-            trainingRepository.put(userEmail, new ArrayList<>());
+        if (!userTrainingMap.containsKey(userEmail)) {
+            userTrainingMap.put(userEmail, new TreeSet<>());
         }
 
-        List<Training> userTrainings = trainingRepository.get(userEmail);
+        TreeSet<Training> userTrainings = userTrainingMap.get(userEmail);
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         for (Training training : userTrainings) {
             try {
@@ -65,7 +66,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public void changeDateTraining(Training training, String newDate) {
-      training.setDate(newDate);
+        training.setDate(newDate);
     }
 
     @Override

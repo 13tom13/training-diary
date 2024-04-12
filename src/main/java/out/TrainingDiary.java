@@ -1,3 +1,5 @@
+package out;
+
 import controller.AuthorizationController;
 import controller.training.implementation.TrainingControllerImpl;
 import controller.UserController;
@@ -201,17 +203,18 @@ public class TrainingDiary {
     }
 
     private void viewAllTraining(String userEmail) {
-        List<Training> allTraining = trainingController.getAllTrainings(userEmail);
-
+        TreeSet<Training> allTraining = trainingController.getAllTrainings(userEmail);
         String previousDate = "";
         for (Training training : allTraining) {
             String currentDate = String.valueOf(training.getDate());
             if (!currentDate.equals(previousDate)) {
-                System.out.println(currentDate);
+                System.out.println("\n" + currentDate + ":");
                 previousDate = currentDate;
             }
-            System.out.println((allTraining.indexOf(training) + 1) + ". " + training);
+            System.out.println(training);
         }
+
+
 
 
     }
