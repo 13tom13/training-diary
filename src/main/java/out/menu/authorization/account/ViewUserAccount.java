@@ -1,7 +1,10 @@
 package out.menu.authorization.account;
 
 import in.controller.training.TrainingController;
+import in.controller.training.TrainingStatisticsController;
+import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import in.model.User;
+import out.menu.authorization.account.statistic.ViewTrainingStatistcs;
 import out.menu.authorization.account.training.ViewTraining;
 import out.menu.authorization.account.training.ViewTrainingAdded;
 import out.menu.authorization.account.training.ViewTrainingEditing;
@@ -15,12 +18,15 @@ public class ViewUserAccount {
 
     private final ViewTrainingEditing viewTrainingEditing;
 
+    private final ViewTrainingStatistcs viewTrainingStatistcs;
+
     private final Scanner scanner;
 
     private final User user;
 
 
-    public ViewUserAccount(TrainingController trainingController, User user, Scanner scanner) {
+    public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, User user, Scanner scanner) {
+        this.viewTrainingStatistcs = new ViewTrainingStatistcs(trainingStatisticsController, user, scanner);
         this.viewTraining = new ViewTraining(trainingController, user);
         this.viewTrainingAdded = new ViewTrainingAdded(trainingController, user, scanner);
         this.viewTrainingEditing = new ViewTrainingEditing(trainingController, viewTrainingAdded, user, scanner);
@@ -36,13 +42,13 @@ public class ViewUserAccount {
             System.out.println("1. Просмотр всех тренировок");
             System.out.println("2. Добавление тренировки");
             System.out.println("3. Внести изменение в тренировку");
-            System.out.println("4. Выход");
+            System.out.println("4. Статистика по тренировкам");
+            System.out.println("5. Выход");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
                 case 1:
                     viewTraining.viewAllTraining();
-                    //TODO: сообщение о том что список тренировок пуст
                     break;
                 case 2:
                     viewTrainingAdded.addTraining();
@@ -51,6 +57,9 @@ public class ViewUserAccount {
                     viewTrainingEditing.editingTraining();
                     break;
                 case 4:
+                    viewTrainingStatistcs.statisticMenu();
+                    break;
+                case 5:
                     System.out.println("До свидания!");
                     startAccount = false;
                     break;

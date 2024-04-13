@@ -1,6 +1,5 @@
 package in.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -8,12 +7,14 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private List<Rights> rights;
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, List<Rights> rights) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.rights = rights;
     }
 
     // Геттеры и сеттеры для всех полей
@@ -50,6 +51,13 @@ public class User {
         this.password = password;
     }
 
+    public List<Rights> getRights() {
+        return rights;
+    }
+
+    public void setRights(List<Rights> rights) {
+        this.rights = rights;
+    }
 
     @Override
     public String toString() {
@@ -58,7 +66,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", rights=" + rights +
                 '}';
     }
 }
-

@@ -1,9 +1,12 @@
 import in.controller.AuthorizationController;
+import in.controller.training.TrainingStatisticsController;
 import in.controller.training.implementation.TrainingControllerImpl;
 import in.controller.UserController;
+import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import in.exception.RepositoryException;
 import in.model.Training;
 import in.model.User;
+import in.service.implementation.TrainingStatisticsService;
 import out.TrainingDiary;
 import in.repository.TrainingRepository;
 import in.repository.UserRepository;
@@ -23,9 +26,7 @@ public class Main {
         TrainingDiary trainingDiary = getTrainingDiary();
 
         trainingDiary.start();
-        //TODO: реализовать возможность удалять свои тренировки, если это необходимо
         //TODO: реализовать контроль прав пользователя
-        //TODO: реализовать возможность получения статистики по тренировкам
         //TODO: Аудит действий пользователя
         // (авторизация, завершение работы, добавление,
         // редактирование и удаление тренировок, получение статистики тренировок и тд)
@@ -45,15 +46,16 @@ public class Main {
         TrainingService trainingService = new TrainingServiceImpl(trainingRepository);
         TrainingControllerImpl trainingController = new TrainingControllerImpl(trainingService);
 
+        TrainingStatisticsService trainingStatisticsService = new TrainingStatisticsService(trainingService);
+        TrainingStatisticsController trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsService);
+
         addTestUser(userRepository, trainingRepository);
 
-        return new TrainingDiary(authorizationController, userController, trainingController);
+        return new TrainingDiary(authorizationController, userController, trainingController, trainingStatisticsController);
     }
 
     private static void addTestUser (UserRepository userRepository, TrainingRepository trainingRepository){
         System.out.println("Add test User\nEmail: test@mail.ru, Password: pass");
-        System.out.println();
-        System.out.println();
         User user = new User("Ivan", "Petrov", "test@mail.ru", "pass");
         try {
             userRepository.saveUser(user);
@@ -66,24 +68,13 @@ public class Main {
     private static void addTestTrainings (String testUserEmail, TrainingRepository trainingRepository){
         Training training1 = new Training("Кардио", "13.04.24", 90, 560);
         Training training2 = new Training("Силовая", "14.04.24", 60, 450);
-        Training training3 = new Training("Гибкость", "13.04.24", 45, 300);
+        Training training3 = new Training("Гибкость", "10.04.24", 45, 300);
 
-        System.out.println(training1);
 
         try {
             trainingRepository.saveTraining(testUserEmail, training1);
             trainingRepository.saveTraining(testUserEmail, training2);
             trainingRepository.saveTraining(testUserEmail, training3);
-
-            trainingRepository.addTrainingAdditional(training1,"Место", "лес");
-            trainingRepository.addTrainingAdditional(training1,"Обувь", "кроссы");
-
-            trainingRepository.addTrainingAdditional(training2,"Группа мышц", "плечи");
-            trainingRepository.addTrainingAdditional(training2,"Воды выпито", "1.5л");
-
-            trainingRepository.addTrainingAdditional(training3,"Растяжка", "10 см");
-            trainingRepository.addTrainingAdditional(training3,"Планка", "2 мин");
-
         } catch (RepositoryException e) {
             System.err.println("не удалось добавить тестовые тренировки");
         }

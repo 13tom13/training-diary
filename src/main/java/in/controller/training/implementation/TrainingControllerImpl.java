@@ -1,12 +1,16 @@
 package in.controller.training.implementation;
 
 import in.controller.training.TrainingController;
+import in.exception.InvalidDateFormatException;
 import in.exception.RepositoryException;
 import in.model.Training;
+import in.model.User;
 import in.service.TrainingService;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static in.service.implementation.DateValidationService.isValidDateFormat;
 
 public class TrainingControllerImpl implements TrainingController {
 
@@ -17,24 +21,24 @@ public class TrainingControllerImpl implements TrainingController {
     }
 
     @Override
-    public TreeMap<String, TreeSet<Training>> getAllTrainings(String userEmail) {
-        return trainingService.getAllTrainings(userEmail);
+    public TreeMap<String, TreeSet<Training>> getAllTrainings(User user) {
+        return trainingService.getAllTrainings(user);
     }
 
 
     @Override
-    public void createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) {
+    public void saveTraining(User user, Training training) {
         try {
-            trainingService.createTraining(userEmail, name, date, duration, caloriesBurned);
-        } catch (RepositoryException e) {
+            trainingService.saveTraining(user, training);
+        } catch (RepositoryException | InvalidDateFormatException e) {
             System.err.println(e.getMessage());
         }
     }
 
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String trainingDate) {
+    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate) {
         try {
-            return trainingService.getTrainingsByUserEmailAndData(userEmail, trainingDate);
+            return trainingService.getTrainingsByUserEmailAndData(user, trainingDate);
         } catch (RepositoryException e) {
             System.err.println(e.getMessage());
             return new TreeSet<>();
@@ -42,54 +46,68 @@ public class TrainingControllerImpl implements TrainingController {
     }
 
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingDate, String trainingName) {
+    public Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName) {
         try {
-            return trainingService.getTrainingByUserEmailAndDataAndName(userEmail, trainingDate, trainingName);
+            return trainingService.getTrainingByUserEmailAndDataAndName(user, trainingDate, trainingName);
         } catch (RepositoryException e) {
             System.err.println(e.getMessage());
             return new Training();
         }
     }
 
-
     @Override
-    public void addTrainingAdditional(Training training, String additionalName, String additionalValue) {
+    public void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) {
         try {
-            trainingService.addTrainingAdditional(training, additionalName, additionalValue);
+            trainingService.addTrainingAdditional(user, training, additionalName, additionalValue);
         } catch (RepositoryException e) {
             System.err.println(e.getMessage());
         }
     }
 
     @Override
-    public void removeTrainingAdditional(Training training, String additionalName) {
+    public void removeTrainingAdditional(User user, Training training, String additionalName) {
         try {
-            trainingService.removeTrainingAdditional(training, additionalName);
+            trainingService.removeTrainingAdditional(user, training, additionalName);
         } catch (RepositoryException e) {
             System.err.println(e.getMessage());
         }
     }
 
     @Override
-    public void changeNameTraining(Training training, String newName) {
-        trainingService.changeNameTraining(training, newName);
+    public void changeNameTraining(User user, Training training, String newName) {
+        try {
+            trainingService.changeNameTraining(user, training, newName);
+        } catch (RepositoryException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
-    public void changeDateTraining(Training training, String newDate) {
-        trainingService.changeDateTraining(training, newDate);
+    public void changeDateTraining(User user, Training training, String newDate) {
+        try {
+            trainingService.changeDateTraining(user, training, newDate);
+        } catch (RepositoryException | InvalidDateFormatException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
-    public void changeDurationTraining(Training training, String newDuration) {
+    public void changeDurationTraining(User user, Training training, String newDuration) {
         int newDurationInt = Integer.parseInt(newDuration);
-        trainingService.changeDurationTraining(training, newDurationInt);
+        try {
+            trainingService.changeDurationTraining(user, training, newDurationInt);
+        } catch (RepositoryException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
-    public void changeCaloriesTraining(Training training, String newCalories) {
+    public void changeCaloriesTraining(User user, Training training, String newCalories) {
         int newCaloriesInt = Integer.parseInt(newCalories);
-        trainingService.changeCaloriesTraining(training, newCaloriesInt);
+        try {
+            trainingService.changeCaloriesTraining(user, training, newCaloriesInt);
+        } catch (RepositoryException e) {
+            System.err.println(e.getMessage());
+        }
     }
-
 }

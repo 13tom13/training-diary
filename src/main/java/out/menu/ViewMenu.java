@@ -3,6 +3,8 @@ package out.menu;
 import in.controller.AuthorizationController;
 import in.controller.UserController;
 import in.controller.training.TrainingController;
+import in.controller.training.TrainingStatisticsController;
+import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
@@ -11,11 +13,13 @@ public class ViewMenu {
 
     private final ViewAuthorization viewAuthorization;
 
-    public ViewMenu(AuthorizationController authorizationController, 
-                    UserController userController, 
-                    TrainingController trainingController ) {
+    public ViewMenu(AuthorizationController authorizationController,
+                    UserController userController,
+                    TrainingController trainingController,
+                    TrainingStatisticsController trainingStatisticsController) {
         Scanner scanner = new Scanner(System.in);
-        this.viewAuthorization = new ViewAuthorization(authorizationController,userController, trainingController, scanner);
+        this.viewAuthorization = new ViewAuthorization(authorizationController, userController,
+                trainingController, trainingStatisticsController, scanner);
     }
 
     private void viewWelcomeMessage() {
@@ -35,7 +39,7 @@ public class ViewMenu {
         boolean startMenu = true;
         while (startMenu) {
             viewMainMenu();
-            if (scanner.hasNextInt()) { // Проверяем, доступно ли следующее целое число
+            if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {

@@ -6,6 +6,8 @@ import in.model.User;
 
 import java.util.Scanner;
 
+import static in.service.implementation.DateValidationService.isValidDateFormat;
+
 public class ViewTrainingAdded {
 
     private final TrainingController trainingController;
@@ -26,16 +28,20 @@ public class ViewTrainingAdded {
         String name = scanner.nextLine();
         System.out.print("Дата (дд.мм.гг): ");
         String date = scanner.nextLine();
-        System.out.print("Продолжительность (минуты): ");
-        int duration = Integer.parseInt(scanner.nextLine());
-        System.out.print("Сожженные калории: ");
-        int caloriesBurned = Integer.parseInt(scanner.nextLine());
-        trainingController.createTraining(user.getEmail(), name, date, duration, caloriesBurned);
-        Training training = trainingController.getTrainingByUserEmailAndDataAndName(user.getEmail(), date, name);
-        addTrainingAdditional(training);
+        if (isValidDateFormat(date)) {
+            System.out.print("Продолжительность (минуты): ");
+            int duration = Integer.parseInt(scanner.nextLine());
+            System.out.print("Сожженные калории: ");
+            int caloriesBurned = Integer.parseInt(scanner.nextLine());
+            Training training = new Training(name, date, duration, caloriesBurned);
+            trainingController.saveTraining(user, training);
+            addTrainingAdditional(user, training);
+        } else {
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+        }
     }
 
-    public void addTrainingAdditional(Training training) {
+    public void addTrainingAdditional(User user, Training training) {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
@@ -53,13 +59,13 @@ public class ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-                        trainingController.addTrainingAdditional(training, additionalName, additionalValue);
+                        trainingController.addTrainingAdditional(user, training, additionalName, additionalValue);
                         break;
                     case 2:
                         if (!training.getAdditions().isEmpty()){
                             System.out.println("Введите название дополнительной информации для удаления:");
                             String additionalNameForRemove = scanner.nextLine();
-                            trainingController.removeTrainingAdditional(training, additionalNameForRemove);
+                            trainingController.removeTrainingAdditional(user, training, additionalNameForRemove);
                             break;
                         }
                     case 3:

@@ -3,32 +3,29 @@ package in.controller.training;
 import in.model.Training;
 import in.model.User;
 
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 public interface TrainingController {
 
-    TreeMap<String, TreeSet<Training>> getAllTrainings (String userEmail);
+    TreeMap<String, TreeSet<Training>> getAllTrainings(User user);
 
+    void saveTraining(User user, Training training);
 
-    void createTraining (String userEmail, String name, String date, int duration, int caloriesBurned);
+    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate);
 
+    Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName);
 
-    TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String trainingDate);
+    void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue);
 
-    Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingDate, String trainingName);
+    void removeTrainingAdditional(User user, Training training, String additionalName);
 
-    void addTrainingAdditional(Training training, String additionalName, String additionalValue);
+    void changeNameTraining(User user, Training training, String newName);
 
-    void removeTrainingAdditional(Training training, String additionalName);
+    void changeDateTraining(User user, Training training, String newDate);
 
-    void changeNameTraining(Training training, String newName);
+    void changeDurationTraining(User user, Training training, String newDuration);
 
-    void changeDateTraining(Training training, String newDate);
-
-    void changeDurationTraining(Training training, String newDuration);
-
-    void changeCaloriesTraining(Training training, String newCalories);
-
+    void changeCaloriesTraining(User user, Training training, String newCalories);
 }
+

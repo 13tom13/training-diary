@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import static in.service.implementation.DateValidationService.isValidDateFormat;
+
 public class ViewTrainingEditing {
 
     private final TrainingController trainingController;
@@ -31,7 +33,7 @@ public class ViewTrainingEditing {
         TreeSet<Training> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
         String trainingDate = scanner.nextLine();
-        trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user.getEmail(), trainingDate);
+        trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
             System.out.println("Тренировки на " + trainingDate + ":");
             for (Training training : trainingsFromDay) {
@@ -39,7 +41,7 @@ public class ViewTrainingEditing {
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            training = trainingController.getTrainingByUserEmailAndDataAndName(user.getEmail(), trainingDate, trainingName);
+            training = trainingController.getTrainingByUserEmailAndDataAndName(user, trainingDate, trainingName);
         }
     }
 
@@ -54,7 +56,7 @@ public class ViewTrainingEditing {
         }
         while (startView) {
             System.out.println();
-            System.out.printf("Редактирование тренировки %s дата: %s:\n", training.getName(), training.getDate());
+            System.out.printf("Редактирование тренировки:\n%s", training);
             System.out.println("Выберите действие:");
             System.out.println("1. изменить название");
             System.out.println("2. изменить дату тренировки");
@@ -70,32 +72,37 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        trainingController.changeNameTraining(training, newName);
+                        trainingController.changeNameTraining(user, training, newName);
                         break;
                     case 2:
                         System.out.println();
                         System.out.println("Введите новую дату:");
                         String newDate = scanner.nextLine();
-                        trainingController.changeDateTraining(training, newDate);
+                        if (isValidDateFormat(newDate)) {
+                            trainingController.changeDateTraining(user, training, newDate);
+                        } else {
+                            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+                        }
                         break;
                     case 3:
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        trainingController.changeDurationTraining(training, newDuration);
+                        trainingController.changeDurationTraining(user, training, newDuration);
                         break;
                     case 4:
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        trainingController.changeCaloriesTraining(training, newCalories);
+                        trainingController.changeCaloriesTraining(user, training, newCalories);
                         break;
                     case 5:
-                        viewTrainingAdded.addTrainingAdditional(training);
+                        viewTrainingAdded.addTrainingAdditional(user, training);
                         break;
                     case 6:
-                        System.out.println("До свидания!");
+                        System.out.println("Выход из меню изменения тренировки");
                         startView = false;
+                        break;
                     default:
                         System.out.println("Неверный выбор. Попробуйте еще раз.");
                         break;

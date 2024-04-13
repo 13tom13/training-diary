@@ -1,30 +1,32 @@
 package in.service;
 
+import in.exception.InvalidDateFormatException;
 import in.exception.RepositoryException;
 import in.model.Training;
+import in.model.User;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 public interface TrainingService {
-    TreeMap<String, TreeSet<Training>> getAllTrainings(String userEmail);
+    TreeMap<String, TreeSet<Training>> getAllTrainings(User user);
 
 
-    TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String data) throws RepositoryException;
+    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String data) throws RepositoryException;
 
-    Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingData, String trainingName) throws RepositoryException;
+    Training getTrainingByUserEmailAndDataAndName(User user, String trainingData, String trainingName) throws RepositoryException;
 
-    void createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) throws RepositoryException;
+    void saveTraining(User user, Training training) throws RepositoryException, InvalidDateFormatException;
 
-    void addTrainingAdditional(Training training, String additionalName, String additionalValue) throws RepositoryException;
+    void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException;
 
-    void removeTrainingAdditional(Training training, String additionalName) throws RepositoryException;
+    void removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException;
 
-    void changeNameTraining(Training training, String newName);
+    void changeNameTraining(User user, Training training, String newName) throws RepositoryException;
 
-    void changeDateTraining(Training training, String newDate);
+    void changeDateTraining(User user, Training training, String newDate) throws RepositoryException, InvalidDateFormatException;
 
-    void changeDurationTraining(Training training, int newDuration);
+    void changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException;
 
-    void changeCaloriesTraining(Training training, int newCalories);
+    void changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException;
 }

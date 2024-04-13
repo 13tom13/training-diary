@@ -16,16 +16,10 @@ public interface TrainingRepository {
 
     void saveTraining(String userEmail, Training newTraining) throws RepositoryException;
 
-    void addTrainingAdditional(Training training, String additionalName, String additionalValue) throws RepositoryException;
+    void deleteTraining(String userEmail, Training training) throws RepositoryException;
 
-    void removeTrainingAdditional(Training training, String additionalName) throws RepositoryException;
+    void updateTraining(String userEmail, Training oldTraining, Training newTraining) throws RepositoryException;
 
-    void changeNameTraining(Training training, String newName);
 
-    void changeDateTraining(Training training, String newDate);
-
-    void changeDurationTraining(Training training, int newDuration);
-
-    void changeCaloriesTraining(Training training, int newCalories);
 }
 

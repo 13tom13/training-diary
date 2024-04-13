@@ -1,42 +1,43 @@
 package in.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Training implements Comparable<Training> {
 
-    public static final String DATE_FORMAT = "dd.MM.yy";
-
     private String name;
-    private Date date;
+    private String date;
     private int duration;
     private int caloriesBurned;
 
-    private final HashMap<String, String> additions = new HashMap<>();
+    private final HashMap<String, String> additions;
 
     public Training() {
+        this.additions = new HashMap<>();
+    }
+
+    public Training(String name, String date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+        this.name = name;
+        this.date = date;
+        this.duration = duration;
+        this.caloriesBurned = caloriesBurned;
+        this.additions = additions;
     }
 
     public Training(String name, String date, int duration, int caloriesBurned) {
         this.name = name;
-        setDate(date);
+        this.date = date;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
+        this.additions = new HashMap<>();
     }
+
 
     public void setDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        try {
-            this.date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            System.err.println("Не удалось распознать дату " + dateString);
-        }
+        this.date = dateString;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -68,21 +69,23 @@ public class Training implements Comparable<Training> {
         return additions;
     }
 
-
     public void addAdditional(String additionalName, String additionalValue) {
         additions.put(additionalName, additionalValue);
     }
 
+    public void removeAdditional(String additionalName) {
+        additions.remove(additionalName);
+    }
+
+
+
     @Override
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        String formattedDate = dateFormat.format(date);
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Тренировка: ").append(name)
-                .append(" Дата: ").append(formattedDate)
-                .append(" Продолжительность: ").append(duration).append(" мин")
-                .append(" Сожжено калорий: ").append(caloriesBurned).append(" kcal");
+                .append(" | Дата: ").append(date)
+                .append(" | Продолжительность: ").append(duration).append(" мин")
+                .append(" | Сожжено калорий: ").append(caloriesBurned).append(" kcal");
 
         if (!additions.isEmpty()) {
             stringBuilder.append("\nДополнительная информация:");

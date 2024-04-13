@@ -19,9 +19,4 @@ private final AuthorizationService authorizationService;
         return user;
     }
 
-    public void logout() {
-
-
-    }
-
 }

@@ -3,6 +3,8 @@ package out.menu.authorization;
 import in.controller.AuthorizationController;
 import in.controller.UserController;
 import in.controller.training.TrainingController;
+import in.controller.training.TrainingStatisticsController;
+import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import in.exception.AuthorizationException;
 import in.exception.ServiceException;
 import in.model.User;
@@ -18,16 +20,20 @@ public class ViewAuthorization {
 
     private final TrainingController trainingController;
 
+    private final TrainingStatisticsController trainingStatisticsController;
+
     private final Scanner scanner;
 
 
     public ViewAuthorization(AuthorizationController authorizationController,
                              UserController userController,
                              TrainingController trainingController,
+                             TrainingStatisticsController trainingStatisticsController,
                              Scanner scanner) {
         this.authorizationController = authorizationController;
         this.userController = userController;
         this.trainingController = trainingController;
+        this.trainingStatisticsController = trainingStatisticsController;
         this.scanner = scanner;
     }
 
@@ -39,7 +45,7 @@ public class ViewAuthorization {
         String authPassword = scanner.nextLine();
         try {
             User user = authorizationController.login(authEmail, authPassword);
-            ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, user, scanner);
+            ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController,trainingStatisticsController,user,scanner);
             viewUserAccount.userAccountMenu();
         } catch (AuthorizationException | ServiceException e) {
             System.err.println(e.getMessage());
@@ -58,4 +64,5 @@ public class ViewAuthorization {
         String regPassword = scanner.nextLine();
         userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
     }
+
 }

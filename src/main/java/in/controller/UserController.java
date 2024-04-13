@@ -15,10 +15,8 @@ public class UserController {
     public void createNewUser(String firstName, String lastName, String email, String password) {
         try {
             userService.saveUser(firstName, lastName, email, password);
-            System.out.println("User with email " + email + " created");
         } catch (ValidationException | RepositoryException e) {
             System.err.println(e.getMessage());
         }
-
     }
 }
