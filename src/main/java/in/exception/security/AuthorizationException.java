@@ -1,4 +1,4 @@
-package in.exception;
+package in.exception.security;
 
 public class AuthorizationException extends Exception {
 

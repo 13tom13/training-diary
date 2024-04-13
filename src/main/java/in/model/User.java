@@ -1,5 +1,7 @@
 package in.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class User {
@@ -8,16 +10,15 @@ public class User {
     private String email;
     private String password;
     private List<Rights> rights;
+    private boolean isActive = true;
 
-    public User(String firstName, String lastName, String email, String password, List<Rights> rights) {
+    public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.rights = rights;
+        this.rights = new ArrayList<>(Arrays.asList(Rights.values()));
     }
-
-    // Геттеры и сеттеры для всех полей
 
     public String getFirstName() {
         return firstName;
@@ -55,18 +56,30 @@ public class User {
         return rights;
     }
 
+    public void removeRights(String rightForRemove) {
+        try {
+            Rights rightToRemove = Rights.valueOf(rightForRemove);
+            rights.remove(rightToRemove);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Право " + rightForRemove + " не существует.");
+        }
+    }
+
     public void setRights(List<Rights> rights) {
         this.rights = rights;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", rights=" + rights +
-                '}';
+        String status = isActive ? "active" : "deactivate";
+        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | права: " + rights.toString() + " | (" + status + ")";
     }
 }

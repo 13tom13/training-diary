@@ -1,6 +1,7 @@
 package in.service;
 
-import in.exception.AuthorizationException;
+import in.exception.security.AuthorizationException;
+import in.exception.security.NotActiveUserException;
 import in.model.User;
 
 public interface AuthorizationService {

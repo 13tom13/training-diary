@@ -37,13 +37,15 @@ public class ViewUserAccount {
     public void userAccountMenu() {
         boolean startAccount = true;
         while (startAccount) {
+            System.out.println(user);
             System.out.printf("\nДобро пожаловать %s %s!\n", user.getFirstName(), user.getLastName());
             System.out.println("Выберите действие:");
             System.out.println("1. Просмотр всех тренировок");
             System.out.println("2. Добавление тренировки");
-            System.out.println("3. Внести изменение в тренировку");
-            System.out.println("4. Статистика по тренировкам");
-            System.out.println("5. Выход");
+            System.out.println("3. Удаление тренировки");
+            System.out.println("4. Внести изменение в тренировку");
+            System.out.println("5. Статистика по тренировкам");
+            System.out.println("6. Выход");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -54,12 +56,15 @@ public class ViewUserAccount {
                     viewTrainingAdded.addTraining();
                     break;
                 case 3:
-                    viewTrainingEditing.editingTraining();
+                    viewTrainingAdded.deleteTraining();
                     break;
                 case 4:
-                    viewTrainingStatistcs.statisticMenu();
+                    viewTrainingEditing.editingTraining();
                     break;
                 case 5:
+                    viewTrainingStatistcs.statisticMenu();
+                    break;
+                case 6:
                     System.out.println("До свидания!");
                     startAccount = false;
                     break;

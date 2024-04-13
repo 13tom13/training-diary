@@ -26,7 +26,6 @@ public class Main {
         TrainingDiary trainingDiary = getTrainingDiary();
 
         trainingDiary.start();
-        //TODO: реализовать контроль прав пользователя
         //TODO: Аудит действий пользователя
         // (авторизация, завершение работы, добавление,
         // редактирование и удаление тренировок, получение статистики тренировок и тд)
@@ -69,7 +68,6 @@ public class Main {
         Training training1 = new Training("Кардио", "13.04.24", 90, 560);
         Training training2 = new Training("Силовая", "14.04.24", 60, 450);
         Training training3 = new Training("Гибкость", "10.04.24", 45, 300);
-
 
         try {
             trainingRepository.saveTraining(testUserEmail, training1);

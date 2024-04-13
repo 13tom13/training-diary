@@ -77,6 +77,10 @@ public class ViewTrainingStatistcs {
         System.out.println("Введите конец периода:");
         String endDate = scanner.nextLine();
         int result = statisticsFunction.apply(user, startDate, endDate);
+        if (result == -1){
+            System.err.println("ошибка");
+            return;
+        }
         if (result != 0) {
             System.out.println("Результат: " + result);
         } else {

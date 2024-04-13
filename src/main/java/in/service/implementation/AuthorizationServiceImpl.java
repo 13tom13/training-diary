@@ -1,6 +1,7 @@
 package in.service.implementation;
 
-import in.exception.AuthorizationException;
+import in.exception.security.AuthorizationException;
+import in.exception.security.NotActiveUserException;
 import in.model.User;
 import in.repository.UserRepository;
 import in.service.AuthorizationService;
@@ -20,7 +21,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         Optional<User> user = userRepository.getUserByEmail(email);
         if (user.isPresent()) {
             if (user.get().getPassword().equals(password)) {
-                return user.get();
+                if (user.get().isActive()){
+                    return user.get();
+                } else {
+                    throw new NotActiveUserException();
+                }
             } else {
                 throw new AuthorizationException("Wrong password");
             }

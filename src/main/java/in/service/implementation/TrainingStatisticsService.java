@@ -1,5 +1,8 @@
 package in.service.implementation;
 
+import in.exception.security.rights.NoEditRightsException;
+import in.exception.security.rights.NoStatisticsRightsException;
+import in.model.Rights;
 import in.model.Training;
 import in.model.User;
 import in.service.TrainingService;
@@ -17,7 +20,10 @@ public class TrainingStatisticsService implements in.service.TrainingStatisticsS
         this.trainingService = trainingService;
     }
 
-    public int getAllTrainingStatistics(User user) {
+    public int getAllTrainingStatistics(User user) throws NoStatisticsRightsException {
+        if (!user.getRights().contains(Rights.STATISTICS)) {
+            throw new NoStatisticsRightsException();
+        }
         TreeMap<String, TreeSet<Training>> allTrainings = trainingService.getAllTrainings(user);
         int totalTrainings = 0;
         for (TreeSet<Training> trainingsOnDate : allTrainings.values()) {
@@ -26,7 +32,10 @@ public class TrainingStatisticsService implements in.service.TrainingStatisticsS
         return totalTrainings;
     }
 
-    public Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) {
+    public Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
+        if (!user.getRights().contains(Rights.STATISTICS)) {
+            throw new NoStatisticsRightsException();
+        }
         int totalTrainings;
         List<Training> trainings = getTrainingsInPeriod(user, startDate, endDate);
         totalTrainings = trainings.size();
@@ -34,7 +43,10 @@ public class TrainingStatisticsService implements in.service.TrainingStatisticsS
         return totalTrainings;
     }
 
-    public Integer getDurationStatisticsPerPeriod(User user, String startDate, String endDate) {
+    public Integer getDurationStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
+        if (!user.getRights().contains(Rights.STATISTICS)) {
+            throw new NoStatisticsRightsException();
+        }
         int totalDuration = 0;
         List<Training> trainings = getTrainingsInPeriod(user, startDate, endDate);
         for (Training training : trainings) {
@@ -43,7 +55,10 @@ public class TrainingStatisticsService implements in.service.TrainingStatisticsS
         return totalDuration;
     }
 
-    public Integer getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) {
+    public Integer getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
+        if (!user.getRights().contains(Rights.STATISTICS)) {
+            throw new NoStatisticsRightsException();
+        }
         int totalCaloriesBurned = 0;
         List<Training> trainings = getTrainingsInPeriod(user, startDate, endDate);
         for (Training training : trainings) {

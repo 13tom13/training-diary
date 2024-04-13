@@ -12,6 +12,8 @@ public interface TrainingController {
 
     void saveTraining(User user, Training training);
 
+    void deleteTraining(User user, String date, String name);
+
     TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate);
 
     Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName);

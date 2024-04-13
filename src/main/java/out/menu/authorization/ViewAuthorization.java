@@ -4,9 +4,7 @@ import in.controller.AuthorizationController;
 import in.controller.UserController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
-import in.exception.AuthorizationException;
-import in.exception.ServiceException;
+import in.exception.security.AuthorizationException;
 import in.model.User;
 import out.menu.authorization.account.ViewUserAccount;
 
@@ -43,13 +41,14 @@ public class ViewAuthorization {
         String authEmail = scanner.nextLine();
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
-        try {
-            User user = authorizationController.login(authEmail, authPassword);
-            ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController,trainingStatisticsController,user,scanner);
-            viewUserAccount.userAccountMenu();
-        } catch (AuthorizationException | ServiceException e) {
-            System.err.println(e.getMessage());
-        }
+       try {
+           User user = authorizationController.login(authEmail, authPassword);
+           ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController,trainingStatisticsController,user,scanner);
+           viewUserAccount.userAccountMenu();
+       } catch (AuthorizationException e) {
+           System.err.println(e.getMessage());
+       }
+
     }
 
     public void register() {

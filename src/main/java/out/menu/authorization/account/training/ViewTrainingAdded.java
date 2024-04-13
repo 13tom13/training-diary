@@ -41,6 +41,14 @@ public class ViewTrainingAdded {
         }
     }
 
+    public void deleteTraining() {
+        System.out.print("Введите дату тренировки (дд.мм.гг): ");
+        String date = scanner.nextLine();
+        System.out.print("Название: ");
+        String name = scanner.nextLine();
+        trainingController.deleteTraining(user, date, name);
+    }
+
     public void addTrainingAdditional(User user, Training training) {
         boolean startAdd = true;
         while (startAdd) {
@@ -82,4 +90,5 @@ public class ViewTrainingAdded {
             }
         }
     }
+
 }

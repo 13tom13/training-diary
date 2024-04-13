@@ -3,6 +3,10 @@ package in.controller.training.implementation;
 import in.controller.training.TrainingController;
 import in.exception.InvalidDateFormatException;
 import in.exception.RepositoryException;
+import in.exception.ServiceException;
+import in.exception.security.rights.NoDeleteRightsException;
+import in.exception.security.rights.NoEditRightsException;
+import in.exception.security.rights.NoWriteRightsException;
 import in.model.Training;
 import in.model.User;
 import in.service.TrainingService;
@@ -30,9 +34,19 @@ public class TrainingControllerImpl implements TrainingController {
     public void saveTraining(User user, Training training) {
         try {
             trainingService.saveTraining(user, training);
-        } catch (RepositoryException | InvalidDateFormatException e) {
+        } catch (RepositoryException | InvalidDateFormatException | NoWriteRightsException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void deleteTraining(User user, String date, String name) {
+        try {
+            trainingService.deleteTraining(user, date, name);
+        } catch (RepositoryException | InvalidDateFormatException | NoDeleteRightsException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
     @Override
@@ -59,7 +73,7 @@ public class TrainingControllerImpl implements TrainingController {
     public void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) {
         try {
             trainingService.addTrainingAdditional(user, training, additionalName, additionalValue);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NoWriteRightsException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -68,7 +82,7 @@ public class TrainingControllerImpl implements TrainingController {
     public void removeTrainingAdditional(User user, Training training, String additionalName) {
         try {
             trainingService.removeTrainingAdditional(user, training, additionalName);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NoEditRightsException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -77,7 +91,7 @@ public class TrainingControllerImpl implements TrainingController {
     public void changeNameTraining(User user, Training training, String newName) {
         try {
             trainingService.changeNameTraining(user, training, newName);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NoEditRightsException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -86,7 +100,7 @@ public class TrainingControllerImpl implements TrainingController {
     public void changeDateTraining(User user, Training training, String newDate) {
         try {
             trainingService.changeDateTraining(user, training, newDate);
-        } catch (RepositoryException | InvalidDateFormatException e) {
+        } catch (RepositoryException | InvalidDateFormatException | NoEditRightsException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -96,7 +110,7 @@ public class TrainingControllerImpl implements TrainingController {
         int newDurationInt = Integer.parseInt(newDuration);
         try {
             trainingService.changeDurationTraining(user, training, newDurationInt);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NoEditRightsException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -106,7 +120,7 @@ public class TrainingControllerImpl implements TrainingController {
         int newCaloriesInt = Integer.parseInt(newCalories);
         try {
             trainingService.changeCaloriesTraining(user, training, newCaloriesInt);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NoEditRightsException e) {
             System.err.println(e.getMessage());
         }
     }
