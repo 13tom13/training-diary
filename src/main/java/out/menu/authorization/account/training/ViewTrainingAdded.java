@@ -30,7 +30,8 @@ public class ViewTrainingAdded {
         int duration = Integer.parseInt(scanner.nextLine());
         System.out.print("Сожженные калории: ");
         int caloriesBurned = Integer.parseInt(scanner.nextLine());
-        Training training = trainingController.createTraining(user.getEmail(), name, date, duration, caloriesBurned);
+        trainingController.createTraining(user.getEmail(), name, date, duration, caloriesBurned);
+        Training training = trainingController.getTrainingByUserEmailAndDataAndName(user.getEmail(), date, name);
         addTrainingAdditional(training);
     }
 
@@ -38,7 +39,9 @@ public class ViewTrainingAdded {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
-            System.out.println("2. удалить дополнительную информацию");
+            if (!training.getAdditions().isEmpty()){
+                System.out.println("2. удалить дополнительную информацию?");
+            }
             System.out.println("3. выход");
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
@@ -53,11 +56,12 @@ public class ViewTrainingAdded {
                         trainingController.addTrainingAdditional(training, additionalName, additionalValue);
                         break;
                     case 2:
-                        System.out.println("Введите название дополнительной информации для удаления:");
-                        String additionalNameForRemove = scanner.nextLine();
-                        trainingController.removeTrainingAdditional(training, additionalNameForRemove);
-                        // TODO: реализовать метод removeTrainingAdditional
-                        break;
+                        if (!training.getAdditions().isEmpty()){
+                            System.out.println("Введите название дополнительной информации для удаления:");
+                            String additionalNameForRemove = scanner.nextLine();
+                            trainingController.removeTrainingAdditional(training, additionalNameForRemove);
+                            break;
+                        }
                     case 3:
                         System.out.println("Выход.");
                         startAdd = false;

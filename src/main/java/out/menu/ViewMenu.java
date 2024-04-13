@@ -18,11 +18,11 @@ public class ViewMenu {
         this.viewAuthorization = new ViewAuthorization(authorizationController,userController, trainingController, scanner);
     }
 
-    public void displayWelcomeMessage() {
+    private void viewWelcomeMessage() {
         System.out.println("Добро пожаловать в тренировочный дневник!");
     }
 
-    public void displayMainMenu() {
+    private void viewMainMenu() {
         System.out.println("Выберите действие:");
         System.out.println("1. Авторизация");
         System.out.println("2. Регистрация");
@@ -30,22 +30,34 @@ public class ViewMenu {
     }
 
     public void processMainMenuChoice() {
+        viewWelcomeMessage();
         Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        switch (choice) {
-            case 1:
-                viewAuthorization.login();
-                break;
-            case 2:
-                viewAuthorization.register();
-                break;
-            case 3:
-                System.out.println("До свидания!");
-                break;
-            default:
+        boolean startMenu = true;
+        while (startMenu) {
+            viewMainMenu();
+            if (scanner.hasNextInt()) { // Проверяем, доступно ли следующее целое число
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        viewAuthorization.login();
+                        break;
+                    case 2:
+                        viewAuthorization.register();
+                        break;
+                    case 3:
+                        System.out.println("До свидания!");
+                        startMenu = false;
+                        break;
+                    default:
+                        System.out.println("Неверный выбор. Попробуйте еще раз.");
+                        break;
+                }
+            } else {
                 System.out.println("Неверный выбор. Попробуйте еще раз.");
-                break;
+                scanner.nextLine();
+            }
         }
+
     }
 }

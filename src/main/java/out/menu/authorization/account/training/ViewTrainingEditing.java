@@ -6,6 +6,7 @@ import in.model.User;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public class ViewTrainingEditing {
 
@@ -14,6 +15,8 @@ public class ViewTrainingEditing {
     private final ViewTrainingAdded viewTrainingAdded;
     private final User user;
     private final Scanner scanner;
+
+    private Training training;
 
     public ViewTrainingEditing(TrainingController trainingController,
                                ViewTrainingAdded viewTrainingAdded,
@@ -24,30 +27,33 @@ public class ViewTrainingEditing {
         this.scanner = scanner;
     }
 
-    private Training getTrainingForEditing() {
-        List<Training> trainingsFromDay;
+    private void getTrainingForEditing() {
+        TreeSet<Training> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
         String trainingDate = scanner.nextLine();
-        trainingsFromDay = trainingController.getTrainingsByUserAndDay(user, trainingDate);
-
-        System.out.println("Тренировки на " + trainingDate + ":");
-        for (Training training : trainingsFromDay) {
-            System.out.println(training);
+        trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user.getEmail(), trainingDate);
+        if (!trainingsFromDay.isEmpty()) {
+            System.out.println("Тренировки на " + trainingDate + ":");
+            for (Training training : trainingsFromDay) {
+                System.out.println(training);
+            }
+            System.out.println("Введите название тренировки: ");
+            String trainingName = scanner.nextLine();
+            training = trainingController.getTrainingByUserEmailAndDataAndName(user.getEmail(), trainingDate, trainingName);
         }
-
-        System.out.println("Введите название тренировки: ");
-        String trainingName = scanner.nextLine();
-        return trainingController.getTrainingByNameAndDate(trainingName, trainingDate);
-        //TODO реализовать метод getTrainingByNameAndDate
     }
 
 
     public void editingTraining() {
-        boolean startView = true;
+        getTrainingForEditing();
+        boolean startView = false;
+        if (training != null && training.getName()!= null ) {
+            startView = true;
+        } else {
+            System.out.println("Тренировка не найдена.");
+        }
         while (startView) {
             System.out.println();
-            Training training = getTrainingForEditing();
-
             System.out.printf("Редактирование тренировки %s дата: %s:\n", training.getName(), training.getDate());
             System.out.println("Выберите действие:");
             System.out.println("1. изменить название");
@@ -61,21 +67,25 @@ public class ViewTrainingEditing {
                 scanner.nextLine();
                 switch (choice) {
                     case 1:
+                        System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
                         trainingController.changeNameTraining(training, newName);
                         break;
                     case 2:
+                        System.out.println();
                         System.out.println("Введите новую дату:");
                         String newDate = scanner.nextLine();
                         trainingController.changeDateTraining(training, newDate);
                         break;
                     case 3:
+                        System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
                         trainingController.changeDurationTraining(training, newDuration);
                         break;
                     case 4:
+                        System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
                         trainingController.changeCaloriesTraining(training, newCalories);

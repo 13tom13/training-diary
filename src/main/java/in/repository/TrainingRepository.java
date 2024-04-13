@@ -2,17 +2,23 @@ package in.repository;
 
 import in.exception.RepositoryException;
 import in.model.Training;
+import in.model.User;
 
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public interface TrainingRepository {
-    TreeSet<Training> getAllTrainingsFromUser(String userEmail);
+    TreeMap<String, TreeSet<Training>> getAllTrainingsByUserEmail(String userEmail);
 
-    Training getTrainingByNumber(String userEmail, int trainingNumber) throws RepositoryException;
+    TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String trainingData) throws RepositoryException;
 
-    Training createTraining(String userEmail, String name, String date, int duration, int caloriesBurned);
+    Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingData, String trainingName) throws RepositoryException;
 
-    void addTrainingAdditional(Training training, String additionalName, String additionalValue);
+    void saveTraining(String userEmail, Training newTraining) throws RepositoryException;
+
+    void addTrainingAdditional(Training training, String additionalName, String additionalValue) throws RepositoryException;
+
+    void removeTrainingAdditional(Training training, String additionalName) throws RepositoryException;
 
     void changeNameTraining(Training training, String newName);
 

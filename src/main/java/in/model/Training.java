@@ -17,6 +17,9 @@ public class Training implements Comparable<Training> {
 
     private final HashMap<String, String> additions = new HashMap<>();
 
+    public Training() {
+    }
+
     public Training(String name, String date, int duration, int caloriesBurned) {
         this.name = name;
         setDate(date);
@@ -72,13 +75,33 @@ public class Training implements Comparable<Training> {
 
     @Override
     public String toString() {
-        return "Тренировка: " + name + " дата: " + date + " продолжительность: "
-                + duration + " мин" + " сожжено калорий: " + caloriesBurned + " kcal";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        String formattedDate = dateFormat.format(date);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Тренировка: ").append(name)
+                .append(" Дата: ").append(formattedDate)
+                .append(" Продолжительность: ").append(duration).append(" мин")
+                .append(" Сожжено калорий: ").append(caloriesBurned).append(" kcal");
+
+        if (!additions.isEmpty()) {
+            stringBuilder.append("\nДополнительная информация:");
+            for (String key : additions.keySet()) {
+                stringBuilder.append("\n").append(key).append(": ").append(additions.get(key));
+            }
+        }
+        return stringBuilder.toString();
     }
+
 
     @Override
     public int compareTo(Training other) {
-        return this.date.compareTo(other.date);
+        int dateComparison = this.date.compareTo(other.date);
+        if (dateComparison != 0) {
+            return dateComparison;
+        }
+
+        return this.name.compareTo(other.name);
     }
 
     @Override

@@ -15,8 +15,6 @@ public class TrainingDiary {
     }
 
     public void start() {
-        viewMenu.displayWelcomeMessage();
-        viewMenu.displayMainMenu();
         viewMenu.processMainMenuChoice();
     }
 }

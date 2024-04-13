@@ -5,6 +5,9 @@ import in.controller.training.TrainingController;
 import in.model.Training;
 import in.model.User;
 
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class ViewTraining {
@@ -20,15 +23,22 @@ public class ViewTraining {
     }
 
     public void viewAllTraining() {
-        TreeSet<Training> allTraining = trainingController.getAllTrainings(user.getEmail());
-        String previousDate = "";
-        for (Training training : allTraining) {
-            String currentDate = String.valueOf(training.getDate());
-            if (!currentDate.equals(previousDate)) {
-                System.out.println("\n" + currentDate + ":");
-                previousDate = currentDate;
+        TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user.getEmail());
+        for (Map.Entry<String, TreeSet<Training>> entry : allTraining.entrySet()) {
+            String currentDate = entry.getKey();
+            TreeSet<Training> trainingsOnDate = entry.getValue();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Training.DATE_FORMAT);
+            String formattedDate = dateFormat.format(currentDate);
+
+            System.out.println("\n" + "=====" + formattedDate + "=====");
+
+            for (Training training : trainingsOnDate) {
+                System.out.println(training);
+                System.out.println("--------------------------------------------------");
             }
-            System.out.println(training);
         }
     }
+
+
 }

@@ -31,7 +31,7 @@ public class ViewUserAccount {
     public void userAccountMenu() {
         boolean startAccount = true;
         while (startAccount) {
-            System.out.printf("Добро пожаловать %s %s!\n", user.getFirstName(), user.getLastName());
+            System.out.printf("\nДобро пожаловать %s %s!\n", user.getFirstName(), user.getLastName());
             System.out.println("Выберите действие:");
             System.out.println("1. Просмотр всех тренировок");
             System.out.println("2. Добавление тренировки");
@@ -42,6 +42,7 @@ public class ViewUserAccount {
             switch (choice) {
                 case 1:
                     viewTraining.viewAllTraining();
+                    //TODO: сообщение о том что список тренировок пуст
                     break;
                 case 2:
                     viewTrainingAdded.addTraining();

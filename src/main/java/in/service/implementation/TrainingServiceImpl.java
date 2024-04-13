@@ -5,6 +5,7 @@ import in.model.Training;
 import in.repository.TrainingRepository;
 import in.service.TrainingService;
 
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class TrainingServiceImpl implements TrainingService {
@@ -16,29 +17,36 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public TreeSet<Training> getAllTrainings(String userEmail) {
-        return trainingRepository.getAllTrainingsFromUser(userEmail);
+    public TreeMap<String, TreeSet<Training>> getAllTrainings(String userEmail) {
+       return trainingRepository.getAllTrainingsByUserEmail(userEmail);
     }
 
     @Override
-    public Training getTrainingByNumber(String userEmail, int trainingNumber) {
-        try {
-            return trainingRepository.getTrainingByNumber(userEmail, trainingNumber);
-        } catch (RepositoryException e) {
-            System.err.println(e.getMessage());
-        }
-        return null;
+    public TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String data) throws RepositoryException {
+        return trainingRepository.getTrainingsByUserEmailAndData(userEmail, data);
+
+    }
+
+    @Override
+    public Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingData, String trainingName) throws RepositoryException {
+        return trainingRepository.getTrainingByUserEmailAndDataAndName(userEmail, trainingData, trainingName);
     }
 
 
     @Override
-    public Training createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) {
-        return trainingRepository.createTraining(userEmail, name, date, duration, caloriesBurned);
+    public void createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) throws RepositoryException {
+        Training newTraining = new Training(name, date, duration, caloriesBurned);
+        trainingRepository.saveTraining(userEmail, newTraining);
     }
 
     @Override
-    public void addTrainingAdditional(Training training, String additionalName, String additionalValue) {
+    public void addTrainingAdditional(Training training, String additionalName, String additionalValue) throws RepositoryException {
         trainingRepository.addTrainingAdditional(training, additionalName, additionalValue);
+    }
+
+    @Override
+    public void removeTrainingAdditional(Training training, String additionalName) throws RepositoryException {
+        trainingRepository.removeTrainingAdditional(training, additionalName);
     }
 
     @Override

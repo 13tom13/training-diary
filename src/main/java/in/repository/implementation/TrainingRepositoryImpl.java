@@ -4,57 +4,90 @@ import in.exception.RepositoryException;
 import in.model.Training;
 import in.repository.TrainingRepository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private final Map<String, TreeSet<Training>> userTrainingMap = new HashMap<>();
+    /**
+     * Map для хранения тренировок пользователей.
+     * Ключами являются адреса электронной почты пользователей.
+     * Значениями являются TreeMap, где ключами являются даты тренировок,
+     * а значениями являются сами тренировки пользователя, совершенные в указанные даты.
+     */
+    private final Map<String, TreeMap<String, TreeSet<Training>>> userTrainingMap = new HashMap<>();
 
-    @Override
-    public TreeSet<Training> getAllTrainingsFromUser(String userEmail) {
-        return userTrainingMap.get(userEmail);
+    public TreeMap<String, TreeSet<Training>> getAllTrainingsByUserEmail(String userEmail) {
+        return userTrainingMap.getOrDefault(userEmail, new TreeMap<>());
     }
 
     @Override
-    public Training getTrainingByNumber(String userEmail, int trainingNumber) throws RepositoryException {
-        TreeSet<Training> userTrainings = userTrainingMap.get(userEmail);
-        if (userTrainings != null && trainingNumber >= 0 && trainingNumber < userTrainings.size()) {
-            // Получение тренировки по номеру из TreeSet, который автоматически сортирует тренировки по дате
-            return new ArrayList<>(userTrainings).get(trainingNumber);
-        } else {
-            throw new RepositoryException("Тренировка с номером " + trainingNumber + " не найдена для пользователя с email " + userEmail);
-        }
-    }
-
-    @Override
-    public Training createTraining(String userEmail, String name, String date, int duration, int caloriesBurned) {
-        if (!userTrainingMap.containsKey(userEmail)) {
-            userTrainingMap.put(userEmail, new TreeSet<>());
-        }
-
-        TreeSet<Training> userTrainings = userTrainingMap.get(userEmail);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Training.DATE_FORMAT);
-        for (Training training : userTrainings) {
-            try {
-                if (training.getName().equals(name) && training.getDate().equals(dateFormat.parse(date))) {
-                    throw new RepositoryException("Тренировка с именем " + name + " на дату " + date + " уже существует");
-                }
-            } catch (ParseException e) {
-                System.out.println("Не удалось распознать дату " + date);
-            } catch (RepositoryException e) {
-                System.err.println(e.getMessage());
+    public TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String trainingData) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+        if (userTrainings != null) {
+            TreeSet<Training> trainingsOnDate = userTrainings.get(trainingData);
+            if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
+                return trainingsOnDate;
             }
         }
-        Training newTraining = new Training(name, date, duration, caloriesBurned);
-        userTrainings.add(newTraining);
-        return newTraining;
+        throw new RepositoryException("Тренировка с датой " + trainingData + " не найдена для пользователя с email " + userEmail);
     }
 
     @Override
-    public void addTrainingAdditional(Training training, String additionalName, String additionalValue) {
-        training.addAdditional(additionalName, additionalValue);
+    public Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingData, String trainingName) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+        if (userTrainings != null) {
+            TreeSet<Training> trainingsOnDate = userTrainings.get(trainingData);
+            if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
+                for (Training training : trainingsOnDate) {
+                    if (training.getName().equals(trainingName)) {
+                        return training;
+                    }
+                }
+                throw new RepositoryException("Тренировка с именем " + trainingName + " не найдена в тренировках с датой " + trainingData + " для пользователя с email " + userEmail);
+            } else {
+                throw new RepositoryException("На указанную дату " + trainingData + " нет тренировок для пользователя с email " + userEmail);
+            }
+        } else {
+            throw new RepositoryException("Пользователь с email " + userEmail + " не найден в тренировках");
+        }
+    }
+
+
+
+    @Override
+    public void saveTraining(String userEmail, Training newTraining) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.computeIfAbsent(userEmail, k -> new TreeMap<>());
+        TreeSet<Training> trainingsOnDate = userTrainings.computeIfAbsent(String.valueOf(newTraining.getDate()), k -> new TreeSet<>());
+
+        if (!trainingsOnDate.add(newTraining)){
+            throw new RepositoryException("Тренировка с именем " + newTraining.getName() + " на дату " + newTraining.getDate() + " уже существует");
+        } else{
+            userTrainings.put(String.valueOf(newTraining.getDate()), trainingsOnDate);
+        }
+
+    }
+
+    @Override
+    public void addTrainingAdditional(Training training, String additionalName, String additionalValue) throws RepositoryException {
+        if (!training.getAdditions().containsKey(additionalName)){
+            training.addAdditional(additionalName, additionalValue);
+        } else {
+            throw new RepositoryException("Дополнительное поле с именем " + additionalName + " уже существует");
+        }
+
+    }
+
+    @Override
+    public void removeTrainingAdditional (Training training, String additionalName) throws RepositoryException {
+        if (training.getAdditions().containsKey(additionalName)){
+            training.getAdditions().remove(additionalName);
+        } else {
+            throw new RepositoryException("дополнительная информация с именем " + additionalName + " не найдена");
+        }
+
     }
 
     @Override

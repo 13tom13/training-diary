@@ -11,9 +11,6 @@ public class UserRepositoryImpl implements UserRepository {
     private final Map<String, User> userRepository = new HashMap<>();
 
     public UserRepositoryImpl() {
-        System.out.println("Add test User\nEmail: test@mail.ru, Password: pass");
-        User user = new User("Ivan", "Petrov", "test@mail.ru", "pass");
-        userRepository.put(user.getEmail(), user);
     }
 
 
