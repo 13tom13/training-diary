@@ -3,6 +3,7 @@ package out.menu.authorization;
 import in.controller.*;
 import in.controller.AuthorizationController;
 import in.exception.security.AuthorizationException;
+import in.logger.Logger;
 import in.model.Roles;
 import in.model.User;
 import out.menu.account.ViewAdminAccount;
@@ -72,4 +73,7 @@ public class ViewAuthorization {
         userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
     }
 
+    public void logout(User user) {
+
+    }
 }

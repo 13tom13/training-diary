@@ -2,6 +2,7 @@ package out.menu.account;
 
 import in.controller.TrainingController;
 import in.controller.TrainingStatisticsController;
+import in.logger.Logger;
 import in.model.User;
 import out.menu.training.ViewTrainingAdded;
 import out.menu.training.ViewTrainingEditing;
@@ -22,6 +23,8 @@ public class ViewUserAccount {
     private final Scanner scanner;
 
     private final User user;
+
+    private static final Logger logger = Logger.getInstance();
 
 
     public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, User user, Scanner scanner) {
@@ -64,6 +67,7 @@ public class ViewUserAccount {
                         viewTrainingStatistcs.statisticMenu();
                         break;
                     case 6:
+                        logger.logAction(user.getEmail(), "logout");
                         System.out.println("До свидания!");
                         startAccount = false;
                         break;
