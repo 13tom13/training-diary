@@ -9,7 +9,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private static final Logger logger = Logger.getInstance();
+    private final Logger logger = Logger.getInstance();
 
     public UserController(UserService userService) {
         this.userService = userService;

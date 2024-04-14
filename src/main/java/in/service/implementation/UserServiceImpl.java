@@ -25,13 +25,13 @@ public class UserServiceImpl implements UserService {
     public void saveUser(String firstName, String lastName, String email, String password)
             throws ValidationException, RepositoryException {
         if (firstName == null || firstName.isEmpty()) {
-            throw new ValidationException("field \"firstName\" cannot be empty", this.getClass());
+            throw new ValidationException("firstName");
         } else if (lastName == null || lastName.isEmpty()) {
-            throw new ValidationException("field \"lastName\" cannot be empty", this.getClass());
+            throw new ValidationException("lastName");
         } else if (email == null || email.isEmpty()) {
-            throw new ValidationException("field \"email\" cannot be empty", this.getClass());
+            throw new ValidationException("email");
         } else if (password == null || password.isEmpty()) {
-            throw new ValidationException("field \"password\" cannot be empty", this.getClass());
+            throw new ValidationException("password");
         } else {
             User user = new User(firstName, lastName, email, password);
             userRepository.saveUser(user);

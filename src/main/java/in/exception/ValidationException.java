@@ -2,7 +2,7 @@ package in.exception;
 
 public class ValidationException extends Exception {
 
-    public ValidationException(String message, Class<?> callingClass) {
-        super("Validation exception in class " + callingClass.getSimpleName() + ": " + message);
+    public ValidationException(String field) {
+        super("field \"" + field + "\" cannot be empty");
     }
 }

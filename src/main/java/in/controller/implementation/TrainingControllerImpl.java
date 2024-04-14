@@ -18,7 +18,7 @@ public class TrainingControllerImpl implements TrainingController {
 
     private final TrainingService trainingService;
 
-    private static final Logger logger = Logger.getInstance();
+    private final Logger logger = Logger.getInstance();
 
     public TrainingControllerImpl(TrainingService trainingService) {
         this.trainingService = trainingService;
