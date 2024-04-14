@@ -2,6 +2,7 @@ package in.controller.training.implementation;
 
 import in.controller.training.TrainingStatisticsController;
 import in.exception.security.rights.NoStatisticsRightsException;
+import in.logger.Logger;
 import in.model.User;
 import in.service.implementation.TrainingStatisticsService;
 
@@ -9,13 +10,17 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
 
     private final TrainingStatisticsService trainingStatisticsService;
 
+    private static final Logger logger = Logger.getInstance();
+
     public TrainingStatisticsControllerImpl(TrainingStatisticsService trainingStatisticsService) {
         this.trainingStatisticsService = trainingStatisticsService;
     }
 
     public int getAllTrainingStatistics(User user) {
         try {
-            return trainingStatisticsService.getAllTrainingStatistics(user);
+            int result = trainingStatisticsService.getAllTrainingStatistics(user);
+            logger.logAction(user.getEmail(), "get all training statistics");
+            return result;
         } catch (NoStatisticsRightsException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -24,7 +29,10 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
 
     public Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) {
         try {
-            return trainingStatisticsService.getAllTrainingStatisticsPerPeriod(user, startDate, endDate);
+            int result = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(user, startDate, endDate);
+            logger.logAction(user.getEmail(),
+                    "get all training statistics per period " + startDate + " - " + endDate);
+            return result;
         } catch (NoStatisticsRightsException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -33,7 +41,10 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
 
     public int getDurationStatisticsPerPeriod(User user, String startDate, String endDate) {
         try {
-            return trainingStatisticsService.getDurationStatisticsPerPeriod(user, startDate, endDate);
+            int result = trainingStatisticsService.getDurationStatisticsPerPeriod(user, startDate, endDate);
+            logger.logAction(user.getEmail(),
+                    "get duration statistics per period " + startDate + " - " + endDate);
+            return result;
         } catch (NoStatisticsRightsException e) {
             System.err.println(e.getMessage());
             return -1;
@@ -42,7 +53,10 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
 
     public int getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) {
         try {
-            return trainingStatisticsService.getCaloriesBurnedPerPeriod(user, startDate, endDate);
+            int result = trainingStatisticsService.getCaloriesBurnedPerPeriod(user, startDate, endDate);
+            logger.logAction(user.getEmail(),
+                    "get calories burned statistics per period " + startDate + " - " + endDate);
+            return result;
         } catch (NoStatisticsRightsException e) {
             throw new RuntimeException(e);
         }
