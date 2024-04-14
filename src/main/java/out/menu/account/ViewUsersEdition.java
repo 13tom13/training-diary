@@ -6,7 +6,6 @@ import in.model.User;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.TreeSet;
 
 public class ViewUsersEdition {
 
@@ -157,7 +156,6 @@ public class ViewUsersEdition {
             }
         }
     }
-
 
 
 }

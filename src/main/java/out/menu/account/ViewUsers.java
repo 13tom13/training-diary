@@ -17,8 +17,6 @@ public class ViewUsers {
 
     private final AdminController adminController;
 
-    private final TrainingController trainingController;
-
     private final ViewTraining viewTraining;
 
     private final ViewUsersEdition viewUsersEdition;
@@ -28,7 +26,6 @@ public class ViewUsers {
     public ViewUsers(AdminController adminController, TrainingController trainingController, Scanner scanner) {
         this.adminController = adminController;
         this.viewTraining = new ViewTraining(trainingController);
-        this.trainingController = trainingController;
         this.viewUsersEdition = new ViewUsersEdition(adminController, scanner);
         this.scanner = scanner;
     }

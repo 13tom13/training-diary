@@ -11,7 +11,7 @@ public class User {
     private String password;
     private List<Rights> rights;
 
-    private List<Roles> roles;
+    private final List<Roles> roles;
 
     private boolean isActive = true;
 
@@ -70,15 +70,6 @@ public class User {
             roles.add(roleForSet);
         } catch (IllegalArgumentException e) {
             System.out.println("Роль " + rolesForSet + " не найдена");
-        }
-    }
-
-    public void removeRights(String rightForRemove) {
-        try {
-            Rights rightToRemove = Rights.valueOf(rightForRemove);
-            rights.remove(rightToRemove);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Право " + rightForRemove + " не существует");
         }
     }
 
