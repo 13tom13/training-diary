@@ -1,40 +1,24 @@
 package out.menu.authorization.account;
 
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import in.controller.AdminController;
 import in.model.User;
-import out.menu.authorization.account.statistic.ViewTrainingStatistcs;
-import out.menu.authorization.account.training.ViewTraining;
-import out.menu.authorization.account.training.ViewTrainingAdded;
-import out.menu.authorization.account.training.ViewTrainingEditing;
 
 import java.util.Scanner;
 
-public class ViewUserAccount {
-    private final ViewTraining viewTraining;
+public class ViewAdminAccount {
 
-    private final ViewTrainingAdded viewTrainingAdded;
-
-    private final ViewTrainingEditing viewTrainingEditing;
-
-    private final ViewTrainingStatistcs viewTrainingStatistcs;
+    private final AdminController adminController;
 
     private final Scanner scanner;
 
     private final User user;
-
-
-    public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, User user, Scanner scanner) {
-        this.viewTrainingStatistcs = new ViewTrainingStatistcs(trainingStatisticsController, user, scanner);
-        this.viewTraining = new ViewTraining(trainingController, user);
-        this.viewTrainingAdded = new ViewTrainingAdded(trainingController, user, scanner);
-        this.viewTrainingEditing = new ViewTrainingEditing(trainingController, viewTrainingAdded, user, scanner);
+    public ViewAdminAccount(AdminController adminController, User user, Scanner scanner) {
+        this.adminController = adminController;
         this.scanner = scanner;
         this.user = user;
     }
 
-    public void userAccountMenu() {
+    public void adminAccountMenu() {
         boolean startAccount = true;
         while (startAccount) {
             System.out.printf("\nДобро пожаловать %s %s!\n", user.getFirstName(), user.getLastName());
@@ -49,19 +33,19 @@ public class ViewUserAccount {
             scanner.nextLine();
             switch (choice) {
                 case 1:
-                    viewTraining.viewAllTraining();
+
                     break;
                 case 2:
-                    viewTrainingAdded.addTraining();
+
                     break;
                 case 3:
-                    viewTrainingAdded.deleteTraining();
+
                     break;
                 case 4:
-                    viewTrainingEditing.editingTraining();
+
                     break;
                 case 5:
-                    viewTrainingStatistcs.statisticMenu();
+
                     break;
                 case 6:
                     System.out.println("До свидания!");
@@ -73,6 +57,4 @@ public class ViewUserAccount {
             }
         }
     }
-
 }
-

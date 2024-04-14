@@ -1,10 +1,10 @@
 package out.menu;
 
+import in.controller.AdminController;
 import in.controller.AuthorizationController;
 import in.controller.UserController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
@@ -14,11 +14,12 @@ public class ViewMenu {
     private final ViewAuthorization viewAuthorization;
 
     public ViewMenu(AuthorizationController authorizationController,
+                    AdminController adminController,
                     UserController userController,
                     TrainingController trainingController,
                     TrainingStatisticsController trainingStatisticsController) {
         Scanner scanner = new Scanner(System.in);
-        this.viewAuthorization = new ViewAuthorization(authorizationController, userController,
+        this.viewAuthorization = new ViewAuthorization(authorizationController, adminController, userController,
                 trainingController, trainingStatisticsController, scanner);
     }
 

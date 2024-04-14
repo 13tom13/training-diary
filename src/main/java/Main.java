@@ -1,9 +1,11 @@
+import in.controller.AdminController;
 import in.controller.AuthorizationController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.training.implementation.TrainingControllerImpl;
 import in.controller.UserController;
 import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import in.exception.RepositoryException;
+import in.model.Roles;
 import in.model.Training;
 import in.model.User;
 import in.service.implementation.TrainingStatisticsService;
@@ -48,13 +50,27 @@ public class Main {
         TrainingStatisticsService trainingStatisticsService = new TrainingStatisticsService(trainingService);
         TrainingStatisticsController trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsService);
 
+        AdminController adminController = new AdminController();
+
+        addAdmin(userRepository);
         addTestUser(userRepository, trainingRepository);
 
-        return new TrainingDiary(authorizationController, userController, trainingController, trainingStatisticsController);
+        return new TrainingDiary(authorizationController, adminController, userController, trainingController, trainingStatisticsController);
+    }
+
+    private static void addAdmin (UserRepository userRepository){
+        System.out.println("Add admin  Email: admin, Password: admin");
+        User user = new User("Admin", "Admin", "admin", "admin");
+        user.setRoles("ADMIN");
+        try {
+            userRepository.saveUser(user);
+        } catch (RepositoryException e) {
+            System.err.println("не удалось добавить тестового пользователя");
+        }
     }
 
     private static void addTestUser (UserRepository userRepository, TrainingRepository trainingRepository){
-        System.out.println("Add test User\nEmail: test@mail.ru, Password: pass");
+        System.out.println("Add test User  Email: test@mail.ru, Password: pass");
         User user = new User("Ivan", "Petrov", "test@mail.ru", "pass");
         try {
             userRepository.saveUser(user);

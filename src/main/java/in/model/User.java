@@ -10,6 +10,9 @@ public class User {
     private String email;
     private String password;
     private List<Rights> rights;
+
+    private List<Roles> roles;
+
     private boolean isActive = true;
 
     public User(String firstName, String lastName, String email, String password) {
@@ -18,6 +21,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.rights = new ArrayList<>(Arrays.asList(Rights.values()));
+        this.roles = new ArrayList<>(List.of(Roles.USER));
     }
 
     public String getFirstName() {
@@ -56,17 +60,35 @@ public class User {
         return rights;
     }
 
+    public List<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String rolesForSet) {
+        try {
+            Roles roleForSet = Roles.valueOf(rolesForSet);
+            roles.add(roleForSet);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Роль " + rolesForSet + " не найдена");
+        }
+    }
+
     public void removeRights(String rightForRemove) {
         try {
             Rights rightToRemove = Rights.valueOf(rightForRemove);
             rights.remove(rightToRemove);
         } catch (IllegalArgumentException e) {
-            System.out.println("Право " + rightForRemove + " не существует.");
+            System.out.println("Право " + rightForRemove + " не существует");
         }
     }
 
-    public void setRights(List<Rights> rights) {
-        this.rights = rights;
+    public void setRights(String rightsForSet) {
+        try {
+        Rights rightForSet = Rights.valueOf(rightsForSet);
+        rights.add(rightForSet);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Право " + rightsForSet + " не найдено");
+        }
     }
 
     public boolean isActive() {

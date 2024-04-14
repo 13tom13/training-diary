@@ -1,11 +1,14 @@
 package out.menu.authorization;
 
+import in.controller.AdminController;
 import in.controller.AuthorizationController;
 import in.controller.UserController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.exception.security.AuthorizationException;
+import in.model.Roles;
 import in.model.User;
+import out.menu.authorization.account.ViewAdminAccount;
 import out.menu.authorization.account.ViewUserAccount;
 
 import java.util.Scanner;
@@ -13,6 +16,8 @@ import java.util.Scanner;
 public class ViewAuthorization {
 
     private final AuthorizationController authorizationController;
+
+    private final AdminController adminController;
 
     private final UserController userController;
 
@@ -23,12 +28,13 @@ public class ViewAuthorization {
     private final Scanner scanner;
 
 
-    public ViewAuthorization(AuthorizationController authorizationController,
+    public ViewAuthorization(AuthorizationController authorizationController, AdminController adminController,
                              UserController userController,
                              TrainingController trainingController,
                              TrainingStatisticsController trainingStatisticsController,
                              Scanner scanner) {
         this.authorizationController = authorizationController;
+        this.adminController = adminController;
         this.userController = userController;
         this.trainingController = trainingController;
         this.trainingStatisticsController = trainingStatisticsController;
@@ -41,13 +47,19 @@ public class ViewAuthorization {
         String authEmail = scanner.nextLine();
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
-       try {
-           User user = authorizationController.login(authEmail, authPassword);
-           ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController,trainingStatisticsController,user,scanner);
-           viewUserAccount.userAccountMenu();
-       } catch (AuthorizationException e) {
-           System.err.println(e.getMessage());
-       }
+        try {
+            User user = authorizationController.login(authEmail, authPassword);
+            if (user.getRoles().contains(Roles.ADMIN)) {
+                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, user, scanner);
+                viewAdminAccount.adminAccountMenu();
+            }
+            if (user.getRoles().contains(Roles.USER)) {
+                ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
+                viewUserAccount.userAccountMenu();
+            }
+        } catch (AuthorizationException e) {
+            System.err.println(e.getMessage());
+        }
 
     }
 
