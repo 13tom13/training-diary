@@ -1,6 +1,6 @@
-package out.menu.authorization.account.training;
+package out.menu.training;
 
-import in.controller.training.TrainingController;
+import in.controller.TrainingController;
 import in.model.Training;
 import in.model.User;
 

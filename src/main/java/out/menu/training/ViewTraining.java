@@ -1,7 +1,7 @@
-package out.menu.authorization.account.training;
+package out.menu.training;
 
 
-import in.controller.training.TrainingController;
+import in.controller.TrainingController;
 import in.model.Training;
 import in.model.User;
 
@@ -13,15 +13,12 @@ public class ViewTraining {
 
     private final TrainingController trainingController;
 
-    private final User user;
 
-
-    public ViewTraining(TrainingController trainingController, User user) {
+    public ViewTraining(TrainingController trainingController) {
         this.trainingController = trainingController;
-        this.user = user;
     }
 
-    public void viewAllTraining() {
+    public void viewAllTraining(User user) {
         TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
         if (allTraining.isEmpty()) {
             System.out.println("список тренировок пуст");

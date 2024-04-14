@@ -1,15 +1,12 @@
 package out.menu.authorization;
 
-import in.controller.AdminController;
+import in.controller.*;
 import in.controller.AuthorizationController;
-import in.controller.UserController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
 import in.exception.security.AuthorizationException;
 import in.model.Roles;
 import in.model.User;
-import out.menu.authorization.account.ViewAdminAccount;
-import out.menu.authorization.account.ViewUserAccount;
+import out.menu.account.ViewAdminAccount;
+import out.menu.account.ViewUserAccount;
 
 import java.util.Scanner;
 
@@ -50,10 +47,9 @@ public class ViewAuthorization {
         try {
             User user = authorizationController.login(authEmail, authPassword);
             if (user.getRoles().contains(Roles.ADMIN)) {
-                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, user, scanner);
+                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController,trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
-            }
-            if (user.getRoles().contains(Roles.USER)) {
+            } else if (user.getRoles().contains(Roles.USER)) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
                 viewUserAccount.userAccountMenu();
             }

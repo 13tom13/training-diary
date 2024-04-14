@@ -1,6 +1,6 @@
-package in.controller.training.implementation;
+package in.controller.implementation;
 
-import in.controller.training.TrainingStatisticsController;
+import in.controller.TrainingStatisticsController;
 import in.exception.security.rights.NoStatisticsRightsException;
 import in.logger.Logger;
 import in.model.User;

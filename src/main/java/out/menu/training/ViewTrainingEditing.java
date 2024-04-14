@@ -1,10 +1,9 @@
-package out.menu.authorization.account.training;
+package out.menu.training;
 
-import in.controller.training.TrainingController;
+import in.controller.TrainingController;
 import in.model.Training;
 import in.model.User;
 
-import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 

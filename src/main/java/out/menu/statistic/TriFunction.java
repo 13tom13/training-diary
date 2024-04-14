@@ -1,4 +1,4 @@
-package out.menu.authorization.account.statistic;
+package out.menu.statistic;
 
 import in.exception.RepositoryException;
 

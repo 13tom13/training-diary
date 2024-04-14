@@ -1,10 +1,7 @@
 package out.menu;
 
-import in.controller.AdminController;
+import in.controller.*;
 import in.controller.AuthorizationController;
-import in.controller.UserController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;

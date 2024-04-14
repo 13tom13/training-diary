@@ -1,9 +1,8 @@
-package in.controller.training.implementation;
+package in.controller.implementation;
 
-import in.controller.training.TrainingController;
+import in.controller.TrainingController;
 import in.exception.InvalidDateFormatException;
 import in.exception.RepositoryException;
-import in.exception.ServiceException;
 import in.exception.security.rights.NoDeleteRightsException;
 import in.exception.security.rights.NoEditRightsException;
 import in.exception.security.rights.NoWriteRightsException;
@@ -14,8 +13,6 @@ import in.service.TrainingService;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import static in.service.implementation.DateValidationService.isValidDateFormat;
 
 public class TrainingControllerImpl implements TrainingController {
 

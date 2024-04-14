@@ -1,4 +1,4 @@
-package in.controller.training;
+package in.controller;
 
 import in.model.Training;
 import in.model.User;

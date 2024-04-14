@@ -82,13 +82,8 @@ public class User {
         }
     }
 
-    public void setRights(String rightsForSet) {
-        try {
-        Rights rightForSet = Rights.valueOf(rightsForSet);
-        rights.add(rightForSet);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Право " + rightsForSet + " не найдено");
-        }
+    public void setRights(List<Rights> rightsForSet) {
+        this.rights = rightsForSet;
     }
 
     public boolean isActive() {
@@ -102,6 +97,7 @@ public class User {
     @Override
     public String toString() {
         String status = isActive ? "active" : "deactivate";
-        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | права: " + rights.toString() + " | (" + status + ")";
+        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | роли: "
+                + roles.toString()  +  " | права: " + rights.toString() + " | (" + status + ")";
     }
 }

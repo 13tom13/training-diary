@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Logger {
     private static Logger instance;
-    private final static String DIRECTORY_PATH = "logs";
+    public final static String LOGS_PATH = "logs";
 
     private Logger() {
     }
@@ -22,14 +22,14 @@ public class Logger {
     }
 
     public synchronized void logAction(String userEmail, String action) {
-        String fileName = DIRECTORY_PATH + "/" + userEmail.replace("@", "_") + ".log";
+        String fileName = LOGS_PATH + "/" + userEmail.replace("@", "_") + ".log";
         LocalDateTime currentTime = LocalDateTime.now();
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        File directory = new File(DIRECTORY_PATH);
+        File directory = new File(LOGS_PATH);
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
-                System.err.println("Failed to create log directory: " + DIRECTORY_PATH);
+                System.err.println("Failed to create log directory: " + LOGS_PATH);
                 return;
             }
         }

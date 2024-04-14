@@ -1,11 +1,11 @@
 import in.controller.AdminController;
+import in.controller.implementation.AdminControllerImpl;
 import in.controller.AuthorizationController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingControllerImpl;
+import in.controller.TrainingStatisticsController;
+import in.controller.implementation.TrainingControllerImpl;
 import in.controller.UserController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import in.controller.implementation.TrainingStatisticsControllerImpl;
 import in.exception.RepositoryException;
-import in.model.Roles;
 import in.model.Training;
 import in.model.User;
 import in.service.implementation.TrainingStatisticsService;
@@ -50,7 +50,7 @@ public class Main {
         TrainingStatisticsService trainingStatisticsService = new TrainingStatisticsService(trainingService);
         TrainingStatisticsController trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsService);
 
-        AdminController adminController = new AdminController();
+        AdminController adminController = new AdminControllerImpl(userRepository);
 
         addAdmin(userRepository);
         addTestUser(userRepository, trainingRepository);

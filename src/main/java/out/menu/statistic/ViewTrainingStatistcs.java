@@ -1,7 +1,6 @@
-package out.menu.authorization.account.statistic;
+package out.menu.statistic;
 
-import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import in.controller.TrainingStatisticsController;
 import in.model.User;
 
 import java.util.Scanner;

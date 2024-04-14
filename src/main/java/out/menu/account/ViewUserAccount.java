@@ -1,13 +1,12 @@
-package out.menu.authorization.account;
+package out.menu.account;
 
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import in.controller.TrainingController;
+import in.controller.TrainingStatisticsController;
 import in.model.User;
-import out.menu.authorization.account.statistic.ViewTrainingStatistcs;
-import out.menu.authorization.account.training.ViewTraining;
-import out.menu.authorization.account.training.ViewTrainingAdded;
-import out.menu.authorization.account.training.ViewTrainingEditing;
+import out.menu.training.ViewTrainingAdded;
+import out.menu.training.ViewTrainingEditing;
+import out.menu.statistic.ViewTrainingStatistcs;
+import out.menu.training.ViewTraining;
 
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class ViewUserAccount {
 
     public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, User user, Scanner scanner) {
         this.viewTrainingStatistcs = new ViewTrainingStatistcs(trainingStatisticsController, user, scanner);
-        this.viewTraining = new ViewTraining(trainingController, user);
+        this.viewTraining = new ViewTraining(trainingController);
         this.viewTrainingAdded = new ViewTrainingAdded(trainingController, user, scanner);
         this.viewTrainingEditing = new ViewTrainingEditing(trainingController, viewTrainingAdded, user, scanner);
         this.scanner = scanner;
@@ -45,31 +44,36 @@ public class ViewUserAccount {
             System.out.println("4. Внести изменение в тренировку");
             System.out.println("5. Статистика по тренировкам");
             System.out.println("6. Выход");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    viewTraining.viewAllTraining();
-                    break;
-                case 2:
-                    viewTrainingAdded.addTraining();
-                    break;
-                case 3:
-                    viewTrainingAdded.deleteTraining();
-                    break;
-                case 4:
-                    viewTrainingEditing.editingTraining();
-                    break;
-                case 5:
-                    viewTrainingStatistcs.statisticMenu();
-                    break;
-                case 6:
-                    System.out.println("До свидания!");
-                    startAccount = false;
-                    break;
-                default:
-                    System.out.println("Неверный выбор. Попробуйте еще раз.");
-                    break;
+            if (scanner.hasNextInt()) {
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        viewTraining.viewAllTraining(user);
+                        break;
+                    case 2:
+                        viewTrainingAdded.addTraining();
+                        break;
+                    case 3:
+                        viewTrainingAdded.deleteTraining();
+                        break;
+                    case 4:
+                        viewTrainingEditing.editingTraining();
+                        break;
+                    case 5:
+                        viewTrainingStatistcs.statisticMenu();
+                        break;
+                    case 6:
+                        System.out.println("До свидания!");
+                        startAccount = false;
+                        break;
+                    default:
+                        System.out.println("Неверный выбор. Попробуйте еще раз.");
+                        break;
+                }
+            } else {
+                System.out.println("Неверный выбор. Попробуйте еще раз.");
+                scanner.nextLine();
             }
         }
     }

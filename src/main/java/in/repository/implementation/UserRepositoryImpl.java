@@ -21,6 +21,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return new ArrayList<>(userRepository.values());
+}
+
+    @Override
     public void saveUser(User user) throws RepositoryException {
         if (!userRepository.containsKey(user.getEmail())) {
             userRepository.put(user.getEmail(), user);
@@ -33,6 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUser(User user) {
         userRepository.put(user.getEmail(), user);
     }
+
 
     public void deleteUser(String email) {
         userRepository.remove(email);
