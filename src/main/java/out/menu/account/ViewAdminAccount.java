@@ -2,7 +2,6 @@ package out.menu.account;
 
 import in.controller.AdminController;
 import in.controller.TrainingController;
-import in.logger.Logger;
 
 import java.util.Scanner;
 
@@ -12,7 +11,7 @@ public class ViewAdminAccount {
 
     private final Scanner scanner;
 
-    public ViewAdminAccount(AdminController adminController, TrainingController trainingController,Scanner scanner) {
+    public ViewAdminAccount(AdminController adminController, TrainingController trainingController, Scanner scanner) {
         viewUsers = new ViewUsers(adminController, trainingController, scanner);
         this.scanner = scanner;
     }

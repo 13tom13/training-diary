@@ -1,9 +1,7 @@
 package out.menu.authorization;
 
 import in.controller.*;
-import in.controller.AuthorizationController;
 import in.exception.security.AuthorizationException;
-import in.logger.Logger;
 import in.model.Roles;
 import in.model.User;
 import out.menu.account.ViewAdminAccount;
@@ -48,7 +46,7 @@ public class ViewAuthorization {
         try {
             User user = authorizationController.login(authEmail, authPassword);
             if (user.getRoles().contains(Roles.ADMIN)) {
-                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController,trainingController, scanner);
+                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
             } else if (user.getRoles().contains(Roles.USER)) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
@@ -73,7 +71,4 @@ public class ViewAuthorization {
         userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
     }
 
-    public void logout(User user) {
-
-    }
 }
