@@ -9,7 +9,7 @@ Training Diary - это приложение для ведения ежедне�
 
 ## Установка
 
-1. Склонируйте репозиторий: `git clone https://github.com/13tom13/training-diary.git`
+1. Склонируйте репозиторий: `git clone git@github.com:13tom13/training-diary.git`
 2. Перейдите в каталог проекта: `cd training-diary`
 3. Соберите проект с помощью Maven: `mvn clean install`
 4. Запустите приложение: `java -jar target/training-diary.jar`
