@@ -22,7 +22,7 @@ public class Logger {
     }
 
     public synchronized void logAction(String userEmail, String action) {
-        String fileName = LOGS_PATH + "/" + userEmail.replace("@", "_") + ".log";
+        String fileName = getLogFielPath(userEmail);
         LocalDateTime currentTime = LocalDateTime.now();
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -39,6 +39,10 @@ public class Logger {
         } catch (IOException e) {
             System.err.println("Failed to log action: " + e.getMessage());
         }
+    }
+
+    public static String getLogFielPath (String userEmail){
+        return LOGS_PATH + "/" + userEmail.replace("@", "_") + ".log";
     }
 
 }

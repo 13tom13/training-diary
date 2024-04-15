@@ -8,12 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import testutil.TestUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class TrainingStatisticsControllerImplTest {
+public class TrainingStatisticsControllerImplTest extends TestUtil {
 
     @Mock
     private TrainingStatisticsService trainingStatisticsServiceMock;
@@ -27,10 +28,11 @@ public class TrainingStatisticsControllerImplTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsServiceMock);
-        testUser = new User("test@example.com", "John", "Doe", "password");
+        testUser = new User("John", "Doe", TEST_EMAIL, "password");
         startDate = "01.01.24";
         endDate = "31.01.24";
     }
+
 
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {

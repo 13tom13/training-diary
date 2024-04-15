@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import testutil.TestUtil;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -20,7 +21,7 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class TrainingControllerImplTest {
+public class TrainingControllerImplTest extends TestUtil {
 
     @Mock
     private TrainingService trainingServiceMock;
@@ -43,11 +44,10 @@ public class TrainingControllerImplTest {
         trainingController = new TrainingControllerImpl(trainingServiceMock);
 
         // Create test user
-        String email = "test@mail.ru";
         String firstname = "Test";
         String lastname = "User";
         String password = "pass";
-        testUser = new User(firstname, lastname, email, password);
+        testUser = new User(firstname, lastname, TEST_EMAIL, password);
     }
 
     @Test

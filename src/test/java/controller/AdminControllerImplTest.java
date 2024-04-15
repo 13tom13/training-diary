@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static testutil.TestUtil.TEST_EMAIL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +30,7 @@ public class AdminControllerImplTest {
         MockitoAnnotations.openMocks(this);
         adminController = new AdminControllerImpl(userRepositoryMock);
         testUsers = new ArrayList<>();
-        testUser = new User("test@example.com", "John", "Doe", "password");
+        testUser = new User(TEST_EMAIL, "John", "Doe", "password");
         testUsers.add(testUser);
     }
 
