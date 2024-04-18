@@ -1,6 +1,6 @@
 package logger;
 
-import in.logger.Logger;
+import utils.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import testutil.TestUtil;

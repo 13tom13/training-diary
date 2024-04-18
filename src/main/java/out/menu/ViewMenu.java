@@ -1,7 +1,10 @@
 package out.menu;
 
-import in.controller.*;
-import in.controller.AuthorizationController;
+import in.controller.authorization.AuthorizationController;
+import in.controller.training.TrainingController;
+import in.controller.training.TrainingStatisticsController;
+import in.controller.users.AdminController;
+import in.controller.users.UserController;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
@@ -21,6 +24,7 @@ public class ViewMenu {
     }
 
     private void viewWelcomeMessage() {
+        System.out.println();
         System.out.println("Добро пожаловать в тренировочный дневник!");
     }
 

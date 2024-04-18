@@ -1,23 +1,28 @@
 package controller;
 
-import in.controller.implementation.TrainingStatisticsControllerImpl;
-import in.exception.security.rights.NoStatisticsRightsException;
-import in.model.User;
-import in.service.implementation.TrainingStatisticsService;
+import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import exceptions.security.rights.NoStatisticsRightsException;
+import model.User;
+import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import testutil.TestUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class TrainingStatisticsControllerImplTest extends TestUtil {
 
     @Mock
-    private TrainingStatisticsService trainingStatisticsServiceMock;
+    private TrainingStatisticsServiceImp trainingStatisticsServiceMock;
 
     private TrainingStatisticsControllerImpl trainingStatisticsController;
     private User testUser;
@@ -26,7 +31,7 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+
         trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsServiceMock);
         testUser = new User("John", "Doe", TEST_EMAIL, "password");
         startDate = "01.01.24";

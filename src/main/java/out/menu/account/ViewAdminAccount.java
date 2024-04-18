@@ -1,7 +1,7 @@
 package out.menu.account;
 
-import in.controller.AdminController;
-import in.controller.TrainingController;
+import in.controller.users.AdminController;
+import in.controller.training.TrainingController;
 
 import java.util.Scanner;
 

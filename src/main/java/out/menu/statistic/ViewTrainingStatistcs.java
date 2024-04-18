@@ -1,7 +1,7 @@
 package out.menu.statistic;
 
-import in.controller.TrainingStatisticsController;
-import in.model.User;
+import in.controller.training.TrainingStatisticsController;
+import model.User;
 
 import java.util.Scanner;
 

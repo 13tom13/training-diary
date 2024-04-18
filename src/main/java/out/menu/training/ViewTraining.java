@@ -1,9 +1,9 @@
 package out.menu.training;
 
 
-import in.controller.TrainingController;
-import in.model.Training;
-import in.model.User;
+import in.controller.training.TrainingController;
+import model.Training;
+import model.User;
 
 import java.util.Map;
 import java.util.TreeMap;

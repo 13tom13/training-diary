@@ -1,19 +1,23 @@
 package controller;
 
-import in.controller.implementation.TrainingControllerImpl;
-import in.exception.InvalidDateFormatException;
-import in.exception.RepositoryException;
-import in.exception.security.rights.NoDeleteRightsException;
-import in.exception.security.rights.NoEditRightsException;
-import in.exception.security.rights.NoWriteRightsException;
-import in.model.Training;
-import in.model.User;
-import in.service.TrainingService;
+import in.controller.training.implementation.TrainingControllerImpl;
+import exceptions.InvalidDateFormatException;
+import exceptions.RepositoryException;
+import exceptions.security.rights.NoDeleteRightsException;
+import exceptions.security.rights.NoEditRightsException;
+import exceptions.security.rights.NoWriteRightsException;
+import model.Training;
+import model.User;
+import in.service.training.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import testutil.TestUtil;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -21,6 +25,8 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class TrainingControllerImplTest extends TestUtil {
 
     @Mock
@@ -40,7 +46,6 @@ public class TrainingControllerImplTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         trainingController = new TrainingControllerImpl(trainingServiceMock);
 
         // Create test user

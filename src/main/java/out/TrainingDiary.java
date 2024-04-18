@@ -1,23 +1,23 @@
 package out;
 
-import in.controller.*;
-import in.controller.AuthorizationController;
+import config.ControllerInitializer;
 import out.menu.ViewMenu;
 
 public class TrainingDiary {
     private final ViewMenu viewMenu;
 
-
-    public TrainingDiary(AuthorizationController authorizationController,
-                         AdminController adminController,
-                         UserController userController,
-                         TrainingController trainingController,
-                         TrainingStatisticsController trainingStatisticsController) {
-        this.viewMenu = new ViewMenu(authorizationController, adminController, userController,
-                trainingController, trainingStatisticsController);
+    public TrainingDiary() {
+        ControllerInitializer controllerInitializer = new ControllerInitializer();
+        this.viewMenu = new ViewMenu(controllerInitializer.getAuthorizationController(),
+                controllerInitializer.getAdminController(),
+                controllerInitializer.getUserController(),
+                controllerInitializer.getTrainingController(),
+                controllerInitializer.getTrainingStatisticsController());
     }
 
     public void start() {
         viewMenu.processMainMenuChoice();
     }
+
+
 }

@@ -1,12 +1,13 @@
 package out.menu.training;
 
-import in.controller.TrainingController;
-import in.model.Training;
-import in.model.User;
+import in.controller.training.TrainingController;
+import model.Training;
+import model.User;
 
+import java.util.List;
 import java.util.Scanner;
 
-import static in.service.implementation.DateValidationService.isValidDateFormat;
+import static utils.DateValidationService.isValidDateFormat;
 
 public class ViewTrainingAdded {
 
@@ -25,7 +26,7 @@ public class ViewTrainingAdded {
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
         System.out.print("Название: ");
-        String name = scanner.nextLine();
+        String name = choseTrainingType();
         System.out.print("Дата (дд.мм.гг): ");
         String date = scanner.nextLine();
         if (isValidDateFormat(date)) {
@@ -34,12 +35,46 @@ public class ViewTrainingAdded {
             System.out.print("Сожженные калории: ");
             int caloriesBurned = Integer.parseInt(scanner.nextLine());
             Training training = new Training(name, date, duration, caloriesBurned);
-            trainingController.saveTraining(user, training);
-            addTrainingAdditional(user, training);
+            if (trainingController.saveTraining(user, training)){
+                addTrainingAdditional(user, training);
+            }
         } else {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
         }
     }
+
+    public String choseTrainingType() {
+        System.out.println("Выберите тип тренировки:");
+
+        List<String> trainingTypes = trainingController.getTrainingTypes(user);
+
+        for (int i = 0; i < trainingTypes.size(); i++) {
+            System.out.println((i + 1) + ". " + trainingTypes.get(i));
+        }
+
+        System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
+
+        System.out.print("Ваш выбор: ");
+        int choice = scanner.nextInt();
+
+        if (choice >= 1 && choice <= trainingTypes.size()) {
+            String selectedTrainingType = trainingTypes.get(choice - 1);
+            System.out.println("Выбран тип тренировки: " + selectedTrainingType);
+            scanner.nextLine();
+            return selectedTrainingType;
+        } else if (choice == trainingTypes.size() + 1) {
+            scanner.nextLine();
+            System.out.print("Введите свой тип тренировки: ");
+            String customTrainingType = scanner.nextLine();
+            trainingController.saveTrainingType(user, customTrainingType);
+            System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
+            return customTrainingType;
+        } else {
+            System.out.println("Некорректный выбор.");
+            return null; // или можно выбрасывать исключение или делать что-то ещё, в зависимости от требований системы
+        }
+    }
+
 
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");

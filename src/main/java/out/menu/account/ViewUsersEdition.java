@@ -1,8 +1,8 @@
 package out.menu.account;
 
-import in.controller.AdminController;
-import in.model.Rights;
-import in.model.User;
+import in.controller.users.AdminController;
+import model.Rights;
+import model.User;
 
 import java.util.List;
 import java.util.Scanner;

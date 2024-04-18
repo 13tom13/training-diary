@@ -1,13 +1,13 @@
 package out.menu.training;
 
-import in.controller.TrainingController;
-import in.model.Training;
-import in.model.User;
+import in.controller.training.TrainingController;
+import model.Training;
+import model.User;
 
 import java.util.Scanner;
 import java.util.TreeSet;
 
-import static in.service.implementation.DateValidationService.isValidDateFormat;
+import static utils.DateValidationService.isValidDateFormat;
 
 public class ViewTrainingEditing {
 

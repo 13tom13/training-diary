@@ -1,8 +1,8 @@
 package out.menu.account;
 
-import in.controller.AdminController;
-import in.controller.TrainingController;
-import in.model.User;
+import in.controller.users.AdminController;
+import in.controller.training.TrainingController;
+import model.User;
 import out.menu.training.ViewTraining;
 
 import java.io.BufferedReader;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-import static in.logger.Logger.LOGS_PATH;
+import static utils.Logger.LOGS_PATH;
 
 public class ViewUsers {
 

@@ -1,26 +1,32 @@
 package controller;
 
-import in.controller.AuthorizationController;
-import in.exception.security.AuthorizationException;
-import in.model.User;
-import in.service.AuthorizationService;
+import in.controller.authorization.implementation.AuthorizationControllerImpl;
+import exceptions.security.AuthorizationException;
+import model.User;
+import in.service.users.AuthorizationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import testutil.TestUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AuthorizationControllerTest  extends TestUtil {
 
-    private AuthorizationController authorizationController;
+    private AuthorizationControllerImpl authorizationController;
     private AuthorizationService authorizationService;
 
     @BeforeEach
     void setUp() {
         authorizationService = Mockito.mock(AuthorizationService.class);
-        authorizationController = new AuthorizationController(authorizationService);
+        authorizationController = new AuthorizationControllerImpl(authorizationService);
     }
 
     @Test
