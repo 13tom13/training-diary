@@ -1,10 +1,10 @@
-package in.service.implementation;
+package in.service.users.implementation;
 
-import in.exception.security.AuthorizationException;
-import in.exception.security.NotActiveUserException;
-import in.model.User;
+import exceptions.security.AuthorizationException;
+import exceptions.security.NotActiveUserException;
+import model.User;
 import in.repository.UserRepository;
-import in.service.AuthorizationService;
+import in.service.users.AuthorizationService;
 
 import java.util.Optional;
 
