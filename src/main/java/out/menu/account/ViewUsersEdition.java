@@ -7,17 +7,30 @@ import model.User;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Класс ViewUsersEdition представляет меню для редактирования пользователей.
+ */
 public class ViewUsersEdition {
 
     private final AdminController adminController;
-
     private final Scanner scanner;
 
+    /**
+     * Конструктор класса ViewUsersEdition.
+     *
+     * @param adminController Контроллер администратора.
+     * @param scanner         Сканер для ввода данных.
+     */
     public ViewUsersEdition(AdminController adminController, Scanner scanner) {
         this.scanner = scanner;
         this.adminController = adminController;
     }
 
+    /**
+     * Метод для редактирования данных пользователя.
+     *
+     * @param user Пользователь, данные которого будут редактироваться.
+     */
     public void userEdition(User user) {
         boolean editing = true;
         while (editing) {
@@ -60,7 +73,7 @@ public class ViewUsersEdition {
                     case 6:
                         adminController.deleteUser(user);
                     case 7:
-                        System.out.println("До свидания!");
+                        System.out.println("Выход из редактирования пользователя " + user.getEmail());
                         editing = false;
                         break;
                     default:
@@ -74,7 +87,12 @@ public class ViewUsersEdition {
         }
     }
 
-
+    /**
+     * Метод для получения непустого ввода от пользователя.
+     *
+     * @param prompt Сообщение-приглашение для ввода.
+     * @return Введенная пользователем строка.
+     */
     private String getNonEmptyInput(String prompt) {
         String input = "";
         while (input.isEmpty()) {
@@ -87,7 +105,11 @@ public class ViewUsersEdition {
         return input;
     }
 
-
+    /**
+     * Метод для изменения прав пользователя.
+     *
+     * @param user Пользователь, права которого будут изменены.
+     */
     private void changeUserRights(User user) {
         List<Rights> userRights = user.getRights();
         List<Rights> allRights = List.of(Rights.values());
@@ -156,6 +178,4 @@ public class ViewUsersEdition {
             }
         }
     }
-
-
 }

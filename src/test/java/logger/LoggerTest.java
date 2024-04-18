@@ -13,14 +13,19 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Тестирование класса Logger.
+ */
 public class LoggerTest {
 
     private static final String TEST_EMAIL = "test@example.com";
     private static final String TEST_ACTION = "logged in";
 
+    /**
+     * Удаление существующего файла журнала перед каждым запуском теста.
+     */
     @BeforeEach
     public void setUp() {
-        // Удаление существующего файла журнала перед каждым запуском теста
         String logFilePath = Logger.getLogFielPath(TEST_EMAIL);
         File logFile = new File(logFilePath);
         if (logFile.exists()) {
@@ -28,6 +33,9 @@ public class LoggerTest {
         }
     }
 
+    /**
+     * Тестирование метода logAction.
+     */
     @Test
     public void testLogAction() {
         // Arrange
@@ -45,16 +53,21 @@ public class LoggerTest {
         try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
             String line = reader.readLine();
             assertNotNull(line, "Log file is empty");
-            String expectedLine = formatLogLine(TEST_ACTION);
+            String expectedLine = formatLogLine();
             assertEquals(expectedLine, line, "Logged action does not match expected");
         } catch (IOException e) {
             fail("Error reading log file: " + e.getMessage());
         }
     }
 
-    private String formatLogLine(String action) {
+    /**
+     * Форматирование строки журнала действий.
+     *
+     * @return отформатированная строка журнала действий
+     */
+    private String formatLogLine() {
         LocalDateTime currentTime = LocalDateTime.now();
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return formattedTime + ": ACTION - " + TEST_EMAIL + " \"" + action + "\"";
+        return formattedTime + ": ACTION - " + TEST_EMAIL + " \"" + LoggerTest.TEST_ACTION + "\"";
     }
 }

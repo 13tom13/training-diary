@@ -16,9 +16,12 @@ import testutil.TestUtil;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Тестирование класса AuthorizationControllerImpl.
+ */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class AuthorizationControllerTest  extends TestUtil {
+public class AuthorizationControllerTest extends TestUtil {
 
     private AuthorizationControllerImpl authorizationController;
     private AuthorizationService authorizationService;
@@ -29,13 +32,18 @@ public class AuthorizationControllerTest  extends TestUtil {
         authorizationController = new AuthorizationControllerImpl(authorizationService);
     }
 
+    /**
+     * Тестирование метода login с правильными учетными данными.
+     *
+     * @throws AuthorizationException если возникла ошибка авторизации
+     */
     @Test
     void loginValidCredentialsReturnsUser() throws AuthorizationException {
         // Arrange
         String firstname = "Test";
         String lastname = "User";
         String password = "pass";
-        User expectedUser = new User(firstname, lastname,TEST_EMAIL, password);
+        User expectedUser = new User(firstname, lastname, TEST_EMAIL, password);
 
         // Stubbing the service method
         Mockito.when(authorizationService.login(TEST_EMAIL, password)).thenReturn(expectedUser);
@@ -47,6 +55,11 @@ public class AuthorizationControllerTest  extends TestUtil {
         assertEquals(expectedUser, actualUser);
     }
 
+    /**
+     * Тестирование метода login с неправильными учетными данными.
+     *
+     * @throws AuthorizationException если возникла ошибка авторизации
+     */
     @Test
     void loginInvalidCredentialsThrowsAuthorizationException() throws AuthorizationException {
         // Arrange
@@ -60,3 +73,4 @@ public class AuthorizationControllerTest  extends TestUtil {
         assertThrows(AuthorizationException.class, () -> authorizationController.login(email, password));
     }
 }
+

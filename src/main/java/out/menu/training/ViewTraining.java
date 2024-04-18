@@ -9,19 +9,31 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Представляет класс для просмотра тренировок пользователя.
+ */
 public class ViewTraining {
 
     private final TrainingController trainingController;
 
-
+    /**
+     * Создает экземпляр ViewTraining с заданным контроллером тренировок.
+     *
+     * @param trainingController Контроллер тренировок.
+     */
     public ViewTraining(TrainingController trainingController) {
         this.trainingController = trainingController;
     }
 
+    /**
+     * Отображает все тренировки пользователя.
+     *
+     * @param user Пользователь, чьи тренировки необходимо отобразить.
+     */
     public void viewAllTraining(User user) {
         TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
         if (allTraining.isEmpty()) {
-            System.out.println("список тренировок пуст");
+            System.out.println("Список тренировок пуст");
             return;
         }
 
@@ -38,5 +50,4 @@ public class ViewTraining {
             }
         }
     }
-
 }

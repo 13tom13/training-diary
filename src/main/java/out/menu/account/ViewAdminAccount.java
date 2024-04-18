@@ -5,17 +5,28 @@ import in.controller.training.TrainingController;
 
 import java.util.Scanner;
 
+/**
+ * Класс ViewAdminAccount представляет меню для администратора.
+ */
 public class ViewAdminAccount {
 
     private final ViewUsers viewUsers;
-
     private final Scanner scanner;
 
+    /**
+     * Конструктор класса ViewAdminAccount.
+     * @param adminController Контроллер администратора.
+     * @param trainingController Контроллер тренировок.
+     * @param scanner Сканер для ввода данных.
+     */
     public ViewAdminAccount(AdminController adminController, TrainingController trainingController, Scanner scanner) {
         viewUsers = new ViewUsers(adminController, trainingController, scanner);
         this.scanner = scanner;
     }
 
+    /**
+     * Метод для отображения меню для администратора.
+     */
     public void adminAccountMenu() {
         boolean startAccount = true;
         while (startAccount) {
@@ -28,19 +39,13 @@ public class ViewAdminAccount {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case 1:
-                        viewUsers.viewAllUsers();
-                        break;
-                    case 2:
-                        viewUsers.viewUser();
-                        break;
-                    case 3:
-                        System.out.println("До свидания!");
+                    case 1 -> viewUsers.viewAllUsers();
+                    case 2 -> viewUsers.viewUser();
+                    case 3 -> {
+                        System.out.println("Выход из меню администратора");
                         startAccount = false;
-                        break;
-                    default:
-                        System.out.println("Неверный выбор. Попробуйте еще раз.");
-                        break;
+                    }
+                    default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
                 }
             } else {
                 System.out.println("Неверный выбор. Попробуйте еще раз.");
@@ -48,6 +53,4 @@ public class ViewAdminAccount {
             }
         }
     }
-
-
 }

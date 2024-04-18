@@ -9,16 +9,26 @@ import java.util.TreeSet;
 
 import static utils.DateValidationService.isValidDateFormat;
 
+/**
+ * Представляет класс для редактирования тренировок пользователя.
+ */
 public class ViewTrainingEditing {
 
     private final TrainingController trainingController;
-
     private final ViewTrainingAdded viewTrainingAdded;
     private final User user;
     private final Scanner scanner;
 
     private Training training;
 
+    /**
+     * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
+     *
+     * @param trainingController Контроллер тренировок.
+     * @param viewTrainingAdded Представление добавления тренировок.
+     * @param user              Пользователь.
+     * @param scanner           Сканер для ввода данных.
+     */
     public ViewTrainingEditing(TrainingController trainingController,
                                ViewTrainingAdded viewTrainingAdded,
                                User user, Scanner scanner) {
@@ -28,6 +38,9 @@ public class ViewTrainingEditing {
         this.scanner = scanner;
     }
 
+    /**
+     * Получает тренировку для редактирования.
+     */
     private void getTrainingForEditing() {
         TreeSet<Training> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
@@ -44,11 +57,13 @@ public class ViewTrainingEditing {
         }
     }
 
-
+    /**
+     * Редактирует тренировку.
+     */
     public void editingTraining() {
         getTrainingForEditing();
         boolean startView = false;
-        if (training != null && training.getName()!= null ) {
+        if (training != null && training.getName() != null) {
             startView = true;
         } else {
             System.out.println("Тренировка не найдена.");
@@ -67,13 +82,13 @@ public class ViewTrainingEditing {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case 1:
+                    case 1 -> {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
                         trainingController.changeNameTraining(user, training, newName);
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         System.out.println();
                         System.out.println("Введите новую дату:");
                         String newDate = scanner.nextLine();
@@ -82,29 +97,25 @@ public class ViewTrainingEditing {
                         } else {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
                         }
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
                         trainingController.changeDurationTraining(user, training, newDuration);
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
                         trainingController.changeCaloriesTraining(user, training, newCalories);
-                        break;
-                    case 5:
-                        viewTrainingAdded.addTrainingAdditional(user, training);
-                        break;
-                    case 6:
-                        System.out.println("Выход из меню изменения тренировки");
+                    }
+                    case 5 -> viewTrainingAdded.addTrainingAdditional(user, training);
+                    case 6 -> {
+                        System.out.println("Выход из меню изменения тренировки.");
                         startView = false;
-                        break;
-                    default:
-                        System.out.println("Неверный выбор. Попробуйте еще раз.");
-                        break;
+                    }
+                    default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
                 }
             } else {
                 System.out.println("Неверный ввод. Пожалуйста, введите число.");

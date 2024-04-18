@@ -16,6 +16,9 @@ import testutil.TestUtil;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
+/**
+ * Тестирование класса UserControllerImpl.
+ */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UserControllerImplTest extends TestUtil {
@@ -27,11 +30,15 @@ public class UserControllerImplTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-//        MockitoAnnotations.openMocks(this);
         userController = new UserControllerImpl(userServiceMock);
     }
 
-
+    /**
+     * Тестирование успешного создания нового пользователя.
+     *
+     * @throws ValidationException если возникли проблемы с валидацией данных пользователя
+     * @throws RepositoryException если возникли проблемы с доступом к репозиторию пользователей
+     */
     @Test
     public void testCreateNewUser_Successful() throws ValidationException, RepositoryException {
         // Set up values for the test

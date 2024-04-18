@@ -9,10 +9,21 @@ import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
 
+/**
+ * Класс ViewMenu представляет собой меню приложения для управления авторизацией и регистрацией пользователей.
+ */
 public class ViewMenu {
 
     private final ViewAuthorization viewAuthorization;
 
+    /**
+     * Конструктор класса ViewMenu.
+     * @param authorizationController Контроллер авторизации.
+     * @param adminController Контроллер администратора.
+     * @param userController Контроллер пользователя.
+     * @param trainingController Контроллер тренировок.
+     * @param trainingStatisticsController Контроллер статистики тренировок.
+     */
     public ViewMenu(AuthorizationController authorizationController,
                     AdminController adminController,
                     UserController userController,
@@ -23,11 +34,17 @@ public class ViewMenu {
                 trainingController, trainingStatisticsController, scanner);
     }
 
+    /**
+     * Выводит приветственное сообщение при запуске меню.
+     */
     private void viewWelcomeMessage() {
         System.out.println();
         System.out.println("Добро пожаловать в тренировочный дневник!");
     }
 
+    /**
+     * Выводит главное меню приложения.
+     */
     private void viewMainMenu() {
         System.out.println("Выберите действие:");
         System.out.println("1. Авторизация");
@@ -35,6 +52,9 @@ public class ViewMenu {
         System.out.println("3. Выход");
     }
 
+    /**
+     * Обрабатывает выбор пользователя в главном меню.
+     */
     public void processMainMenuChoice() {
         viewWelcomeMessage();
         Scanner scanner = new Scanner(System.in);
@@ -45,25 +65,18 @@ public class ViewMenu {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case 1:
-                        viewAuthorization.login();
-                        break;
-                    case 2:
-                        viewAuthorization.register();
-                        break;
-                    case 3:
-                        System.out.println("До свидания!");
+                    case 1 -> viewAuthorization.login();
+                    case 2 -> viewAuthorization.register();
+                    case 3 -> {
+                        System.out.println("Завершение программы");
                         startMenu = false;
-                        break;
-                    default:
-                        System.out.println("Неверный выбор. Попробуйте еще раз.");
-                        break;
+                    }
+                    default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
                 }
             } else {
                 System.out.println("Неверный выбор. Попробуйте еще раз.");
                 scanner.nextLine();
             }
         }
-
     }
 }
