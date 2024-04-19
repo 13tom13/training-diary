@@ -12,6 +12,7 @@ import in.service.training.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -28,12 +29,12 @@ import static org.mockito.Mockito.*;
  * Тестирование класса TrainingControllerImpl.
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class TrainingControllerImplTest extends TestUtil {
 
     @Mock
     private TrainingService trainingServiceMock;
 
+    @InjectMocks
     private TrainingControllerImpl trainingController;
 
     private User testUser;
@@ -48,13 +49,8 @@ public class TrainingControllerImplTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        trainingController = new TrainingControllerImpl(trainingServiceMock);
-
         // Создание тестового пользователя
-        String firstname = "Test";
-        String lastname = "User";
-        String password = "pass";
-        testUser = new User(firstname, lastname, TEST_EMAIL, password);
+        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
     }
 
     /**

@@ -25,9 +25,10 @@ public class ViewUsers {
 
     /**
      * Конструктор класса ViewUsers.
-     * @param adminController Контроллер администратора.
+     *
+     * @param adminController    Контроллер администратора.
      * @param trainingController Контроллер тренировок.
-     * @param scanner Сканер для ввода данных.
+     * @param scanner            Сканер для ввода данных.
      */
     public ViewUsers(AdminController adminController, TrainingController trainingController, Scanner scanner) {
         this.adminController = adminController;
@@ -63,6 +64,8 @@ public class ViewUsers {
 
     /**
      * Метод для отображения меню действий с пользователем.
+     *
+     * @param user Пользователь, для которого отображается меню.
      */
     public void userViewMenu(User user) {
         boolean view = true;
@@ -96,6 +99,8 @@ public class ViewUsers {
 
     /**
      * Метод для просмотра логов пользователя.
+     *
+     * @param user Пользователь, чьи логи просматриваются.
      */
     private void viewLogsUser(User user) {
         String userEmail = user.getEmail();

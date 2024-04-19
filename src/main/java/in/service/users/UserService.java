@@ -31,17 +31,4 @@ public interface UserService {
      */
     void saveUser(String firstName, String lastName, String email, String password) throws RepositoryException, ValidationException;
 
-    /**
-     * Обновляет информацию о пользователе.
-     *
-     * @param user объект пользователя для обновления
-     */
-    void updateUser(User user);
-
-    /**
-     * Удаляет пользователя по его электронной почте.
-     *
-     * @param email электронная почта пользователя для удаления
-     */
-    void deleteUser(String email);
 }

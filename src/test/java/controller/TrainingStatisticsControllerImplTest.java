@@ -7,10 +7,9 @@ import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import testutil.TestUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,24 +20,20 @@ import static org.mockito.Mockito.when;
  * Тестирование класса TrainingStatisticsControllerImpl.
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class TrainingStatisticsControllerImplTest extends TestUtil {
 
     @Mock
     private TrainingStatisticsServiceImp trainingStatisticsServiceMock;
 
+    @InjectMocks
     private TrainingStatisticsControllerImpl trainingStatisticsController;
     private User testUser;
-    private String startDate;
-    private String endDate;
+    private final String startDate = "01.01.24";
+    private final String endDate = "31.01.24";
 
     @BeforeEach
     public void setUp() {
-
-        trainingStatisticsController = new TrainingStatisticsControllerImpl(trainingStatisticsServiceMock);
-        testUser = new User("John", "Doe", TEST_EMAIL, "password");
-        startDate = "01.01.24";
-        endDate = "31.01.24";
+        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
     }
 
     /**

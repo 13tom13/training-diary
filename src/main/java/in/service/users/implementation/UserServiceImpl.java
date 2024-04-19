@@ -65,23 +65,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * Обновляет данные пользователя.
-     *
-     * @param user объект пользователя с обновленными данными
-     */
-    @Override
-    public void updateUser(User user) {
-        // Реализация обновления пользователя
-    }
-
-    /**
-     * Удаляет пользователя.
-     *
-     * @param email электронная почта пользователя
-     */
-    @Override
-    public void deleteUser(String email) {
-        // Реализация удаления пользователя
-    }
 }

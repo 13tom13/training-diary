@@ -12,9 +12,14 @@ import java.time.format.DateTimeFormatter;
  */
 public class Logger {
     private static Logger instance;
+
+    /**
+     * Путь к директории, где будут храниться файлы журнала.
+     */
     public final static String LOGS_PATH = "logs";
 
     private Logger() {
+        // Приватный конструктор, чтобы предотвратить создание экземпляров этого класса.
     }
 
     /**
@@ -93,7 +98,7 @@ public class Logger {
      * @param userEmail Email пользователя
      * @return Путь к файлу журнала для данного пользователя
      */
-    public static String getLogFielPath (String userEmail){
+    public static String getLogFielPath(String userEmail) {
         return LOGS_PATH + "/" + userEmail.replace("@", "_") + ".log";
     }
 

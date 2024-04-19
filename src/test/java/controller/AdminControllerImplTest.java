@@ -1,12 +1,15 @@
 package controller;
 
 import in.controller.users.implementation.AdminControllerImpl;
+import in.repository.UserRepository;
 import model.Rights;
 import model.User;
-import in.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +18,26 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static testutil.TestUtil.TEST_EMAIL;
+import static testutil.TestUtil.*;
 
 /**
  * Тесты для класса AdminControllerImpl.
  */
+@ExtendWith(MockitoExtension.class)
 public class AdminControllerImplTest {
 
+    @Mock
     private UserRepository userRepositoryMock;
 
+    @InjectMocks
     private AdminControllerImpl adminController;
     private List<User> testUsers;
     private User testUser;
 
     @BeforeEach
     public void setUp() {
-        userRepositoryMock = Mockito.mock(UserRepository.class);
-        adminController = new AdminControllerImpl(userRepositoryMock);
         testUsers = new ArrayList<>();
-        testUser = new User(TEST_EMAIL, "John", "Doe", "password");
+        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
         testUsers.add(testUser);
     }
 

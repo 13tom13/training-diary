@@ -7,8 +7,18 @@ import java.text.SimpleDateFormat;
  * Сервис для проверки формата даты.
  */
 public class DateValidationService {
+    /**
+     * Конструктор класса DateValidationService.
+     * Приватный конструктор, поскольку все методы в этом классе являются статическими.
+     */
+    private DateValidationService() {
+        // Приватный конструктор, чтобы предотвратить создание экземпляров этого класса.
+    }
 
-    /** Формат даты. */
+
+    /**
+     * Формат даты.
+     */
     public static final String DATE_FORMAT = "dd.MM.yy";
 
     /**
@@ -27,4 +37,5 @@ public class DateValidationService {
             return false;
         }
     }
+
 }

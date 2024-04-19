@@ -2,6 +2,7 @@ package logger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import testutil.TestUtil;
 import utils.Logger;
 
 import java.io.BufferedReader;
@@ -16,9 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Тестирование класса Logger.
  */
-public class LoggerTest {
+public class LoggerTest extends TestUtil {
 
-    private static final String TEST_EMAIL = "test@example.com";
     private static final String TEST_ACTION = "logged in";
 
     /**
