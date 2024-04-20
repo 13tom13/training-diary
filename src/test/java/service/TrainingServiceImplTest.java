@@ -5,10 +5,9 @@ import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
-import in.repository.TrainingRepository;
-import in.repository.TrainingTypeRepository;
+import in.repository.training.TrainingRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.implementation.TrainingServiceImpl;
-import model.Rights;
 import model.Training;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
 

@@ -2,7 +2,7 @@ package service;
 
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.implementation.AuthorizationServiceImpl;
 import model.User;
 import org.junit.jupiter.api.Test;

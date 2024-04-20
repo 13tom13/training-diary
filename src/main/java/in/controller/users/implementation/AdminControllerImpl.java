@@ -3,7 +3,7 @@ package in.controller.users.implementation;
 import in.controller.users.AdminController;
 import model.Rights;
 import model.User;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -113,6 +113,11 @@ public class AdminControllerImpl implements AdminController {
      */
     @Override
     public void deleteUser(User user) {
-        userRepository.deleteUser(user.getEmail());
+        userRepository.deleteUser(user);
+    }
+
+    @Override
+    public List<Rights> getAllRights() {
+        return userRepository.getAllRights();
     }
 }

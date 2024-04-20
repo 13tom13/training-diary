@@ -1,15 +1,16 @@
-package in.repository.implementation;
+package in.repository.user.implementation;
 
 import exceptions.RepositoryException;
+import model.Rights;
 import model.User;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 
 import java.util.*;
 
 /**
  * Реализация интерфейса {@link UserRepository}, предоставляющая методы для работы с хранилищем пользователей.
  */
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryCollections implements UserRepository {
 
     /** Хранилище пользователей, где ключами являются адреса электронной почты пользователей. */
     private final Map<String, User> userRepository;
@@ -17,7 +18,7 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * Конструктор по умолчанию, инициализирующий хранилище пользователей.
      */
-    public UserRepositoryImpl() {
+    public UserRepositoryCollections() {
         userRepository = new HashMap<>();
     }
 
@@ -41,6 +42,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAllUsers() {
         return new ArrayList<>(userRepository.values());
+    }
+
+    @Override
+    public List<Rights> getAllRights() {
+        return null;
     }
 
     /**
@@ -68,13 +74,8 @@ public class UserRepositoryImpl implements UserRepository {
         userRepository.put(user.getEmail(), user);
     }
 
-    /**
-     * Удаляет пользователя по его электронной почте.
-     *
-     * @param email электронная почта пользователя для удаления
-     */
     @Override
-    public void deleteUser(String email) {
-        userRepository.remove(email);
+    public void deleteUser(User user) {
     }
+
 }

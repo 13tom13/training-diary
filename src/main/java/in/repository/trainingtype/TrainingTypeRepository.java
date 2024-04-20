@@ -1,4 +1,4 @@
-package in.repository;
+package in.repository.trainingtype;
 
 import java.util.List;
 

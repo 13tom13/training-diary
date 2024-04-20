@@ -1,8 +1,8 @@
-package config;
+package config.initializer;
 
-import in.repository.TrainingRepository;
-import in.repository.TrainingTypeRepository;
-import in.repository.UserRepository;
+import in.repository.training.TrainingRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
+import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
 import in.service.training.TrainingService;
 import in.service.users.UserService;

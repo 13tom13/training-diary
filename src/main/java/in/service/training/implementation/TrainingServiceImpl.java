@@ -8,8 +8,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import model.Rights;
 import model.Training;
 import model.User;
-import in.repository.TrainingRepository;
-import in.repository.TrainingTypeRepository;
+import in.repository.training.TrainingRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
 
 import java.util.List;
@@ -77,7 +77,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void saveTraining(User user, Training training) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
-        if (!user.getRights().contains(Rights.WRITE)) {
+        if (!user.getRights().contains("WRITE")) {
             throw new NoWriteRightsException();
         }
         if (!isValidDateFormat(training.getDate())) {
@@ -99,7 +99,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, NoDeleteRightsException {
-        if (!user.getRights().contains(Rights.DELETE)) {
+        if (!user.getRights().contains("DELETE")) {
             throw new NoDeleteRightsException();
         }
         if (isValidDateFormat(date)) {
@@ -116,7 +116,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException, NoWriteRightsException {
-        if (!user.getRights().contains(Rights.WRITE)) {
+        if (!user.getRights().contains("WRITE")) {
             throw new NoWriteRightsException();
         }
         Training trainingForAdditional = getTrainingForChange(user, training);
@@ -133,7 +133,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException, NoEditRightsException {
-        if (!user.getRights().contains(Rights.EDIT)) {
+        if (!user.getRights().contains("EDIT")) {
             throw new NoEditRightsException();
         }
         Training trainingForRemoval = getTrainingForChange(user, training);
@@ -148,7 +148,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void changeNameTraining(User user, Training training, String newName) throws RepositoryException, NoEditRightsException {
-        if (!user.getRights().contains(Rights.EDIT)) {
+        if (!user.getRights().contains("EDIT")) {
             throw new NoEditRightsException();
         }
         Training trainingForChange = getTrainingForChange(user, training);
@@ -161,7 +161,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void changeDateTraining(User user, Training training, String newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
-        if (!user.getRights().contains(Rights.EDIT)) {
+        if (!user.getRights().contains("EDIT")) {
             throw new NoEditRightsException();
         }
         if (isValidDateFormat(newDate)) {
@@ -178,7 +178,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException, NoEditRightsException {
-        if (!user.getRights().contains(Rights.EDIT)) {
+        if (!user.getRights().contains("EDIT")) {
             throw new NoEditRightsException();
         }
         Training trainingForChange = getTrainingForChange(user, training);
@@ -191,7 +191,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException {
-        if (!user.getRights().contains(Rights.EDIT)) {
+        if (!user.getRights().contains("EDIT")) {
             throw new NoEditRightsException();
         }
         Training trainingForChange = getTrainingForChange(user, training);

@@ -1,6 +1,6 @@
-package in.repository.implementation;
+package in.repository.trainingtype.implementation;
 
-import in.repository.TrainingTypeRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;

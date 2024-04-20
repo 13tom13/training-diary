@@ -5,7 +5,7 @@ import exceptions.ServiceException;
 import exceptions.ValidationException;
 import model.User;
 import in.service.users.UserService;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 
 /**
  * Реализация интерфейса {@link UserService}.

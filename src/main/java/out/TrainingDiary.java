@@ -1,6 +1,6 @@
 package out;
 
-import config.ControllerInitializer;
+import config.initializer.ControllerInitializer;
 import out.menu.ViewMenu;
 
 /**

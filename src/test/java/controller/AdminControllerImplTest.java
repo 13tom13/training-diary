@@ -1,7 +1,7 @@
 package controller;
 
 import in.controller.users.implementation.AdminControllerImpl;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import model.Rights;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -155,7 +155,7 @@ public class AdminControllerImplTest {
     public void testChangeUserRights() {
         // Arrange
         List<Rights> newUserRights = new ArrayList<>();
-        newUserRights.add(Rights.EDIT);
+        newUserRights.add(new Rights(1L,"WRITE"));
 
         // Act
         adminController.changeUserRights(testUser, newUserRights);

@@ -1,6 +1,7 @@
-package in.repository;
+package in.repository.user;
 
 import exceptions.RepositoryException;
+import model.Rights;
 import model.User;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface UserRepository {
      */
     List<User> getAllUsers();
 
+    List<Rights> getAllRights();
+
     /**
      * Сохранить пользователя в хранилище.
      *
@@ -44,8 +47,8 @@ public interface UserRepository {
     /**
      * Удалить пользователя из хранилища по его электронной почте.
      *
-     * @param email электронная почта пользователя, которого нужно удалить
+     * @param user объект пользователя, которого нужно удалить
      */
-    void deleteUser(String email);
+    void deleteUser(User user);
 
 }

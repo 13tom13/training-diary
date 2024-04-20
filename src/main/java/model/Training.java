@@ -8,6 +8,8 @@ import java.util.Objects;
  */
 public class Training implements Comparable<Training> {
 
+    private Long id;
+
     private String name; // Название тренировки
     private String date; // Дата тренировки
     private int duration; // Продолжительность тренировки в минутах
@@ -29,15 +31,16 @@ public class Training implements Comparable<Training> {
      * @param date           Дата тренировки
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
-     * @param additions      Дополнительная информация о тренировке
      */
-    public Training(String name, String date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+    public Training(long id, String name, String date, int duration, int caloriesBurned) {
         this.name = name;
         this.date = date;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
-        this.additions = additions;
+        additions = new HashMap<>();
     }
+
+
 
     /**
      * Конструктор с параметрами (без дополнительной информации).

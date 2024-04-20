@@ -1,4 +1,4 @@
-package config;
+package config.initializer;
 
 import in.controller.authorization.AuthorizationController;
 import in.controller.authorization.implementation.AuthorizationControllerImpl;

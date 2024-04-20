@@ -1,8 +1,8 @@
-package in.repository.implementation;
+package in.repository.training.implementation;
 
 import exceptions.RepositoryException;
 import model.Training;
-import in.repository.TrainingRepository;
+import in.repository.training.TrainingRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.TreeSet;
  * Реализация интерфейса {@link TrainingRepository} для хранения тренировок.
  * Этот класс обеспечивает методы для сохранения, получения и удаления тренировок пользователя.
  */
-public class TrainingRepositoryImpl implements TrainingRepository {
+public class TrainingRepositoryCollections implements TrainingRepository {
 
     /**
      * Map для хранения тренировок пользователей.
@@ -24,10 +24,10 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     private final Map<String, TreeMap<String, TreeSet<Training>>> userTrainingMap;
 
     /**
-     * Создает новый экземпляр класса TrainingRepositoryImpl.
+     * Создает новый экземпляр класса TrainingRepositoryCollections.
      * Инициализирует внутреннюю структуру данных для хранения тренировок пользователей.
      */
-    public TrainingRepositoryImpl() {
+    public TrainingRepositoryCollections() {
         userTrainingMap = new HashMap<>();
     }
 

@@ -2,7 +2,7 @@ package service;
 
 import exceptions.ServiceException;
 import exceptions.ValidationException;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.implementation.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,20 +1,22 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Класс, представляющий пользователя.
  */
 public class User {
+
+    private int id; // Идентификатор пользователя TODO: переделать на LONG
     private String firstName; // Имя пользователя
     private String lastName; // Фамилия пользователя
     private String email; // Электронная почта пользователя
     private String password; // Пароль пользователя
-    private List<Rights> rights; // Права пользователя
+    private List<Rights> rights = new ArrayList<>(); // Права пользователя
 
-    private final List<Roles> roles; // Роли пользователя
+    private List<Roles> roles = new ArrayList<>(); // Роли пользователя
     private boolean isActive = true; // Активность пользователя
 
     /**
@@ -30,8 +32,27 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.rights = new ArrayList<>(Arrays.asList(Rights.values()));
-        this.roles = new ArrayList<>(List.of(Roles.USER));
+    }
+
+    /**
+     * Пустой конструктор.
+     */
+    public User() {
+    }
+
+    /**
+     * Получает идентификатор пользователя.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     *  Устанавливает идентификатор пользователя.
+     * @param id идентификатор пользователя
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -124,18 +145,14 @@ public class User {
         return roles;
     }
 
+
     /**
-     * Устанавливает роль для пользователя.
+     * Устанавливает роли для пользователя.
      *
-     * @param roleForSet Роль для установки
+     * @param rolesForSet Список ролей для установки
      */
-    public void setRoles(String roleForSet) {
-        try {
-            Roles role = Roles.valueOf(roleForSet);
-            roles.add(role);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Роль " + roleForSet + " не найдена");
-        }
+    public void setRoles(List<Roles> rolesForSet) {
+        roles.addAll(rolesForSet);
     }
 
     /**
@@ -176,4 +193,18 @@ public class User {
         return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | роли: "
                 + roles.toString() + " | права: " + rights.toString() + " | (" + status + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
 }

@@ -70,4 +70,6 @@ public interface AdminController {
      * @param user  Пользователь, который будет удален.
      */
     void deleteUser(User user);
+
+    List<Rights> getAllRights();
 }

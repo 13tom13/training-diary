@@ -1,14 +1,19 @@
-package config;
+package config.initializer;
 
 import exceptions.RepositoryException;
+import in.repository.training.implementation.TrainingRepositoryCollections;
+import in.repository.training.implementation.TrainingRepositoryJDBC;
+import in.repository.user.implementation.UserRepositoryJDBC;
 import model.Training;
 import model.User;
-import in.repository.TrainingRepository;
-import in.repository.TrainingTypeRepository;
-import in.repository.UserRepository;
-import in.repository.implementation.TrainingRepositoryImpl;
-import in.repository.implementation.TrainingTypeRepositoryImpl;
-import in.repository.implementation.UserRepositoryImpl;
+import in.repository.training.TrainingRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
+import in.repository.user.UserRepository;
+import in.repository.trainingtype.implementation.TrainingTypeRepositoryImpl;
+
+import java.sql.SQLException;
+
+import static database.DatabaseConnection.getConnection;
 
 /**
  * Класс RepositoryInitializer отвечает за инициализацию репозиториев,
@@ -25,12 +30,16 @@ public class RepositoryInitializer {
      * репозитории пользователей, тренировок и типов тренировок.
      */
     public RepositoryInitializer() {
-        this.userRepository = new UserRepositoryImpl();
-        this.trainingRepository = new TrainingRepositoryImpl();
+//        this.userRepository = new UserRepositoryCollections();
+        try {
+            this.userRepository = new UserRepositoryJDBC(getConnection());
+            this.trainingRepository = new TrainingRepositoryJDBC(getConnection());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+//        this.trainingRepository = new TrainingRepositoryCollections();
         this.trainingTypeRepository = new TrainingTypeRepositoryImpl();
 
-        addAdmin();
-        addTestUser();
     }
 
     /**
@@ -60,24 +69,24 @@ public class RepositoryInitializer {
         return trainingTypeRepository;
     }
 
-    /**
-     * Добавляет администратора в репозиторий пользователей.
-     */
-    private void addAdmin() {
-        System.out.println("Добавление администратора Email: admin, Password: admin");
-        User user = new User("Admin", "Admin", "admin", "admin");
-        user.setRoles("ADMIN");
-        try {
-            userRepository.saveUser(user);
-        } catch (RepositoryException e) {
-            System.err.println("Не удалось добавить администратора");
-        }
-    }
-
-    /**
-     * Добавляет тестового пользователя в репозиторий пользователей
-     * и создает для него тестовые тренировки.
-     */
+//    /**
+//     * Добавляет администратора в репозиторий пользователей.
+//     */
+//    private void addAdmin() {
+//        System.out.println("Добавление администратора Email: admin, Password: admin");
+//        User user = new User("Admin", "Admin", "admin", "admin");
+//        user.setRoles("ADMIN");
+//        try {
+//            userRepository.saveUser(user);
+//        } catch (RepositoryException e) {
+//            System.err.println("Не удалось добавить администратора");
+//        }
+//    }
+//
+//    /**
+//     * Добавляет тестового пользователя в репозиторий пользователей
+//     * и создает для него тестовые тренировки.
+//     */
     private void addTestUser() {
         System.out.println("Добавление тестового пользователя Email: test@mail.ru, Password: pass");
         User user = new User("Ivan", "Petrov", "test@mail.ru", "pass");

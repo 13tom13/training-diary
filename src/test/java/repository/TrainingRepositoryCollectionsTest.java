@@ -1,14 +1,13 @@
 package repository;
 
 import exceptions.RepositoryException;
+import in.repository.training.implementation.TrainingRepositoryCollections;
 import model.Training;
-import in.repository.TrainingRepository;
-import in.repository.implementation.TrainingRepositoryImpl;
+import in.repository.training.TrainingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import testutil.TestUtil;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -16,16 +15,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
- * Тестовый класс для проверки {@link TrainingRepositoryImpl}.
+ * Тестовый класс для проверки {@link TrainingRepositoryCollections}.
  */
-public class TrainingRepositoryImplTest {
+public class TrainingRepositoryCollectionsTest {
 
     private TrainingRepository trainingRepository;
 
     @BeforeEach
     void setUp() {
         // Создаем новый экземпляр репозитория перед каждым тестом
-        trainingRepository = new TrainingRepositoryImpl();
+        trainingRepository = new TrainingRepositoryCollections();
     }
 
     /**

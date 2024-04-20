@@ -1,4 +1,4 @@
-package in.repository;
+package in.repository.training;
 
 import exceptions.RepositoryException;
 import model.Training;

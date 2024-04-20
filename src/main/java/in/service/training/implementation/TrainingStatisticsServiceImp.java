@@ -38,7 +38,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public int getAllTrainingStatistics(User user) throws NoStatisticsRightsException {
-        if (!user.getRights().contains(Rights.STATISTICS)) {
+        if (!user.getRights().contains("STATISTICS")) {
             throw new NoStatisticsRightsException();
         }
         TreeMap<String, TreeSet<Training>> allTrainings = trainingService.getAllTrainings(user);
@@ -60,7 +60,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
-        if (!user.getRights().contains(Rights.STATISTICS)) {
+        if (!user.getRights().contains("STATISTICS")) {
             throw new NoStatisticsRightsException();
         }
         int totalTrainings;
@@ -81,7 +81,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public Integer getDurationStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
-        if (!user.getRights().contains(Rights.STATISTICS)) {
+        if (!user.getRights().contains("STATISTICS")) {
             throw new NoStatisticsRightsException();
         }
         int totalDuration = 0;
@@ -94,7 +94,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
 
     @Override
     public Integer getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException {
-        if (!user.getRights().contains(Rights.STATISTICS)) {
+        if (!user.getRights().contains("STATISTICS")) {
             throw new NoStatisticsRightsException();
         }
         int totalCaloriesBurned = 0;

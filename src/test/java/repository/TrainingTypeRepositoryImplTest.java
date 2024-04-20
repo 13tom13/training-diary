@@ -1,7 +1,7 @@
 package repository;
 
-import in.repository.TrainingTypeRepository;
-import in.repository.implementation.TrainingTypeRepositoryImpl;
+import in.repository.trainingtype.TrainingTypeRepository;
+import in.repository.trainingtype.implementation.TrainingTypeRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

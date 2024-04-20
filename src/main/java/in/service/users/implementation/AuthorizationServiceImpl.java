@@ -3,7 +3,7 @@ package in.service.users.implementation;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import model.User;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
 
 import java.util.Optional;

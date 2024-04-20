@@ -25,6 +25,8 @@ public class ViewAuthorization {
     private final TrainingStatisticsController trainingStatisticsController;
     private final Scanner scanner;
 
+    private User user;
+
     /**
      * Конструктор класса ViewAuthorization.
      * @param authorizationController Контроллер авторизации.
@@ -55,17 +57,21 @@ public class ViewAuthorization {
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
         try {
-            User user = authorizationController.login(authEmail, authPassword);
-            if (user.getRoles().contains(Roles.ADMIN)) {
+            user = authorizationController.login(authEmail, authPassword);
+            if (heIs("ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
-            } else if (user.getRoles().contains(Roles.USER)) {
+            } else if (heIs("USER")) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
                 viewUserAccount.userAccountMenu();
             }
         } catch (AuthorizationException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private boolean heIs(String roleName) {
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
     }
 
     /**
