@@ -112,6 +112,7 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
+
     @Override
     public void updateUser(User user) {
         String sql = "UPDATE users SET first_name = ?, last_name = ?, password = ? WHERE email = ?";
@@ -201,30 +202,50 @@ public class UserRepositoryJDBC implements UserRepository {
     }
 
     // Метод для добавления прав пользователя в базу данных
-    private void insertUserRights(User user) throws SQLException {
-        String sql = "INSERT INTO user_rights (user_id, right_id) VALUES (?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (Rights right : user.getRights()) {
-                statement.setLong(1, user.getId());
-                statement.setLong(2, right.getId());
-                statement.addBatch();
+    public void insertUserRights(User user) throws SQLException {
+        String sqlSelectRights = "SELECT id FROM rights";
+        String sqlInsertRights = "INSERT INTO user_rights (user_id, right_id) VALUES (?, ?)";
+
+        try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRights);
+             PreparedStatement insertStatement = connection.prepareStatement(sqlInsertRights)) {
+
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int rightId = resultSet.getInt("id");
+                insertStatement.setLong(1, user.getId());
+                insertStatement.setLong(2, rightId);
+                insertStatement.executeUpdate();
             }
-            statement.executeBatch();
         }
     }
 
     // Метод для добавления ролей пользователя в базу данных
     private void insertUserRoles(User user) throws SQLException {
-        String sql = "INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (Roles role : user.getRoles()) {
-                statement.setLong(1, user.getId());
-                statement.setLong(2, role.getId());
-                statement.addBatch();
+        String sqlSelectRoles = "SELECT id FROM roles WHERE name = ?";
+        String sqlInsertUserRole = "INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)";
+
+        try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRoles);
+             PreparedStatement insertStatement = connection.prepareStatement(sqlInsertUserRole)) {
+
+            // Получаем id роли с именем "USER"
+            selectStatement.setString(1, "USER");
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            // Если роль уже существует в базе данных
+            if (resultSet.next()) {
+                long userRoleId = resultSet.getLong("id");
+                // Вставляем роль "USER" для данного пользователя
+                insertStatement.setLong(1, user.getId());
+                insertStatement.setLong(2, userRoleId);
+                insertStatement.executeUpdate();
+            } else {
+                // Если роль "USER" отсутствует в базе данных, выбросить исключение
+                throw new SQLException("Роль USER не найдена в таблице ролей.");
             }
-            statement.executeBatch();
         }
     }
+
 
     // Метод для удаления прав пользователя из базы данных
     private void deleteUserRights(User user) throws SQLException {
