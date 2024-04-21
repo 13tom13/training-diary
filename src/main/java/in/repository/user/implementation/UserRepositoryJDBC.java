@@ -46,17 +46,6 @@ public class UserRepositoryJDBC implements UserRepository {
         }
         return Optional.empty();
     }
-    private void rollbackConnection() {
-        try {
-            if (connection != null) {
-                connection.rollback();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
 
     @Override
@@ -155,7 +144,7 @@ public class UserRepositoryJDBC implements UserRepository {
     // Метод для создания объекта User из ResultSet
     private User getUser(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setId(resultSet.getInt("id"));
+        user.setId(resultSet.getLong("id"));
         user.setEmail(resultSet.getString("email"));
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
@@ -164,11 +153,11 @@ public class UserRepositoryJDBC implements UserRepository {
     }
 
     // Метод для получения списка прав пользователя по его ID
-    private List<Rights> getUserRightsById(int userId) throws SQLException {
+    private List<Rights> getUserRightsById(long userId) throws SQLException {
         List<Rights> rights = new ArrayList<>();
         String sql = "SELECT r.id, r.name FROM rights r INNER JOIN user_rights ur ON r.id = ur.right_id WHERE ur.user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Long id = resultSet.getLong("id");
@@ -182,11 +171,11 @@ public class UserRepositoryJDBC implements UserRepository {
     }
 
     // Метод для получения списка ролей пользователя по его ID
-    private List<Roles> getUserRolesById(int userId) throws SQLException {
+    private List<Roles> getUserRolesById(long userId) throws SQLException {
         List<Roles> roles = new ArrayList<>();
         String sql = "SELECT r.id, r.name FROM roles r INNER JOIN users_roles ur ON r.id = ur.role_id WHERE ur.user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Long id = resultSet.getLong("id");
@@ -216,7 +205,7 @@ public class UserRepositoryJDBC implements UserRepository {
         String sql = "INSERT INTO user_rights (user_id, right_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (Rights right : user.getRights()) {
-                statement.setInt(1, user.getId());
+                statement.setLong(1, user.getId());
                 statement.setLong(2, right.getId());
                 statement.addBatch();
             }
@@ -229,7 +218,7 @@ public class UserRepositoryJDBC implements UserRepository {
         String sql = "INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (Roles role : user.getRoles()) {
-                statement.setInt(1, user.getId());
+                statement.setLong(1, user.getId());
                 statement.setLong(2, role.getId());
                 statement.addBatch();
             }
@@ -239,21 +228,31 @@ public class UserRepositoryJDBC implements UserRepository {
 
     // Метод для удаления прав пользователя из базы данных
     private void deleteUserRights(User user) throws SQLException {
-        int userId = user.getId();
+        long userId = user.getId();
         String sql = "DELETE FROM user_rights WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             statement.executeUpdate();
         }
     }
 
     // Метод для удаления ролей пользователя из базы данных
     private void deleteUserRoles(User user) throws SQLException {
-        int userId = user.getId();
+        long userId = user.getId();
         String sql = "DELETE FROM users_roles WHERE user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
+            statement.setLong(1, userId);
             statement.executeUpdate();
+        }
+    }
+
+    private void rollbackConnection() {
+        try {
+            if (connection != null) {
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -4,6 +4,7 @@ import in.controller.training.TrainingController;
 import model.Training;
 import model.User;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -71,26 +72,34 @@ public class ViewTrainingAdded {
 
         System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
 
-        System.out.print("Ваш выбор: ");
-        int choice = scanner.nextInt();
+        while (true) {
+            try {
+                System.out.print("Ваш выбор: ");
+                int choice = scanner.nextInt();
 
-        if (choice >= 1 && choice <= trainingTypes.size()) {
-            String selectedTrainingType = trainingTypes.get(choice - 1);
-            System.out.println("Выбран тип тренировки: " + selectedTrainingType);
-            scanner.nextLine();
-            return selectedTrainingType;
-        } else if (choice == trainingTypes.size() + 1) {
-            scanner.nextLine();
-            System.out.print("Введите свой тип тренировки: ");
-            String customTrainingType = scanner.nextLine();
-            trainingController.saveTrainingType(user, customTrainingType);
-            System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
-            return customTrainingType;
-        } else {
-            System.out.println("Некорректный выбор.");
-            return null;
+                if (choice >= 1 && choice <= trainingTypes.size()) {
+                    String selectedTrainingType = trainingTypes.get(choice - 1);
+                    System.out.println("Выбран тип тренировки: " + selectedTrainingType);
+                    scanner.nextLine(); // Очистка буфера
+                    return selectedTrainingType;
+                } else if (choice == trainingTypes.size() + 1) {
+                    scanner.nextLine(); // Очистка буфера
+                    System.out.print("Введите свой тип тренировки: ");
+                    String customTrainingType = scanner.nextLine();
+                    trainingController.saveTrainingType(user, customTrainingType);
+                    System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
+                    return customTrainingType;
+                } else {
+                    System.out.println("Некорректный выбор.");
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine(); // Очистка буфера
+                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
+            }
         }
+
     }
+
 
     /**
      * Метод для удаления тренировки.
@@ -100,7 +109,10 @@ public class ViewTrainingAdded {
         String date = scanner.nextLine();
         System.out.print("Название: ");
         String name = scanner.nextLine();
-        trainingController.deleteTraining(user, date, name);
+        if (trainingController.deleteTraining(user, date, name)) {
+            System.out.println("Тренировка успешно удалена.");
+        }
+
     }
 
     /**

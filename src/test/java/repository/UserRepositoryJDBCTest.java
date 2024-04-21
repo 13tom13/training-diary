@@ -117,7 +117,7 @@ public class UserRepositoryJDBCTest {
         userRepository.saveUser(user);
 
         // Act
-        userRepository.deleteUser(user.getEmail());
+        userRepository.deleteUser(user);
         Optional<User> deletedUser = userRepository.getUserByEmail(user.getEmail());
 
         // Assert

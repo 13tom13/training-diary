@@ -30,12 +30,13 @@ public interface TrainingModificationService {
      * @param user пользователь, для которого удаляется тренировка
      * @param date дата тренировки
      * @param name название тренировки
-     * @throws RepositoryException         если возникла ошибка доступа к хранилищу
+     * @return
+     * @throws RepositoryException        если возникла ошибка доступа к хранилищу
      * @throws InvalidDateFormatException если указана некорректная дата тренировки
-     * @throws SecurityException           если возникла ошибка безопасности
-     * @throws NoDeleteRightsException     если у пользователя нет прав на удаление
+     * @throws SecurityException          если возникла ошибка безопасности
+     * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    void deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    boolean deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.

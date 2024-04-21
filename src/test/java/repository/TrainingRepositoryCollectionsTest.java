@@ -39,7 +39,7 @@ public class TrainingRepositoryCollectionsTest {
         trainingRepository.saveTraining(TestUtil.TEST_EMAIL, training);
 
         // Получаем все тренировки пользователя
-        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserEmail(TestUtil.TEST_EMAIL);
+        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserID(TestUtil.TEST_EMAIL);
 
         // Проверяем, что тренировка успешно сохранена
         assertThat(userTrainings).isNotEmpty();
@@ -62,7 +62,7 @@ public class TrainingRepositoryCollectionsTest {
         trainingRepository.deleteTraining(TestUtil.TEST_EMAIL, training);
 
         // Проверяем, что тренировка успешно удалена
-        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserEmail(TestUtil.TEST_EMAIL);
+        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserID(TestUtil.TEST_EMAIL);
         assertThat(userTrainings).isEmpty();
     }
 
@@ -80,7 +80,7 @@ public class TrainingRepositoryCollectionsTest {
         trainingRepository.updateTraining(TestUtil.TEST_EMAIL, oldTraining, newTraining);
 
         // Получаем все тренировки пользователя
-        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserEmail(TestUtil.TEST_EMAIL);
+        TreeMap<String, TreeSet<Training>> userTrainings = trainingRepository.getAllTrainingsByUserID(TestUtil.TEST_EMAIL);
 
         // Проверяем, что старая тренировка удалена, а новая добавлена
         assertThat(userTrainings).isNotEmpty();
@@ -96,6 +96,6 @@ public class TrainingRepositoryCollectionsTest {
     void testGetNonExistentTraining() {
         // Пытаемся получить несуществующую тренировку
         assertThatExceptionOfType(RepositoryException.class)
-                .isThrownBy(() -> trainingRepository.getTrainingByUserEmailAndDataAndName(TestUtil.TEST_EMAIL, "2024-04-19", "Push-ups"));
+                .isThrownBy(() -> trainingRepository.getTrainingByUserIDlAndDataAndName(TestUtil.TEST_EMAIL, "2024-04-19", "Push-ups"));
     }
 }

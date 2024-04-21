@@ -3,6 +3,7 @@ package in.repository.training.implementation;
 import exceptions.RepositoryException;
 import model.Training;
 import in.repository.training.TrainingRepository;
+import model.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +36,12 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Получает все тренировки пользователя по его адресу электронной почты.
      * Если пользователь с указанным адресом не найден, возвращает пустую TreeMap.
      *
-     * @param userEmail адрес электронной почты пользователя
+     * @param user адрес электронной почты пользователя
      * @return TreeMap, содержащий все тренировки пользователя
      */
     @Override
-    public TreeMap<String, TreeSet<Training>> getAllTrainingsByUserEmail(String userEmail) {
-        return userTrainingMap.getOrDefault(userEmail, new TreeMap<>());
+    public TreeMap<String, TreeSet<Training>> getAllTrainingsByUserID(User user) {
+        return userTrainingMap.getOrDefault(user.getEmail(), new TreeMap<>());
     }
 
     /**
@@ -48,21 +49,21 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Если пользователь с указанным адресом не найден или тренировка на указанную дату отсутствует,
      * выбрасывает исключение RepositoryException.
      *
-     * @param userEmail   адрес электронной почты пользователя
+     * @param user         адрес электронной почты пользователя
      * @param trainingDate дата тренировки
      * @return множество тренировок пользователя на указанную дату
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(String userEmail, String trainingDate) throws RepositoryException {
-        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+    public TreeSet<Training> getTrainingsByUserIDAndData(User user, String trainingDate) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(user);
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(trainingDate);
             if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
                 return trainingsOnDate;
             }
         }
-        throw new RepositoryException("Тренировка с датой " + trainingDate + " не найдена для пользователя с email " + userEmail);
+        throw new RepositoryException("Тренировка с датой " + trainingDate + " не найдена для пользователя с email " + user);
     }
 
     /**
@@ -70,15 +71,15 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Если пользователь с указанным адресом не найден, тренировка на указанную дату отсутствует
      * или тренировка с указанным именем не найдена, выбрасывает исключение RepositoryException.
      *
-     * @param userEmail    адрес электронной почты пользователя
+     * @param user         адрес электронной почты пользователя
      * @param trainingDate дата тренировки
      * @param trainingName имя тренировки
      * @return тренировка пользователя на указанную дату и с указанным именем
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(String userEmail, String trainingDate, String trainingName) throws RepositoryException {
-        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+    public Training getTrainingByUserIDlAndDataAndName(User user, String trainingDate, String trainingName) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(user);
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(trainingDate);
             if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
@@ -87,12 +88,12 @@ public class TrainingRepositoryCollections implements TrainingRepository {
                         return training;
                     }
                 }
-                throw new RepositoryException("Тренировка с именем " + trainingName + " не найдена в тренировках с датой " + trainingDate + " для пользователя с email " + userEmail);
+                throw new RepositoryException("Тренировка с именем " + trainingName + " не найдена в тренировках с датой " + trainingDate + " для пользователя с email " + user);
             } else {
-                throw new RepositoryException("На указанную дату " + trainingDate + " нет тренировок для пользователя с email " + userEmail);
+                throw new RepositoryException("На указанную дату " + trainingDate + " нет тренировок для пользователя с email " + user);
             }
         } else {
-            throw new RepositoryException("Пользователь с email " + userEmail + " не найден в тренировках");
+            throw new RepositoryException("Пользователь с email " + user + " не найден в тренировках");
         }
     }
 
@@ -101,13 +102,13 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Если для указанного пользователя уже существует тренировка на указанную дату с тем же именем,
      * выбрасывает исключение RepositoryException.
      *
-     * @param userEmail   адрес электронной почты пользователя
+     * @param user     пользователь, для которого сохраняется тренировка
      * @param newTraining новая тренировка пользователя
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void saveTraining(String userEmail, Training newTraining) throws RepositoryException {
-        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.computeIfAbsent(userEmail, k -> new TreeMap<>());
+    public void saveTraining(User user, Training newTraining) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.computeIfAbsent(user.getEmail(), k -> new TreeMap<>());
         TreeSet<Training> trainingsOnDate = userTrainings.computeIfAbsent(newTraining.getDate(), k -> new TreeSet<>());
         if (!trainingsOnDate.add(newTraining)) {
             throw new RepositoryException("Тренировка с именем " + newTraining.getName() + " на дату " + newTraining.getDate() + " уже существует");
@@ -121,28 +122,30 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Если тренировка для удаления не найдена на указанную дату или для указанного пользователя,
      * выбрасывает исключение RepositoryException.
      *
-     * @param userEmail адрес электронной почты пользователя
-     * @param training  тренировка для удаления
+     * @param user     адрес электронной почты пользователя
+     * @param training тренировка для удаления
+     * @return
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void deleteTraining(String userEmail, Training training) throws RepositoryException {
-        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+    public boolean deleteTraining(User user, Training training) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getEmail());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(training.getDate());
             if (trainingsOnDate != null) {
                 if (!trainingsOnDate.remove(training)) {
-                    throw new RepositoryException("Тренировка для удаления не найдена на указанную дату для пользователя с email " + userEmail);
+                    throw new RepositoryException("Тренировка для удаления не найдена на указанную дату для пользователя с email " + user);
                 }
                 if (trainingsOnDate.isEmpty()) {
                     userTrainings.remove(training.getDate());
                 }
             } else {
-                throw new RepositoryException("На указанную дату " + training.getDate() + " нет тренировок для пользователя с email " + userEmail);
+                throw new RepositoryException("На указанную дату " + training.getDate() + " нет тренировок для пользователя с email " + user);
             }
         } else {
-            throw new RepositoryException("Пользователь с email " + userEmail + " не найден в тренировках");
+            throw new RepositoryException("Пользователь с email " + user.getEmail() + " не найден в тренировках");
         }
+        return false;
     }
 
     /**
@@ -150,27 +153,27 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Если тренировка для обновления не найдена на указанную дату или для указанного пользователя,
      * выбрасывает исключение RepositoryException.
      *
-     * @param userEmail   адрес электронной почты пользователя
+     * @param user        адрес электронной почты пользователя
      * @param oldTraining тренировка для обновления
      * @param newTraining новая версия тренировки
      * @throws RepositoryException если тренировка для обновления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void updateTraining(String userEmail, Training oldTraining, Training newTraining) throws RepositoryException {
-        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(userEmail);
+    public void updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
+        TreeMap<String, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getEmail());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(oldTraining.getDate());
             if (trainingsOnDate != null) {
                 if (!trainingsOnDate.remove(oldTraining)) {
-                    throw new RepositoryException("Тренировка для обновления не найдена на указанную дату для пользователя с email " + userEmail);
+                    throw new RepositoryException("Тренировка для обновления не найдена на указанную дату для пользователя с email " + user);
                 }
                 trainingsOnDate.add(newTraining);
                 userTrainings.put(newTraining.getDate(), trainingsOnDate);
             } else {
-                throw new RepositoryException("На указанную дату " + oldTraining.getDate() + " нет тренировок для пользователя с email " + userEmail);
+                throw new RepositoryException("На указанную дату " + oldTraining.getDate() + " нет тренировок для пользователя с email " + user);
             }
         } else {
-            throw new RepositoryException("Пользователь с email " + userEmail + " не найден в тренировках");
+            throw new RepositoryException("Пользователь с email " + user + " не найден в тренировках");
         }
     }
 }

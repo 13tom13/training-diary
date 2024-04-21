@@ -80,7 +80,7 @@ public class TrainingServiceImplTest extends TestUtil {
         TreeMap<String, TreeSet<Training>> expectedTrainings = new TreeMap<>();
 
         // Configure mock behavior
-        when(trainingRepository.getAllTrainingsByUserEmail(testUser.getEmail())).thenReturn(expectedTrainings);
+//        when(trainingRepository.getAllTrainingsByUserID(testUser).thenReturn(expectedTrainings));
 
         // Act
         TreeMap<String, TreeSet<Training>> actualTrainings = trainingService.getAllTrainings(testUser);
@@ -102,15 +102,15 @@ public class TrainingServiceImplTest extends TestUtil {
         Training testTraining = new Training(testTrainingName, testDate, 60, 200);
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
+        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, testDate, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).deleteTraining(testUser.getEmail(), testTraining);
+        doNothing().when(trainingRepository).deleteTraining(testUser, testTraining);
 
         // Act
         trainingService.deleteTraining(testUser, testDate, testTrainingName);
 
         // Assert
-        verify(trainingRepository).deleteTraining(testUser.getEmail(), testTraining);
+        verify(trainingRepository).deleteTraining(testUser, testTraining);
     }
 
     /**
@@ -125,15 +125,15 @@ public class TrainingServiceImplTest extends TestUtil {
         Training testTraining = new Training(testTrainingName, testDate, 60, 200);
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
+        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).updateTraining(testUser.getEmail(), testTraining, testTraining);
+        doNothing().when(trainingRepository).updateTraining(testUser, testTraining, testTraining);
 
         // Act
         trainingService.addTrainingAdditional(testUser, testTraining, testAdditionalName, "additionalValue");
 
         // Assert
-        verify(trainingRepository).updateTraining(testUser.getEmail(), testTraining, testTraining);
+        verify(trainingRepository).updateTraining(testUser, testTraining, testTraining);
     }
 
     /**
@@ -149,7 +149,7 @@ public class TrainingServiceImplTest extends TestUtil {
         testTraining.addAdditional(testAdditionalName, "additionalValue");
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
+        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
                 .thenReturn(testTraining);
         doNothing().when(trainingRepository).updateTraining(testUser.getEmail(), testTraining, testTraining);
 
@@ -172,7 +172,7 @@ public class TrainingServiceImplTest extends TestUtil {
         Training testTraining = new Training(testTrainingName, testDate, 60, 200);
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
+        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser.getEmail(), testDate, testTrainingName))
                 .thenReturn(testTraining);
         doNothing().when(trainingRepository).updateTraining(testUser.getEmail(), testTraining, testTraining);
 

@@ -6,7 +6,6 @@ import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
-import model.Roles;
 import model.User;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
@@ -58,10 +57,10 @@ public class ViewAuthorization {
         String authPassword = scanner.nextLine();
         try {
             user = authorizationController.login(authEmail, authPassword);
-            if (heIs("ADMIN")) {
+            if (hisRole("ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
-            } else if (heIs("USER")) {
+            } else if (hisRole("USER")) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
                 viewUserAccount.userAccountMenu();
             }
@@ -70,7 +69,7 @@ public class ViewAuthorization {
         }
     }
 
-    private boolean heIs(String roleName) {
+    private boolean hisRole(String roleName) {
         return user.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
     }
 

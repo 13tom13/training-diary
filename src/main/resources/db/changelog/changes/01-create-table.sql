@@ -50,17 +50,22 @@ CREATE TABLE trainings
     name            VARCHAR(100) NOT NULL,
     date            VARCHAR(100) NOT NULL,
     duration        INT          NOT NULL,
-    calories_burned INT          NOT NULL
+    calories_burned INT          NOT NULL,
+    CONSTRAINT unique_name_date UNIQUE (name, date)
 );
 
 -- Создание таблицы для дополнительной информации о тренировках
 CREATE TABLE training_additions
 (
-    training_id INT REFERENCES trainings (id),
+    training_id INT,
     key         VARCHAR(100),
     value       VARCHAR(255),
-    PRIMARY KEY (training_id, key)
+    PRIMARY KEY (training_id, key),
+    FOREIGN KEY (training_id)
+        REFERENCES trainings(id)
+        ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS user_trainings
 (

@@ -32,12 +32,13 @@ public class Training implements Comparable<Training> {
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
      */
-    public Training(long id, String name, String date, int duration, int caloriesBurned) {
+    public Training(long id, String name, String date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+        this.id = id;
         this.name = name;
         this.date = date;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
-        additions = new HashMap<>();
+        this.additions = additions;
     }
 
 
@@ -56,6 +57,14 @@ public class Training implements Comparable<Training> {
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
         this.additions = new HashMap<>();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     /**

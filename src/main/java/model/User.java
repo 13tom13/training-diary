@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class User {
 
-    private int id; // Идентификатор пользователя TODO: переделать на LONG
+    private long id; // Идентификатор пользователя
     private String firstName; // Имя пользователя
     private String lastName; // Фамилия пользователя
     private String email; // Электронная почта пользователя
@@ -43,7 +43,7 @@ public class User {
     /**
      * Получает идентификатор пользователя.
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -51,7 +51,7 @@ public class User {
      *  Устанавливает идентификатор пользователя.
      * @param id идентификатор пользователя
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

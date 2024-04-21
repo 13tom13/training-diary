@@ -71,6 +71,7 @@ public class ViewTrainingEditing {
         while (startView) {
             System.out.println();
             System.out.printf("Редактирование тренировки:\n%s", training);
+            System.out.println();
             System.out.println("Выберите действие:");
             System.out.println("1. изменить название");
             System.out.println("2. изменить дату тренировки");

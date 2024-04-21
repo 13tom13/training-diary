@@ -15,8 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import testutil.TestUtil;
 
 import java.util.TreeMap;
@@ -123,7 +121,7 @@ public class TrainingControllerImplTest extends TestUtil {
         TreeSet<Training> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, testDate)).thenReturn(expectedTrainings);
+        when(trainingServiceMock.getTrainingsByUserIDAndData(testUser, testDate)).thenReturn(expectedTrainings);
 
         // Act
         TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, testDate);
@@ -140,7 +138,7 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingByUserEmailAndDataAndName(testUser, testDate, testTrainingName))
+        when(trainingServiceMock.getTrainingByUserIDAndDataAndName(testUser, testDate, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
