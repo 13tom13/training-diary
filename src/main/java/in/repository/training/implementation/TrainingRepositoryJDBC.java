@@ -37,12 +37,12 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     @Override
     public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserID(User user) {
         TreeMap<Date, TreeSet<Training>> userTrainingMap = new TreeMap<>();
-        String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned, " +
-                "       training_additions.key AS addition_key, training_additions.value AS addition_value " +
-                "FROM trainings training " +
-                "JOIN user_trainings usertraining ON training.id = usertraining.training_id " +
-                "JOIN users u ON u.id = usertraining.user_id " +
-                "LEFT JOIN training_additions ON training.id = training_additions.training_id " +
+        String sql = "SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned, " +
+                "       ta.key AS addition_key, ta.value AS addition_value " +
+                "FROM main.trainings t " +
+                "JOIN service.user_trainings ut ON t.id = ut.training_id " +
+                "JOIN main.users u ON u.id = ut.user_id " +
+                "LEFT JOIN main.training_additions ta ON t.id = ta.training_id " +
                 "WHERE u.id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -77,15 +77,15 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     @Override
     public TreeSet<Training> getTrainingsByUserIDAndData(User user, Date trainingDate) throws RepositoryException {
         TreeSet<Training> trainingsOnDate = new TreeSet<>();
-        String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned " +
-                "FROM trainings training " +
-                "JOIN user_trainings usertraining ON training.id = usertraining.training_id " +
-                "JOIN users u ON u.id = usertraining.user_id " +
-                "WHERE u.id = ? AND training.date = ?";
+        String sql = "SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned " +
+                "FROM main.trainings t " +
+                "JOIN service.user_trainings ut ON t.id = ut.training_id " +
+                "JOIN main.users u ON u.id = ut.user_id " +
+                "WHERE u.id = ? AND t.date = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
-            statement.setDate(2, new java.sql.Date(trainingDate.getTime())); // Преобразуем java.util.Date в java.sql.Date
+            statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Создаем объект Training из ResultSet
@@ -117,13 +117,13 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public Training getTrainingByUserIDlAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
-        String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned, " +
-                "       training_additions.key AS addition_key, training_additions.value AS addition_value " +
-                "FROM trainings training " +
-                "JOIN user_trainings usertraining ON training.id = usertraining.training_id " +
-                "JOIN users u ON u.id = usertraining.user_id " +
-                "LEFT JOIN training_additions ON training.id = training_additions.training_id " +
-                "WHERE u.id = ? AND training.date = ? AND training.name = ?";
+        String sql = "SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned, " +
+                "       ta.key AS addition_key, ta.value AS addition_value " +
+                "FROM main.trainings t " +
+                "JOIN service.user_trainings ut ON t.id = ut.training_id " +
+                "JOIN main.users u ON u.id = ut.user_id " +
+                "LEFT JOIN main.training_additions ta ON t.id = ta.training_id " +
+                "WHERE u.id = ? AND t.date = ? AND t.name = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
             statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
@@ -135,7 +135,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                     throw new RepositoryException("Тренировка с именем " + trainingName + " не найдена в тренировках с датой " + trainingDate + " для пользователя с email " + user.getEmail());
                 }
             }
-        } catch (SQLException | RepositoryException e) {
+        } catch (SQLException e) {
             throw new RepositoryException("Ошибка при получении тренировки по адресу электронной почты " + user.getEmail() + " и дате " + trainingDate + " и имени " + trainingName);
         }
     }
@@ -150,7 +150,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             // Удаляем существующие записи о дополнительной информации
             deleteTrainingAdditionals(training.getId());
 
-            String insertSql = "INSERT INTO training_additions (training_id, key, value) VALUES (?, ?, ?)";
+            String insertSql = "INSERT INTO main.training_additions (training_id, key, value) VALUES (?, ?, ?)";
             try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
                 connection.setAutoCommit(false);
                 for (String key : additionals.keySet()) {
@@ -174,7 +174,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
 
     public void deleteTrainingAdditionals(long trainingId) throws RepositoryException {
-        String deleteSql = "DELETE FROM training_additions WHERE training_id = ?";
+        String deleteSql = "DELETE FROM main.training_additions WHERE training_id = ?";
         try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
             deleteStatement.setLong(1, trainingId);
             deleteStatement.executeUpdate();
@@ -195,8 +195,8 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public void saveTraining(User user, Training newTraining) throws RepositoryException {
-        String sqlInsertTraining = "INSERT INTO trainings (name, date, duration, calories_burned) VALUES (?, ?, ?, ?)";
-        String sqlInsertUserTraining = "INSERT INTO user_trainings (user_id, training_id) VALUES (?, ?)";
+        String sqlInsertTraining = "INSERT INTO main.trainings (name, date, duration, calories_burned) VALUES (?, ?, ?, ?)";
+        String sqlInsertUserTraining = "INSERT INTO service.user_trainings (user_id, training_id) VALUES (?, ?)";
 
         try (PreparedStatement statementTraining = connection.prepareStatement(sqlInsertTraining, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement statementUserTraining = connection.prepareStatement(sqlInsertUserTraining)) {
@@ -244,8 +244,8 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public boolean deleteTraining(User user, Training training) throws RepositoryException {
-        String sqlDeleteUserTraining = "DELETE FROM user_trainings WHERE user_id = ? AND training_id = ?";
-        String sqlDeleteTraining = "DELETE FROM trainings WHERE id = ?";
+        String sqlDeleteUserTraining = "DELETE FROM service.user_trainings WHERE user_id = ? AND training_id = ?";
+        String sqlDeleteTraining = "DELETE FROM main.trainings WHERE id = ?";
 
         // Установка автоматического подтверждения транзакции вручную
         try {
@@ -301,9 +301,9 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public void updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
-        String sqlSelectUser = "SELECT * FROM users WHERE email = ?";
-        String sqlUpdateTraining = "UPDATE trainings SET name = ?, date = ?, duration = ?, calories_burned = ? WHERE id = ?";
-        String sqlDeleteAdditionals = "DELETE FROM training_additions WHERE training_id = ?";
+        String sqlSelectUser = "SELECT * FROM main.users WHERE email = ?";
+        String sqlUpdateTraining = "UPDATE main.trainings SET name = ?, date = ?, duration = ?, calories_burned = ? WHERE id = ?";
+        String sqlDeleteAdditionals = "DELETE FROM main.training_additions WHERE training_id = ?";
 
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectUser);
              PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateTraining);
@@ -368,7 +368,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     public HashMap<String, String> getTrainingAdditionals(long trainingID) throws RepositoryException {
         HashMap<String, String> additionals = new HashMap<>();
 
-        String sql = "SELECT key, value FROM training_additions WHERE training_id = ?";
+        String sql = "SELECT key, value FROM main.training_additions WHERE training_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, trainingID);
             try (ResultSet resultSet = statement.executeQuery()) {

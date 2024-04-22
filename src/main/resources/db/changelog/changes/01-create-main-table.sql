@@ -1,8 +1,8 @@
--- Создание схемы service
-CREATE SCHEMA IF NOT EXISTS public;
+-- Создание схемы main
+CREATE SCHEMA IF NOT EXISTS main;
 
 -- Создание таблицы пользователей
-CREATE TABLE IF NOT EXISTS public.users
+CREATE TABLE IF NOT EXISTS main.users
 (
     id         SERIAL PRIMARY KEY,
     first_name VARCHAR(50)  NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.users
 );
 
 -- Создание таблицы тренировок
-CREATE TABLE public.trainings
+CREATE TABLE IF NOT EXISTS main.trainings
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
@@ -25,27 +25,13 @@ CREATE TABLE public.trainings
 
 
 -- Создание таблицы для дополнительной информации о тренировках
-CREATE TABLE public.training_additions
+CREATE TABLE IF NOT EXISTS main.training_additions
 (
     training_id INT,
     key         VARCHAR(100),
     value       VARCHAR(255),
     PRIMARY KEY (training_id, key),
     FOREIGN KEY (training_id)
-        REFERENCES trainings(id)
+        REFERENCES main.trainings(id)
         ON DELETE CASCADE
-);
-
--- Создание таблицы ролей в схеме service
-CREATE TABLE IF NOT EXISTS public.roles
-(
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
-
--- Создание таблицы прав в схеме service
-CREATE TABLE IF NOT EXISTS public.rights
-(
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
 );
