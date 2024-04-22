@@ -12,13 +12,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryJDBC implements UserRepository {
-
+    /** Соединение с базой данных. */
     private final Connection connection;
 
+    /**
+     * Конструктор для создания объекта UserRepositoryJDBC с указанным соединением с базой данных.
+     *
+     * @param connection соединение с базой данных
+     */
     public UserRepositoryJDBC(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Получает пользователя по электронной почте.
+     *
+     * @param email электронная почта пользователя
+     * @return объект Optional, содержащий пользователя, если пользователь найден, иначе пустой Optional
+     */
+    @Override
     public Optional<User> getUserByEmail(String email) {
         String sql = "SELECT * FROM main.users WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -42,11 +54,16 @@ public class UserRepositoryJDBC implements UserRepository {
             }
         } catch (SQLException e) {
             rollbackConnection();
+            System.err.println("Ошибка при выполнении запроса к базе данных");
         }
         return Optional.empty();
     }
 
-
+    /**
+     * Получает список всех пользователей.
+     *
+     * @return список всех пользователей
+     */
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -65,10 +82,15 @@ public class UserRepositoryJDBC implements UserRepository {
         return users;
     }
 
+    /**
+     * Получает список всех прав.
+     *
+     * @return список всех прав
+     */
     @Override
     public List<Rights> getAllRights() {
         List<Rights> rights = new ArrayList<>();
-        String sql = "SELECT * FROM main.rights";
+        String sql = "SELECT * FROM permissions.rights";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -83,7 +105,12 @@ public class UserRepositoryJDBC implements UserRepository {
         return rights;
     }
 
-
+    /**
+     * Сохраняет нового пользователя в базе данных.
+     *
+     * @param user пользователь для сохранения
+     * @throws RepositoryException если возникла ошибка при выполнении запроса к базе данных
+     */
     @Override
     public void saveUser(User user) throws RepositoryException {
         String sql = "INSERT INTO main.users (email, first_name, last_name, password) " +
@@ -107,11 +134,15 @@ public class UserRepositoryJDBC implements UserRepository {
             insertUserRights(user);
             insertUserRoles(user);
         } catch (SQLException e) {
-            throw new RepositoryException("Ошибка при подключении к базе данных");
+            throw new RepositoryException("Ошибка при выполнении запроса к базе данных");
         }
     }
 
-
+    /**
+     * Обновляет информацию о пользователе в базе данных.
+     *
+     * @param user пользователь для обновления
+     */
     @Override
     public void updateUser(User user) {
         String sql = "UPDATE main.users SET first_name = ?, last_name = ?, password = ? " +
@@ -129,6 +160,11 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
+    /**
+     * Удаляет пользователя из базы данных.
+     *
+     * @param user пользователь для удаления
+     */
     @Override
     public void deleteUser(User user) {
         String sql = "DELETE FROM main.users WHERE email = ?";
@@ -142,7 +178,15 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
-    // Метод для создания объекта User из ResultSet
+    // Дополнительные приватные методы и метод rollbackConnection()
+
+    /**
+     * Создает объект пользователя из ResultSet.
+     *
+     * @param resultSet объект ResultSet, содержащий данные о пользователе
+     * @return объект User
+     * @throws SQLException если возникла ошибка при работе с ResultSet
+     */
     private User getUser(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId(resultSet.getLong("id"));
@@ -153,7 +197,13 @@ public class UserRepositoryJDBC implements UserRepository {
         return user;
     }
 
-    // Метод для получения списка прав пользователя по его ID
+    /**
+     * Получает список прав пользователя по его идентификатору.
+     *
+     * @param userId идентификатор пользователя
+     * @return список прав пользователя
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private List<Rights> getUserRightsById(long userId) throws SQLException {
         List<Rights> rights = new ArrayList<>();
         String sql = "SELECT r.id, r.name FROM permissions.rights r " +
@@ -173,7 +223,13 @@ public class UserRepositoryJDBC implements UserRepository {
         return rights;
     }
 
-    // Метод для получения списка ролей пользователя по его ID
+    /**
+     * Получает список ролей пользователя по его идентификатору.
+     *
+     * @param userId идентификатор пользователя
+     * @return список ролей пользователя
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private List<Roles> getUserRolesById(long userId) throws SQLException {
         List<Roles> roles = new ArrayList<>();
         String sql = "SELECT r.id, r.name FROM permissions.roles r " +
@@ -193,13 +249,23 @@ public class UserRepositoryJDBC implements UserRepository {
         return roles;
     }
 
-    // Метод для обновления прав пользователя в базе данных
+    /**
+     * Обновляет права пользователя в базе данных.
+     *
+     * @param user пользователь, чьи права нужно обновить
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private void updateUserRights(User user) throws SQLException {
         deleteUserRights(user);
         insertUserRights(user);
     }
 
-    // Метод для обновления ролей пользователя в базе данных
+    /**
+     * Обновляет роли пользователя в базе данных.
+     *
+     * @param user пользователь, чьи роли нужно обновить
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private void updateUserRoles(User user) throws SQLException {
         deleteUserRoles(user);
         insertUserRoles(user);
@@ -225,7 +291,12 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
-    // Метод для добавления ролей пользователя в базу данных
+    /**
+     * Вставляет права пользователя в базу данных.
+     *
+     * @param user пользователь, для которого нужно вставить права
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private void insertUserRoles(User user) throws SQLException {
         String sqlSelectRoles = "SELECT id FROM permissions.roles WHERE name = ?";
         String sqlInsertUserRole = "INSERT INTO service.users_roles (user_id, role_id) VALUES (?, ?)";
@@ -252,7 +323,12 @@ public class UserRepositoryJDBC implements UserRepository {
     }
 
 
-    // Метод для удаления прав пользователя из базы данных
+    /**
+     * Удаляет права пользователя из базы данных.
+     *
+     * @param user пользователь, у которого нужно удалить права
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private void deleteUserRights(User user) throws SQLException {
         long userId = user.getId();
         String sql = "DELETE FROM service.user_rights WHERE user_id = ?";
@@ -262,7 +338,12 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
-    // Метод для удаления ролей пользователя из базы данных
+    /**
+     * Удаляет роли пользователя из базы данных.
+     *
+     * @param user пользователь, у которого нужно удалить роли
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
     private void deleteUserRoles(User user) throws SQLException {
         long userId = user.getId();
         String sql = "DELETE FROM service.users_roles WHERE user_id = ?";
@@ -272,6 +353,9 @@ public class UserRepositoryJDBC implements UserRepository {
         }
     }
 
+    /**
+     * Отменяет текущую транзакцию и выполняет откат изменений.
+     */
     private void rollbackConnection() {
         try {
             if (connection != null) {

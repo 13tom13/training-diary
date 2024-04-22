@@ -53,8 +53,7 @@ public class TrainingControllerImpl implements TrainingController {
      */
     @Override
     public List<String> getTrainingTypes(User user) {
-        String userEmail = user.getEmail();
-        return trainingService.getTrainingTypes(userEmail);
+        return trainingService.getTrainingTypes(user);
     }
 
 
@@ -95,7 +94,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user Пользователь
      * @param date Дата тренировки
      * @param name Название тренировки
-     * @return
+     * @return {@code true}, если тренировка удалена успешно, в противном случае {@code false}
      */
     @Override
     public boolean deleteTraining(User user, Date date, String name) {

@@ -1,24 +1,26 @@
 package repository;
 
-import database.LiquibaseConnectorForTest;
 import exceptions.RepositoryException;
 import in.repository.training.implementation.TrainingRepositoryJDBC;
 import model.Training;
 import model.User;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
-import testutil.TestUtil;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.Date;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static testutil.TestUtil.*;
 
+
+/**
+ * Тесты для класса TrainingRepositoryJDBC, который реализует интерфейс TrainingRepository.
+ * Этот класс предназначен для тестирования методов, связанных с операциями чтения, записи, обновления и удаления тренировок в базе данных.
+ */
 public class TrainingRepositoryJDBCTest {
 
     private static Connection connection;
@@ -26,39 +28,38 @@ public class TrainingRepositoryJDBCTest {
 
     private static User user;
 
+    /**
+     * Подготовка тестового окружения перед запуском тестов.
+     * Создает подключение к временной тестовой базе данных, применяет миграции и инициализирует экземпляр TrainingRepositoryJDBC для тестирования.
+     *
+     * @throws SQLException если возникает ошибка при подключении к базе данных или применении миграций
+     */
     @BeforeAll
     static void setUp() throws SQLException {
-        PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
-                .withDatabaseName("training-diary-test")
-                .withUsername("test")
-                .withPassword("test")
-                .withExposedPorts(5432);
-        postgres.start();
-
-        String jdbcUrl = postgres.getJdbcUrl();
-        String username = postgres.getUsername();
-        String password = postgres.getPassword();
-
-        connection = DriverManager.getConnection(jdbcUrl, username, password);
-        LiquibaseConnectorForTest connectorForTestDB = new LiquibaseConnectorForTest();
-        connectorForTestDB.runMigrations(connection);
+        connection = createConnectionToTestDatabase();
         repository = new TrainingRepositoryJDBC(connection);
 
-        user = getTestUserFromDatabase();
+        user = getTestUserFromDatabase(connection);
     }
 
-
+    /**
+     * Очистка ресурсов после выполнения всех тестов.
+     * Закрывает соединение с базой данных.
+     *
+     * @throws SQLException если возникает ошибка при закрытии соединения с базой данных
+     */
     @AfterAll
     static void tearDown() throws SQLException {
         connection.close();
     }
 
-    @AfterAll
-    static void cleanLogsAfterTests() {
-        // Clean logs after tests using TestUtil
-        TestUtil.cleanLogsAfterTests();
-    }
 
+    /**
+     * Тест для метода saveTraining.
+     * Проверяет корректность сохранения новой тренировки в базе данных для указанного пользователя.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testSaveTraining() throws RepositoryException {
         // Создаем новую тренировку для пользователя
@@ -71,9 +72,15 @@ public class TrainingRepositoryJDBCTest {
         TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserID(user);
 
         // Проверяем, что тренировка успешно сохранена
-        assertTrue(userTrainings.containsValue(new TreeSet<>(Set.of(newTraining))));
+        Assertions.assertTrue(userTrainings.containsValue(new TreeSet<>(Set.of(newTraining))));
     }
 
+    /**
+     * Тест для метода getAllTrainingsByUserID.
+     * Проверяет корректность получения всех тренировок пользователя из базы данных.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testGetAllTrainingsByUserID() throws RepositoryException {
         // Предположим, что у пользователя есть две тренировки
@@ -97,12 +104,18 @@ public class TrainingRepositoryJDBCTest {
         Date prevDate = null;
         for (Date currentDate : dates) {
             if (prevDate != null) {
-                assertTrue(prevDate.before(currentDate));
+                Assertions.assertTrue(prevDate.before(currentDate));
             }
             prevDate = currentDate;
         }
     }
 
+    /**
+     * Тест для метода getTrainingByUserIDlAndDataAndName.
+     * Проверяет корректность получения тренировки пользователя по указанным параметрам из базы данных.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testGetTrainingByUserIDlAndDataAndName() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка на указанную дату с указанным именем
@@ -124,6 +137,12 @@ public class TrainingRepositoryJDBCTest {
         assertThrows(RepositoryException.class, () -> repository.getTrainingByUserIDlAndDataAndName(user, date, nonExistentTrainingName));
     }
 
+    /**
+     * Тест для метода deleteTraining.
+     * Проверяет корректность удаления тренировки пользователя из базы данных.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testDeleteTraining() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка, которую мы хотим удалить
@@ -136,7 +155,7 @@ public class TrainingRepositoryJDBCTest {
         boolean isDeleted = repository.deleteTraining(user, training);
 
         // Проверяем, что метод возвращает true, если удаление прошло успешно
-        assertTrue(isDeleted);
+        Assertions.assertTrue(isDeleted);
 
         // Проверяем, что тренировка больше не существует в базе данных
         assertThrows(RepositoryException.class, () -> repository.getTrainingByUserIDlAndDataAndName(user, TEST_DATE, "Running"));
@@ -145,6 +164,12 @@ public class TrainingRepositoryJDBCTest {
         assertThrows(RepositoryException.class, () -> repository.deleteTraining(user, training));
     }
 
+    /**
+     * Тест для метода updateTraining.
+     * Проверяет корректность обновления тренировки пользователя в базе данных.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testUpdateTraining() throws RepositoryException {
         // Создаем старую и новую тренировки
@@ -170,6 +195,12 @@ public class TrainingRepositoryJDBCTest {
         assertEquals(newTraining.getCaloriesBurned(), updatedTraining.getCaloriesBurned());
     }
 
+    /**
+     * Тест для метода saveTrainingAdditionals.
+     * Проверяет корректность сохранения дополнительной информации о тренировке в базе данных.
+     *
+     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
+     */
     @Test
     void testSaveTrainingAdditionals() throws RepositoryException {
         // Создаем тренировку с дополнительной информацией
@@ -190,29 +221,6 @@ public class TrainingRepositoryJDBCTest {
         // Проверяем, что дополнительная информация успешно сохранена
         assertNotNull(savedAdditionalInfo);
         assertEquals(additionalInfo, savedAdditionalInfo);
-    }
-
-
-    private static User getTestUserFromDatabase() throws SQLException {
-        // Запрос для получения первого пользователя из таблицы пользователей
-        String sql = "SELECT * FROM main.users LIMIT 1";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    // Создание и возвращение объекта User
-                    User user = new User();
-                    user.setId(resultSet.getLong("id"));
-                    user.setEmail(resultSet.getString("email"));
-                    user.setFirstName(resultSet.getString("first_name"));
-                    user.setLastName(resultSet.getString("last_name"));
-                    user.setPassword(resultSet.getString("password"));
-                    return user;
-                } else {
-                    throw new SQLException("Тестовый пользователь не найден в базе данных");
-                }
-            }
-        }
     }
 
 

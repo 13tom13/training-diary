@@ -1,11 +1,11 @@
 package config.initializer;
 
 import in.repository.training.implementation.TrainingRepositoryJDBC;
+import in.repository.trainingtype.implementation.TrainingTypeRepositoryJDBC;
 import in.repository.user.implementation.UserRepositoryJDBC;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.repository.user.UserRepository;
-import in.repository.trainingtype.implementation.TrainingTypeRepositoryImpl;
 
 import java.sql.SQLException;
 
@@ -29,11 +29,10 @@ public class RepositoryInitializer {
         try {
             this.userRepository = new UserRepositoryJDBC(getConnection());
             this.trainingRepository = new TrainingRepositoryJDBC(getConnection());
+            this.trainingTypeRepository = new TrainingTypeRepositoryJDBC(getConnection());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        this.trainingTypeRepository = new TrainingTypeRepositoryImpl();
-
     }
 
     /**

@@ -1,21 +1,20 @@
 package controller;
 
-import in.controller.training.implementation.TrainingControllerImpl;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
+import in.controller.training.implementation.TrainingControllerImpl;
+import in.service.training.TrainingService;
 import model.Training;
 import model.User;
-import in.service.training.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import testutil.TestUtil;
 
 import java.util.Date;
 import java.util.TreeMap;
@@ -40,7 +39,7 @@ public class TrainingControllerImplTest {
     private User testUser;
 
     private final Training testTraining = new Training();
-    
+
 
     private final String testTrainingName = "Test Training";
 
@@ -101,9 +100,6 @@ public class TrainingControllerImplTest {
      */
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
-        // Configure mock behavior
-        doNothing().when(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
-
         // Act
         trainingController.deleteTraining(testUser, TEST_DATE, testTrainingName);
 
@@ -153,7 +149,7 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного добавления дополнительной информации о тренировке.
      *
-     * @throws RepositoryException  если возникла ошибка в репозитории
+     * @throws RepositoryException    если возникла ошибка в репозитории
      * @throws NoWriteRightsException если нет прав на запись
      */
     @Test
@@ -169,7 +165,7 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного удаления дополнительной информации о тренировке.
      *
-     * @throws RepositoryException  если возникла ошибка в репозитории
+     * @throws RepositoryException   если возникла ошибка в репозитории
      * @throws NoEditRightsException если нет прав на редактирование
      */
     @Test
@@ -184,7 +180,7 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного изменения имени тренировки.
      *
-     * @throws RepositoryException  если возникла ошибка в репозитории
+     * @throws RepositoryException   если возникла ошибка в репозитории
      * @throws NoEditRightsException если нет прав на редактирование
      */
     @Test
@@ -202,14 +198,14 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного изменения даты тренировки.
      *
-     * @throws RepositoryException          если возникла ошибка в репозитории
+     * @throws RepositoryException        если возникла ошибка в репозитории
      * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoEditRightsException       если нет прав на редактирование
+     * @throws NoEditRightsException      если нет прав на редактирование
      */
     @Test
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
-        Date newDate = new Date(2024,4,19);
+        Date newDate = new Date(2024, 4, 19);
 
         // Act
         trainingController.changeDateTraining(testUser, testTraining, newDate);
@@ -221,7 +217,7 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного изменения продолжительности тренировки.
      *
-     * @throws RepositoryException  если возникла ошибка в репозитории
+     * @throws RepositoryException   если возникла ошибка в репозитории
      * @throws NoEditRightsException если нет прав на редактирование
      */
     @Test
@@ -239,7 +235,7 @@ public class TrainingControllerImplTest {
     /**
      * Тестирование успешного изменения количества калорий, сожженных во время тренировки.
      *
-     * @throws RepositoryException  если возникла ошибка в репозитории
+     * @throws RepositoryException   если возникла ошибка в репозитории
      * @throws NoEditRightsException если нет прав на редактирование
      */
     @Test

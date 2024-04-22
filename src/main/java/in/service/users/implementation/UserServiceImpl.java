@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByEmail(String email) throws ServiceException {
-        return userRepository.getUserByEmail(email).orElseThrow(() ->
-                new ServiceException("User not found"));
+            return userRepository.getUserByEmail(email).orElseThrow(() ->
+                    new ServiceException("User not found"));
     }
 
     /**

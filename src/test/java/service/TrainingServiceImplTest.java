@@ -8,6 +8,7 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.implementation.TrainingServiceImpl;
+import model.Rights;
 import model.Training;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +48,9 @@ public class TrainingServiceImplTest extends TestUtil {
     @BeforeEach
     public void setUp() {
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testUser.getRights().add(new Rights(1L,"WRITE"));
+        testUser.getRights().add(new Rights(2L,"EDIT"));
+        testUser.getRights().add(new Rights(3L,"DELETE"));
     }
 
     /**
@@ -60,9 +64,6 @@ public class TrainingServiceImplTest extends TestUtil {
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Arrange
         Training training = new Training(testTrainingName, TEST_DATE, 60, 200);
-
-        // Configure mock behavior
-        doNothing().when(trainingRepository).saveTraining(testUser, training);
 
         // Act
         trainingService.saveTraining(testUser, training);
@@ -79,8 +80,6 @@ public class TrainingServiceImplTest extends TestUtil {
         // Arrange
         TreeMap<String, TreeSet<Training>> expectedTrainings = new TreeMap<>();
 
-        // Configure mock behavior
-//        when(trainingRepository.getAllTrainingsByUserID(testUser).thenReturn(expectedTrainings));
 
         // Act
         TreeMap<Date, TreeSet<Training>> actualTrainings = trainingService.getAllTrainings(testUser);
@@ -104,7 +103,6 @@ public class TrainingServiceImplTest extends TestUtil {
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).deleteTraining(testUser, testTraining);
 
         // Act
         trainingService.deleteTraining(testUser, TEST_DATE, testTrainingName);

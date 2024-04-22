@@ -17,7 +17,7 @@ public interface UserService {
      * @return объект пользователя
      * @throws ServiceException если произошла ошибка при получении пользователя
      */
-    User getUserByEmail(String email) throws ServiceException;
+    User getUserByEmail(String email) throws ServiceException, RepositoryException;
 
     /**
      * Сохраняет нового пользователя.

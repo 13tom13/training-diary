@@ -1,4 +1,5 @@
 package database;
+
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -7,16 +8,11 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-import static config.ApplicationConfig.*;
+import static config.ApplicationConfig.getTestChangeLogFile;
 
 public class LiquibaseConnectorForTest {
-//    private String url = getTestDbUrl();
-//    private String username = getTestDbUsername();
-//    private String password = getTestDbPassword();
-    private String changelogFilePath = getTestChangeLogFile();
+    private final String changelogFilePath = getTestChangeLogFile();
 
 
     public LiquibaseConnectorForTest() {
@@ -31,7 +27,7 @@ public class LiquibaseConnectorForTest {
             System.out.println("Liquibase for test update executed successfully.\n");
 
         } catch (LiquibaseException e) {
-            e.printStackTrace();
+            System.out.println("Liquibase update test with exception");
         }
     }
 }

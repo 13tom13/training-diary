@@ -13,10 +13,10 @@ import java.sql.SQLException;
 import static config.ApplicationConfig.*;
 
 public class LiquibaseConnector {
-    private String url = getDbUrl();
-    private String username = getDbUsername();
-    private String password = getDbPassword();
-    private String changelogFilePath = getChangeLogFile();
+    private final String url = getDbUrl();
+    private final String username = getDbUsername();
+    private final String password = getDbPassword();
+    private final String changelogFilePath = getChangeLogFile();
 
 
     public LiquibaseConnector() {
@@ -31,7 +31,7 @@ public class LiquibaseConnector {
             System.out.println("Liquibase update executed successfully.\n");
 
         } catch (SQLException | LiquibaseException e) {
-            e.printStackTrace();
+            System.out.println("Liquibase update with exception");
         }
     }
 }

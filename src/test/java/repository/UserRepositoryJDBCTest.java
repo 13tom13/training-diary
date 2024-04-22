@@ -1,71 +1,50 @@
 package repository;
 
 import exceptions.RepositoryException;
+import in.repository.user.UserRepository;
 import in.repository.user.implementation.UserRepositoryJDBC;
 import model.User;
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import testutil.TestUtil;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static testutil.TestUtil.*;
 
+/**
+ * Реализация интерфейса UserRepository для работы с пользователями в базе данных с помощью JDBC.
+ */
 public class UserRepositoryJDBCTest {
 
-    private static PostgreSQLContainer<?> postgreSQLContainer;
-    private Connection connection;
-    private UserRepositoryJDBC userRepository;
+    private static Connection connection;
+    private static UserRepository userRepository;
+    private static User user;
 
     @BeforeAll
-    static void setUpContainer() {
-        postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-                .withDatabaseName("test-db")
-                .withUsername("test-user")
-                .withPassword("test-password")
-                .withInitScript("init.sql");
-        postgreSQLContainer.start();
+    static void setUpContainer() throws SQLException {
+        connection = createConnectionToTestDatabase();
+        userRepository = new UserRepositoryJDBC(connection);
+        user = getTestUserFromDatabase(connection);
     }
 
     @AfterAll
-    static void tearDownContainer() {
-        if (postgreSQLContainer != null) {
-            postgreSQLContainer.stop();
-        }
+    static void tearDownContainer() throws SQLException {
+        cleanLogsAfterTests();
+        connection.close();
+
     }
 
-    @BeforeEach
-    void setUp() throws SQLException {
-        String jdbcUrl = postgreSQLContainer.getJdbcUrl();
-        String username = postgreSQLContainer.getUsername();
-        String password = postgreSQLContainer.getPassword();
-        connection = DriverManager.getConnection(jdbcUrl, username, password);
-        userRepository = new UserRepositoryJDBC(connection);
-        // Очистка базы данных перед каждым тестом
-        cleanDatabase();
-    }
-
-    @AfterEach
-    void tearDown() throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
-    }
-
-    private void cleanDatabase() throws SQLException {
-        // Например, можно удалять все записи из таблицы пользователей
-        connection.prepareStatement("DELETE FROM users").executeUpdate();
-    }
 
     @Test
     void testSaveUserAndGetUserByEmail() throws RepositoryException {
         // Arrange
-        User user = new User(TestUtil.TEST_FIRST_NAME, TestUtil.TEST_LAST_NAME, TestUtil.TEST_EMAIL, TestUtil.TEST_PASSWORD);
+        User user = new User("Test", "Test", "test2@test.com", "test");
 
         // Act
         userRepository.saveUser(user);
@@ -77,27 +56,18 @@ public class UserRepositoryJDBCTest {
     }
 
     @Test
-    void testGetAllUsers() throws RepositoryException {
-        // Arrange
-        User user1 = new User(TestUtil.TEST_EMAIL, TestUtil.TEST_FIRST_NAME, TestUtil.TEST_LAST_NAME, TestUtil.TEST_PASSWORD);
-        User user2 = new User("test2@example.com", "Jane", "Smith", "password2");
-        userRepository.saveUser(user1);
-        userRepository.saveUser(user2);
-
+    void testGetAllUsers() {
         // Act
         List<User> userList = userRepository.getAllUsers();
 
         // Assert
-        assertEquals(2, userList.size());
-        assertTrue(userList.contains(user1));
-        assertTrue(userList.contains(user2));
+        assertEquals(1, userList.size());
+        assertTrue(userList.contains(user));
     }
 
     @Test
-    void testUpdateUser() throws RepositoryException {
+    void testUpdateUser() {
         // Arrange
-        User user = new User(TestUtil.TEST_EMAIL, TestUtil.TEST_FIRST_NAME, TestUtil.TEST_LAST_NAME, TestUtil.TEST_PASSWORD);
-        userRepository.saveUser(user);
         user.setFirstName("UpdatedFirstName");
         user.setLastName("UpdatedLastName");
 
@@ -111,10 +81,7 @@ public class UserRepositoryJDBCTest {
     }
 
     @Test
-    void testDeleteUser() throws RepositoryException {
-        // Arrange
-        User user = new User(TestUtil.TEST_EMAIL, TestUtil.TEST_FIRST_NAME, TestUtil.TEST_LAST_NAME, TestUtil.TEST_PASSWORD);
-        userRepository.saveUser(user);
+    void testDeleteUser() {
 
         // Act
         userRepository.deleteUser(user);

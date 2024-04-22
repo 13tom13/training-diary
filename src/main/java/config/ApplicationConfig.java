@@ -1,9 +1,7 @@
 package config;
 
 import database.LiquibaseConnector;
-import database.LiquibaseConnectorForTest;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -22,7 +20,7 @@ public class ApplicationConfig {
                 throw new IOException("Unable to load config file: " + CONFIG_FILE);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при загрузке файла конфигурации: " + e.getMessage());
         }
         liquibaseMigrations();
     }
@@ -30,7 +28,6 @@ public class ApplicationConfig {
     private static void liquibaseMigrations() {
         LiquibaseConnector connector = new LiquibaseConnector();
         connector.runMigrations();
-
     }
 
     public static String getDbUrl() {
@@ -49,8 +46,8 @@ public class ApplicationConfig {
         return PROPERTIES.getProperty("liquibase.changelog");
     }
 
-    public static String getTestDbUrl() {
-        return PROPERTIES.getProperty("db.test.url");
+    public static String getTestDatabaseName() {
+        return PROPERTIES.getProperty("db.test.testDatabaseName");
     }
 
     public static String getTestDbUsername() {

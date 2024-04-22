@@ -1,5 +1,7 @@
 package in.repository.trainingtype;
 
+import model.User;
+
 import java.util.List;
 
 /**
@@ -10,16 +12,16 @@ public interface TrainingTypeRepository {
     /**
      * Получить список типов тренировок для указанного пользователя.
      *
-     * @param userEmail электронная почта пользователя
+     * @param user пользователь
      * @return список типов тренировок
      */
-    List<String> getTrainingTypes(String userEmail);
+    List<String> getTrainingTypes(User user);
 
     /**
      * Сохранить новый тип тренировки для указанного пользователя.
      *
-     * @param userEmail     электронная почта пользователя
+     * @param user пользователь
      * @param trainingType  новый тип тренировки
      */
-    void saveTrainingType(String userEmail, String trainingType);
+    void saveTrainingType(User user, String trainingType);
 }

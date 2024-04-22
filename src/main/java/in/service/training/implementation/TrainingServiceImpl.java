@@ -47,8 +47,8 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public List<String> getTrainingTypes(String userEmail) {
-        return trainingTypeRepository.getTrainingTypes(userEmail);
+    public List<String> getTrainingTypes(User user) {
+        return trainingTypeRepository.getTrainingTypes(user);
     }
 
     /**
@@ -75,9 +75,6 @@ public class TrainingServiceImpl implements TrainingService {
         if (!hisRight(user, "WRITE")) {
             throw new NoWriteRightsException();
         }
-//        if (!isValidDateFormat(training.getDate())) {
-//            throw new InvalidDateFormatException();
-//        }
         trainingRepository.saveTraining(user, training);
     }
 
@@ -86,7 +83,7 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void saveTrainingType(User user, String customTrainingType) {
-        trainingTypeRepository.saveTrainingType(user.getEmail(), customTrainingType);
+        trainingTypeRepository.saveTrainingType(user, customTrainingType);
     }
 
     /**
@@ -153,7 +150,7 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public void changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
+    public void changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, NoEditRightsException {
         if (!hisRight(user, "EDIT")) {
             throw new NoEditRightsException();
         }
@@ -180,12 +177,13 @@ public class TrainingServiceImpl implements TrainingService {
      */
     @Override
     public void changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException {
-        if (!hisRight(user, "EDIT")) {
-            throw new NoEditRightsException();
+        if (hisRight(user, "EDIT")) {
+            Training trainingForChange = getTrainingForChange(user, training);
+            trainingForChange.setCaloriesBurned(newCalories);
+            trainingRepository.updateTraining(user, training, trainingForChange);
         }
-        Training trainingForChange = getTrainingForChange(user, training);
-        trainingForChange.setCaloriesBurned(newCalories);
-        trainingRepository.updateTraining(user, training, trainingForChange);
+        throw new NoEditRightsException();
+
     }
 
     private Training getTrainingForChange(User user, Training training) throws RepositoryException {
