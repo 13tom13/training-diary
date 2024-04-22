@@ -8,6 +8,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import model.Training;
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс для модификации данных о тренировках.
  */
@@ -36,7 +38,7 @@ public interface TrainingModificationService {
      * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    boolean deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    boolean deleteTraining(User user, Date date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -86,7 +88,7 @@ public interface TrainingModificationService {
      * @throws SecurityException           если возникла ошибка безопасности
      * @throws NoEditRightsException       если у пользователя нет прав на редактирование
      */
-    void changeDateTraining(User user, Training training, String newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
+    void changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
 
     /**
      * Изменяет длительность тренировки.

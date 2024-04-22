@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,8 +30,8 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
     @InjectMocks
     private TrainingStatisticsControllerImpl trainingStatisticsController;
     private User testUser;
-    private final String startDate = "01.01.24";
-    private final String endDate = "31.01.24";
+    private final Date startDate = new Date(2024, 1, 1);
+    private final Date endDate = new Date(2024, 12, 31);
 
     @BeforeEach
     public void setUp() {

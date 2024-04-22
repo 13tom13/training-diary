@@ -1,5 +1,7 @@
 package model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -11,7 +13,7 @@ public class Training implements Comparable<Training> {
     private Long id;
 
     private String name; // Название тренировки
-    private String date; // Дата тренировки
+    private Date date; // Дата тренировки
     private int duration; // Продолжительность тренировки в минутах
     private int caloriesBurned; // Количество сожженных калорий
 
@@ -32,7 +34,7 @@ public class Training implements Comparable<Training> {
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
      */
-    public Training(long id, String name, String date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+    public Training(long id, String name, Date date, int duration, int caloriesBurned, HashMap<String, String> additions) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -51,7 +53,7 @@ public class Training implements Comparable<Training> {
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
      */
-    public Training(String name, String date, int duration, int caloriesBurned) {
+    public Training(String name, Date date, int duration, int caloriesBurned) {
         this.name = name;
         this.date = date;
         this.duration = duration;
@@ -72,7 +74,7 @@ public class Training implements Comparable<Training> {
      *
      * @param date Дата тренировки в формате строки
      */
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -81,7 +83,7 @@ public class Training implements Comparable<Training> {
      *
      * @return Дата тренировки
      */
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -214,11 +216,20 @@ public class Training implements Comparable<Training> {
      *
      * @return Строковое представление тренировки
      */
+    /**
+     * Возвращает строковое представление тренировки.
+     *
+     * @return Строковое представление тренировки
+     */
     @Override
     public String toString() {
+        // Форматирование даты в строку в формате "dd.MM.yy"
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+        String formattedDate = dateFormat.format(date);
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Тренировка: ").append(name)
-                .append(" | Дата: ").append(date)
+                .append(" | Дата: ").append(formattedDate) // Вывод отформатированной даты
                 .append(" | Продолжительность: ").append(duration).append(" мин")
                 .append(" | Сожжено калорий: ").append(caloriesBurned).append(" kcal");
 

@@ -3,6 +3,8 @@ package in.controller.training;
 import model.Training;
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс, определяющий методы для модификации тренировок.
  */
@@ -25,7 +27,7 @@ public interface TrainingModificationController {
      * @param name имя тренировки
      * @return
      */
-    boolean deleteTraining(User user, String date, String name);
+    boolean deleteTraining(User user, Date date, String name);
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -62,7 +64,7 @@ public interface TrainingModificationController {
      * @param training тренировка, у которой изменяется дата
      * @param newDate  новая дата тренировки
      */
-    void changeDateTraining(User user, Training training, String newDate);
+    void changeDateTraining(User user, Training training, Date newDate);
 
     /**
      * Изменяет продолжительность тренировки.

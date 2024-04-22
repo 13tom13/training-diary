@@ -5,17 +5,16 @@ import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
-import model.Training;
-import model.User;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
+import model.Training;
+import model.User;
 
+import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import static utils.DateValidationService.isValidDateFormat;
 
 /**
  * Реализация сервиса для управления тренировками пользователя.
@@ -28,7 +27,7 @@ public class TrainingServiceImpl implements TrainingService {
     /**
      * Конструктор.
      *
-     * @param trainingRepository    Репозиторий для доступа к тренировкам.
+     * @param trainingRepository     Репозиторий для доступа к тренировкам.
      * @param trainingTypeRepository Репозиторий для доступа к типам тренировок.
      */
     public TrainingServiceImpl(TrainingRepository trainingRepository, TrainingTypeRepository trainingTypeRepository) {
@@ -40,7 +39,7 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public TreeMap<String, TreeSet<Training>> getAllTrainings(User user) {
+    public TreeMap<Date, TreeSet<Training>> getAllTrainings(User user) {
         return trainingRepository.getAllTrainingsByUserID(user);
     }
 
@@ -56,7 +55,7 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserIDAndData(User user, String data) throws RepositoryException {
+    public TreeSet<Training> getTrainingsByUserIDAndData(User user, Date data) throws RepositoryException {
         return trainingRepository.getTrainingsByUserIDAndData(user, data);
     }
 
@@ -64,7 +63,7 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public Training getTrainingByUserIDAndDataAndName(User user, String trainingData, String trainingName) throws RepositoryException {
+    public Training getTrainingByUserIDAndDataAndName(User user, Date trainingData, String trainingName) throws RepositoryException {
         return trainingRepository.getTrainingByUserIDlAndDataAndName(user, trainingData, trainingName);
     }
 
@@ -76,9 +75,9 @@ public class TrainingServiceImpl implements TrainingService {
         if (!hisRight(user, "WRITE")) {
             throw new NoWriteRightsException();
         }
-        if (!isValidDateFormat(training.getDate())) {
-            throw new InvalidDateFormatException();
-        }
+//        if (!isValidDateFormat(training.getDate())) {
+//            throw new InvalidDateFormatException();
+//        }
         trainingRepository.saveTraining(user, training);
     }
 
@@ -96,16 +95,13 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public boolean deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, NoDeleteRightsException {
+    public boolean deleteTraining(User user, Date date, String name) throws RepositoryException, InvalidDateFormatException, NoDeleteRightsException {
         if (!hisRight(user, "DELETE")) {
             throw new NoDeleteRightsException();
         }
-        if (isValidDateFormat(date)) {
-            Training training = getTrainingByUserIDAndDataAndName(user, date, name);
-            return trainingRepository.deleteTraining(user, training);
-        } else {
-            throw new InvalidDateFormatException();
-        }
+        Training training = getTrainingByUserIDAndDataAndName(user, date, name);
+        return trainingRepository.deleteTraining(user, training);
+
     }
 
     /**
@@ -157,17 +153,13 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public void changeDateTraining(User user, Training training, String newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
+    public void changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         if (!hisRight(user, "EDIT")) {
             throw new NoEditRightsException();
         }
-        if (isValidDateFormat(newDate)) {
-            Training trainingForChange = getTrainingForChange(user, training);
-            trainingForChange.setDate(newDate);
-            trainingRepository.updateTraining(user, training, trainingForChange);
-        } else {
-            throw new InvalidDateFormatException();
-        }
+        Training trainingForChange = getTrainingForChange(user, training);
+        trainingForChange.setDate(newDate);
+        trainingRepository.updateTraining(user, training, trainingForChange);
     }
 
     /**

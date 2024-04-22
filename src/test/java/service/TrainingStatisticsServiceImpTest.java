@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -33,8 +34,8 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     private TrainingStatisticsServiceImp trainingStatisticsService;
 
     private User testUser;
-    private final String startDate = "01.01.24";
-    private final String endDate = "31.01.24";
+    private final Date startDate = "01.01.24";
+    private final Date endDate = "31.01.24";
 
     private int totalTestTrainings;
 

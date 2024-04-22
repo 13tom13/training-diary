@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -39,7 +40,7 @@ public class TrainingControllerImplTest extends TestUtil {
 
     private final Training testTraining = new Training();
 
-    private final String testDate = "10.11.24";
+    private final Date testDate = new Date(2024,4,18);
 
     private final String testTrainingName = "Test Training";
 
@@ -79,13 +80,13 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<String, TreeSet<Training>> expectedTrainings = new TreeMap<>();
+        TreeMap<Date, TreeSet<Training>> expectedTrainings = new TreeMap<>();
 
         // Configure mock behavior
         when(trainingServiceMock.getAllTrainings(testUser)).thenReturn(expectedTrainings);
 
         // Act
-        TreeMap<String, TreeSet<Training>> actualTrainings = trainingController.getAllTrainings(testUser);
+        TreeMap<Date, TreeSet<Training>> actualTrainings = trainingController.getAllTrainings(testUser);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -208,7 +209,7 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
-        String newDate = "11.11.24";
+        Date newDate = new Date(2024,4,19);
 
         // Act
         trainingController.changeDateTraining(testUser, testTraining, newDate);

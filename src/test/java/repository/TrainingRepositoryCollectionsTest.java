@@ -1,7 +1,6 @@
 package repository;
 
 import exceptions.RepositoryException;
-import in.repository.training.implementation.TrainingRepositoryCollections;
 import model.Training;
 import in.repository.training.TrainingRepository;
 import org.junit.jupiter.api.BeforeEach;

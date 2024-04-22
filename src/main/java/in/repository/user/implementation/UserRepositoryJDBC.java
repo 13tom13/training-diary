@@ -41,7 +41,6 @@ public class UserRepositoryJDBC implements UserRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             rollbackConnection();
         }
         return Optional.empty();
@@ -61,7 +60,7 @@ public class UserRepositoryJDBC implements UserRepository {
                 users.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при получении пользователей: " + e.getMessage());
         }
         return users;
     }
@@ -79,7 +78,7 @@ public class UserRepositoryJDBC implements UserRepository {
                 rights.add(right);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при получении прав пользователей: " + e.getMessage());
         }
         return rights;
     }
@@ -107,8 +106,7 @@ public class UserRepositoryJDBC implements UserRepository {
             insertUserRights(user);
             insertUserRoles(user);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RepositoryException("Database connection error");
+            throw new RepositoryException("Ошибка при подключении к базе данных");
         }
     }
 
@@ -125,7 +123,7 @@ public class UserRepositoryJDBC implements UserRepository {
             updateUserRights(user);
             updateUserRoles(user);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при обновлении пользователя: " + e.getMessage());
         }
     }
 
@@ -138,7 +136,7 @@ public class UserRepositoryJDBC implements UserRepository {
             deleteUserRights(user);
             deleteUserRoles(user);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при удалении пользователя: " + e.getMessage());
         }
     }
 
@@ -273,7 +271,7 @@ public class UserRepositoryJDBC implements UserRepository {
                 connection.rollback();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка при попытке отмены транзакции: " + e.getMessage());
         }
     }
 }

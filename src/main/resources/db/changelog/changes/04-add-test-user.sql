@@ -22,16 +22,17 @@ FROM (SELECT users.id, rights.id AS right_id
 
 -- Добавление тренировок
 INSERT INTO trainings (name, date, duration, calories_burned)
-VALUES ('Кардио', '13.04.24', 90, 560),
-       ('Силовая', '14.04.24', 60, 450),
-       ('Гибкость', '10.04.24', 45, 300);
+VALUES ('Кардио', TO_DATE('13.04.24', 'DD.MM.YY'), 90, 560),
+       ('Силовая', TO_DATE('14.04.24', 'DD.MM.YY'), 60, 450),
+       ('Гибкость', TO_DATE('10.04.24', 'DD.MM.YY'), 45, 300);
 
 -- Добавление тренировок пользователя
 INSERT INTO user_trainings (user_id, training_id)
 SELECT u.id, t.id
 FROM users u
          JOIN trainings t ON
-    (t.name = 'Кардио' AND t.date = '13.04.24') OR
-    (t.name = 'Силовая' AND t.date = '14.04.24') OR
-    (t.name = 'Гибкость' AND t.date = '10.04.24')
+    (t.name = 'Кардио' AND t.date = TO_DATE('13.04.24', 'DD.MM.YY')) OR
+    (t.name = 'Силовая' AND t.date = TO_DATE('14.04.24', 'DD.MM.YY')) OR
+    (t.name = 'Гибкость' AND t.date = TO_DATE('10.04.24', 'DD.MM.YY'))
 WHERE u.email = 'test@mail.ru';
+

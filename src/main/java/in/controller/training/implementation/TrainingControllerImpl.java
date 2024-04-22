@@ -11,6 +11,7 @@ import model.Training;
 import model.User;
 import utils.Logger;
 
+import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -40,7 +41,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @return Словарь, содержащий тренировки, сгруппированные по дате
      */
     @Override
-    public TreeMap<String, TreeSet<Training>> getAllTrainings(User user) {
+    public TreeMap<Date, TreeSet<Training>> getAllTrainings(User user) {
         return trainingService.getAllTrainings(user);
     }
 
@@ -97,7 +98,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @return
      */
     @Override
-    public boolean deleteTraining(User user, String date, String name) {
+    public boolean deleteTraining(User user, Date date, String name) {
         try {
             boolean result = trainingService.deleteTraining(user, date, name);
             logger.logAction(user.getEmail(), "delete training " + name + " " + date);
@@ -117,7 +118,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @return Множество тренировок пользователя на указанную дату
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate) {
+    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) {
         try {
             return trainingService.getTrainingsByUserIDAndData(user, trainingDate);
         } catch (RepositoryException e) {
@@ -136,7 +137,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName) {
+    public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) {
         try {
             return trainingService.getTrainingByUserIDAndDataAndName(user, trainingDate, trainingName);
         } catch (RepositoryException e) {
@@ -212,7 +213,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @param newDate  Новая дата тренировки
      */
     @Override
-    public void changeDateTraining(User user, Training training, String newDate) {
+    public void changeDateTraining(User user, Training training, Date newDate) {
         try {
             trainingService.changeDateTraining(user, training, newDate);
             logger.logAction(user.getEmail(),

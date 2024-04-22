@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -40,7 +41,7 @@ public class TrainingServiceImplTest extends TestUtil {
     private TrainingServiceImpl trainingService;
 
     private User testUser;
-    private final String testDate = "10.11.24";
+    private final Date testDate = "10.11.24";
     private final String testTrainingName = "Test Training";
     private final String testAdditionalName = "additionalName";
 

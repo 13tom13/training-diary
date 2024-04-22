@@ -6,6 +6,7 @@ import model.Training;
 import model.User;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -34,8 +35,8 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @return TreeMap, содержащий все тренировки пользователя
      */
     @Override
-    public TreeMap<String, TreeSet<Training>> getAllTrainingsByUserID(User user) {
-        TreeMap<String, TreeSet<Training>> userTrainingMap = new TreeMap<>();
+    public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserID(User user) {
+        TreeMap<Date, TreeSet<Training>> userTrainingMap = new TreeMap<>();
         String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned, " +
                 "       training_additions.key AS addition_key, training_additions.value AS addition_value " +
                 "FROM trainings training " +
@@ -49,7 +50,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Получаем данные о тренировке из ResultSet
-                    String date = resultSet.getString("date");
+                    Date date = resultSet.getDate("date");
                     // Создаем объект Training из ResultSet
                     Training training = getTraining(resultSet);
                     // Добавляем тренировку в TreeMap, используя дату в качестве ключа
@@ -74,7 +75,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserIDAndData(User user, String trainingDate) throws RepositoryException {
+    public TreeSet<Training> getTrainingsByUserIDAndData(User user, Date trainingDate) throws RepositoryException {
         TreeSet<Training> trainingsOnDate = new TreeSet<>();
         String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned " +
                 "FROM trainings training " +
@@ -84,7 +85,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
-            statement.setString(2, trainingDate);
+            statement.setDate(2, new java.sql.Date(trainingDate.getTime())); // Преобразуем java.util.Date в java.sql.Date
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Создаем объект Training из ResultSet
@@ -115,7 +116,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public Training getTrainingByUserIDlAndDataAndName(User user, String trainingDate, String trainingName) throws RepositoryException {
+    public Training getTrainingByUserIDlAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
         String sql = "SELECT training.id AS training_id, training.name, training.date, training.duration, training.calories_burned, " +
                 "       training_additions.key AS addition_key, training_additions.value AS addition_value " +
                 "FROM trainings training " +
@@ -125,7 +126,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 "WHERE u.id = ? AND training.date = ? AND training.name = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
-            statement.setString(2, trainingDate);
+            statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
             statement.setString(3, trainingName);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -202,7 +203,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
             // Вставка новой тренировки
             statementTraining.setString(1, newTraining.getName());
-            statementTraining.setString(2, newTraining.getDate());
+            statementTraining.setDate(2, new java.sql.Date(newTraining.getDate().getTime()));
             statementTraining.setInt(3, newTraining.getDuration());
             statementTraining.setInt(4, newTraining.getCaloriesBurned());
             int rowsAffected = statementTraining.executeUpdate();
@@ -226,8 +227,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             newTraining.setId(trainingId); // Устанавливаем идентификатор тренировки
             saveTrainingAdditionals(newTraining); // Сохраняем дополнительную информацию
         } catch (SQLException e) {
-            e.printStackTrace();
-//            throw new RepositoryException("Ошибка при сохранении тренировки");
+            throw new RepositoryException("Ошибка. Тренировка с таким же именем и датой уже существует");
         }
     }
 
@@ -320,7 +320,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             connection.setAutoCommit(false); // Начинаем транзакцию
             try {
                 updateStatement.setString(1, newTraining.getName());
-                updateStatement.setString(2, newTraining.getDate());
+                updateStatement.setDate(2, new java.sql.Date(newTraining.getDate().getTime()));
                 updateStatement.setInt(3, newTraining.getDuration());
                 updateStatement.setInt(4, newTraining.getCaloriesBurned());
                 updateStatement.setLong(5, oldTraining.getId()); // Предполагается, что у oldTraining есть id
@@ -354,7 +354,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     private Training getTraining(ResultSet resultSet) throws SQLException, RepositoryException {
         long id = resultSet.getLong("training_id");
         String name = resultSet.getString("name");
-        String date = resultSet.getString("date");
+        Date date = resultSet.getDate("date");
         int duration = resultSet.getInt("duration");
         int caloriesBurned = resultSet.getInt("calories_burned");
 

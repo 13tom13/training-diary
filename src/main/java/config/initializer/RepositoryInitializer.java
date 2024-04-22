@@ -1,11 +1,7 @@
 package config.initializer;
 
-import exceptions.RepositoryException;
-import in.repository.training.implementation.TrainingRepositoryCollections;
 import in.repository.training.implementation.TrainingRepositoryJDBC;
 import in.repository.user.implementation.UserRepositoryJDBC;
-import model.Training;
-import model.User;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.repository.user.UserRepository;

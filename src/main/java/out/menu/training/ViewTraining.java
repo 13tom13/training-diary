@@ -5,9 +5,12 @@ import in.controller.training.TrainingController;
 import model.Training;
 import model.User;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static utils.Utils.getFormattedDate;
 
 /**
  * Представляет класс для просмотра тренировок пользователя.
@@ -31,15 +34,15 @@ public class ViewTraining {
      * @param user Пользователь, чьи тренировки необходимо отобразить.
      */
     public void viewAllTraining(User user) {
-        TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
+        TreeMap<Date, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
         if (allTraining.isEmpty()) {
             System.out.println("Список тренировок пуст");
             return;
         }
 
-        for (Map.Entry<String, TreeSet<Training>> entry : allTraining.entrySet()) {
+        for (Map.Entry<Date, TreeSet<Training>> entry : allTraining.entrySet()) {
 
-            String currentDate = entry.getKey();
+            String currentDate = getFormattedDate(entry.getKey());
             TreeSet<Training> trainingsOnDate = entry.getValue();
 
             System.out.println("\n" + "=====" + currentDate + "=====");

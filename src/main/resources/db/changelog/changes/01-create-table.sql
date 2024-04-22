@@ -48,11 +48,12 @@ CREATE TABLE trainings
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
-    date            VARCHAR(100) NOT NULL,
-    duration        INT          NOT NULL,
-    calories_burned INT          NOT NULL,
+    date            DATE NOT NULL,
+    duration        INT NOT NULL,
+    calories_burned INT NOT NULL,
     CONSTRAINT unique_name_date UNIQUE (name, date)
 );
+
 
 -- Создание таблицы для дополнительной информации о тренировках
 CREATE TABLE training_additions
