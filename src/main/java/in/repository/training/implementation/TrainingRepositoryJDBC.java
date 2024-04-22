@@ -141,49 +141,6 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     }
 
 
-    public void saveTrainingAdditionals(Training training) throws RepositoryException {
-        HashMap<String, String> additionals = training.getAdditions();
-        if (additionals.isEmpty()) {
-            return; // Если дополнительной информации нет, нет смысла сохранять
-        }
-        try {
-            // Удаляем существующие записи о дополнительной информации
-            deleteTrainingAdditionals(training.getId());
-
-            String insertSql = "INSERT INTO main.training_additions (training_id, key, value) VALUES (?, ?, ?)";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
-                connection.setAutoCommit(false);
-                for (String key : additionals.keySet()) {
-                    insertStatement.setLong(1, training.getId());
-                    insertStatement.setString(2, key);
-                    insertStatement.setString(3, additionals.get(key));
-                    insertStatement.addBatch();
-                }
-                insertStatement.executeBatch();
-                connection.commit(); // Фиксируем изменения в базе данных
-            }
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RepositoryException("Ошибка при откате изменений в базе данных");
-            }
-            throw new RepositoryException("Ошибка при сохранении дополнений для тренировки " + training.getName());
-        }
-    }
-
-
-    public void deleteTrainingAdditionals(long trainingId) throws RepositoryException {
-        String deleteSql = "DELETE FROM main.training_additions WHERE training_id = ?";
-        try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
-            deleteStatement.setLong(1, trainingId);
-            deleteStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RepositoryException("Ошибка при удалении дополнительной информации для тренировки с ID " + trainingId);
-        }
-    }
-
-
     /**
      * Сохраняет новую тренировку пользователя.
      * Если для указанного пользователя уже существует тренировка на указанную дату с тем же именем,
@@ -227,7 +184,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             newTraining.setId(trainingId); // Устанавливаем идентификатор тренировки
             saveTrainingAdditionals(newTraining); // Сохраняем дополнительную информацию
         } catch (SQLException e) {
-            throw new RepositoryException("Ошибка. Тренировка с таким же именем и датой уже существует");
+            throw new RepositoryException("Ошибка сохранения тренировки");
         }
     }
 
@@ -346,6 +303,50 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
         } catch (SQLException e) {
             throw new RepositoryException("Ошибка при обновлении тренировки");
+        }
+    }
+
+
+
+    public void saveTrainingAdditionals(Training training) throws RepositoryException {
+        HashMap<String, String> additionals = training.getAdditions();
+        if (additionals.isEmpty()) {
+            return; // Если дополнительной информации нет, нет смысла сохранять
+        }
+        try {
+            // Удаляем существующие записи о дополнительной информации
+            deleteTrainingAdditionals(training.getId());
+
+            String insertSql = "INSERT INTO main.training_additions (training_id, key, value) VALUES (?, ?, ?)";
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
+                connection.setAutoCommit(false);
+                for (String key : additionals.keySet()) {
+                    insertStatement.setLong(1, training.getId());
+                    insertStatement.setString(2, key);
+                    insertStatement.setString(3, additionals.get(key));
+                    insertStatement.addBatch();
+                }
+                insertStatement.executeBatch();
+                connection.commit(); // Фиксируем изменения в базе данных
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RepositoryException("Ошибка при откате изменений в базе данных");
+            }
+            throw new RepositoryException("Ошибка при сохранении дополнений для тренировки " + training.getName());
+        }
+    }
+
+
+    public void deleteTrainingAdditionals(long trainingId) throws RepositoryException {
+        String deleteSql = "DELETE FROM main.training_additions WHERE training_id = ?";
+        try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
+            deleteStatement.setLong(1, trainingId);
+            deleteStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RepositoryException("Ошибка при удалении дополнительной информации для тренировки с ID " + trainingId);
         }
     }
 

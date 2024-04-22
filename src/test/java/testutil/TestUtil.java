@@ -26,7 +26,7 @@ public abstract class TestUtil {
     public static final String TEST_PASSWORD = "password";
 
     /** Тестовая дата. */
-    public static final Date TEST_DATE = new Date(2024,4,18);
+    public static final Date TEST_DATE = new Date(2024,4,10);
 
     /**
      * Метод, выполняющийся после всех тестов для очистки журналов.

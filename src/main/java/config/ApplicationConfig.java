@@ -1,6 +1,7 @@
 package config;
 
 import database.LiquibaseConnector;
+import database.LiquibaseConnectorForTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class ApplicationConfig {
     private static void liquibaseMigrations() {
         LiquibaseConnector connector = new LiquibaseConnector();
         connector.runMigrations();
+
     }
 
     public static String getDbUrl() {
@@ -45,5 +47,21 @@ public class ApplicationConfig {
 
     public static String getChangeLogFile() {
         return PROPERTIES.getProperty("liquibase.changelog");
+    }
+
+    public static String getTestDbUrl() {
+        return PROPERTIES.getProperty("db.test.url");
+    }
+
+    public static String getTestDbUsername() {
+        return PROPERTIES.getProperty("db.test.username");
+    }
+
+    public static String getTestDbPassword() {
+        return PROPERTIES.getProperty("db.test.password");
+    }
+
+    public static String getTestChangeLogFile() {
+        return PROPERTIES.getProperty("liquibase.test.changelog");
     }
 }

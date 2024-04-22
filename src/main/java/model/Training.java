@@ -61,6 +61,14 @@ public class Training implements Comparable<Training> {
         this.additions = new HashMap<>();
     }
 
+    public Training(String name, Date date, int caloriesBurned, int duration,HashMap<String, String> additions) {
+        this.additions = additions;
+        this.caloriesBurned = caloriesBurned;
+        this.duration = duration;
+        this.date = date;
+        this.name = name;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -149,6 +157,8 @@ public class Training implements Comparable<Training> {
     public HashMap<String, String> getAdditions() {
         return additions;
     }
+
+
 
     /**
      * Добавляет дополнительные данные к тренировке.
