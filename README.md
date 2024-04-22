@@ -12,7 +12,7 @@ Training Diary - это приложение для ведения ежедне�
 1. Клонируйте репозиторий: `git clone git@github.com:13tom13/training-diary.git`
 2. Перейдите в каталог проекта: `cd training-diary`
 3. Соберите проект с помощью Maven: `mvn clean install`
-4. Запустите базу данных PostgresSQL в Docker командой: `docker run --name postgres-training-diary -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=training-diary -p 5432:5432 -d postgres`
+4. Запустите базу данных PostgresSQL в Docker командой: `docker-compose up -d`
 5. Запустите приложение: `java -jar target/training-diary-1.0.jar`
 
 ## Функционал

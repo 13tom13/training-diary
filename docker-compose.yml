@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  postgres-training-diary:
+    image: postgres:latest
+    container_name: postgres-training-diary
+    environment:
+      POSTGRES_DB: training-diary
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    restart: always
+
+  postgres-training-diary-test:
+    image: postgres:latest
+    container_name: postgres-training-diary-test
+    environment:
+      POSTGRES_DB: training-diary-test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - "5433:5432"
+    restart: always

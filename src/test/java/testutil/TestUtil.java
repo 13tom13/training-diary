@@ -3,6 +3,7 @@ package testutil;
 import org.junit.jupiter.api.AfterAll;
 
 import java.io.File;
+import java.util.Date;
 
 import static utils.Logger.getLogFielPath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,6 +24,9 @@ public abstract class TestUtil {
 
     /** Тестовый пароль. */
     public static final String TEST_PASSWORD = "password";
+
+    /** Тестовая дата. */
+    public static final Date TEST_DATE = new Date(2024,4,18);
 
     /**
      * Метод, выполняющийся после всех тестов для очистки журналов.

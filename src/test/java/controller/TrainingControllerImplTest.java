@@ -23,12 +23,13 @@ import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static testutil.TestUtil.*;
 
 /**
  * Тестирование класса TrainingControllerImpl.
  */
 @ExtendWith(MockitoExtension.class)
-public class TrainingControllerImplTest extends TestUtil {
+public class TrainingControllerImplTest {
 
     @Mock
     private TrainingService trainingServiceMock;
@@ -39,8 +40,7 @@ public class TrainingControllerImplTest extends TestUtil {
     private User testUser;
 
     private final Training testTraining = new Training();
-
-    private final Date testDate = new Date(2024,4,18);
+    
 
     private final String testTrainingName = "Test Training";
 
@@ -62,7 +62,7 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Arrange
-        Training training = new Training(testTrainingName, testDate, 60, 200);
+        Training training = new Training(testTrainingName, TEST_DATE, 60, 200);
 
         // Configure mock behavior
         doNothing().when(trainingServiceMock).saveTraining(testUser, training);
@@ -102,13 +102,13 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
         // Configure mock behavior
-        doNothing().when(trainingServiceMock).deleteTraining(testUser, testDate, testTrainingName);
+        doNothing().when(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
 
         // Act
-        trainingController.deleteTraining(testUser, testDate, testTrainingName);
+        trainingController.deleteTraining(testUser, TEST_DATE, testTrainingName);
 
         // Assert
-        verify(trainingServiceMock).deleteTraining(testUser, testDate, testTrainingName);
+        verify(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
     }
 
     /**
@@ -122,10 +122,10 @@ public class TrainingControllerImplTest extends TestUtil {
         TreeSet<Training> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingsByUserIDAndData(testUser, testDate)).thenReturn(expectedTrainings);
+        when(trainingServiceMock.getTrainingsByUserIDAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
 
         // Act
-        TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, testDate);
+        TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -139,12 +139,12 @@ public class TrainingControllerImplTest extends TestUtil {
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingByUserIDAndDataAndName(testUser, testDate, testTrainingName))
+        when(trainingServiceMock.getTrainingByUserIDAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
         Training actualTraining = trainingController
-                .getTrainingByUserEmailAndDataAndName(testUser, testDate, testTrainingName);
+                .getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName);
 
         // Assert
         assertEquals(testTraining, actualTraining);
