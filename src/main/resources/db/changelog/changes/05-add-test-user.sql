@@ -3,7 +3,7 @@ INSERT INTO users (first_name, last_name, email, password)
 VALUES ('Иван', 'Петров', 'test@mail.ru', 'pass');
 
 -- Добавление роли для тестового пользователя
-INSERT INTO users_roles (user_id, role_id)
+INSERT INTO service.users_roles (user_id, role_id)
 SELECT id, role_id
 FROM (SELECT users.id, roles.id AS role_id
       FROM users
@@ -13,7 +13,7 @@ FROM (SELECT users.id, roles.id AS role_id
 
 
 -- Добавление прав для тестового пользователя
-INSERT INTO user_rights (user_id, right_id)
+INSERT INTO service.user_rights (user_id, right_id)
 SELECT id, right_id
 FROM (SELECT users.id, rights.id AS right_id
       FROM users

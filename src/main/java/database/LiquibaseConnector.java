@@ -25,9 +25,14 @@ public class LiquibaseConnector {
     public void runMigrations() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+            // Устанавливаем новую схему по умолчанию
+            database.setDefaultSchemaName("service");
+
             Liquibase liquibase = new Liquibase(changelogFilePath, new ClassLoaderResourceAccessor(), database);
             liquibase.update();
-            System.out.println("Liquibase update executed successfully.");
+            System.out.println("Liquibase update executed successfully.\n");
+
         } catch (SQLException | LiquibaseException e) {
             e.printStackTrace();
         }

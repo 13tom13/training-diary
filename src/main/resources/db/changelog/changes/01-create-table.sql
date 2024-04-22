@@ -1,5 +1,8 @@
+-- Создание схемы service
+CREATE SCHEMA IF NOT EXISTS public;
+
 -- Создание таблицы пользователей
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE IF NOT EXISTS public.users
 (
     id         SERIAL PRIMARY KEY,
     first_name VARCHAR(50)  NOT NULL,
@@ -9,42 +12,8 @@ CREATE TABLE IF NOT EXISTS users
     is_active  BOOLEAN      NOT NULL DEFAULT TRUE
 );
 
--- Создание таблицы ролей
-CREATE TABLE IF NOT EXISTS roles
-(
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
-
--- Создание таблицы прав
-CREATE TABLE IF NOT EXISTS rights
-(
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
-
--- Создание таблицы для связи пользователей и их ролей (многие ко многим)
-CREATE TABLE IF NOT EXISTS users_roles
-(
-    USER_ID BIGINT,
-    ROLE_ID BIGINT,
-    FOREIGN KEY (USER_ID) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (ROLE_ID) REFERENCES roles (id) ON DELETE CASCADE,
-    PRIMARY KEY (USER_ID, ROLE_ID)
-);
-
--- Создание таблицы для связи пользователей и их прав (многие ко многим)
-CREATE TABLE user_rights
-(
-    user_id  INT NOT NULL,
-    right_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (right_id) REFERENCES rights (id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, right_id)
-);
-
 -- Создание таблицы тренировок
-CREATE TABLE trainings
+CREATE TABLE public.trainings
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
@@ -56,7 +25,7 @@ CREATE TABLE trainings
 
 
 -- Создание таблицы для дополнительной информации о тренировках
-CREATE TABLE training_additions
+CREATE TABLE public.training_additions
 (
     training_id INT,
     key         VARCHAR(100),
@@ -67,10 +36,16 @@ CREATE TABLE training_additions
         ON DELETE CASCADE
 );
 
-
-CREATE TABLE IF NOT EXISTS user_trainings
+-- Создание таблицы ролей в схеме service
+CREATE TABLE IF NOT EXISTS public.roles
 (
-    user_id     SERIAL REFERENCES users (id) ON DELETE CASCADE,
-    training_id SERIAL REFERENCES trainings (id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, training_id)
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- Создание таблицы прав в схеме service
+CREATE TABLE IF NOT EXISTS public.rights
+(
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
 );
