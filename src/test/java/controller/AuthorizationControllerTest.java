@@ -16,9 +16,6 @@ import testutil.TestUtil;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * Тестирование класса AuthorizationControllerImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationControllerTest extends TestUtil {
 
@@ -28,11 +25,6 @@ public class AuthorizationControllerTest extends TestUtil {
     @InjectMocks
     private AuthorizationControllerImpl authorizationController;
 
-    /**
-     * Тестирование метода login с правильными учетными данными.
-     *
-     * @throws AuthorizationException если возникла ошибка авторизации
-     */
     @Test
     void loginValidCredentialsReturnsUser() throws AuthorizationException {
         // Arrange
@@ -48,11 +40,6 @@ public class AuthorizationControllerTest extends TestUtil {
         assertEquals(expectedUser, actualUser);
     }
 
-    /**
-     * Тестирование метода login с неправильными учетными данными.
-     *
-     * @throws AuthorizationException если возникла ошибка авторизации
-     */
     @Test
     void loginInvalidCredentialsThrowsAuthorizationException() throws AuthorizationException {
         // Arrange

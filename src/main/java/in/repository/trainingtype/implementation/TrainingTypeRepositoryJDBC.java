@@ -37,8 +37,12 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
     @Override
     public List<String> getTrainingTypes(User user) {
         List<String> userTrainingTypes = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT training_type FROM permissions.user_training_types WHERE user_id = ?")) {
+        String sql = """
+                SELECT training_type
+                FROM permissions.user_training_types
+                WHERE user_id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -64,8 +68,11 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      */
     @Override
     public void saveTrainingType(User user, String trainingType) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO permissions.user_training_types (user_id, training_type) VALUES (?, ?)")) {
+        String sql = """
+                INSERT INTO permissions.user_training_types (user_id, training_type)
+                VALUES (?, ?)
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, user.getId());
             statement.setString(2, trainingType);
             statement.executeUpdate();
@@ -82,8 +89,11 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      */
     private List<String> getDefaultTrainingTypes(User user) throws SQLException {
         List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
-        try (PreparedStatement insertStatement = connection.prepareStatement(
-                "INSERT INTO permissions.user_training_types (user_id, training_type) VALUES (?, ?)")) {
+        String sql = """
+             INSERT INTO permissions.user_training_types (user_id, training_type)
+             VALUES (?, ?)
+             """;
+        try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
             for (String trainingType : defaultTrainingTypes) {
                 insertStatement.setLong(1, user.getId());
                 insertStatement.setString(2, trainingType);

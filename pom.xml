@@ -15,12 +15,7 @@
     </properties>
 
     <dependencies>
-
-
-
-
-
-
+        <!--     database dependency -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -31,8 +26,6 @@
             <artifactId>liquibase-core</artifactId>
             <version>4.27.0</version>
         </dependency>
-
-
         <!--     test dependency -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -63,8 +56,6 @@
             <version>1.19.7</version>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>

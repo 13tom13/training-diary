@@ -1,9 +1,10 @@
 package in.repository.user.implementation;
 
 import exceptions.RepositoryException;
-import model.Rights;
-import model.User;
 import in.repository.user.UserRepository;
+import model.Rights;
+import model.Roles;
+import model.User;
 
 import java.util.*;
 
@@ -12,14 +13,32 @@ import java.util.*;
  */
 public class UserRepositoryCollections implements UserRepository {
 
-    /** Хранилище пользователей, где ключами являются адреса электронной почты пользователей. */
+    /**
+     * Хранилище пользователей, где ключами являются адреса электронной почты пользователей.
+     */
     private final Map<String, User> userRepository;
+
+    /**
+     * Хранилище прав, где ключами являются идентификаторы прав.
+     */
+    private final Map<Long, Rights> rightsRepository;
+
+    /**
+     * Хранилище ролей, где ключами являются идентификаторы ролей.
+     */
+    private final Map<Long, Roles> rolesRepository;
+
+    private static final long USER_ROLE_ID = 2L;
+
 
     /**
      * Конструктор по умолчанию, инициализирующий хранилище пользователей.
      */
     public UserRepositoryCollections() {
         userRepository = new HashMap<>();
+        rightsRepository = new HashMap<>();
+        rolesRepository = new HashMap<>();
+        initializeDefaultRolesAndRights();
     }
 
     /**
@@ -44,9 +63,14 @@ public class UserRepositoryCollections implements UserRepository {
         return new ArrayList<>(userRepository.values());
     }
 
+    /**
+     * Получает список всех прав.
+     *
+     * @return список всех прав
+     */
     @Override
     public List<Rights> getAllRights() {
-        return null;
+        return new ArrayList<>(rightsRepository.values());
     }
 
     /**
@@ -55,6 +79,7 @@ public class UserRepositoryCollections implements UserRepository {
      * @param user объект пользователя для сохранения
      * @throws RepositoryException если пользователь с такой электронной почтой уже существует
      */
+
     @Override
     public void saveUser(User user) throws RepositoryException {
         if (!userRepository.containsKey(user.getEmail())) {
@@ -63,6 +88,7 @@ public class UserRepositoryCollections implements UserRepository {
             throw new RepositoryException("Пользователь с адресом электронной почты " + user.getEmail() + " уже существует");
         }
     }
+
 
     /**
      * Обновляет информацию о пользователе.
@@ -74,8 +100,57 @@ public class UserRepositoryCollections implements UserRepository {
         userRepository.put(user.getEmail(), user);
     }
 
+    /**
+     * Удаляет пользователя.
+     *
+     * @param user объект пользователя для удаления
+     */
     @Override
     public void deleteUser(User user) {
+        userRepository.remove(user.getEmail());
     }
 
+    /**
+     * Присваивает пользователю все права из хранилища прав.
+     *
+     * @param user пользователь, которому нужно присвоить права
+     */
+    @Override
+    public void assignUserRights(User user) {
+        // Получаем все права из rightsRepository и присваиваем их пользователю
+        user.setRights(new ArrayList<>(rightsRepository.values()));
+    }
+
+    /**
+     * Присваивает пользователю роль "User" из хранилища ролей.
+     *
+     * @param user пользователь, которому нужно присвоить роль
+     */
+    @Override
+    public void assignUserRoles(User user) {
+        Roles userRole = rolesRepository.get(USER_ROLE_ID);
+        if (userRole != null)
+            user.setRoles(List.of(userRole));
+    }
+
+    /**
+     * Метод для заполнения коллекций Rights и Roles значениями по умолчанию.
+     */
+    private void initializeDefaultRolesAndRights() {
+        // Добавление ролей по умолчанию
+        Roles adminRole = new Roles(1L, "ADMIN");
+        Roles userRole = new Roles(USER_ROLE_ID, "USER");
+        rolesRepository.put(adminRole.getId(), adminRole);
+        rolesRepository.put(userRole.getId(), userRole);
+
+        // Добавление прав по умолчанию
+        Rights writeRight = new Rights(1L, "WRITE");
+        Rights editRight = new Rights(2L, "EDIT");
+        Rights deleteRight = new Rights(3L, "DELETE");
+        Rights statisticsRight = new Rights(4L, "STATISTICS");
+        rightsRepository.put(writeRight.getId(), writeRight);
+        rightsRepository.put(editRight.getId(), editRight);
+        rightsRepository.put(deleteRight.getId(), deleteRight);
+        rightsRepository.put(statisticsRight.getId(), statisticsRight);
+    }
 }

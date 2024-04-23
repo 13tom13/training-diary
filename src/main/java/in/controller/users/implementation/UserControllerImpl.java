@@ -1,13 +1,14 @@
 package in.controller.users.implementation;
 
-import in.controller.users.UserController;
+import dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.ValidationException;
-import utils.Logger;
+import in.controller.users.UserController;
 import in.service.users.UserService;
+import utils.Logger;
 
 /**
- * Реализация контроллера пользователей.
+ * Реализация интерфейса {@link UserController} для хранения тренировок.
  */
 public class UserControllerImpl implements UserController {
 
@@ -17,6 +18,7 @@ public class UserControllerImpl implements UserController {
 
     /**
      * Конструктор контроллера пользователей.
+     *
      * @param userService Сервис пользователей
      */
     public UserControllerImpl(UserService userService) {
@@ -25,15 +27,13 @@ public class UserControllerImpl implements UserController {
 
     /**
      * Создает нового пользователя.
-     * @param firstName Имя пользователя
-     * @param lastName Фамилия пользователя
-     * @param email Email пользователя
-     * @param password Пароль пользователя
+     *
+     * @param userDTO объект, содержащий данные нового пользователя
      */
-    public void createNewUser(String firstName, String lastName, String email, String password) {
+    public void createNewUser(UserDTO userDTO) {
         try {
-            userService.saveUser(firstName, lastName, email, password);
-            logger.logAction(email,"created");
+            userService.saveUser(userDTO);
+            logger.logAction(userDTO.getEmail(), "created");
         } catch (ValidationException | RepositoryException e) {
             System.err.println(e.getMessage());
         }

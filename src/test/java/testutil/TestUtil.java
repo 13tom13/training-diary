@@ -76,12 +76,29 @@ public abstract class TestUtil {
         String password = postgres.getPassword();
 
         Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+        createTestSchemas(connection);
 
         LiquibaseConnectorForTest connectorForTestDB = new LiquibaseConnectorForTest();
         connectorForTestDB.runMigrations(connection);
 
         return connection;
     }
+
+    public static void createTestSchemas(Connection connection) throws SQLException {
+        String sql = "CREATE SCHEMA IF NOT EXISTS main";
+        String sql1 = "CREATE SCHEMA IF NOT EXISTS permissions";
+        String sql2 = "CREATE SCHEMA IF NOT EXISTS service";
+
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+            statement.executeUpdate(sql1);
+            statement.executeUpdate(sql2);
+        } catch (SQLException e) {
+            // Обработка ошибок, если таковые возникнут при выполнении запросов
+            throw new SQLException("Ошибка при создании схемы: " + e.getMessage());
+        }
+    }
+
 
     /**
      * Метод для получения тестового пользователя из базы данных.

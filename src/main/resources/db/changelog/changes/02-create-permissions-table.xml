@@ -1,0 +1,67 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Создание схемы permissions -->
+    <changeSet id="create_schema_main" author="13tom13">
+        <sql>CREATE SCHEMA IF NOT EXISTS permissions;</sql>
+    </changeSet>
+
+    <!-- Создание последовательности для user_training_types -->
+    <changeSet id="create_sequence_roles" author="13tom13" runOnChange="true">
+        <createSequence schemaName="permissions" sequenceName="seq_roles"
+                        dataType="BIGINT" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <!-- Создание таблицы roles в схеме permissions -->
+    <changeSet id="create_table_roles" author="13tom13" runOnChange="true">
+        <createTable tableName="roles" schemaName="permissions">
+            <column  valueSequenceCurrent="seq_roles" name="id" type="BIGINT">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание последовательности для rights -->
+    <changeSet id="create_sequence_rights" author="13tom13" runOnChange="true">
+        <createSequence schemaName="permissions" sequenceName="seq_rights" dataType="BIGINT" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <!-- Создание таблицы rights в схеме permissions -->
+    <changeSet id="create_table_rights" author="13tom13" runOnChange="true">
+        <createTable tableName="rights" schemaName="permissions">
+            <column name="id" type="BIGINT"  valueSequenceCurrent="seq_rights">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание последовательности для user_training_types -->
+    <changeSet id="create_sequence_user_training_types" author="13tom13" runOnChange="true">
+        <createSequence schemaName="permissions" sequenceName="seq_user_training_types" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <!-- Создание таблицы user_training_types в схеме permissions -->
+    <changeSet id="create_table_user_training_types" author="13tom13" runOnChange="true">
+        <createTable tableName="user_training_types" schemaName="permissions">
+            <column name="id" type="BIGINT" valueSequenceNext="seq_user_training_types">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" referencedTableSchemaName="main" deleteCascade="true"
+                referencedTableName="users" referencedColumnNames="id" foreignKeyName="fk_user_training_types"/>
+            </column>
+            <column name="training_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+</databaseChangeLog>

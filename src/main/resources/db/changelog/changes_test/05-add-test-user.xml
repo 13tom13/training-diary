@@ -1,0 +1,78 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="add_test_user_roles_rights" author="13tom13" runOnChange="true">
+        <!-- Добавление тестового пользователя -->
+        <insert tableName="users" schemaName="main">
+            <column name="id"   value="2"/>
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Doe"/>
+            <column name="email" value="test@test.com"/>
+            <column name="password" value="password"/>
+        </insert>
+
+        <!-- Добавление роли "USER" для тестового пользователя -->
+        <insert tableName="users_roles" schemaName="service">
+            <column name="user_id" valueComputed="2"/>
+            <column name="role_id" valueComputed="2"/>
+        </insert>
+
+        <!-- Добавление прав для тестового пользователя -->
+        <insert tableName="user_rights" schemaName="service">
+            <column name="user_id" value="2"/>
+            <column name="right_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_rights" schemaName="service">
+            <column name="user_id" value="2"/>
+            <column name="right_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="user_rights" schemaName="service">
+            <column name="user_id" value="2"/>
+            <column name="right_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="user_rights" schemaName="service">
+            <column name="user_id" value="2"/>
+            <column name="right_id" valueNumeric="4"/>
+        </insert>
+
+        <!-- Добавление тренировок -->
+        <insert tableName="trainings" schemaName="main">
+            <column name="id" value="1"/>
+            <column name="name" value="Кардио"/>
+            <column name="date" valueDate="2024-04-13"/>
+            <column name="duration" value="90"/>
+            <column name="calories_burned" value="560"/>
+        </insert>
+        <insert tableName="trainings" schemaName="main">
+            <column name="id" value="2"/>
+            <column name="name" value="Силовая"/>
+            <column name="date" valueDate="2024-04-14"/>
+            <column name="duration" value="60"/>
+            <column name="calories_burned" value="450"/>
+        </insert>
+        <insert tableName="trainings" schemaName="main">
+            <column name="id" value="3"/>
+            <column name="name" value="Гибкость"/>
+            <column name="date" valueDate="2024-04-10"/>
+            <column name="duration" value="45"/>
+            <column name="calories_burned" value="300"/>
+        </insert>
+
+        <!-- Добавление тренировок пользователю -->
+        <insert tableName="user_trainings" schemaName="service">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="training_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="user_trainings" schemaName="service">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="training_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="user_trainings" schemaName="service">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="training_id" valueNumeric="3"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

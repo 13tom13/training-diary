@@ -24,9 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static testutil.TestUtil.*;
 
-/**
- * Тестирование класса TrainingControllerImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class TrainingControllerImplTest {
 
@@ -51,13 +48,7 @@ public class TrainingControllerImplTest {
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
     }
 
-    /**
-     * Тестирование успешного сохранения тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoWriteRightsException     если нет прав на запись
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
+
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Arrange
@@ -73,9 +64,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).saveTraining(testUser, training);
     }
 
-    /**
-     * Тестирование получения всех тренировок.
-     */
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
@@ -91,13 +79,6 @@ public class TrainingControllerImplTest {
         assertEquals(expectedTrainings, actualTrainings);
     }
 
-    /**
-     * Тестирование успешного удаления тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoDeleteRightsException    если нет прав на удаление
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
         // Act
@@ -107,11 +88,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
     }
 
-    /**
-     * Тестирование получения тренировок по электронной почте пользователя и дате.
-     *
-     * @throws RepositoryException если возникла ошибка в репозитории
-     */
     @Test
     public void testGetTrainingsByUserEmailAndData_ReturnsTrainings() throws RepositoryException {
         // Arrange
@@ -127,11 +103,6 @@ public class TrainingControllerImplTest {
         assertEquals(expectedTrainings, actualTrainings);
     }
 
-    /**
-     * Тестирование получения тренировки по электронной почте пользователя, дате и имени тренировки.
-     *
-     * @throws RepositoryException если возникла ошибка в репозитории
-     */
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
@@ -146,12 +117,6 @@ public class TrainingControllerImplTest {
         assertEquals(testTraining, actualTraining);
     }
 
-    /**
-     * Тестирование успешного добавления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException    если возникла ошибка в репозитории
-     * @throws NoWriteRightsException если нет прав на запись
-     */
     @Test
     public void testAddTrainingAdditional_Successful() throws RepositoryException, NoWriteRightsException {
         // Act
@@ -162,12 +127,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue);
     }
 
-    /**
-     * Тестирование успешного удаления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException   если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testRemoveTrainingAdditional_Successful() throws RepositoryException, NoEditRightsException {
         // Act
@@ -177,12 +136,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).removeTrainingAdditional(testUser, testTraining, testAdditionalName);
     }
 
-    /**
-     * Тестирование успешного изменения имени тренировки.
-     *
-     * @throws RepositoryException   если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeNameTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
@@ -195,13 +148,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).changeNameTraining(testUser, testTraining, newName);
     }
 
-    /**
-     * Тестирование успешного изменения даты тренировки.
-     *
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoEditRightsException      если нет прав на редактирование
-     */
     @Test
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
@@ -214,12 +160,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).changeDateTraining(testUser, testTraining, newDate);
     }
 
-    /**
-     * Тестирование успешного изменения продолжительности тренировки.
-     *
-     * @throws RepositoryException   если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeDurationTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
@@ -232,12 +172,6 @@ public class TrainingControllerImplTest {
         verify(trainingServiceMock).changeDurationTraining(testUser, testTraining, 60);
     }
 
-    /**
-     * Тестирование успешного изменения количества калорий, сожженных во время тренировки.
-     *
-     * @throws RepositoryException   если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeCaloriesTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange

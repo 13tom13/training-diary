@@ -1,0 +1,36 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="insert_data_into_roles_and_rights" author="13tom13" runOnChange="true">
+        <!-- Вставка данных в таблицу roles -->
+        <insert schemaName="permissions" tableName="roles">
+            <column name="id" value="1"/>
+            <column name="name" value="ADMIN"/>
+        </insert>
+        <insert schemaName="permissions" tableName="roles">
+            <column name="id" value="2"/>
+            <column name="name" value="USER"/>
+        </insert>
+
+        <!-- Вставка данных в таблицу rights -->
+        <insert schemaName="permissions" tableName="rights">
+            <column name="id" value="1"/>
+            <column name="name" value="WRITE"/>
+        </insert>
+        <insert schemaName="permissions" tableName="rights">
+            <column name="id" value="2"/>
+            <column name="name" value="EDIT"/>
+        </insert>
+        <insert schemaName="permissions" tableName="rights">
+            <column name="id" value="3"/>
+            <column name="name" value="DELETE"/>
+        </insert>
+        <insert schemaName="permissions" tableName="rights">
+            <column name="id" value="4"/>
+            <column name="name" value="STATISTICS"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

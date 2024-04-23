@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <!-- Создание схемы main -->
+    <changeSet id="create_schema_main" author="13tom13">
+        <sql dbms="postgresql"
+             endDelimiter="\nGO"
+             splitStatements="true"
+             stripComments="true">create schema if not exists main
+        </sql>
+    </changeSet>
+
+    <!-- Создание таблицы пользователей -->
+    <changeSet id="create_table_users" author="13tom13" runOnChange="true">
+        <createSequence schemaName="main" sequenceName="users_id_seq" catalogName="users" startValue="1"
+                        incrementBy="1"/>
+
+        <createTable tableName="users" schemaName="main">
+            <column name="id" type="BIGINT" valueSequenceCurrent="users_id_seq">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="create_table_trainings" author="13tom13" runOnChange="true">
+        <createSequence schemaName="main" sequenceName="trainings_id_seq" startValue="1" incrementBy="1"/>
+
+        <createTable tableName="trainings" schemaName="main">
+            <column name="id" type="BIGINT" valueSequenceCurrent="trainings_id_seq">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="date" type="DATE">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calories_burned" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы для дополнительной информации о тренировках -->
+    <changeSet id="create_table_training_additions" author="13tom13" runOnChange="true">
+        <createTable tableName="training_additions" schemaName="main">
+            <column name="training_id" type="INT">
+                <constraints nullable="false" primaryKey="true"
+                             foreignKeyName="fk_training_id" referencedTableSchemaName="main"
+                             referencedTableName="trainings" referencedColumnNames="id" deleteCascade="true"/>
+            </column>
+            <column name="key" type="VARCHAR(100)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

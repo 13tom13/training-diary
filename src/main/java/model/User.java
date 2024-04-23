@@ -34,6 +34,16 @@ public class User {
         this.password = password;
     }
 
+    public User(long id, String firstName, String lastName, String email, String password, List<Rights> rights, List<Roles> roles) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.rights = rights;
+        this.roles = roles;
+    }
+
     /**
      * Пустой конструктор.
      */

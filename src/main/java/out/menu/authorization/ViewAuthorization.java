@@ -1,5 +1,6 @@
 package out.menu.authorization;
 
+import dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.training.TrainingController;
@@ -86,6 +87,7 @@ public class ViewAuthorization {
         String regLastName = scanner.nextLine();
         System.out.println("Введите пароль:");
         String regPassword = scanner.nextLine();
-        userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
+        UserDTO userDTO = new UserDTO(regFirstName, regLastName, regEmail, regPassword);
+        userController.createNewUser(userDTO);
     }
 }

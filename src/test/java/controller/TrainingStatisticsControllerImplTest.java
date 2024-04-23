@@ -18,9 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тестирование класса TrainingStatisticsControllerImpl.
- */
+
 @ExtendWith(MockitoExtension.class)
 public class TrainingStatisticsControllerImplTest extends TestUtil {
 
@@ -38,11 +36,6 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
     }
 
-    /**
-     * Тестирование получения общей статистики тренировок.
-     *
-     * @throws NoStatisticsRightsException если нет прав на просмотр статистики
-     */
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {
         // Arrange
@@ -57,11 +50,6 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
         verify(trainingStatisticsServiceMock).getAllTrainingStatistics(testUser);
     }
 
-    /**
-     * Тестирование получения общей статистики тренировок за определенный период.
-     *
-     * @throws NoStatisticsRightsException если нет прав на просмотр статистики
-     */
     @Test
     public void testGetAllTrainingStatisticsPerPeriod() throws NoStatisticsRightsException {
         // Arrange
@@ -77,11 +65,6 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
         verify(trainingStatisticsServiceMock).getAllTrainingStatisticsPerPeriod(testUser, startDate, endDate);
     }
 
-    /**
-     * Тестирование получения статистики по продолжительности тренировок за определенный период.
-     *
-     * @throws NoStatisticsRightsException если нет прав на просмотр статистики
-     */
     @Test
     public void testGetDurationStatisticsPerPeriod() throws NoStatisticsRightsException {
         // Arrange
@@ -97,11 +80,6 @@ public class TrainingStatisticsControllerImplTest extends TestUtil {
         verify(trainingStatisticsServiceMock).getDurationStatisticsPerPeriod(testUser, startDate, endDate);
     }
 
-    /**
-     * Тестирование получения статистики по сожженным калориям за определенный период.
-     *
-     * @throws NoStatisticsRightsException если нет прав на просмотр статистики
-     */
     @Test
     public void testGetCaloriesBurnedPerPeriod() throws NoStatisticsRightsException {
         // Arrange

@@ -16,11 +16,6 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static testutil.TestUtil.*;
 
-
-/**
- * Тесты для класса TrainingRepositoryJDBC, который реализует интерфейс TrainingRepository.
- * Этот класс предназначен для тестирования методов, связанных с операциями чтения, записи, обновления и удаления тренировок в базе данных.
- */
 public class TrainingRepositoryJDBCTest {
 
     private static Connection connection;
@@ -28,12 +23,6 @@ public class TrainingRepositoryJDBCTest {
 
     private static User user;
 
-    /**
-     * Подготовка тестового окружения перед запуском тестов.
-     * Создает подключение к временной тестовой базе данных, применяет миграции и инициализирует экземпляр TrainingRepositoryJDBC для тестирования.
-     *
-     * @throws SQLException если возникает ошибка при подключении к базе данных или применении миграций
-     */
     @BeforeAll
     static void setUp() throws SQLException {
         connection = createConnectionToTestDatabase();
@@ -42,24 +31,13 @@ public class TrainingRepositoryJDBCTest {
         user = getTestUserFromDatabase(connection);
     }
 
-    /**
-     * Очистка ресурсов после выполнения всех тестов.
-     * Закрывает соединение с базой данных.
-     *
-     * @throws SQLException если возникает ошибка при закрытии соединения с базой данных
-     */
+
     @AfterAll
     static void tearDown() throws SQLException {
         connection.close();
     }
 
 
-    /**
-     * Тест для метода saveTraining.
-     * Проверяет корректность сохранения новой тренировки в базе данных для указанного пользователя.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
     @Test
     void testSaveTraining() throws RepositoryException {
         // Создаем новую тренировку для пользователя
@@ -75,12 +53,7 @@ public class TrainingRepositoryJDBCTest {
         Assertions.assertTrue(userTrainings.containsValue(new TreeSet<>(Set.of(newTraining))));
     }
 
-    /**
-     * Тест для метода getAllTrainingsByUserID.
-     * Проверяет корректность получения всех тренировок пользователя из базы данных.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
+
     @Test
     void testGetAllTrainingsByUserID() throws RepositoryException {
         // Предположим, что у пользователя есть две тренировки
@@ -110,12 +83,6 @@ public class TrainingRepositoryJDBCTest {
         }
     }
 
-    /**
-     * Тест для метода getTrainingByUserIDlAndDataAndName.
-     * Проверяет корректность получения тренировки пользователя по указанным параметрам из базы данных.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
     @Test
     void testGetTrainingByUserIDlAndDataAndName() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка на указанную дату с указанным именем
@@ -137,12 +104,7 @@ public class TrainingRepositoryJDBCTest {
         assertThrows(RepositoryException.class, () -> repository.getTrainingByUserIDlAndDataAndName(user, date, nonExistentTrainingName));
     }
 
-    /**
-     * Тест для метода deleteTraining.
-     * Проверяет корректность удаления тренировки пользователя из базы данных.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
+
     @Test
     void testDeleteTraining() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка, которую мы хотим удалить
@@ -164,12 +126,7 @@ public class TrainingRepositoryJDBCTest {
         assertThrows(RepositoryException.class, () -> repository.deleteTraining(user, training));
     }
 
-    /**
-     * Тест для метода updateTraining.
-     * Проверяет корректность обновления тренировки пользователя в базе данных.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
+
     @Test
     void testUpdateTraining() throws RepositoryException {
         // Создаем старую и новую тренировки
@@ -195,12 +152,6 @@ public class TrainingRepositoryJDBCTest {
         assertEquals(newTraining.getCaloriesBurned(), updatedTraining.getCaloriesBurned());
     }
 
-    /**
-     * Тест для метода saveTrainingAdditionals.
-     * Проверяет корректность сохранения дополнительной информации о тренировке в базе данных.
-     *
-     * @throws RepositoryException если возникает ошибка при доступе к репозиторию
-     */
     @Test
     void testSaveTrainingAdditionals() throws RepositoryException {
         // Создаем тренировку с дополнительной информацией

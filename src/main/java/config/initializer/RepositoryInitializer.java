@@ -1,7 +1,10 @@
 package config.initializer;
 
+import in.repository.training.implementation.TrainingRepositoryCollections;
 import in.repository.training.implementation.TrainingRepositoryJDBC;
+import in.repository.trainingtype.implementation.TrainingTypeRepositoryCollections;
 import in.repository.trainingtype.implementation.TrainingTypeRepositoryJDBC;
+import in.repository.user.implementation.UserRepositoryCollections;
 import in.repository.user.implementation.UserRepositoryJDBC;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
@@ -9,6 +12,7 @@ import in.repository.user.UserRepository;
 
 import java.sql.SQLException;
 
+import static config.ApplicationConfig.*;
 import static database.DatabaseConnection.getConnection;
 
 /**
@@ -26,12 +30,35 @@ public class RepositoryInitializer {
      * репозитории пользователей, тренировок и типов тренировок.
      */
     public RepositoryInitializer() {
-        try {
-            this.userRepository = new UserRepositoryJDBC(getConnection());
-            this.trainingRepository = new TrainingRepositoryJDBC(getConnection());
-            this.trainingTypeRepository = new TrainingTypeRepositoryJDBC(getConnection());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+        switch (getApplicationProfile()) {
+            case "JDBC":
+                try {
+                    this.userRepository = new UserRepositoryJDBC(getConnection());
+                    this.trainingRepository = new TrainingRepositoryJDBC(getConnection());
+                    this.trainingTypeRepository = new TrainingTypeRepositoryJDBC(getConnection());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                liquibaseMigrations();
+                break;
+
+            case "Collections":
+                this.trainingRepository = new TrainingRepositoryCollections();
+                this.userRepository = new UserRepositoryCollections();
+                this.trainingTypeRepository = new TrainingTypeRepositoryCollections();
+                collectionsMigrations(userRepository, trainingRepository);
+                break;
+
+            default:
+                try {
+                    this.userRepository = new UserRepositoryJDBC(getConnection());
+                    this.trainingRepository = new TrainingRepositoryJDBC(getConnection());
+                    this.trainingTypeRepository = new TrainingTypeRepositoryJDBC(getConnection());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
         }
     }
 

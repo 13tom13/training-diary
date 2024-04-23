@@ -21,9 +21,6 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-/**
- * Тестирование класса TrainingStatisticsServiceImp.
- */
 @ExtendWith(MockitoExtension.class)
 public class TrainingStatisticsServiceImpTest extends TestUtil {
 
@@ -49,11 +46,6 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         testUser.getRights().add(new Rights(4L,"STATISTICS"));
     }
 
-    /**
-     * Тестирование метода getAllTrainingStatistics().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {
         // Arrange
@@ -71,11 +63,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(0, totalTrainings);
     }
 
-    /**
-     * Тестирование метода getAllTrainingStatisticsPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
+
     @Test
     public void testGetAllTrainingStatisticsPerPeriod() throws NoStatisticsRightsException {
         // Configure mock behavior
@@ -88,11 +76,6 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestTrainings, totalTrainings);
     }
 
-    /**
-     * Тестирование метода getDurationStatisticsPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
     @Test
     public void testGetDurationStatisticsPerPeriod() throws NoStatisticsRightsException {
 
@@ -106,11 +89,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestDuration, totalDuration);
     }
 
-    /**
-     * Тестирование метода getCaloriesBurnedPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
+
     @Test
     public void testGetCaloriesBurnedPerPeriod() throws NoStatisticsRightsException {
 
@@ -124,11 +103,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestCaloriesBurned, totalCaloriesBurned);
     }
 
-    /**
-     * Метод для создания тестовых данных тренировок.
-     *
-     * @return TreeMap<String, TreeSet < Training>> - структура данных для тестов
-     */
+
     private TreeMap<Date, TreeSet<Training>> getMockTrainingData() {
         TreeMap<Date, TreeSet<Training>> allTrainings = new TreeMap<>();
         TreeSet<Training> trainings = new TreeSet<>();

@@ -1,6 +1,9 @@
 package config;
 
+import database.CollectionsMigrations;
 import database.LiquibaseConnector;
+import in.repository.training.TrainingRepository;
+import in.repository.user.UserRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,12 +25,21 @@ public class ApplicationConfig {
         } catch (IOException e) {
             System.err.println("Ошибка при загрузке файла конфигурации: " + e.getMessage());
         }
-        liquibaseMigrations();
+
     }
 
-    private static void liquibaseMigrations() {
+    public static void liquibaseMigrations() {
         LiquibaseConnector connector = new LiquibaseConnector();
         connector.runMigrations();
+    }
+
+    public static void collectionsMigrations(UserRepository userRepository, TrainingRepository trainingRepository) {
+        CollectionsMigrations collectionsMigrations = new CollectionsMigrations(userRepository, trainingRepository);
+        collectionsMigrations.runMigrations();
+    }
+
+    public static String getApplicationProfile() {
+        return PROPERTIES.getProperty("application.profile");
     }
 
     public static String getDbUrl() {

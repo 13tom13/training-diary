@@ -26,9 +26,6 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Тестирование класса TrainingServiceImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class TrainingServiceImplTest extends TestUtil {
 
@@ -53,13 +50,6 @@ public class TrainingServiceImplTest extends TestUtil {
         testUser.getRights().add(new Rights(3L,"DELETE"));
     }
 
-    /**
-     * Тестирование успешного сохранения тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoWriteRightsException     если нет прав на запись
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Arrange
@@ -72,9 +62,6 @@ public class TrainingServiceImplTest extends TestUtil {
         verify(trainingRepository).saveTraining(testUser, training);
     }
 
-    /**
-     * Тестирование получения всех тренировок.
-     */
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
@@ -88,13 +75,7 @@ public class TrainingServiceImplTest extends TestUtil {
         assertEquals(expectedTrainings, actualTrainings);
     }
 
-    /**
-     * Тестирование успешного удаления тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoDeleteRightsException    если нет прав на удаление
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
+
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
         // Arrange

@@ -32,7 +32,12 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String sql = "SELECT * FROM main.users WHERE email = ?";
+        String sql = """
+             SELECT *
+             FROM main.users
+             WHERE email = ?
+             """;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
             statement.setString(1, email);
@@ -67,7 +72,10 @@ public class UserRepositoryJDBC implements UserRepository {
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM main.users";
+        String sql = """
+             SELECT *
+             FROM main.users
+             """;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -90,7 +98,11 @@ public class UserRepositoryJDBC implements UserRepository {
     @Override
     public List<Rights> getAllRights() {
         List<Rights> rights = new ArrayList<>();
-        String sql = "SELECT * FROM permissions.rights";
+        String sql = """
+             SELECT *
+             FROM permissions.rights
+             """;
+
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -113,8 +125,11 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void saveUser(User user) throws RepositoryException {
-        String sql = "INSERT INTO main.users (email, first_name, last_name, password) " +
-                "VALUES (?, ?, ?, ?)";
+        String sql = """
+             INSERT INTO main.users (email, first_name, last_name, password)
+             VALUES (?, ?, ?, ?)
+             """;
+
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getFirstName());
@@ -131,8 +146,8 @@ public class UserRepositoryJDBC implements UserRepository {
                     throw new RepositoryException("Failed to add user, no ID obtained.");
                 }
             }
-            insertUserRights(user);
-            insertUserRoles(user);
+            assignUserRights(user);
+            assignUserRoles(user);
         } catch (SQLException e) {
             throw new RepositoryException("Ошибка при выполнении запроса к базе данных");
         }
@@ -145,8 +160,11 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void updateUser(User user) {
-        String sql = "UPDATE main.users SET first_name = ?, last_name = ?, password = ? " +
-                "WHERE email = ?";
+        String sql = """
+                UPDATE main.users SET first_name = ?, last_name = ?, password = ?
+                WHERE email = ?
+                """;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
@@ -167,7 +185,10 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void deleteUser(User user) {
-        String sql = "DELETE FROM main.users WHERE email = ?";
+        String sql = """
+             DELETE FROM main.users
+             WHERE email = ?
+             """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
             statement.executeUpdate();
@@ -206,9 +227,13 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private List<Rights> getUserRightsById(long userId) throws SQLException {
         List<Rights> rights = new ArrayList<>();
-        String sql = "SELECT r.id, r.name FROM permissions.rights r " +
-                "INNER JOIN service.user_rights ur ON r.id = ur.right_id " +
-                "WHERE ur.user_id = ?";
+        String sql = """
+             SELECT r.id, r.name
+             FROM permissions.rights r
+             INNER JOIN service.user_rights ur ON r.id = ur.right_id
+             WHERE ur.user_id = ?
+             """;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -232,9 +257,13 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private List<Roles> getUserRolesById(long userId) throws SQLException {
         List<Roles> roles = new ArrayList<>();
-        String sql = "SELECT r.id, r.name FROM permissions.roles r " +
-                "INNER JOIN service.users_roles ur ON r.id = ur.role_id " +
-                "WHERE ur.user_id = ?";
+        String sql = """
+             SELECT r.id, r.name
+             FROM permissions.roles r
+             INNER JOIN service.users_roles ur ON r.id = ur.role_id
+             WHERE ur.user_id = ?
+             """;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -257,7 +286,7 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private void updateUserRights(User user) throws SQLException {
         deleteUserRights(user);
-        insertUserRights(user);
+        assignUserRights(user);
     }
 
     /**
@@ -268,15 +297,25 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private void updateUserRoles(User user) throws SQLException {
         deleteUserRoles(user);
-        insertUserRoles(user);
+        assignUserRoles(user);
     }
 
-    // Метод для добавления прав пользователя в базу данных
-    public void insertUserRights(User user) throws SQLException {
-        String sqlSelectRights = "SELECT id FROM permissions.rights";
-        String sqlInsertRights = "INSERT INTO service.user_rights (user_id, right_id) " +
-                "VALUES (?, ?)";
-
+    /**
+     * Вставляет права пользователя в базу данных.
+     *
+     * @param user пользователь, для которого нужно вставить права
+     * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
+     */
+    @Override
+    public void assignUserRights(User user) throws SQLException {
+        String sqlSelectRights = """
+                        SELECT id
+                        FROM permissions.rights
+                        """;
+        String sqlInsertRights = """
+                         INSERT INTO service.user_rights (user_id, right_id)
+                         VALUES (?, ?)
+                         """;
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRights);
              PreparedStatement insertStatement = connection.prepareStatement(sqlInsertRights)) {
 
@@ -292,14 +331,22 @@ public class UserRepositoryJDBC implements UserRepository {
     }
 
     /**
-     * Вставляет права пользователя в базу данных.
+     * Вставляет роли пользователя в базу данных.
      *
      * @param user пользователь, для которого нужно вставить права
      * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
      */
-    private void insertUserRoles(User user) throws SQLException {
-        String sqlSelectRoles = "SELECT id FROM permissions.roles WHERE name = ?";
-        String sqlInsertUserRole = "INSERT INTO service.users_roles (user_id, role_id) VALUES (?, ?)";
+    @Override
+    public void assignUserRoles(User user) throws SQLException {
+        String sqlSelectRoles = """
+                        SELECT id
+                        FROM permissions.roles
+                        WHERE name = ?
+                        """;
+        String sqlInsertUserRole = """
+                           INSERT INTO service.users_roles (user_id, role_id)
+                           VALUES (?, ?)
+                           """;
 
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRoles);
              PreparedStatement insertStatement = connection.prepareStatement(sqlInsertUserRole)) {
@@ -331,7 +378,10 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private void deleteUserRights(User user) throws SQLException {
         long userId = user.getId();
-        String sql = "DELETE FROM service.user_rights WHERE user_id = ?";
+        String sql = """
+             DELETE FROM service.user_rights
+             WHERE user_id = ?
+             """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             statement.executeUpdate();
@@ -346,7 +396,10 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     private void deleteUserRoles(User user) throws SQLException {
         long userId = user.getId();
-        String sql = "DELETE FROM service.users_roles WHERE user_id = ?";
+        String sql = """
+             DELETE FROM service.users_roles
+             WHERE user_id = ?
+             """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             statement.executeUpdate();

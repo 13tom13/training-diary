@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+        <changeSet id="add_admin_user_role_rights" author="13tom13" runOnChange="true">
+            <!-- Добавление пользователя "Админ" -->
+            <insert tableName="users" schemaName="main">
+                <column name="id" value="1"/>
+                <column name="first_name" value="Админ"/>
+                <column name="last_name" value="Администратор"/>
+                <column name="email" value="admin@mail.ru"/>
+                <column name="password" value="admin"/>
+            </insert>
+
+
+            <!-- Добавление роли "ADMIN" для пользователя "Админ" -->
+            <insert tableName="users_roles" schemaName="service">
+                <column name="user_id" value="1"/>
+                <column name="role_id" valueComputed="1"/>
+            </insert>
+            <!-- Добавление прав для пользователя "Админ" -->
+            <insert tableName="user_rights" schemaName="service">
+                <column name="user_id" value="1"/>
+                <column name="right_id" valueNumeric="1"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="service">
+                <column name="user_id" value="1"/>
+                <column name="right_id" valueNumeric="2"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="service">
+                <column name="user_id" value="1"/>
+                <column name="right_id" valueNumeric="3"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="service">
+                <column name="user_id" value="1"/>
+                <column name="right_id" valueNumeric="4"/>
+            </insert>
+        </changeSet>
+
+</databaseChangeLog>

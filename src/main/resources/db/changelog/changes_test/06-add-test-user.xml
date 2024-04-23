@@ -1,0 +1,46 @@
+<insert schema="main" table="users">
+    <values>
+        <row>
+            <column name="first_name">John</column>
+            <column name="last_name">Doe</column>
+            <column name="email">test@test.com</column>
+            <column name="password">password</column>
+        </row>
+    </values>
+</insert>
+
+<insert schema="service" table="users_roles">
+<query>
+    <select>
+        <columns>
+            <column>main.users.id</column>
+            <column>permissions.roles.id AS role_id</column>
+        </columns>
+        <from>
+            <join type="CROSS">
+                <table>main.users</table>
+                <table>permissions.roles</table>
+            </join>
+        </from>
+        <where>main.users.email = 'test@test.com' AND permissions.roles.name = 'USER'</where>
+    </select>
+</query>
+</insert>
+
+<insert schema="service" table="user_rights">
+<query>
+    <select>
+        <columns>
+            <column>main.users.id</column>
+            <column>permissions.rights.id AS right_id</column>
+        </columns>
+        <from>
+            <join type="CROSS">
+                <table>main.users</table>
+                <table>permissions.rights</table>
+            </join>
+        </from>
+        <where>main.users.email = 'test@test.com'</where>
+    </select>
+</query>
+</insert>

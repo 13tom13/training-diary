@@ -17,9 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static testutil.TestUtil.*;
 
-/**
- * Реализация интерфейса UserRepository для работы с пользователями в базе данных с помощью JDBC.
- */
 public class UserRepositoryJDBCTest {
 
     private static Connection connection;

@@ -4,6 +4,7 @@ import exceptions.RepositoryException;
 import model.Rights;
 import model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +51,21 @@ public interface UserRepository {
      * @param user объект пользователя, которого нужно удалить
      */
     void deleteUser(User user);
+
+    /**
+     * Присваивает пользователю список прав.
+     *
+     * @param user объект пользователя, которому присваиваются права
+     * @throws SQLException если произошла ошибка при выполнении SQL-запроса
+     */
+    void assignUserRights(User user) throws SQLException;
+
+    /**
+     * Присваивает пользователю список ролей.
+     *
+     * @param user объект пользователя, которому присваиваются роли
+     * @throws SQLException если произошла ошибка при выполнении SQL-запроса
+     */
+    void assignUserRoles(User user) throws SQLException;
 
 }
