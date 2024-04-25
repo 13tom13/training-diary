@@ -25,7 +25,6 @@ public class ApplicationConfig {
         } catch (IOException e) {
             System.err.println("Ошибка при загрузке файла конфигурации: " + e.getMessage());
         }
-
     }
 
     public static void liquibaseMigrations() {
