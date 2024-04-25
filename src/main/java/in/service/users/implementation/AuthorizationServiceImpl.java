@@ -44,10 +44,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     throw new NotActiveUserException();
                 }
             } else {
-                throw new AuthorizationException("Wrong password");
+                throw new AuthorizationException("Пароль не верный");
             }
         } else {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException("Пользователь не найден");
         }
     }
 }

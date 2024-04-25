@@ -39,7 +39,7 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
         List<String> userTrainingTypes = new ArrayList<>();
         String sql = """
                 SELECT training_type
-                FROM permissions.user_training_types
+                FROM relations.user_training_types
                 WHERE user_id = ?
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -69,7 +69,7 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
     @Override
     public void saveTrainingType(User user, String trainingType) {
         String sql = """
-                INSERT INTO permissions.user_training_types (user_id, training_type)
+                INSERT INTO relations.user_training_types (user_id, training_type)
                 VALUES (?, ?)
                 """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -85,23 +85,25 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
     /**
      * Получает список тренировок по умолчанию.
      *
-     * @throws SQLException если возникает ошибка при доступе к базе данных
      */
-    private List<String> getDefaultTrainingTypes(User user) throws SQLException {
-        List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
-        String sql = """
-             INSERT INTO permissions.user_training_types (user_id, training_type)
-             VALUES (?, ?)
-             """;
-        try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
-            for (String trainingType : defaultTrainingTypes) {
-                insertStatement.setLong(1, user.getId());
-                insertStatement.setString(2, trainingType);
-                insertStatement.executeUpdate();
+        private List<String> getDefaultTrainingTypes(User user) {
+            System.out.println(user);
+            List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
+            String sql = """
+                 INSERT INTO relations.user_training_types (user_id, training_type)
+                 VALUES (?, ?)
+                 """;
+            try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
+                for (String trainingType : defaultTrainingTypes) {
+                    insertStatement.setLong(1, user.getId());
+                    insertStatement.setString(2, trainingType);
+                    insertStatement.executeUpdate();
+                }
+            } catch (SQLException e) {
+                System.err.println("Не удалось добавить тип тренировки");
             }
+            return defaultTrainingTypes;
         }
-        return defaultTrainingTypes;
-    }
 
     // Метод для получения списка типов тренировок по умолчанию
     private List<String> getDefaultTrainingTypeList() {

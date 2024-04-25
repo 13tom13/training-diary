@@ -4,34 +4,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <!-- Создание схемы main -->
-    <changeSet id="create_schema_main" author="13tom13">
-        <sql dbms="postgresql"
-             endDelimiter="\nGO"
-             splitStatements="true"
-             stripComments="true">create schema if not exists main
-        </sql>
-    </changeSet>
-
-
-    <!-- Создание схемы permissions -->
-    <changeSet id="create_schema_main" author="13tom13">
-        <sql dbms="postgresql"
-             endDelimiter="\nGO"
-             splitStatements="true"
-             stripComments="true">create schema if not exists permissions
-        </sql>
-    </changeSet>
-
-    <!-- Создание схемы service -->
-    <changeSet id="create_schema_main" author="13tom13">
-        <sql dbms="postgresql"
-             endDelimiter="\nGO"
-             splitStatements="true"
-             stripComments="true">create schema if not exists service
-        </sql>
-    </changeSet>
-
-
     <includeAll path="changes_test" relativeToChangelogFile="true" />
 </databaseChangeLog>

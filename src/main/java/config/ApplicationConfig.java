@@ -42,6 +42,10 @@ public class ApplicationConfig {
         return PROPERTIES.getProperty("application.profile");
     }
 
+    public static String getDefaultDbSchema(){
+        return PROPERTIES.getProperty("db.default.schema");
+    }
+
     public static String getDbUrl() {
         return PROPERTIES.getProperty("db.url");
     }

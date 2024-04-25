@@ -35,17 +35,18 @@ public class TrainingControllerImplTest {
 
     private User testUser;
 
-    private final Training testTraining = new Training();
-
-
     private final String testTrainingName = "Test Training";
 
     private final String testAdditionalName = "additionalName";
+
+    private Training testTraining;
 
     @BeforeEach
     public void setUp() {
         // Создание тестового пользователя
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testTraining  = new Training(testTrainingName, TEST_DATE, 60, 200);
+
     }
 
 
@@ -111,7 +112,7 @@ public class TrainingControllerImplTest {
 
         // Act
         Training actualTraining = trainingController
-                .getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName);
+                .getTrainingByUserEmailAndDateAndName(testUser, TEST_DATE, testTrainingName);
 
         // Assert
         assertEquals(testTraining, actualTraining);
@@ -119,8 +120,11 @@ public class TrainingControllerImplTest {
 
     @Test
     public void testAddTrainingAdditional_Successful() throws RepositoryException, NoWriteRightsException {
-        // Act
+        // Arrange
         String testAdditionalValue = "additionalValue";
+        when(trainingServiceMock.addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue))
+                .thenReturn(testTraining);
+        // Act
         trainingController.addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue);
 
         // Assert
@@ -129,6 +133,9 @@ public class TrainingControllerImplTest {
 
     @Test
     public void testRemoveTrainingAdditional_Successful() throws RepositoryException, NoEditRightsException {
+        when(trainingServiceMock.removeTrainingAdditional(testUser, testTraining, testAdditionalName))
+                .thenReturn(testTraining);
+
         // Act
         trainingController.removeTrainingAdditional(testUser, testTraining, testAdditionalName);
 
@@ -140,6 +147,8 @@ public class TrainingControllerImplTest {
     public void testChangeNameTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newName = "New Training Name";
+        when(trainingServiceMock.changeNameTraining(testUser, testTraining, newName))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeNameTraining(testUser, testTraining, newName);
@@ -152,6 +161,8 @@ public class TrainingControllerImplTest {
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
         Date newDate = new Date(2024, 4, 19);
+        when(trainingServiceMock.changeDateTraining(testUser, testTraining, newDate))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeDateTraining(testUser, testTraining, newDate);
@@ -164,6 +175,8 @@ public class TrainingControllerImplTest {
     public void testChangeDurationTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newDuration = "60";
+        when(trainingServiceMock.changeDurationTraining(testUser, testTraining, Integer.parseInt(newDuration)))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeDurationTraining(testUser, testTraining, newDuration);
@@ -176,6 +189,8 @@ public class TrainingControllerImplTest {
     public void testChangeCaloriesTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newCalories = "500";
+        when(trainingServiceMock.changeCaloriesTraining(testUser, testTraining, Integer.parseInt(newCalories)))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeCaloriesTraining(testUser, testTraining, newCalories);
@@ -183,5 +198,6 @@ public class TrainingControllerImplTest {
         // Assert
         verify(trainingServiceMock).changeCaloriesTraining(testUser, testTraining, 500);
     }
+
 
 }

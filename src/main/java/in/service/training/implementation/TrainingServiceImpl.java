@@ -74,8 +74,9 @@ public class TrainingServiceImpl implements TrainingService {
     public void saveTraining(User user, Training training) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         if (hisRight(user, "WRITE")) {
             trainingRepository.saveTraining(user, training);
+        } else {
+            throw new NoWriteRightsException();
         }
-        throw new NoWriteRightsException();
     }
 
     /**
@@ -105,87 +106,110 @@ public class TrainingServiceImpl implements TrainingService {
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException, NoWriteRightsException {
+    public Training addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException, NoWriteRightsException {
         if (hisRight(user, "WRITE")) {
             Training trainingForAdditional = getTrainingForChange(user, training);
             if (!trainingForAdditional.getAdditions().containsKey(additionalName)) {
                 trainingForAdditional.addAdditional(additionalName, additionalValue);
-                trainingRepository.updateTraining(user, training, trainingForAdditional);
+                training = trainingRepository.updateTraining(user, training, trainingForAdditional);
             } else {
                 throw new RepositoryException("Дополнительное поле с именем " + additionalName + " уже существует");
             }
+        } else {
+            throw new NoWriteRightsException();
         }
-        throw new NoWriteRightsException();
+        return training;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException, NoEditRightsException {
+    public Training removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException, NoEditRightsException {
         if (hisRight(user, "EDIT")) {
             Training trainingForRemoval = getTrainingForChange(user, training);
             if (trainingForRemoval.getAdditions().containsKey(additionalName)) {
                 trainingForRemoval.removeAdditional(additionalName);
-                trainingRepository.updateTraining(user, training, trainingForRemoval);
+                training = trainingRepository.updateTraining(user, training, trainingForRemoval);
             }
+        } else {
+            throw new NoEditRightsException();
         }
-        throw new NoEditRightsException();
+        return training;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void changeNameTraining(User user, Training training, String newName) throws RepositoryException, NoEditRightsException {
+    public Training changeNameTraining(User user, Training training, String newName) throws RepositoryException, NoEditRightsException {
         if (hisRight(user, "EDIT")) {
             Training trainingForChange = getTrainingForChange(user, training);
             trainingForChange.setName(newName);
-            trainingRepository.updateTraining(user, training, trainingForChange);
+            training = trainingRepository.updateTraining(user, training, trainingForChange);
+        } else {
+            throw new NoEditRightsException();
         }
-        throw new NoEditRightsException();
+        return training;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, NoEditRightsException {
+    public Training changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, NoEditRightsException {
         if (hisRight(user, "EDIT")) {
             Training trainingForChange = getTrainingForChange(user, training);
             trainingForChange.setDate(newDate);
-            trainingRepository.updateTraining(user, training, trainingForChange);
+            training = trainingRepository.updateTraining(user, training, trainingForChange);
+        } else {
+            throw new NoEditRightsException();
         }
-        throw new NoEditRightsException();
+        return training;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException, NoEditRightsException {
+    public Training changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException, NoEditRightsException {
         if (hisRight(user, "EDIT")) {
             Training trainingForChange = getTrainingForChange(user, training);
             trainingForChange.setDuration(newDuration);
-            trainingRepository.updateTraining(user, training, trainingForChange);
+            training = trainingRepository.updateTraining(user, training, trainingForChange);
+        } else {
+            throw new NoEditRightsException();
         }
-        throw new NoEditRightsException();
+        return training;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException {
+    public Training changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException {
         if (hisRight(user, "EDIT")) {
             Training trainingForChange = getTrainingForChange(user, training);
             trainingForChange.setCaloriesBurned(newCalories);
-            trainingRepository.updateTraining(user, training, trainingForChange);
+            training = trainingRepository.updateTraining(user, training, trainingForChange);
+        } else {
+            throw new NoEditRightsException();
         }
-        throw new NoEditRightsException();
-
+        return training;
     }
 
     private Training getTrainingForChange(User user, Training training) throws RepositoryException {

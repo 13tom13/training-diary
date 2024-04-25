@@ -4,22 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <!-- Создание схемы main -->
-    <changeSet id="create_schema_main" author="13tom13">
-        <sql dbms="postgresql"
-             endDelimiter="\nGO"
-             splitStatements="true"
-             stripComments="true">create schema if not exists main
-        </sql>
-    </changeSet>
-
-    <!-- Создание таблицы пользователей -->
-    <changeSet id="create_table_users" author="13tom13" runOnChange="true">
-        <createSequence schemaName="main" sequenceName="users_id_seq" catalogName="users" startValue="1"
-                        incrementBy="1"/>
-
+    <changeSet id="create_table_users" author="13tom13">
         <createTable tableName="users" schemaName="main">
-            <column name="id" type="BIGINT" valueSequenceCurrent="users_id_seq">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="first_name" type="VARCHAR(50)">
@@ -35,24 +22,26 @@
                 <constraints nullable="false"/>
             </column>
             <column name="is_active" type="BOOLEAN" defaultValue="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
         </createTable>
+
+        <!-- Добавляем автоинкремент для столбца id -->
+        <sql>
+            ALTER TABLE main.users ALTER COLUMN id SET DEFAULT nextval('main.users_id_seq');
+        </sql>
     </changeSet>
 
-
     <changeSet id="create_table_trainings" author="13tom13" runOnChange="true">
-        <createSequence schemaName="main" sequenceName="trainings_id_seq" startValue="1" incrementBy="1"/>
-
         <createTable tableName="trainings" schemaName="main">
-            <column name="id" type="BIGINT" valueSequenceCurrent="trainings_id_seq">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="date" type="DATE">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="duration" type="INT">
                 <constraints nullable="false"/>
@@ -61,6 +50,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint tableName="trainings" schemaName="main" columnNames="name,date"/>
+
+        <sql>
+            ALTER TABLE main.trainings ALTER COLUMN id SET DEFAULT nextval('main.trainings_id_seq');
+        </sql>
     </changeSet>
 
     <!-- Создание таблицы для дополнительной информации о тренировках -->

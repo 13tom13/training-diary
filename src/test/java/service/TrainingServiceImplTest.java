@@ -41,6 +41,7 @@ public class TrainingServiceImplTest extends TestUtil {
     private User testUser;
     private final String testTrainingName = "Test Training";
     private final String testAdditionalName = "additionalName";
+    private final Training testTraining = new Training(testTrainingName, TEST_DATE, 60, 200);
 
     @BeforeEach
     public void setUp() {
@@ -65,7 +66,7 @@ public class TrainingServiceImplTest extends TestUtil {
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<String, TreeSet<Training>> expectedTrainings = new TreeMap<>();
+        TreeMap<Date, TreeSet<Training>> expectedTrainings = new TreeMap<>();
 
 
         // Act
@@ -78,8 +79,6 @@ public class TrainingServiceImplTest extends TestUtil {
 
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
-        // Arrange
-        Training testTraining = new Training(testTrainingName, TEST_DATE, 60, 200);
 
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
@@ -92,21 +91,11 @@ public class TrainingServiceImplTest extends TestUtil {
         verify(trainingRepository).deleteTraining(testUser, testTraining);
     }
 
-    /**
-     * Тестирование успешного добавления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoWriteRightsException если нет прав на запись
-     */
     @Test
     public void testAddTrainingAdditional_Successful() throws RepositoryException, NoWriteRightsException {
-        // Arrange
-        Training testTraining = new Training(testTrainingName, TEST_DATE, 60, 200);
-
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).updateTraining(testUser, testTraining, testTraining);
 
         // Act
         trainingService.addTrainingAdditional(testUser, testTraining, testAdditionalName, "additionalValue");
@@ -115,22 +104,15 @@ public class TrainingServiceImplTest extends TestUtil {
         verify(trainingRepository).updateTraining(testUser, testTraining, testTraining);
     }
 
-    /**
-     * Тестирование успешного удаления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
+
     @Test
     public void testRemoveTrainingAdditional_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
-        Training testTraining = new Training(testTrainingName, TEST_DATE, 60, 200);
         testTraining.addAdditional(testAdditionalName, "additionalValue");
 
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).updateTraining(testUser, testTraining, testTraining);
 
         // Act
         trainingService.removeTrainingAdditional(testUser, testTraining, testAdditionalName);
@@ -139,21 +121,13 @@ public class TrainingServiceImplTest extends TestUtil {
         verify(trainingRepository).updateTraining(testUser, testTraining, testTraining);
     }
 
-    /**
-     * Тестирование успешного изменения имени тренировки.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
+
     @Test
     public void testChangeNameTraining_Successful() throws RepositoryException, NoEditRightsException {
-        // Arrange
-        Training testTraining = new Training(testTrainingName, TEST_DATE, 60, 200);
 
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
-        doNothing().when(trainingRepository).updateTraining(testUser, testTraining, testTraining);
 
         // Act
         trainingService.changeNameTraining(testUser, testTraining, "New Training Name");

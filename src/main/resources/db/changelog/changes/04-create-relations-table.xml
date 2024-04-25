@@ -3,12 +3,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
 
-    <changeSet id="create_schema_service" author="13tom13">
-        <sql>CREATE SCHEMA IF NOT EXISTS service;</sql>
-    </changeSet>
-
     <changeSet id="create_table_users_roles" author="13tom13" runOnChange="true">
-        <createTable tableName="users_roles" schemaName="service">
+        <createTable tableName="users_roles" schemaName="relations">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_user_id" referencedTableSchemaName="main"
                              deleteCascade="true" referencedTableName="users" referencedColumnNames="id"
@@ -24,7 +20,7 @@
 
 
     <changeSet id="create_table_user_rights" author="13tom13" runOnChange="true">
-        <createTable tableName="user_rights" schemaName="service">
+        <createTable tableName="user_rights" schemaName="relations">
             <column name="user_id" type="INT">
                 <constraints nullable="false" foreignKeyName="fk_user_rights" referencedTableSchemaName="main"
                              deleteCascade="true" referencedTableName="users" referencedColumnNames="id"
@@ -39,7 +35,7 @@
     </changeSet>
 
     <changeSet id="create_user_trainings_table" author="13tom13">
-        <createTable tableName="user_trainings" schemaName="service">
+        <createTable tableName="user_trainings" schemaName="relations">
             <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user_id_" referencedTableSchemaName="main" nullable="false"
                              referencedTableName="users" referencedColumnNames="id" deleteCascade="true"
@@ -51,6 +47,25 @@
                 primaryKey="true"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы user_training_types в схеме permissions -->
+    <changeSet id="create_table_user_training_types" author="13tom13" runOnChange="true">
+        <createTable tableName="user_training_types" schemaName="relations">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" referencedTableSchemaName="main" deleteCascade="true"
+                             referencedTableName="users" referencedColumnNames="id" foreignKeyName="fk_user_training_types"/>
+            </column>
+            <column name="training_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sql>
+            ALTER TABLE relations.user_training_types ALTER COLUMN id SET DEFAULT nextval('relations.seq_user_training_types');
+        </sql>
     </changeSet>
 
 

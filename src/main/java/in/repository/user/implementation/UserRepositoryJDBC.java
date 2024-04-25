@@ -149,7 +149,7 @@ public class UserRepositoryJDBC implements UserRepository {
             assignUserRights(user);
             assignUserRoles(user);
         } catch (SQLException e) {
-            throw new RepositoryException("Ошибка при выполнении запроса к базе данных");
+            throw new RepositoryException("Ошибка при выполнении запроса к базе данных " + e.getMessage());
         }
     }
 
@@ -230,7 +230,7 @@ public class UserRepositoryJDBC implements UserRepository {
         String sql = """
              SELECT r.id, r.name
              FROM permissions.rights r
-             INNER JOIN service.user_rights ur ON r.id = ur.right_id
+             INNER JOIN relations.user_rights ur ON r.id = ur.right_id
              WHERE ur.user_id = ?
              """;
 
@@ -260,7 +260,7 @@ public class UserRepositoryJDBC implements UserRepository {
         String sql = """
              SELECT r.id, r.name
              FROM permissions.roles r
-             INNER JOIN service.users_roles ur ON r.id = ur.role_id
+             INNER JOIN relations.users_roles ur ON r.id = ur.role_id
              WHERE ur.user_id = ?
              """;
 
@@ -313,7 +313,7 @@ public class UserRepositoryJDBC implements UserRepository {
                         FROM permissions.rights
                         """;
         String sqlInsertRights = """
-                         INSERT INTO service.user_rights (user_id, right_id)
+                         INSERT INTO relations.user_rights (user_id, right_id)
                          VALUES (?, ?)
                          """;
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRights);
@@ -344,7 +344,7 @@ public class UserRepositoryJDBC implements UserRepository {
                         WHERE name = ?
                         """;
         String sqlInsertUserRole = """
-                           INSERT INTO service.users_roles (user_id, role_id)
+                           INSERT INTO relations.users_roles (user_id, role_id)
                            VALUES (?, ?)
                            """;
 
@@ -379,7 +379,7 @@ public class UserRepositoryJDBC implements UserRepository {
     private void deleteUserRights(User user) throws SQLException {
         long userId = user.getId();
         String sql = """
-             DELETE FROM service.user_rights
+             DELETE FROM relations.user_rights
              WHERE user_id = ?
              """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -397,7 +397,7 @@ public class UserRepositoryJDBC implements UserRepository {
     private void deleteUserRoles(User user) throws SQLException {
         long userId = user.getId();
         String sql = """
-             DELETE FROM service.users_roles
+             DELETE FROM relations.users_roles
              WHERE user_id = ?
              """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

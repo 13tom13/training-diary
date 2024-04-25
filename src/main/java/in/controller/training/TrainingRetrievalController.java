@@ -37,5 +37,5 @@ public interface TrainingRetrievalController {
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName);
+    Training getTrainingByUserEmailAndDateAndName(User user, Date trainingDate, String trainingName);
 }

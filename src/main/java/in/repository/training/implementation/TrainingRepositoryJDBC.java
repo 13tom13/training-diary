@@ -41,7 +41,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
                        ta.key AS addition_key, ta.value AS addition_value
                 FROM main.trainings t
-                JOIN service.user_trainings ut ON t.id = ut.training_id
+                JOIN relations.user_trainings ut ON t.id = ut.training_id
                 JOIN main.users u ON u.id = ut.user_id
                 LEFT JOIN main.training_additions ta ON t.id = ta.training_id
                 WHERE u.id = ?
@@ -82,7 +82,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
         String sql = """
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned
                 FROM main.trainings t
-                JOIN service.user_trainings ut ON t.id = ut.training_id
+                JOIN relations.user_trainings ut ON t.id = ut.training_id
                 JOIN main.users u ON u.id = ut.user_id
                 WHERE u.id = ? AND t.date = ?
                 """;
@@ -126,7 +126,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
                        ta.key AS addition_key, ta.value AS addition_value
                 FROM main.trainings t
-                JOIN service.user_trainings ut ON t.id = ut.training_id
+                JOIN relations.user_trainings ut ON t.id = ut.training_id
                 JOIN main.users u ON u.id = ut.user_id
                 LEFT JOIN main.training_additions ta ON t.id = ta.training_id
                 WHERE u.id = ? AND t.date = ? AND t.name = ?
@@ -165,7 +165,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 VALUES (?, ?, ?, ?)
                 """;
         String sqlInsertUserTraining = """
-                INSERT INTO service.user_trainings (user_id, training_id)
+                INSERT INTO relations.user_trainings (user_id, training_id)
                 VALUES (?, ?)
                 """;
         try (PreparedStatement statementTraining = connection.prepareStatement(sqlInsertTraining, Statement.RETURN_GENERATED_KEYS);
@@ -197,7 +197,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             newTraining.setId(trainingId); // Устанавливаем идентификатор тренировки
             saveTrainingAdditionals(newTraining); // Сохраняем дополнительную информацию
         } catch (SQLException e) {
-            throw new RepositoryException("Ошибка сохранения тренировки");
+            throw new RepositoryException("Ошибка сохранения тренировки " + e.getMessage());
         }
     }
 
@@ -209,13 +209,13 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      *
      * @param user     пользователь, для которого удаляется тренировка
      * @param training тренировка для удаления
-     * @return
+     * @return true, если тренировка для удаления найдена, иначе false
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
     public boolean deleteTraining(User user, Training training) throws RepositoryException {
         String sqlDeleteUserTraining = """
-                DELETE FROM service.user_trainings
+                DELETE FROM relations.user_trainings
                 WHERE user_id = ? AND training_id = ?
                 """;
         String sqlDeleteTraining = """
@@ -271,10 +271,11 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @param user        адрес электронной почты пользователя
      * @param oldTraining тренировка для обновления
      * @param newTraining новая версия тренировки
+     * @return измененная тренировка
      * @throws RepositoryException если тренировка для обновления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
+    public Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
         String sqlSelectUser = """
                 SELECT *
                 FROM main.users
@@ -331,6 +332,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
         } catch (SQLException e) {
             throw new RepositoryException("Ошибка при обновлении тренировки");
         }
+        return newTraining;
     }
 
 

@@ -5,10 +5,7 @@ import model.Training;
 import model.User;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static utils.Utils.getDateFromString;
 
@@ -82,7 +79,7 @@ public class ViewTrainingAdded {
 
         Training training = new Training(name, date, duration, caloriesBurned);
         if (trainingController.saveTraining(user, training)) {
-            addTrainingAdditional(user, training);
+            addTrainingAdditional(training);
             System.out.println("Тренировка успешно сохранена.");
         }
     }
@@ -139,16 +136,20 @@ public class ViewTrainingAdded {
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
         String stringDate = scanner.nextLine();
-        Date date;
+        Date trainingDate;
         try {
-            date = getDateFromString(stringDate);
+            trainingDate = getDateFromString(stringDate);
         } catch (ParseException e) {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
             return; // Выйти из метода, если дата некорректна
         }
+        TreeSet<Training> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user, trainingDate);
+        for (Training training : trainingsFromDay) {
+            System.out.println(training);
+        }
         System.out.print("Название: ");
         String name = scanner.nextLine();
-        if (trainingController.deleteTraining(user, date, name)) {
+        if (trainingController.deleteTraining(user, trainingDate, name)) {
             System.out.println("Тренировка успешно удалена.");
         }
     }
@@ -156,11 +157,8 @@ public class ViewTrainingAdded {
 
     /**
      * Метод для добавления дополнительной информации о тренировке.
-     *
-     * @param user     Пользователь.
-     * @param training Тренировка, для которой добавляется информация.
      */
-    public void addTrainingAdditional(User user, Training training) {
+    public void addTrainingAdditional(Training training) {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
@@ -178,13 +176,17 @@ public class ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-                        trainingController.addTrainingAdditional(user, training, additionalName, additionalValue);
+                        training = trainingController.addTrainingAdditional(user, training, additionalName, additionalValue);
                     }
                     case 2 -> {
                         if (!training.getAdditions().isEmpty()) {
+                            for (Map.Entry<String, String> entry : training.getAdditions().entrySet()) {
+                                System.out.println(entry.getKey() + " - " + entry.getValue());
+                            }
                             System.out.println("Введите название дополнительной информации для удаления:");
+
                             String additionalNameForRemove = scanner.nextLine();
-                            trainingController.removeTrainingAdditional(user, training, additionalNameForRemove);
+                            training = trainingController.removeTrainingAdditional(user, training, additionalNameForRemove);
                         }
                     }
                     case 3 -> {

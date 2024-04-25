@@ -136,7 +136,7 @@ public class TrainingControllerImpl implements TrainingController {
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) {
+    public Training getTrainingByUserEmailAndDateAndName(User user, Date trainingDate, String trainingName) {
         try {
             return trainingService.getTrainingByUserIDAndDataAndName(user, trainingDate, trainingName);
         } catch (RepositoryException e) {
@@ -153,17 +153,19 @@ public class TrainingControllerImpl implements TrainingController {
      * @param training        Тренировка, к которой добавляется информация
      * @param additionalName  Название дополнительной информации
      * @param additionalValue Значение дополнительной информации
+     * @return Тренировка, с добавленной дополнительной информацией
      */
     @Override
-    public void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) {
+    public Training addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) {
         try {
-            trainingService.addTrainingAdditional(user, training, additionalName, additionalValue);
+            training = trainingService.addTrainingAdditional(user, training, additionalName, additionalValue);
             logger.logAction(user.getEmail(), String.format("add training additional %s %s (%s %s)",
                     additionalName, additionalValue, training.getName(), training.getDate()));
         } catch (RepositoryException | NoWriteRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 
     /**
@@ -172,17 +174,19 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user           Пользователь
      * @param training       Тренировка, из которой удаляется информация
      * @param additionalName Название дополнительной информации для удаления
+     * @return Тренировка, с удаленной информацией
      */
     @Override
-    public void removeTrainingAdditional(User user, Training training, String additionalName) {
+    public Training removeTrainingAdditional(User user, Training training, String additionalName) {
         try {
-            trainingService.removeTrainingAdditional(user, training, additionalName);
+            training = trainingService.removeTrainingAdditional(user, training, additionalName);
             logger.logAction(user.getEmail(), String.format("remove training additional %s (%s %s)",
                     additionalName, training.getName(), training.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 
     /**
@@ -191,17 +195,20 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user     Пользователь
      * @param training Тренировка, название которой изменяется
      * @param newName  Новое название тренировки
+     * @return Тренировка, с измененным названием
      */
     @Override
-    public void changeNameTraining(User user, Training training, String newName) {
+    public Training changeNameTraining(User user, Training training, String newName) {
         try {
-            trainingService.changeNameTraining(user, training, newName);
+            training = trainingService.changeNameTraining(user, training, newName);
+
             logger.logAction(user.getEmail(),
                     String.format("change training name %s (%s %s)", newName, training.getName(), training.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 
     /**
@@ -210,17 +217,19 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user     Пользователь
      * @param training Тренировка, дата которой изменяется
      * @param newDate  Новая дата тренировки
+     * @return Тренировка, с измененной датой
      */
     @Override
-    public void changeDateTraining(User user, Training training, Date newDate) {
+    public Training changeDateTraining(User user, Training training, Date newDate) {
         try {
-            trainingService.changeDateTraining(user, training, newDate);
+            training = trainingService.changeDateTraining(user, training, newDate);
             logger.logAction(user.getEmail(),
                     String.format("change training date %s (%s %s)", newDate, training.getName(), training.getDate()));
         } catch (RepositoryException | InvalidDateFormatException | NoEditRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 
     /**
@@ -229,18 +238,20 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user        Пользователь
      * @param training    Тренировка, продолжительность которой изменяется
      * @param newDuration Новая продолжительность тренировки
+     * @return Тренировка, с измененной продолжительностью
      */
     @Override
-    public void changeDurationTraining(User user, Training training, String newDuration) {
+    public Training changeDurationTraining(User user, Training training, String newDuration) {
         int newDurationInt = Integer.parseInt(newDuration);
         try {
-            trainingService.changeDurationTraining(user, training, newDurationInt);
+            training = trainingService.changeDurationTraining(user, training, newDurationInt);
             logger.logAction(user.getEmail(),
                     String.format("change training duration %s (%s %s)", newDuration, training.getName(), training.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 
     /**
@@ -249,17 +260,19 @@ public class TrainingControllerImpl implements TrainingController {
      * @param user        Пользователь
      * @param training    Тренировка, количество калорий на которой изменяется
      * @param newCalories Новое количество сожженных калорий
+     * @return Тренировка, с измененным количеством сожженных калорий
      */
     @Override
-    public void changeCaloriesTraining(User user, Training training, String newCalories) {
+    public Training changeCaloriesTraining(User user, Training training, String newCalories) {
         int newCaloriesInt = Integer.parseInt(newCalories);
         try {
-            trainingService.changeCaloriesTraining(user, training, newCaloriesInt);
+            training = trainingService.changeCaloriesTraining(user, training, newCaloriesInt);
             logger.logAction(user.getEmail(),
                     String.format("change training calories %s (%s %s)", newCaloriesInt, training.getName(), training.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(user.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
+        return training;
     }
 }

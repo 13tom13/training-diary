@@ -4,11 +4,9 @@ import dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import exceptions.ValidationException;
-import model.User;
-import in.service.users.UserService;
 import in.repository.user.UserRepository;
-
-import java.sql.SQLException;
+import in.service.users.UserService;
+import model.User;
 
 /**
  * Реализация интерфейса {@link UserService}, предоставляющая методы для работы с пользователями.
@@ -36,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) throws ServiceException {
         return userRepository.getUserByEmail(email).orElseThrow(() ->
-                new ServiceException("User not found"));
+                new ServiceException("Пользователь не найден"));
     }
 
     /**
@@ -60,14 +58,9 @@ public class UserServiceImpl implements UserService {
         } else {
             User user = new User(userDTO.getFirstName(),
                     userDTO.getLastName(), userDTO.getEmail(), userDTO.getPassword());
-            try {
-                userRepository.assignUserRights(user);
-                userRepository.assignUserRoles(user);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
             userRepository.saveUser(user);
-            System.out.println("saved user: " + user.getEmail() + "\n");
+            System.out.println("Пользователь с электронной почтой: " + user.getEmail() + " успешно сохранен");
+            System.out.println();
         }
     }
 }

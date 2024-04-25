@@ -56,13 +56,13 @@ public class ViewTrainingEditing {
         }
         trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
-            System.out.println("Тренировки на " + trainingDate + ":");
+            System.out.println("Тренировки на " + getFormattedDate(trainingDate) + ":");
             for (Training training : trainingsFromDay) {
                 System.out.println(training);
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            training = trainingController.getTrainingByUserEmailAndDataAndName(user, trainingDate, trainingName);
+            training = trainingController.getTrainingByUserEmailAndDateAndName(user, trainingDate, trainingName);
         }
     }
 
@@ -97,15 +97,16 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        trainingController.changeNameTraining(user, training, newName);
+                        training  = trainingController.changeNameTraining(user, training, newName);
                     }
                     case 2 -> {
                         System.out.println();
                         System.out.println("Введите новую дату:");
                         String stringDate = scanner.nextLine();
+
                         try {
                             Date newDate = getDateFromString(stringDate);
-                            trainingController.changeDateTraining(user, training, newDate);
+                            training = trainingController.changeDateTraining(user, training, newDate);
                         } catch (ParseException e) {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
                         }
@@ -114,15 +115,15 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        trainingController.changeDurationTraining(user, training, newDuration);
+                        training = trainingController.changeDurationTraining(user, training, newDuration);
                     }
                     case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        trainingController.changeCaloriesTraining(user, training, newCalories);
+                        training = trainingController.changeCaloriesTraining(user, training, newCalories);
                     }
-                    case 5 -> viewTrainingAdded.addTrainingAdditional(user, training);
+                    case 5 -> viewTrainingAdded.addTrainingAdditional(training);
                     case 6 -> {
                         System.out.println("Выход из меню изменения тренировки.");
                         startView = false;
@@ -135,5 +136,6 @@ public class ViewTrainingEditing {
             }
         }
     }
+
 
 }

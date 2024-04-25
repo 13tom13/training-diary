@@ -153,10 +153,11 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * @param user        пользователь, для которого нужно обновить тренировку
      * @param oldTraining тренировка для обновления
      * @param newTraining новая версия тренировки
+     * @return обновленная тренировка пользователя
      * @throws RepositoryException если тренировка для обновления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
+    public Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
         TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(oldTraining.getDate());
@@ -172,5 +173,6 @@ public class TrainingRepositoryCollections implements TrainingRepository {
         } else {
             throw new RepositoryException("Пользователь с идентификатором " + user.getId() + " не найден в тренировках");
         }
+        return oldTraining;
     }
 }

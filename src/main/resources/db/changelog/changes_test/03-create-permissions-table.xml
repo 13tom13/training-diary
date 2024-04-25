@@ -1,0 +1,38 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+
+
+    <!-- Создание таблицы roles в схеме permissions -->
+    <changeSet id="create_table_roles" author="13tom13" runOnChange="true">
+        <createTable tableName="roles" schemaName="permissions">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <sql>
+            ALTER TABLE permissions.roles ALTER COLUMN id SET DEFAULT nextval('permissions.seq_roles');
+        </sql>
+    </changeSet>
+
+    <!-- Создание таблицы rights в схеме permissions -->
+    <changeSet id="create_table_rights" author="13tom13" runOnChange="true">
+        <createTable tableName="rights" schemaName="permissions">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <sql>
+            ALTER TABLE permissions.rights ALTER COLUMN id SET DEFAULT nextval('permissions.seq_rights');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

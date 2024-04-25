@@ -56,7 +56,7 @@ public interface TrainingRepository {
      *
      * @param user     электронная почта пользователя
      * @param training тренировка для удаления
-     * @return
+     * @return true если удаление прошло успешно, иначе false
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
     boolean deleteTraining(User user, Training training) throws RepositoryException;
@@ -67,8 +67,9 @@ public interface TrainingRepository {
      * @param user        электронная почта пользователя
      * @param oldTraining старая версия тренировки
      * @param newTraining новая версия тренировки
+     * @return измененная тренировка
      * @throws RepositoryException если тренировка для обновления не найдена или возникла ошибка при доступе к хранилищу
      */
-    void updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException;
+    Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException;
 }
 

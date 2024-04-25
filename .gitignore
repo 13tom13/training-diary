@@ -1,4 +1,5 @@
 /.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -27,6 +28,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/.idea/
-/.idea/
 /.idea/
