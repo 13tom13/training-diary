@@ -3,6 +3,8 @@ package in.service.training;
 import exceptions.security.rights.NoStatisticsRightsException;
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс для сервиса статистики тренировок.
  */
@@ -26,7 +28,7 @@ public interface TrainingStatisticsService {
      * @return общая статистика по тренировкам за указанный период
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
-    Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException;
+    Integer getAllTrainingStatisticsPerPeriod(User user, Date startDate, Date endDate) throws NoStatisticsRightsException;
 
     /**
      * Получает статистику по продолжительности тренировок за указанный период для указанного пользователя.
@@ -37,7 +39,7 @@ public interface TrainingStatisticsService {
      * @return статистика по продолжительности тренировок за указанный период
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
-    Integer getDurationStatisticsPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException;
+    Integer getDurationStatisticsPerPeriod(User user, Date startDate, Date endDate) throws NoStatisticsRightsException;
 
     /**
      * Получает статистику по сожженным калориям за указанный период для указанного пользователя.
@@ -48,5 +50,5 @@ public interface TrainingStatisticsService {
      * @return статистика по сожженным калориям за указанный период
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
-    Integer getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) throws NoStatisticsRightsException;
+    Integer getCaloriesBurnedPerPeriod(User user, Date startDate, Date endDate) throws NoStatisticsRightsException;
 }

@@ -2,6 +2,8 @@ package in.controller.training;
 
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс контроллера статистики тренировок.
  */
@@ -23,7 +25,7 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return общая статистика по всем тренировкам пользователя за указанный период
      */
-    Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate);
+    Integer getAllTrainingStatisticsPerPeriod(User user, Date startDate, Date endDate);
 
     /**
      * Получает статистику по длительности тренировок пользователя за определенный период.
@@ -33,7 +35,7 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return статистика по длительности тренировок пользователя за указанный период
      */
-    int getDurationStatisticsPerPeriod(User user, String startDate, String endDate);
+    int getDurationStatisticsPerPeriod(User user, Date startDate, Date endDate);
 
     /**
      * Получает статистику по сожженным калориям пользователем за определенный период.
@@ -43,5 +45,5 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return статистика по сожженным калориям пользователем за указанный период
      */
-    int getCaloriesBurnedPerPeriod(User user, String startDate, String endDate);
+    int getCaloriesBurnedPerPeriod(User user, Date startDate, Date endDate);
 }

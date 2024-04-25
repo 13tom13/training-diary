@@ -14,15 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-/**
- * Тестирование класса TrainingStatisticsServiceImp.
- */
 @ExtendWith(MockitoExtension.class)
 public class TrainingStatisticsServiceImpTest extends TestUtil {
 
@@ -33,8 +31,8 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     private TrainingStatisticsServiceImp trainingStatisticsService;
 
     private User testUser;
-    private final String startDate = "01.01.24";
-    private final String endDate = "31.01.24";
+    private final Date startDate = new Date(2024,1,1);
+    private final Date endDate = new Date(2024,12,31);
 
     private int totalTestTrainings;
 
@@ -45,20 +43,15 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     @BeforeEach
     public void setUp() {
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
-        testUser.getRights().add(Rights.STATISTICS);
+        testUser.getRights().add(new Rights(4L,"STATISTICS"));
     }
 
-    /**
-     * Тестирование метода getAllTrainingStatistics().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {
         // Arrange
-        TreeMap<String, TreeSet<Training>> allTrainings = new TreeMap<>();
-        allTrainings.put("01.01.24", new TreeSet<>());
-        allTrainings.put("02.01.24", new TreeSet<>());
+        TreeMap<Date, TreeSet<Training>> allTrainings = new TreeMap<>();
+        allTrainings.put(new Date(2024,1,1), new TreeSet<>());
+        allTrainings.put(new Date(2024,1,2), new TreeSet<>());
 
         // Configure mock behavior
         when(trainingService.getAllTrainings(testUser)).thenReturn(allTrainings);
@@ -70,11 +63,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(0, totalTrainings);
     }
 
-    /**
-     * Тестирование метода getAllTrainingStatisticsPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
+
     @Test
     public void testGetAllTrainingStatisticsPerPeriod() throws NoStatisticsRightsException {
         // Configure mock behavior
@@ -87,11 +76,6 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestTrainings, totalTrainings);
     }
 
-    /**
-     * Тестирование метода getDurationStatisticsPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
     @Test
     public void testGetDurationStatisticsPerPeriod() throws NoStatisticsRightsException {
 
@@ -105,11 +89,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestDuration, totalDuration);
     }
 
-    /**
-     * Тестирование метода getCaloriesBurnedPerPeriod().
-     *
-     * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
-     */
+
     @Test
     public void testGetCaloriesBurnedPerPeriod() throws NoStatisticsRightsException {
 
@@ -123,18 +103,14 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         assertEquals(totalTestCaloriesBurned, totalCaloriesBurned);
     }
 
-    /**
-     * Метод для создания тестовых данных тренировок.
-     *
-     * @return TreeMap<String, TreeSet < Training>> - структура данных для тестов
-     */
-    private TreeMap<String, TreeSet<Training>> getMockTrainingData() {
-        TreeMap<String, TreeSet<Training>> allTrainings = new TreeMap<>();
+
+    private TreeMap<Date, TreeSet<Training>> getMockTrainingData() {
+        TreeMap<Date, TreeSet<Training>> allTrainings = new TreeMap<>();
         TreeSet<Training> trainings = new TreeSet<>();
-        trainings.add(new Training("Test Training 1", "01.01.24", 60, 200));
-        trainings.add(new Training("Test Training 2", "01.01.24", 45, 150));
-        trainings.add(new Training("Test Training 3", "01.01.24", 90, 300));
-        allTrainings.put(TEST_EMAIL, trainings);
+        trainings.add(new Training("Test Training 1", TEST_DATE, 60, 200));
+        trainings.add(new Training("Test Training 2", TEST_DATE, 45, 150));
+        trainings.add(new Training("Test Training 3", TEST_DATE, 90, 300));
+        allTrainings.put(TEST_DATE, trainings);
         totalTestTrainings = trainings.size();
         for (Training training : trainings) {
             totalTestDuration += training.getDuration();

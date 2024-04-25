@@ -1,8 +1,10 @@
-package in.repository;
+package in.repository.user;
 
 import exceptions.RepositoryException;
+import model.Rights;
 import model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,8 @@ public interface UserRepository {
      */
     List<User> getAllUsers();
 
+    List<Rights> getAllRights();
+
     /**
      * Сохранить пользователя в хранилище.
      *
@@ -44,8 +48,24 @@ public interface UserRepository {
     /**
      * Удалить пользователя из хранилища по его электронной почте.
      *
-     * @param email электронная почта пользователя, которого нужно удалить
+     * @param user объект пользователя, которого нужно удалить
      */
-    void deleteUser(String email);
+    void deleteUser(User user);
+
+    /**
+     * Присваивает пользователю список прав.
+     *
+     * @param user объект пользователя, которому присваиваются права
+     * @throws SQLException если произошла ошибка при выполнении SQL-запроса
+     */
+    void assignUserRights(User user) throws SQLException;
+
+    /**
+     * Присваивает пользователю список ролей.
+     *
+     * @param user объект пользователя, которому присваиваются роли
+     * @throws SQLException если произошла ошибка при выполнении SQL-запроса
+     */
+    void assignUserRoles(User user) throws SQLException;
 
 }

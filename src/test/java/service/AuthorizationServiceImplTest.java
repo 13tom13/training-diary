@@ -2,7 +2,7 @@ package service;
 
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.implementation.AuthorizationServiceImpl;
 import model.User;
 import org.junit.jupiter.api.Test;
@@ -17,9 +17,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-/**
- * Тестирование класса AuthorizationServiceImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationServiceImplTest extends TestUtil {
 
@@ -30,12 +27,6 @@ public class AuthorizationServiceImplTest extends TestUtil {
     private AuthorizationServiceImpl authorizationService;
 
 
-    /**
-     * Тестирование успешного входа пользователя в систему.
-     *
-     * @throws AuthorizationException если аутентификация не удалась из-за неверных учетных данных
-     * @throws NotActiveUserException если пользователь не активен
-     */
     @Test
     public void testLogin_Successful() throws AuthorizationException, NotActiveUserException {
         // Arrange
@@ -54,9 +45,6 @@ public class AuthorizationServiceImplTest extends TestUtil {
         assertTrue(loggedInUser.isActive());
     }
 
-    /**
-     * Тестирование входа пользователя в систему с неверным паролем.
-     */
     @Test
     public void testLogin_WrongPassword() {
         // Arrange
@@ -70,9 +58,6 @@ public class AuthorizationServiceImplTest extends TestUtil {
         assertThrows(AuthorizationException.class, () -> authorizationService.login(TEST_EMAIL, "wrongPassword"));
     }
 
-    /**
-     * Тестирование входа пользователя в систему с неправильным email.
-     */
     @Test
     public void testLogin_UserNotFound() {
         // Configure mock behavior
@@ -82,9 +67,6 @@ public class AuthorizationServiceImplTest extends TestUtil {
         assertThrows(AuthorizationException.class, () -> authorizationService.login(TEST_EMAIL, TEST_PASSWORD));
     }
 
-    /**
-     * Тестирование входа пользователя в систему, если пользователь не активен.
-     */
     @Test
     public void testLogin_InactiveUser() {
         // Arrange

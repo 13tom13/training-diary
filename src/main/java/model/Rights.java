@@ -1,42 +1,40 @@
 package model;
 
-/**
- * Перечисление, представляющее различные права доступа пользователя.
- */
-public enum Rights {
-    /**
-     * Право на запись (добавление данных).
-     */
-    WRITE,
+import java.util.List;
 
-    /**
-     * Право на редактирование данных.
-     */
-    EDIT,
+public class Rights {
+    private Long id;
 
-    /**
-     * Право на удаление данных.
-     */
-    DELETE,
+    private String name;
 
-    /**
-     * Право на доступ к статистике.
-     */
-    STATISTICS;
+    private List<User> users;
 
-    /**
-     * Переопределение метода {@code toString()} для получения текстового представления права.
-     *
-     * @return Текстовое представление права
-     */
     @Override
     public String toString() {
-        return switch (this) {
-            case WRITE -> "WRITE";
-            case EDIT -> "EDIT";
-            case DELETE -> "DELETE";
-            case STATISTICS -> "STATISTICS";
-        };
+        return name;
+    }
+
+    public Rights(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Rights() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
-

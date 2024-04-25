@@ -1,23 +1,23 @@
-package in.repository.implementation;
+package in.repository.trainingtype.implementation;
 
-import in.repository.TrainingTypeRepository;
+import in.repository.trainingtype.TrainingTypeRepository;
+import model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Реализация интерфейса {@link TrainingTypeRepository} для хранения типов тренировок.
- */
-public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
-    private final Map<String, List<String>> trainingTypes;
+public class TrainingTypeRepositoryCollections implements TrainingTypeRepository {
+    private final Map<Long, List<String>> trainingTypes;
+
+    private final long DEFAULT_TRAINING_TYPE_ID = -1L;
 
     /**
-     * Конструктор класса TrainingTypeRepositoryImpl.
+     * Конструктор класса TrainingTypeRepositoryCollections.
      * Инициализирует карту trainingTypes и добавляет список тренировок по умолчанию.
      */
-    public TrainingTypeRepositoryImpl() {
+    public TrainingTypeRepositoryCollections() {
         trainingTypes = new HashMap<>();
         addDefaultTrainingTypes();
     }
@@ -26,17 +26,16 @@ public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
      * Получает список тренировок для указанного пользователя.
      * Если у пользователя нет собственного списка, возвращает список по умолчанию.
      *
-     * @param userEmail электронная почта пользователя
+     * @param user пользователь
      * @return список тренировок пользователя
      */
     @Override
-    public List<String> getTrainingTypes(String userEmail) {
-        List<String> userTrainingTypes = trainingTypes.get(userEmail);
+    public List<String> getTrainingTypes(User user) {
+        List<String> userTrainingTypes = trainingTypes.get(user.getId());
         if (userTrainingTypes == null) {
-            trainingTypes.put(userEmail, trainingTypes.get("default"));
-            return trainingTypes.get("default");
+            return new ArrayList<>(trainingTypes.get(DEFAULT_TRAINING_TYPE_ID));
         } else {
-            return userTrainingTypes;
+            return new ArrayList<>(userTrainingTypes);
         }
     }
 
@@ -44,24 +43,23 @@ public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
      * Добавляет тип тренировки для указанного пользователя.
      * Если у пользователя еще нет списка тренировок, создает его на основе списка по умолчанию.
      *
-     * @param userEmail    электронная почта пользователя
+     * @param user         пользователь
      * @param trainingType тип тренировки для добавления
      */
     @Override
-    public void saveTrainingType(String userEmail, String trainingType) {
-        List<String> userTrainingTypes = trainingTypes.computeIfAbsent
-                (userEmail, k -> new ArrayList<>(trainingTypes.getOrDefault("default", List.of())));
+    public void saveTrainingType(User user, String trainingType) {
+        List<String> userTrainingTypes = trainingTypes.computeIfAbsent(user.getId(),
+                k -> new ArrayList<>(trainingTypes.getOrDefault(DEFAULT_TRAINING_TYPE_ID, List.of())));
         userTrainingTypes.add(trainingType);
     }
 
     /**
      * Добавляет список тренировок по умолчанию.
      */
-    public void addDefaultTrainingTypes() {
+    private void addDefaultTrainingTypes() {
         List<String> defaultTrainingTypes = new ArrayList<>();
         defaultTrainingTypes.add("Кардио");
         defaultTrainingTypes.add("Силовая");
-        trainingTypes.put("default", defaultTrainingTypes);
+        trainingTypes.put(DEFAULT_TRAINING_TYPE_ID, defaultTrainingTypes);
     }
-
 }

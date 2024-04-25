@@ -6,6 +6,8 @@ import utils.Logger;
 import model.User;
 import in.service.training.TrainingStatisticsService;
 
+import java.util.Date;
+
 /**
  * Реализация контроллера статистики тренировок.
  */
@@ -47,7 +49,7 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
      * @param endDate Конечная дата периода
      * @return Статистика всех тренировок за указанный период
      */
-    public Integer getAllTrainingStatisticsPerPeriod(User user, String startDate, String endDate) {
+    public Integer getAllTrainingStatisticsPerPeriod(User user, Date startDate, Date endDate) {
         try {
             int result = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(user, startDate, endDate);
             logger.logAction(user.getEmail(),
@@ -66,7 +68,7 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
      * @param endDate Конечная дата периода
      * @return Статистика продолжительности тренировок за указанный период
      */
-    public int getDurationStatisticsPerPeriod(User user, String startDate, String endDate) {
+    public int getDurationStatisticsPerPeriod(User user, Date startDate, Date endDate) {
         try {
             int result = trainingStatisticsService.getDurationStatisticsPerPeriod(user, startDate, endDate);
             logger.logAction(user.getEmail(),
@@ -86,7 +88,7 @@ public class TrainingStatisticsControllerImpl implements TrainingStatisticsContr
      * @return Статистика сжигания калорий за указанный период
      * @throws RuntimeException если возникает ошибка доступа к статистике
      */
-    public int getCaloriesBurnedPerPeriod(User user, String startDate, String endDate) {
+    public int getCaloriesBurnedPerPeriod(User user, Date startDate, Date endDate) {
         try {
             int result = trainingStatisticsService.getCaloriesBurnedPerPeriod(user, startDate, endDate);
             logger.logAction(user.getEmail(),

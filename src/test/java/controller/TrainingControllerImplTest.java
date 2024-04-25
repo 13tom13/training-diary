@@ -1,35 +1,31 @@
 package controller;
 
-import in.controller.training.implementation.TrainingControllerImpl;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
+import in.controller.training.implementation.TrainingControllerImpl;
+import in.service.training.TrainingService;
 import model.Training;
 import model.User;
-import in.service.training.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-import testutil.TestUtil;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static testutil.TestUtil.*;
 
-/**
- * Тестирование класса TrainingControllerImpl.
- */
 @ExtendWith(MockitoExtension.class)
-public class TrainingControllerImplTest extends TestUtil {
+public class TrainingControllerImplTest {
 
     @Mock
     private TrainingService trainingServiceMock;
@@ -39,31 +35,25 @@ public class TrainingControllerImplTest extends TestUtil {
 
     private User testUser;
 
-    private final Training testTraining = new Training();
-
-    private final String testDate = "10.11.24";
-
     private final String testTrainingName = "Test Training";
 
     private final String testAdditionalName = "additionalName";
+
+    private Training testTraining;
 
     @BeforeEach
     public void setUp() {
         // Создание тестового пользователя
         testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testTraining  = new Training(testTrainingName, TEST_DATE, 60, 200);
+
     }
 
-    /**
-     * Тестирование успешного сохранения тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoWriteRightsException     если нет прав на запись
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
+
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Arrange
-        Training training = new Training(testTrainingName, testDate, 60, 200);
+        Training training = new Training(testTrainingName, TEST_DATE, 60, 200);
 
         // Configure mock behavior
         doNothing().when(trainingServiceMock).saveTraining(testUser, training);
@@ -75,106 +65,77 @@ public class TrainingControllerImplTest extends TestUtil {
         verify(trainingServiceMock).saveTraining(testUser, training);
     }
 
-    /**
-     * Тестирование получения всех тренировок.
-     */
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<String, TreeSet<Training>> expectedTrainings = new TreeMap<>();
+        TreeMap<Date, TreeSet<Training>> expectedTrainings = new TreeMap<>();
 
         // Configure mock behavior
         when(trainingServiceMock.getAllTrainings(testUser)).thenReturn(expectedTrainings);
 
         // Act
-        TreeMap<String, TreeSet<Training>> actualTrainings = trainingController.getAllTrainings(testUser);
+        TreeMap<Date, TreeSet<Training>> actualTrainings = trainingController.getAllTrainings(testUser);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
     }
 
-    /**
-     * Тестирование успешного удаления тренировки.
-     *
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoDeleteRightsException    если нет прав на удаление
-     * @throws RepositoryException        если возникла ошибка в репозитории
-     */
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
-        // Configure mock behavior
-        doNothing().when(trainingServiceMock).deleteTraining(testUser, testDate, testTrainingName);
-
         // Act
-        trainingController.deleteTraining(testUser, testDate, testTrainingName);
+        trainingController.deleteTraining(testUser, TEST_DATE, testTrainingName);
 
         // Assert
-        verify(trainingServiceMock).deleteTraining(testUser, testDate, testTrainingName);
+        verify(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
     }
 
-    /**
-     * Тестирование получения тренировок по электронной почте пользователя и дате.
-     *
-     * @throws RepositoryException если возникла ошибка в репозитории
-     */
     @Test
     public void testGetTrainingsByUserEmailAndData_ReturnsTrainings() throws RepositoryException {
         // Arrange
         TreeSet<Training> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, testDate)).thenReturn(expectedTrainings);
+        when(trainingServiceMock.getTrainingsByUserIDAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
 
         // Act
-        TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, testDate);
+        TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
     }
 
-    /**
-     * Тестирование получения тренировки по электронной почте пользователя, дате и имени тренировки.
-     *
-     * @throws RepositoryException если возникла ошибка в репозитории
-     */
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingByUserEmailAndDataAndName(testUser, testDate, testTrainingName))
+        when(trainingServiceMock.getTrainingByUserIDAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
         Training actualTraining = trainingController
-                .getTrainingByUserEmailAndDataAndName(testUser, testDate, testTrainingName);
+                .getTrainingByUserEmailAndDateAndName(testUser, TEST_DATE, testTrainingName);
 
         // Assert
         assertEquals(testTraining, actualTraining);
     }
 
-    /**
-     * Тестирование успешного добавления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoWriteRightsException если нет прав на запись
-     */
     @Test
     public void testAddTrainingAdditional_Successful() throws RepositoryException, NoWriteRightsException {
-        // Act
+        // Arrange
         String testAdditionalValue = "additionalValue";
+        when(trainingServiceMock.addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue))
+                .thenReturn(testTraining);
+        // Act
         trainingController.addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue);
 
         // Assert
         verify(trainingServiceMock).addTrainingAdditional(testUser, testTraining, testAdditionalName, testAdditionalValue);
     }
 
-    /**
-     * Тестирование успешного удаления дополнительной информации о тренировке.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testRemoveTrainingAdditional_Successful() throws RepositoryException, NoEditRightsException {
+        when(trainingServiceMock.removeTrainingAdditional(testUser, testTraining, testAdditionalName))
+                .thenReturn(testTraining);
+
         // Act
         trainingController.removeTrainingAdditional(testUser, testTraining, testAdditionalName);
 
@@ -182,16 +143,12 @@ public class TrainingControllerImplTest extends TestUtil {
         verify(trainingServiceMock).removeTrainingAdditional(testUser, testTraining, testAdditionalName);
     }
 
-    /**
-     * Тестирование успешного изменения имени тренировки.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeNameTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newName = "New Training Name";
+        when(trainingServiceMock.changeNameTraining(testUser, testTraining, newName))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeNameTraining(testUser, testTraining, newName);
@@ -200,17 +157,12 @@ public class TrainingControllerImplTest extends TestUtil {
         verify(trainingServiceMock).changeNameTraining(testUser, testTraining, newName);
     }
 
-    /**
-     * Тестирование успешного изменения даты тренировки.
-     *
-     * @throws RepositoryException          если возникла ошибка в репозитории
-     * @throws InvalidDateFormatException если формат даты неверен
-     * @throws NoEditRightsException       если нет прав на редактирование
-     */
     @Test
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
-        String newDate = "11.11.24";
+        Date newDate = new Date(2024, 4, 19);
+        when(trainingServiceMock.changeDateTraining(testUser, testTraining, newDate))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeDateTraining(testUser, testTraining, newDate);
@@ -219,16 +171,12 @@ public class TrainingControllerImplTest extends TestUtil {
         verify(trainingServiceMock).changeDateTraining(testUser, testTraining, newDate);
     }
 
-    /**
-     * Тестирование успешного изменения продолжительности тренировки.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeDurationTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newDuration = "60";
+        when(trainingServiceMock.changeDurationTraining(testUser, testTraining, Integer.parseInt(newDuration)))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeDurationTraining(testUser, testTraining, newDuration);
@@ -237,16 +185,12 @@ public class TrainingControllerImplTest extends TestUtil {
         verify(trainingServiceMock).changeDurationTraining(testUser, testTraining, 60);
     }
 
-    /**
-     * Тестирование успешного изменения количества калорий, сожженных во время тренировки.
-     *
-     * @throws RepositoryException  если возникла ошибка в репозитории
-     * @throws NoEditRightsException если нет прав на редактирование
-     */
     @Test
     public void testChangeCaloriesTraining_Successful() throws RepositoryException, NoEditRightsException {
         // Arrange
         String newCalories = "500";
+        when(trainingServiceMock.changeCaloriesTraining(testUser, testTraining, Integer.parseInt(newCalories)))
+                .thenReturn(testTraining);
 
         // Act
         trainingController.changeCaloriesTraining(testUser, testTraining, newCalories);
@@ -254,5 +198,6 @@ public class TrainingControllerImplTest extends TestUtil {
         // Assert
         verify(trainingServiceMock).changeCaloriesTraining(testUser, testTraining, 500);
     }
+
 
 }

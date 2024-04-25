@@ -112,7 +112,7 @@ public class ViewUsersEdition {
      */
     private void changeUserRights(User user) {
         List<Rights> userRights = user.getRights();
-        List<Rights> allRights = List.of(Rights.values());
+        List<Rights> allRights = adminController.getAllRights();
 
         // Реализуем выбор добавления, удаления или выхода
         boolean editingRights = true;

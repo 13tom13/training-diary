@@ -3,7 +3,11 @@ package out.menu.statistic;
 import in.controller.training.TrainingStatisticsController;
 import model.User;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
+
+import static utils.Utils.getDateFromString;
 
 /**
  * Класс ViewTrainingStatistcs представляет меню для просмотра статистики тренировок пользователя.
@@ -78,11 +82,27 @@ public class ViewTrainingStatistcs {
      *
      * @param statisticsFunction Функция для получения статистики за период.
      */
-    private void printPeriodTrainingStatistics(TriFunction<User, String, String, Integer> statisticsFunction) {
-        System.out.println("Введите начало периода:");
-        String startDate = scanner.nextLine();
-        System.out.println("Введите конец периода:");
-        String endDate = scanner.nextLine();
+    private void printPeriodTrainingStatistics(TriFunction<User, Date, Date, Integer> statisticsFunction) {
+        System.out.println("Введите начало периода (дд.мм.гг):");
+        String stringStartDate = scanner.nextLine();
+        Date startDate;
+        try {
+            startDate = getDateFromString(stringStartDate);
+        } catch (ParseException e) {
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+            return; // Выйти из метода, если дата некорректна
+        }
+
+        System.out.println("Введите конец периода (дд.мм.гг):");
+        String stringEndDate = scanner.nextLine();
+        Date endDate;
+        try {
+            endDate = getDateFromString(stringEndDate);
+        } catch (ParseException e) {
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+            return; // Выйти из метода, если дата некорректна
+        }
+
         int result = statisticsFunction.apply(user, startDate, endDate);
         if (result == -1) {
             System.err.println("Ошибка");
@@ -94,4 +114,5 @@ public class ViewTrainingStatistcs {
             System.out.println("Нет данных за указанный период");
         }
     }
+
 }

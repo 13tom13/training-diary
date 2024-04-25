@@ -4,7 +4,7 @@ import exceptions.RepositoryException;
 import model.Training;
 import model.User;
 
-import java.util.List;
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -20,7 +20,7 @@ public interface TrainingRetrievalService {
      * @return отображение даты на множество тренировок
      * @throws SecurityException если возникла ошибка безопасности
      */
-    TreeMap<String, TreeSet<Training>> getAllTrainings(User user) throws SecurityException;
+    TreeMap<Date, TreeSet<Training>> getAllTrainings(User user) throws SecurityException;
 
     /**
      * Получает тренировки для указанного пользователя на указанную дату.
@@ -31,7 +31,7 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String data) throws RepositoryException, SecurityException;
+    TreeSet<Training> getTrainingsByUserIDAndData(User user, Date data) throws RepositoryException, SecurityException;
 
     /**
      * Получает тренировку по электронной почте пользователя, дате и названию.
@@ -43,5 +43,5 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, String trainingData, String trainingName) throws RepositoryException, SecurityException;
+    Training getTrainingByUserIDAndDataAndName(User user, Date trainingData, String trainingName) throws RepositoryException, SecurityException;
 }

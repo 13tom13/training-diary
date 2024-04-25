@@ -1,7 +1,7 @@
 package controller;
 
 import in.controller.users.implementation.AdminControllerImpl;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import model.Rights;
 import model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +20,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static testutil.TestUtil.*;
 
-/**
- * Тесты для класса AdminControllerImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class AdminControllerImplTest {
 
@@ -41,9 +38,6 @@ public class AdminControllerImplTest {
         testUsers.add(testUser);
     }
 
-    /**
-     * Тест для метода getAllUsers(), который проверяет возврат всех пользователей.
-     */
     @Test
     public void testGetAllUsers_ReturnsAllUsers() {
         // Arrange
@@ -56,9 +50,6 @@ public class AdminControllerImplTest {
         assertEquals(testUsers, actualUsers);
     }
 
-    /**
-     * Тест для метода getUser(), который проверяет возврат пользователя по электронной почте.
-     */
     @Test
     public void testGetUser_ReturnsUser_WhenUserExists() {
         // Arrange
@@ -71,9 +62,6 @@ public class AdminControllerImplTest {
         assertEquals(testUser, actualUser);
     }
 
-    /**
-     * Тест для метода getUser(), который проверяет возврат null, когда пользователя не существует.
-     */
     @Test
     public void testGetUser_ReturnsNull_WhenUserDoesNotExist() {
         // Arrange
@@ -87,9 +75,6 @@ public class AdminControllerImplTest {
         assertNull(actualUser);
     }
 
-    /**
-     * Тест для метода changeUserName(), который проверяет изменение имени пользователя.
-     */
     @Test
     public void testChangeUserName() {
         // Arrange
@@ -103,9 +88,6 @@ public class AdminControllerImplTest {
         verify(userRepositoryMock).updateUser(testUser);
     }
 
-    /**
-     * Тест для метода changeUserLastName(), который проверяет изменение фамилии пользователя.
-     */
     @Test
     public void testChangeUserLastName() {
         // Arrange
@@ -119,9 +101,6 @@ public class AdminControllerImplTest {
         verify(userRepositoryMock).updateUser(testUser);
     }
 
-    /**
-     * Тест для метода changeUserPassword(), который проверяет изменение пароля пользователя.
-     */
     @Test
     public void testChangeUserPassword() {
         // Arrange
@@ -135,9 +114,6 @@ public class AdminControllerImplTest {
         verify(userRepositoryMock).updateUser(testUser);
     }
 
-    /**
-     * Тест для метода changeUserActive(), который проверяет изменение активности пользователя.
-     */
     @Test
     public void testChangeUserActive() {
         // Act
@@ -148,14 +124,12 @@ public class AdminControllerImplTest {
         verify(userRepositoryMock).updateUser(testUser);
     }
 
-    /**
-     * Тест для метода changeUserRights(), который проверяет изменение прав пользователя.
-     */
+
     @Test
     public void testChangeUserRights() {
         // Arrange
         List<Rights> newUserRights = new ArrayList<>();
-        newUserRights.add(Rights.EDIT);
+        newUserRights.add(new Rights(1L,"WRITE"));
 
         // Act
         adminController.changeUserRights(testUser, newUserRights);
@@ -165,16 +139,14 @@ public class AdminControllerImplTest {
         verify(userRepositoryMock).updateUser(testUser);
     }
 
-    /**
-     * Тест для метода deleteUser(), который проверяет удаление пользователя.
-     */
+
     @Test
     public void testDeleteUser() {
         // Act
         adminController.deleteUser(testUser);
 
         // Assert
-        verify(userRepositoryMock).deleteUser(testUser.getEmail());
+        verify(userRepositoryMock).deleteUser(testUser);
     }
 }
 

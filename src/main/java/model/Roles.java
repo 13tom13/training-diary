@@ -1,30 +1,42 @@
 package model;
 
-/**
- * Перечисление, представляющее роли пользователей.
- */
-public enum Roles {
-    /**
-     * Роль обычного пользователя.
-     */
-    USER,
+import java.util.List;
 
-    /**
-     * Роль администратора.
-     */
-    ADMIN;
+public class Roles {
+    private Long id;
 
-    /**
-     * Переопределение метода {@code toString()} для получения текстового представления роли.
-     *
-     * @return Текстовое представление роли
-     */
+    private String name;
+
+    private List<User> users;
+
+    public Roles(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Roles() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return switch (this) {
-            case USER -> "USER";
-            case ADMIN -> "ADMIN";
-        };
+        return name;
     }
 }
 

@@ -12,10 +12,10 @@ public interface TrainingTypeService {
     /**
      * Получает список типов тренировок для указанного пользователя.
      *
-     * @param userEmail электронная почта пользователя
+     * @param user  пользователь, для которого получаются типы тренировок
      * @return список типов тренировок
      */
-    List<String> getTrainingTypes(String userEmail);
+    List<String> getTrainingTypes(User user);
 
     /**
      * Сохраняет пользовательский тип тренировки.

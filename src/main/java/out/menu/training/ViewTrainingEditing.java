@@ -4,10 +4,12 @@ import in.controller.training.TrainingController;
 import model.Training;
 import model.User;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.TreeSet;
 
-import static utils.DateValidationService.isValidDateFormat;
+import static utils.Utils.*;
 
 /**
  * Представляет класс для редактирования тренировок пользователя.
@@ -44,18 +46,26 @@ public class ViewTrainingEditing {
     private void getTrainingForEditing() {
         TreeSet<Training> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
-        String trainingDate = scanner.nextLine();
+        String stringDate = scanner.nextLine();
+        Date trainingDate;
+        try {
+            trainingDate = getDateFromString(stringDate);
+        } catch (ParseException e) {
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
+            return; // Выйти из метода, если дата некорректна
+        }
         trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
-            System.out.println("Тренировки на " + trainingDate + ":");
+            System.out.println("Тренировки на " + getFormattedDate(trainingDate) + ":");
             for (Training training : trainingsFromDay) {
                 System.out.println(training);
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            training = trainingController.getTrainingByUserEmailAndDataAndName(user, trainingDate, trainingName);
+            training = trainingController.getTrainingByUserEmailAndDateAndName(user, trainingDate, trainingName);
         }
     }
+
 
     /**
      * Редактирует тренировку.
@@ -71,6 +81,7 @@ public class ViewTrainingEditing {
         while (startView) {
             System.out.println();
             System.out.printf("Редактирование тренировки:\n%s", training);
+            System.out.println();
             System.out.println("Выберите действие:");
             System.out.println("1. изменить название");
             System.out.println("2. изменить дату тренировки");
@@ -86,31 +97,33 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        trainingController.changeNameTraining(user, training, newName);
+                        training  = trainingController.changeNameTraining(user, training, newName);
                     }
                     case 2 -> {
                         System.out.println();
                         System.out.println("Введите новую дату:");
-                        String newDate = scanner.nextLine();
-                        if (isValidDateFormat(newDate)) {
-                            trainingController.changeDateTraining(user, training, newDate);
-                        } else {
-                            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+                        String stringDate = scanner.nextLine();
+
+                        try {
+                            Date newDate = getDateFromString(stringDate);
+                            training = trainingController.changeDateTraining(user, training, newDate);
+                        } catch (ParseException e) {
+                            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
                         }
                     }
                     case 3 -> {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        trainingController.changeDurationTraining(user, training, newDuration);
+                        training = trainingController.changeDurationTraining(user, training, newDuration);
                     }
                     case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        trainingController.changeCaloriesTraining(user, training, newCalories);
+                        training = trainingController.changeCaloriesTraining(user, training, newCalories);
                     }
-                    case 5 -> viewTrainingAdded.addTrainingAdditional(user, training);
+                    case 5 -> viewTrainingAdded.addTrainingAdditional(training);
                     case 6 -> {
                         System.out.println("Выход из меню изменения тренировки.");
                         startView = false;
@@ -123,4 +136,6 @@ public class ViewTrainingEditing {
             }
         }
     }
+
+
 }

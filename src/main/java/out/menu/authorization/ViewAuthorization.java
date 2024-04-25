@@ -1,12 +1,12 @@
 package out.menu.authorization;
 
+import dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
-import model.Roles;
 import model.User;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
@@ -24,6 +24,8 @@ public class ViewAuthorization {
     private final TrainingController trainingController;
     private final TrainingStatisticsController trainingStatisticsController;
     private final Scanner scanner;
+
+    private User user;
 
     /**
      * Конструктор класса ViewAuthorization.
@@ -55,17 +57,21 @@ public class ViewAuthorization {
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
         try {
-            User user = authorizationController.login(authEmail, authPassword);
-            if (user.getRoles().contains(Roles.ADMIN)) {
+            user = authorizationController.login(authEmail, authPassword);
+            if (hisRole("ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
-            } else if (user.getRoles().contains(Roles.USER)) {
+            } else if (hisRole("USER")) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
                 viewUserAccount.userAccountMenu();
             }
         } catch (AuthorizationException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private boolean hisRole(String roleName) {
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
     }
 
     /**
@@ -81,6 +87,7 @@ public class ViewAuthorization {
         String regLastName = scanner.nextLine();
         System.out.println("Введите пароль:");
         String regPassword = scanner.nextLine();
-        userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
+        UserDTO userDTO = new UserDTO(regFirstName, regLastName, regEmail, regPassword);
+        userController.createNewUser(userDTO);
     }
 }

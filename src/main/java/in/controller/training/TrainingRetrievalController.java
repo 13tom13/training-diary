@@ -3,6 +3,7 @@ package in.controller.training;
 import model.Training;
 import model.User;
 
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -17,7 +18,7 @@ public interface TrainingRetrievalController {
      * @param user пользователь, чьи тренировки нужно получить
      * @return структура данных, содержащая все тренировки пользователя
      */
-    TreeMap<String, TreeSet<Training>> getAllTrainings(User user);
+    TreeMap<Date, TreeSet<Training>> getAllTrainings(User user);
 
     /**
      * Получает тренировки пользователя по указанной дате.
@@ -26,7 +27,7 @@ public interface TrainingRetrievalController {
      * @param trainingDate дата тренировки, для которой нужно получить список тренировок
      * @return список тренировок пользователя по указанной дате
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate);
+    TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate);
 
     /**
      * Получает тренировку пользователя по указанной дате и имени.
@@ -36,5 +37,5 @@ public interface TrainingRetrievalController {
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName);
+    Training getTrainingByUserEmailAndDateAndName(User user, Date trainingDate, String trainingName);
 }

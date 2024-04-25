@@ -8,6 +8,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import model.Training;
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс для модификации данных о тренировках.
  */
@@ -30,12 +32,13 @@ public interface TrainingModificationService {
      * @param user пользователь, для которого удаляется тренировка
      * @param date дата тренировки
      * @param name название тренировки
-     * @throws RepositoryException         если возникла ошибка доступа к хранилищу
+     * @return true, если тренировка успешно удалена, в противном случае false
+     * @throws RepositoryException        если возникла ошибка доступа к хранилищу
      * @throws InvalidDateFormatException если указана некорректная дата тренировки
-     * @throws SecurityException           если возникла ошибка безопасности
-     * @throws NoDeleteRightsException     если у пользователя нет прав на удаление
+     * @throws SecurityException          если возникла ошибка безопасности
+     * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    void deleteTraining(User user, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    boolean deleteTraining(User user, Date date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -44,11 +47,12 @@ public interface TrainingModificationService {
      * @param training        тренировка, к которой добавляется информация
      * @param additionalName  имя дополнительной информации
      * @param additionalValue значение дополнительной информации
-     * @throws RepositoryException     если возникла ошибка доступа к хранилищу
-     * @throws SecurityException       если возникла ошибка безопасности
-     * @throws NoWriteRightsException  если у пользователя нет прав на запись
+     * @return измененная тренировка
+     * @throws RepositoryException    если возникла ошибка доступа к хранилищу
+     * @throws SecurityException      если возникла ошибка безопасности
+     * @throws NoWriteRightsException если у пользователя нет прав на запись
      */
-    void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException, SecurityException, NoWriteRightsException;
+    Training addTrainingAdditional(User user, Training training, String additionalName, String additionalValue) throws RepositoryException, SecurityException, NoWriteRightsException;
 
     /**
      * Удаляет дополнительную информацию из тренировки.
@@ -56,11 +60,12 @@ public interface TrainingModificationService {
      * @param user           пользователь, для которого удаляется дополнительная информация
      * @param training       тренировка, из которой удаляется информация
      * @param additionalName имя дополнительной информации
+     * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws SecurityException     если возникла ошибка безопасности
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    void removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException, SecurityException, NoEditRightsException;
+    Training removeTrainingAdditional(User user, Training training, String additionalName) throws RepositoryException, SecurityException, NoEditRightsException;
 
     /**
      * Изменяет название тренировки.
@@ -68,11 +73,12 @@ public interface TrainingModificationService {
      * @param user     пользователь, для которого изменяется название тренировки
      * @param training тренировка, у которой изменяется название
      * @param newName  новое название тренировки
+     * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws SecurityException     если возникла ошибка безопасности
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    void changeNameTraining(User user, Training training, String newName) throws RepositoryException, SecurityException, NoEditRightsException;
+    Training changeNameTraining(User user, Training training, String newName) throws RepositoryException, SecurityException, NoEditRightsException;
 
     /**
      * Изменяет дату тренировки.
@@ -80,32 +86,35 @@ public interface TrainingModificationService {
      * @param user     пользователь, для которого изменяется дата тренировки
      * @param training тренировка, у которой изменяется дата
      * @param newDate  новая дата тренировки
-     * @throws RepositoryException         если возникла ошибка доступа к хранилищу
+     * @return измененная тренировка
+     * @throws RepositoryException        если возникла ошибка доступа к хранилищу
      * @throws InvalidDateFormatException если указана некорректная дата тренировки
-     * @throws SecurityException           если возникла ошибка безопасности
-     * @throws NoEditRightsException       если у пользователя нет прав на редактирование
+     * @throws SecurityException          если возникла ошибка безопасности
+     * @throws NoEditRightsException      если у пользователя нет прав на редактирование
      */
-    void changeDateTraining(User user, Training training, String newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
+    Training changeDateTraining(User user, Training training, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
 
     /**
      * Изменяет длительность тренировки.
      *
-     * @param user      пользователь, для которого изменяется длительность тренировки
-     * @param training  тренировка, у которой изменяется длительность
+     * @param user        пользователь, для которого изменяется длительность тренировки
+     * @param training    тренировка, у которой изменяется длительность
      * @param newDuration новая длительность тренировки
+     * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    void changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException, NoEditRightsException;
+    Training changeDurationTraining(User user, Training training, int newDuration) throws RepositoryException, NoEditRightsException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param user       пользователь, для которого изменяется количество сожженных калорий
-     * @param training   тренировка, у которой изменяется количество сожженных калорий
+     * @param user        пользователь, для которого изменяется количество сожженных калорий
+     * @param training    тренировка, у которой изменяется количество сожженных калорий
      * @param newCalories новое количество сожженных калорий
+     * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    void changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException;
+    Training changeCaloriesTraining(User user, Training training, int newCalories) throws RepositoryException, NoEditRightsException;
 }

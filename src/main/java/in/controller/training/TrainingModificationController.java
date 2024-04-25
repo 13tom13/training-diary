@@ -3,6 +3,8 @@ package in.controller.training;
 import model.Training;
 import model.User;
 
+import java.util.Date;
+
 /**
  * Интерфейс, определяющий методы для модификации тренировок.
  */
@@ -23,8 +25,9 @@ public interface TrainingModificationController {
      * @param user пользователь, для которого удаляется тренировка
      * @param date дата тренировки
      * @param name имя тренировки
+     * @return true, если тренировка успешно удалена, в противном случае false
      */
-    void deleteTraining(User user, String date, String name);
+    boolean deleteTraining(User user, Date date, String name);
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -33,8 +36,9 @@ public interface TrainingModificationController {
      * @param training        тренировка, к которой добавляется информация
      * @param additionalName  название дополнительной информации
      * @param additionalValue значение дополнительной информации
+     * @return измененная тренировка
      */
-    void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue);
+    Training addTrainingAdditional(User user, Training training, String additionalName, String additionalValue);
 
     /**
      * Удаляет дополнительную информацию из тренировки.
@@ -42,8 +46,9 @@ public interface TrainingModificationController {
      * @param user           пользователь, для которого удаляется информация
      * @param training       тренировка, из которой удаляется информация
      * @param additionalName название дополнительной информации
+     * @return измененная тренировка
      */
-    void removeTrainingAdditional(User user, Training training, String additionalName);
+    Training removeTrainingAdditional(User user, Training training, String additionalName);
 
     /**
      * Изменяет имя тренировки.
@@ -51,8 +56,9 @@ public interface TrainingModificationController {
      * @param user     пользователь, для которого изменяется имя тренировки
      * @param training тренировка, у которой изменяется имя
      * @param newName  новое имя тренировки
+     * @return измененная тренировка
      */
-    void changeNameTraining(User user, Training training, String newName);
+    Training changeNameTraining(User user, Training training, String newName);
 
     /**
      * Изменяет дату тренировки.
@@ -60,8 +66,9 @@ public interface TrainingModificationController {
      * @param user     пользователь, для которого изменяется дата тренировки
      * @param training тренировка, у которой изменяется дата
      * @param newDate  новая дата тренировки
+     * @return измененная тренировка
      */
-    void changeDateTraining(User user, Training training, String newDate);
+    Training changeDateTraining(User user, Training training, Date newDate);
 
     /**
      * Изменяет продолжительность тренировки.
@@ -69,15 +76,17 @@ public interface TrainingModificationController {
      * @param user        пользователь, для которого изменяется продолжительность тренировки
      * @param training    тренировка, у которой изменяется продолжительность
      * @param newDuration новая продолжительность тренировки
+     * @return измененная тренировка
      */
-    void changeDurationTraining(User user, Training training, String newDuration);
+    Training changeDurationTraining(User user, Training training, String newDuration);
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param user          пользователь, для которого изменяется количество калорий на тренировке
-     * @param training      тренировка, у которой изменяется количество калорий
-     * @param newCalories   новое количество сожженных калорий
+     * @param user        пользователь, для которого изменяется количество калорий на тренировке
+     * @param training    тренировка, у которой изменяется количество калорий
+     * @param newCalories новое количество сожженных калорий
+     * @return измененная тренировка
      */
-    void changeCaloriesTraining(User user, Training training, String newCalories);
+    Training changeCaloriesTraining(User user, Training training, String newCalories);
 }

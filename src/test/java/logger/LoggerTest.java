@@ -14,16 +14,10 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Тестирование класса Logger.
- */
 public class LoggerTest extends TestUtil {
 
     private static final String TEST_ACTION = "logged in";
 
-    /**
-     * Удаление существующего файла журнала перед каждым запуском теста.
-     */
     @BeforeEach
     public void setUp() {
         String logFilePath = Logger.getLogFielPath(TEST_EMAIL);
@@ -33,9 +27,6 @@ public class LoggerTest extends TestUtil {
         }
     }
 
-    /**
-     * Тестирование метода logAction.
-     */
     @Test
     public void testLogAction() {
         // Arrange
@@ -60,11 +51,6 @@ public class LoggerTest extends TestUtil {
         }
     }
 
-    /**
-     * Форматирование строки журнала действий.
-     *
-     * @return отформатированная строка журнала действий
-     */
     private String formatLogLine() {
         LocalDateTime currentTime = LocalDateTime.now();
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

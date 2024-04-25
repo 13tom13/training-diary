@@ -1,0 +1,42 @@
+
+      
+        <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+        <changeSet id="add_test_user_roles_rights" author="13tom13" runOnChange="true">
+            <!-- Добавление тестового пользователя -->
+            <insert tableName="users" schemaName="main">
+                <column name="first_name" value="John"/>
+                <column name="last_name" value="Doe"/>
+                <column name="email" value="test@test.com"/>
+                <column name="password" value="password"/>
+            </insert>
+
+            <!-- Добавление роли "USER" для тестового пользователя -->
+            <insert tableName="users_roles" schemaName="relations">
+                <column name="user_id" valueComputed="(SELECT id FROM main.users WHERE first_name = 'John')"/>
+                <column name="role_id" valueComputed="(SELECT id FROM permissions.roles WHERE name = 'USER')"/>
+            </insert>
+
+            <!-- Добавление прав для тестового пользователя -->
+            <insert tableName="user_rights" schemaName="relations">
+                <column name="user_id" valueComputed="(SELECT id FROM main.users WHERE first_name = 'John')"/>
+                <column name="right_id" valueNumeric="1"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="relations">
+                <column name="user_id" valueComputed="(SELECT id FROM main.users WHERE first_name = 'John')"/>
+                <column name="right_id" valueNumeric="2"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="relations">
+                <column name="user_id" valueComputed="(SELECT id FROM main.users WHERE first_name = 'John')"/>
+                <column name="right_id" valueNumeric="3"/>
+            </insert>
+            <insert tableName="user_rights" schemaName="relations">
+                <column name="user_id" valueComputed="(SELECT id FROM main.users WHERE first_name = 'John')"/>
+                <column name="right_id" valueNumeric="4"/>
+            </insert>
+        </changeSet>
+
+        </databaseChangeLog>

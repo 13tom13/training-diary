@@ -3,7 +3,7 @@ package in.service.users.implementation;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import model.User;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
 
 import java.util.Optional;
@@ -44,10 +44,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     throw new NotActiveUserException();
                 }
             } else {
-                throw new AuthorizationException("Wrong password");
+                throw new AuthorizationException("Пароль не верный");
             }
         } else {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException("Пользователь не найден");
         }
     }
 }
