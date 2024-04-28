@@ -3,7 +3,7 @@ package repository;
 import exceptions.RepositoryException;
 import in.repository.user.UserRepository;
 import in.repository.user.implementation.UserRepositoryJDBC;
-import model.User;
+import entities.model.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

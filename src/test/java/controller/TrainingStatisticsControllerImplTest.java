@@ -2,7 +2,7 @@ package controller;
 
 import in.controller.training.implementation.TrainingStatisticsControllerImpl;
 import exceptions.security.rights.NoStatisticsRightsException;
-import model.User;
+import entities.model.User;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

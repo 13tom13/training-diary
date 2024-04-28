@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+<h2>Форма авторизации</h2>
+<form id="loginForm" action="/training-diary/login" method="post">
+    <label for="email">Email:</label><br>
+    <input type="text" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Login">
+</form>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+        // Создаем объект JSON
+        var formData = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
+
+        // Отправляем POST-запрос на сервер
+        fetch("/training-diary/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json" // Устанавливаем заголовок Content-Type на application/json
+            },
+            body: JSON.stringify(formData) // Преобразуем объект JSON в строку JSON
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Если ответ успешный, возвращаем JSON
+                }
+                throw new Error("Authorization failed");
+            })
+            .then(data => {
+                // Обработка успешного ответа
+                console.log("User logged in:", data);
+                window.location.href = data.redirectUrl; // Используем полученную ссылку для перенаправления
+            })
+            .catch(error => {
+                // Обработка ошибки
+                console.error("Authorization failed:", error.message);
+            });
+    });
+</script>
+</body>
+</html>

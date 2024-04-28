@@ -1,10 +1,10 @@
 package controller;
 
+import entities.dto.AuthorizationDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.implementation.AuthorizationControllerImpl;
 import in.service.users.AuthorizationService;
-import model.User;
-import org.junit.jupiter.api.BeforeEach;
+import entities.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,11 +30,13 @@ public class AuthorizationControllerTest extends TestUtil {
         // Arrange
         User expectedUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
 
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO(TEST_EMAIL, TEST_PASSWORD);
+
         // Stubbing the service method
         Mockito.when(authorizationService.login(TEST_EMAIL, TEST_PASSWORD)).thenReturn(expectedUser);
 
         // Act
-        User actualUser = authorizationController.login(TEST_EMAIL, TEST_PASSWORD);
+        User actualUser = authorizationController.login(authorizationDTO);
 
         // Assert
         assertEquals(expectedUser, actualUser);
@@ -45,11 +47,13 @@ public class AuthorizationControllerTest extends TestUtil {
         // Arrange
         String password = "wrongpass";
 
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO(TEST_EMAIL, password);
+
         // Stubbing the service method to throw an exception
         Mockito.when(authorizationService.login(TEST_EMAIL, password)).thenThrow(AuthorizationException.class);
 
         // Act & Assert
-        assertThrows(AuthorizationException.class, () -> authorizationController.login(TEST_EMAIL, password));
+        assertThrows(AuthorizationException.class, () -> authorizationController.login(authorizationDTO));
     }
 }
 

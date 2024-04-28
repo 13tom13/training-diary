@@ -1,9 +1,10 @@
 package in.controller.authorization.implementation;
 
+import entities.dto.AuthorizationDTO;
 import in.controller.authorization.AuthorizationController;
 import exceptions.security.AuthorizationException;
 import utils.Logger;
-import model.User;
+import entities.model.User;
 import in.service.users.AuthorizationService;
 
 
@@ -29,14 +30,12 @@ public class AuthorizationControllerImpl implements AuthorizationController {
     /**
      * Метод для выполнения входа пользователя в систему.
      *
-     * @param email    Электронная почта пользователя.
-     * @param password Пароль пользователя.
-     * @return Объект пользователя, если авторизация прошла успешно.
+     * @param authorizationDTO@return Объект пользователя, если авторизация прошла успешно.
      * @throws AuthorizationException Если авторизация не удалась.
      */
-    public User login(String email, String password) throws AuthorizationException {
-        User user = authorizationService.login(email, password);
-        logger.logAction(email, "Вошел в систему");
+    public User login(AuthorizationDTO authorizationDTO) throws AuthorizationException {
+        User user = authorizationService.login(authorizationDTO.getEmail(), authorizationDTO.getPassword());
+        logger.logAction(authorizationDTO.getEmail(), "Вошел в систему");
         return user;
     }
 }

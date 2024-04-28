@@ -1,10 +1,10 @@
 package in.service.users;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import exceptions.ValidationException;
-import model.User;
+import entities.model.User;
 
 /**
  * Интерфейс сервиса для работы с пользователями.
@@ -24,10 +24,9 @@ public interface UserService {
     /**
      * Сохраняет нового пользователя.
      *
-     * @param userDTO объект, содержащий данные нового пользователя
-     * @throws RepositoryException если произошла ошибка доступа к хранилищу
+     * @param registrationDTO@throws RepositoryException если произошла ошибка доступа к хранилищу
      * @throws ValidationException если произошла ошибка валидации данных пользователя
      */
-    void saveUser(UserDTO userDTO) throws RepositoryException, ValidationException;
+    void saveUser(RegistrationDTO registrationDTO) throws RepositoryException, ValidationException;
 
 }

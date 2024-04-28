@@ -1,7 +1,7 @@
 package in.controller.training;
 
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 
 import java.util.Date;
 

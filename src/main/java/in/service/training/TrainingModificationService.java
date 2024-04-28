@@ -5,8 +5,8 @@ import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 
 import java.util.Date;
 

@@ -7,8 +7,8 @@ import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 import in.service.training.TrainingService;
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 import utils.Logger;
 
 import java.util.Date;

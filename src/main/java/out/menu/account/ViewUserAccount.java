@@ -3,7 +3,7 @@ package out.menu.account;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import utils.Logger;
-import model.User;
+import entities.model.User;
 import out.menu.training.ViewTrainingAdded;
 import out.menu.training.ViewTrainingEditing;
 import out.menu.statistic.ViewTrainingStatistcs;

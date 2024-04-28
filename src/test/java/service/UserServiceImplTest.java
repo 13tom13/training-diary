@@ -1,6 +1,7 @@
 package service;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
+import entities.dto.UserDTO;
 import exceptions.ServiceException;
 import exceptions.ValidationException;
 import in.repository.user.UserRepository;
@@ -38,17 +39,17 @@ public class UserServiceImplTest {
     @Test
     public void testSaveUser_WithValidData() {
         // Act & Assert
-        UserDTO userDTO = new UserDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
-        assertThatCode(() -> userService.saveUser(userDTO))
+        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        assertThatCode(() -> userService.saveUser(registrationDTO))
                 .doesNotThrowAnyException();
     }
 
 
     @Test
     public void testSaveUser_WithNullFirstName() {
-        UserDTO userDTO = new UserDTO(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        RegistrationDTO registrationDTO = new RegistrationDTO(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
         // Act & Assert
-        assertThrows(ValidationException.class, () -> userService.saveUser(userDTO));
+        assertThrows(ValidationException.class, () -> userService.saveUser(registrationDTO));
     }
 
 }

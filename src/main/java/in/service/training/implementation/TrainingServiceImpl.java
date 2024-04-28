@@ -8,8 +8,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 
 import java.util.Date;
 import java.util.List;

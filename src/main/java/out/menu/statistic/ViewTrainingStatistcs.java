@@ -1,7 +1,7 @@
 package out.menu.statistic;
 
 import in.controller.training.TrainingStatisticsController;
-import model.User;
+import entities.model.User;
 
 import java.text.ParseException;
 import java.util.Date;

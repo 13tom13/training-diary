@@ -2,7 +2,7 @@ package in.service.users.implementation;
 
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
-import model.User;
+import entities.model.User;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
 

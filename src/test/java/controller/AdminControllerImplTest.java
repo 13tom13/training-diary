@@ -2,8 +2,8 @@ package controller;
 
 import in.controller.users.implementation.AdminControllerImpl;
 import in.repository.user.UserRepository;
-import model.Rights;
-import model.User;
+import entities.model.Rights;
+import entities.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

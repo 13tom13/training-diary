@@ -3,8 +3,8 @@ package in.service.training.implementation;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
 import in.service.training.TrainingStatisticsService;
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 
 import java.util.*;
 

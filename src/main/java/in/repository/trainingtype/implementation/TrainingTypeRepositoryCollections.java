@@ -1,7 +1,7 @@
 package in.repository.trainingtype.implementation;
 
 import in.repository.trainingtype.TrainingTypeRepository;
-import model.User;
+import entities.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

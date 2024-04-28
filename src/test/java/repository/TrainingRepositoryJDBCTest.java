@@ -2,8 +2,8 @@ package repository;
 
 import exceptions.RepositoryException;
 import in.repository.training.implementation.TrainingRepositoryJDBC;
-import model.Training;
-import model.User;
+import entities.model.Training;
+import entities.model.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

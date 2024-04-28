@@ -1,6 +1,7 @@
 package controller;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
+import entities.dto.UserDTO;
 import in.controller.users.implementation.UserControllerImpl;
 import exceptions.RepositoryException;
 import exceptions.ValidationException;
@@ -28,19 +29,19 @@ public class UserControllerImplTest extends TestUtil {
     @Test
     public void testCreateNewUser_Successful() throws ValidationException, RepositoryException {
         // Set up values for the test
-        UserDTO userDTO = new UserDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
 
         // Configure behavior of the userServiceMock object
-        doNothing().when(userServiceMock).saveUser(userDTO);
+        doNothing().when(userServiceMock).saveUser(registrationDTO);
 
         // Call the method under test
-        userController.createNewUser(userDTO);
+        userController.createNewUser(registrationDTO);
 
         // Verify if userServiceMock.saveUser is called with correct arguments
-        verify(userServiceMock).saveUser(userDTO);
+        verify(userServiceMock).saveUser(registrationDTO);
 
         // Assert that no exceptions were thrown during the execution
-        assertThatCode(() -> userController.createNewUser(userDTO))
+        assertThatCode(() -> userController.createNewUser(registrationDTO))
                 .doesNotThrowAnyException();
     }
 }

@@ -3,9 +3,9 @@ package database;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
-import model.Roles;
-import model.Training;
-import model.User;
+import entities.model.Roles;
+import entities.model.Training;
+import entities.model.User;
 
 import java.util.Date;
 import java.util.HashMap;

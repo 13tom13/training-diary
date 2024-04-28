@@ -1,13 +1,14 @@
 package out.menu.authorization;
 
-import dto.UserDTO;
+import entities.dto.AuthorizationDTO;
+import entities.dto.RegistrationDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
-import model.User;
+import entities.model.User;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
 
@@ -57,7 +58,7 @@ public class ViewAuthorization {
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
         try {
-            user = authorizationController.login(authEmail, authPassword);
+            user = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
             if (hisRole("ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
@@ -87,7 +88,7 @@ public class ViewAuthorization {
         String regLastName = scanner.nextLine();
         System.out.println("Введите пароль:");
         String regPassword = scanner.nextLine();
-        UserDTO userDTO = new UserDTO(regFirstName, regLastName, regEmail, regPassword);
-        userController.createNewUser(userDTO);
+        RegistrationDTO regDTO = new RegistrationDTO(regEmail, regFirstName, regLastName, regPassword);
+        userController.createNewUser(regDTO);
     }
 }

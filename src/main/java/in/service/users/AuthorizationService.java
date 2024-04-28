@@ -1,7 +1,7 @@
 package in.service.users;
 
 import exceptions.security.AuthorizationException;
-import model.User;
+import entities.model.User;
 
 /**
  * Сервис аутентификации пользователей.

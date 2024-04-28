@@ -1,7 +1,7 @@
 package testutil;
 
 import database.LiquibaseConnectorForTest;
-import model.User;
+import entities.model.User;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.File;

@@ -3,7 +3,7 @@ package in.controller.training.implementation;
 import in.controller.training.TrainingStatisticsController;
 import exceptions.security.rights.NoStatisticsRightsException;
 import utils.Logger;
-import model.User;
+import entities.model.User;
 import in.service.training.TrainingStatisticsService;
 
 import java.util.Date;

@@ -4,7 +4,7 @@ import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.implementation.AuthorizationServiceImpl;
-import model.User;
+import entities.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

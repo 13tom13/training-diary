@@ -1,12 +1,12 @@
 package in.service.users.implementation;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import exceptions.ValidationException;
 import in.repository.user.UserRepository;
 import in.service.users.UserService;
-import model.User;
+import entities.model.User;
 
 /**
  * Реализация интерфейса {@link UserService}, предоставляющая методы для работы с пользователями.
@@ -40,24 +40,23 @@ public class UserServiceImpl implements UserService {
     /**
      * Сохраняет нового пользователя.
      *
-     * @param userDTO объект UserDTO с данными нового пользователя
-     * @throws ValidationException если одно из полей userDTO пустое или null
+     * @param registrationDTO@throws ValidationException если одно из полей registrationDTO пустое или null
      * @throws RepositoryException если произошла ошибка доступа к репозиторию
      */
     @Override
-    public void saveUser(UserDTO userDTO)
+    public void saveUser(RegistrationDTO registrationDTO)
             throws ValidationException, RepositoryException {
-        if (userDTO.getFirstName() == null || userDTO.getFirstName().isEmpty()) {
+        if (registrationDTO.getFirstName() == null || registrationDTO.getFirstName().isEmpty()) {
             throw new ValidationException("firstName");
-        } else if (userDTO.getLastName() == null || userDTO.getLastName().isEmpty()) {
+        } else if (registrationDTO.getLastName() == null || registrationDTO.getLastName().isEmpty()) {
             throw new ValidationException("lastName");
-        } else if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
+        } else if (registrationDTO.getEmail() == null || registrationDTO.getEmail().isEmpty()) {
             throw new ValidationException("email");
-        } else if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+        } else if (registrationDTO.getPassword() == null || registrationDTO.getPassword().isEmpty()) {
             throw new ValidationException("password");
         } else {
-            User user = new User(userDTO.getFirstName(),
-                    userDTO.getLastName(), userDTO.getEmail(), userDTO.getPassword());
+            User user = new User(registrationDTO.getFirstName(),
+                    registrationDTO.getLastName(), registrationDTO.getEmail(), registrationDTO.getPassword());
             userRepository.saveUser(user);
             System.out.println("Пользователь с электронной почтой: " + user.getEmail() + " успешно сохранен");
             System.out.println();

@@ -1,6 +1,6 @@
 package in.controller.users;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
 
 /**
  * Интерфейс контроллера пользователей.
@@ -10,8 +10,8 @@ public interface UserController {
     /**
      * Создает нового пользователя с заданными данными.
      *
-     * @param dto объект, содержащий данные нового пользователя
+     * @param registrationDTO
      */
-    void createNewUser(UserDTO dto);
+    void createNewUser(RegistrationDTO registrationDTO);
 }
 

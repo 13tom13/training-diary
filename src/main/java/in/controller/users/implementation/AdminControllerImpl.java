@@ -1,8 +1,8 @@
 package in.controller.users.implementation;
 
 import in.controller.users.AdminController;
-import model.Rights;
-import model.User;
+import entities.model.Rights;
+import entities.model.User;
 import in.repository.user.UserRepository;
 
 import java.util.List;

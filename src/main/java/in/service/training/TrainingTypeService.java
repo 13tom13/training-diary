@@ -1,6 +1,6 @@
 package in.service.training;
 
-import model.User;
+import entities.model.User;
 
 import java.util.List;
 

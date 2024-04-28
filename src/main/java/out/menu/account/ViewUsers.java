@@ -2,7 +2,7 @@ package out.menu.account;
 
 import in.controller.users.AdminController;
 import in.controller.training.TrainingController;
-import model.User;
+import entities.model.User;
 import out.menu.training.ViewTraining;
 
 import java.io.BufferedReader;

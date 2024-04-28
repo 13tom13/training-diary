@@ -1,6 +1,6 @@
 package in.controller.users.implementation;
 
-import dto.UserDTO;
+import entities.dto.RegistrationDTO;
 import exceptions.RepositoryException;
 import exceptions.ValidationException;
 import in.controller.users.UserController;
@@ -27,13 +27,12 @@ public class UserControllerImpl implements UserController {
 
     /**
      * Создает нового пользователя.
-     *
-     * @param userDTO объект, содержащий данные нового пользователя
+     * @param registrationDTO объект, содержащий данные нового пользователя
      */
-    public void createNewUser(UserDTO userDTO) {
+    public void createNewUser(RegistrationDTO registrationDTO) {
         try {
-            userService.saveUser(userDTO);
-            logger.logAction(userDTO.getEmail(), "created");
+            userService.saveUser(registrationDTO);
+            logger.logAction(registrationDTO.getEmail(), "created");
         } catch (ValidationException | RepositoryException e) {
             System.err.println(e.getMessage());
         }

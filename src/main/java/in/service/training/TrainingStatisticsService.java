@@ -1,7 +1,7 @@
 package in.service.training;
 
 import exceptions.security.rights.NoStatisticsRightsException;
-import model.User;
+import entities.model.User;
 
 import java.util.Date;
 

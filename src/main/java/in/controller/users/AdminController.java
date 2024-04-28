@@ -1,7 +1,7 @@
 package in.controller.users;
 
-import model.Rights;
-import model.User;
+import entities.model.Rights;
+import entities.model.User;
 
 import java.util.List;
 
