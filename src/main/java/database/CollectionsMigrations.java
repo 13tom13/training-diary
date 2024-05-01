@@ -1,11 +1,11 @@
 package database;
 
+import entities.model.User;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
 import entities.model.Roles;
 import entities.model.Training;
-import entities.model.User;
 
 import java.util.Date;
 import java.util.HashMap;

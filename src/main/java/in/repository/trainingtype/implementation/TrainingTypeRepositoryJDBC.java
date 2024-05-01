@@ -1,7 +1,7 @@
 package in.repository.trainingtype.implementation;
 
-import in.repository.trainingtype.TrainingTypeRepository;
 import entities.model.User;
+import in.repository.trainingtype.TrainingTypeRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

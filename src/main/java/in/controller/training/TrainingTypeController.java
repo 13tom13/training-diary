@@ -1,6 +1,8 @@
 package in.controller.training;
 
-import entities.model.User;
+
+
+import entities.dto.UserDTO;
 
 import java.util.List;
 
@@ -12,16 +14,16 @@ public interface TrainingTypeController {
     /**
      * Получает список типов тренировок для указанного пользователя.
      *
-     * @param user пользователь, для которого нужно получить список типов тренировок
+     * @param userDTO пользователь, для которого нужно получить список типов тренировок
      * @return список типов тренировок пользователя
      */
-    List<String> getTrainingTypes(User user);
+    List<String> getTrainingTypes(UserDTO userDTO);
 
     /**
      * Сохраняет новый тип тренировки для указанного пользователя.
      *
-     * @param user               пользователь, для которого нужно сохранить новый тип тренировки
+     * @param userDTO               пользователь, для которого нужно сохранить новый тип тренировки
      * @param customTrainingType новый тип тренировки для сохранения
      */
-    void saveTrainingType(User user, String customTrainingType);
+    void saveTrainingType(UserDTO userDTO, String customTrainingType);
 }

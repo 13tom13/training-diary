@@ -10,7 +10,7 @@ import utils.Logger;
 /**
  * Реализация интерфейса {@link UserController} для хранения тренировок.
  */
-public class UserControllerImpl implements UserController {
+public class UserControllerConsole implements UserController {
 
     private final UserService userService;
 
@@ -21,7 +21,7 @@ public class UserControllerImpl implements UserController {
      *
      * @param userService Сервис пользователей
      */
-    public UserControllerImpl(UserService userService) {
+    public UserControllerConsole(UserService userService) {
         this.userService = userService;
     }
 

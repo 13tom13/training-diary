@@ -1,10 +1,10 @@
 package in.repository.user.implementation;
 
+import entities.model.User;
 import exceptions.RepositoryException;
 import in.repository.user.UserRepository;
 import entities.model.Rights;
 import entities.model.Roles;
-import entities.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;

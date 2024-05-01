@@ -1,5 +1,6 @@
 package service;
 
+import entities.model.User;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -10,7 +11,6 @@ import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.implementation.TrainingServiceImpl;
 import entities.model.Rights;
 import entities.model.Training;
-import entities.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

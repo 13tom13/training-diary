@@ -1,8 +1,7 @@
 package controller;
 
 import entities.dto.RegistrationDTO;
-import entities.dto.UserDTO;
-import in.controller.users.implementation.UserControllerImpl;
+import in.controller.users.implementation.UserControllerConsole;
 import exceptions.RepositoryException;
 import exceptions.ValidationException;
 import in.service.users.UserService;
@@ -18,13 +17,13 @@ import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerImplTest extends TestUtil {
+public class UserControllerConsoleTest extends TestUtil {
 
     @Mock
     private UserService userServiceMock;
 
     @InjectMocks
-    private UserControllerImpl userController;
+    private UserControllerConsole userController;
 
     @Test
     public void testCreateNewUser_Successful() throws ValidationException, RepositoryException {

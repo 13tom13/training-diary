@@ -1,7 +1,9 @@
 package in.controller.users;
 
+import entities.dto.UserDTO;
 import entities.model.Rights;
 import entities.model.User;
+import exceptions.UserNotFoundException;
 
 import java.util.List;
 
@@ -23,53 +25,53 @@ public interface AdminController {
      * @param email Адрес электронной почты пользователя для поиска.
      * @return Пользователь с указанным адресом электронной почты или null, если не найден.
      */
-    User getUser(String email);
+    UserDTO getUser(String email) throws UserNotFoundException;
 
     /**
      * Изменяет имя пользователя.
      *
-     * @param user     Пользователь, у которого будет изменено имя.
+     * @param userDTO     Пользователь, у которого будет изменено имя.
      * @param newName  Новое имя для пользователя.
      */
-    void changeUserName(User user, String newName);
+    void changeUserName(UserDTO userDTO, String newName);
 
     /**
      * Изменяет фамилию пользователя.
      *
-     * @param user        Пользователь, у которого будет изменена фамилия.
+     * @param userDTO        Пользователь, у которого будет изменена фамилия.
      * @param newLastName Новая фамилия пользователя.
      */
-    void changeUserLastName(User user, String newLastName);
+    void changeUserLastName(UserDTO userDTO, String newLastName);
 
     /**
      * Изменяет пароль пользователя.
      *
-     * @param user         Пользователь, у которого будет изменен пароль.
+     * @param userDTO         Пользователь, у которого будет изменен пароль.
      * @param newPassword  Новый пароль для пользователя.
      */
-    void changeUserPassword(User user, String newPassword);
+    void changeUserPassword(UserDTO userDTO, String newPassword);
 
     /**
      * Активирует или деактивирует пользователя.
      *
-     * @param user  Пользователь, активационный статус которого будет изменен.
+     * @param userDTO  Пользователь, активационный статус которого будет изменен.
      */
-    void changeUserActive(User user);
+    void changeUserActive(UserDTO userDTO);
 
     /**
      * Изменяет права пользователя.
      *
-     * @param user         Пользователь, права которого будут изменены.
+     * @param userDTO         Пользователь, права которого будут изменены.
      * @param userRights   Новые права для пользователя.
      */
-    void changeUserRights(User user, List<Rights> userRights);
+    void changeUserRights(UserDTO userDTO, List<Rights> userRights);
 
     /**
      * Удаляет пользователя.
      *
-     * @param user  Пользователь, который будет удален.
+     * @param userDTO  Пользователь, который будет удален.
      */
-    void deleteUser(User user);
+    void deleteUser(UserDTO userDTO);
 
     List<Rights> getAllRights();
 }

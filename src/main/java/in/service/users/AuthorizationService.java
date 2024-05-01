@@ -1,7 +1,8 @@
 package in.service.users;
 
-import exceptions.security.AuthorizationException;
+import entities.dto.UserDTO;
 import entities.model.User;
+import exceptions.security.AuthorizationException;
 
 /**
  * Сервис аутентификации пользователей.
@@ -16,5 +17,5 @@ public interface AuthorizationService {
      * @return объект пользователя, если аутентификация прошла успешно
      * @throws AuthorizationException если аутентификация не удалась из-за неверных учетных данных
      */
-    User login(String email, String password) throws AuthorizationException;
+    UserDTO login(String email, String password) throws AuthorizationException;
 }

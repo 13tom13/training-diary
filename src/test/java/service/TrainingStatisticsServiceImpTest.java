@@ -1,11 +1,11 @@
 package service;
 
+import entities.model.User;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import entities.model.Rights;
 import entities.model.Training;
-import entities.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

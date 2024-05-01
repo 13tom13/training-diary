@@ -1,12 +1,12 @@
 package in.service.users.implementation;
 
 import entities.dto.RegistrationDTO;
+import entities.model.User;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import exceptions.ValidationException;
 import in.repository.user.UserRepository;
 import in.service.users.UserService;
-import entities.model.User;
 
 /**
  * Реализация интерфейса {@link UserService}, предоставляющая методы для работы с пользователями.
@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByEmail(String email) throws ServiceException {
+
         return userRepository.getUserByEmail(email).orElseThrow(() ->
                 new ServiceException("Пользователь не найден"));
     }

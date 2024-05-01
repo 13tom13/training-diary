@@ -1,10 +1,10 @@
 package in.controller.authorization.implementation;
 
 import entities.dto.AuthorizationDTO;
+import entities.dto.UserDTO;
 import in.controller.authorization.AuthorizationController;
 import exceptions.security.AuthorizationException;
 import utils.Logger;
-import entities.model.User;
 import in.service.users.AuthorizationService;
 
 
@@ -12,7 +12,7 @@ import in.service.users.AuthorizationService;
  * Реализация интерфейса {@link AuthorizationController}.
  * Этот класс предоставляет методы для авторизации пользователей в системе.
  */
-public class AuthorizationControllerImpl implements AuthorizationController {
+public class AuthorizationControllerConsole implements AuthorizationController {
 
     private final AuthorizationService authorizationService;
     private final Logger logger;
@@ -22,7 +22,7 @@ public class AuthorizationControllerImpl implements AuthorizationController {
      *
      * @param authorizationService Сервис авторизации.
      */
-    public AuthorizationControllerImpl(AuthorizationService authorizationService) {
+    public AuthorizationControllerConsole(AuthorizationService authorizationService) {
         this.authorizationService = authorizationService;
         this.logger = Logger.getInstance();
     }
@@ -33,9 +33,10 @@ public class AuthorizationControllerImpl implements AuthorizationController {
      * @param authorizationDTO@return Объект пользователя, если авторизация прошла успешно.
      * @throws AuthorizationException Если авторизация не удалась.
      */
-    public User login(AuthorizationDTO authorizationDTO) throws AuthorizationException {
-        User user = authorizationService.login(authorizationDTO.getEmail(), authorizationDTO.getPassword());
-        logger.logAction(authorizationDTO.getEmail(), "Вошел в систему");
-        return user;
+    public UserDTO login(AuthorizationDTO authorizationDTO) throws AuthorizationException {
+        UserDTO userDTO = authorizationService.login(authorizationDTO.getEmail(), authorizationDTO.getPassword());
+        if (userDTO != null)
+            logger.logAction(authorizationDTO.getEmail(), "Вошел в систему");
+        return userDTO;
     }
 }

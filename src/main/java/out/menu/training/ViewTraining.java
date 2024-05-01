@@ -1,6 +1,7 @@
 package out.menu.training;
 
 
+import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 import entities.model.Training;
 import entities.model.User;
@@ -31,10 +32,10 @@ public class ViewTraining {
     /**
      * Отображает все тренировки пользователя.
      *
-     * @param user Пользователь, чьи тренировки необходимо отобразить.
+     * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
      */
-    public void viewAllTraining(User user) {
-        TreeMap<Date, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
+    public void viewAllTraining(UserDTO userDTO) {
+        TreeMap<Date, TreeSet<Training>> allTraining = trainingController.getAllTrainings(userDTO);
         if (allTraining.isEmpty()) {
             System.out.println("Список тренировок пуст");
             return;

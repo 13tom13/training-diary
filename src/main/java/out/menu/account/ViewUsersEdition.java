@@ -1,8 +1,9 @@
 package out.menu.account;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import in.controller.users.AdminController;
 import entities.model.Rights;
-import entities.model.User;
 
 import java.util.List;
 import java.util.Scanner;
@@ -29,19 +30,19 @@ public class ViewUsersEdition {
     /**
      * Метод для редактирования данных пользователя.
      *
-     * @param user Пользователь, данные которого будут редактироваться.
+     * @param userDTO Пользователь, данные которого будут редактироваться.
      */
-    public void userEdition(User user) {
+    public void userEdition(UserDTO userDTO) {
         boolean editing = true;
         while (editing) {
             System.out.println();
-            System.out.println("Редактирование пользователя: " + user);
+            System.out.println("Редактирование пользователя: " + userDTO);
             System.out.println("Выберите действие:");
             System.out.println("1. изменить имя");
             System.out.println("2. изменить фамилию");
             System.out.println("3. изменить пароль");
             System.out.println("4. изменить права");
-            if (user.isActive()) {
+            if (userDTO.isActive()) {
                 System.out.println("5. деактивировать пользователя");
             } else {
                 System.out.println("5. активировать пользователя");
@@ -54,26 +55,26 @@ public class ViewUsersEdition {
                 switch (choice) {
                     case 1:
                         String newName = getNonEmptyInput("Введите новое имя:");
-                        adminController.changeUserName(user, newName);
+                        adminController.changeUserName(userDTO, newName);
                         break;
                     case 2:
                         String newLastName = getNonEmptyInput("Введите новую фамилию:");
-                        adminController.changeUserLastName(user, newLastName);
+                        adminController.changeUserLastName(userDTO, newLastName);
                         break;
                     case 3:
                         String newPassword = getNonEmptyInput("Введите новый пароль:");
-                        adminController.changeUserPassword(user, newPassword);
+                        adminController.changeUserPassword(userDTO, newPassword);
                         break;
                     case 4:
-                        changeUserRights(user);
+                        changeUserRights(userDTO);
                         break;
                     case 5:
-                        adminController.changeUserActive(user);
+                        adminController.changeUserActive(userDTO);
                         break;
                     case 6:
-                        adminController.deleteUser(user);
+                        adminController.deleteUser(userDTO);
                     case 7:
-                        System.out.println("Выход из редактирования пользователя " + user.getEmail());
+                        System.out.println("Выход из редактирования пользователя " + userDTO.getEmail());
                         editing = false;
                         break;
                     default:
@@ -108,10 +109,10 @@ public class ViewUsersEdition {
     /**
      * Метод для изменения прав пользователя.
      *
-     * @param user Пользователь, права которого будут изменены.
+     * @param userDTO Пользователь, права которого будут изменены.
      */
-    private void changeUserRights(User user) {
-        List<Rights> userRights = user.getRights();
+    private void changeUserRights(UserDTO userDTO) {
+        List<Rights> userRights = userDTO.getRights();
         List<Rights> allRights = adminController.getAllRights();
 
         // Реализуем выбор добавления, удаления или выхода
@@ -164,7 +165,7 @@ public class ViewUsersEdition {
                         }
                         break;
                     case 3:
-                        adminController.changeUserRights(user, userRights);
+                        adminController.changeUserRights(userDTO, userRights);
                         editingRights = false;
                         System.out.println("Список прав пользователя обновлен");
                         break;

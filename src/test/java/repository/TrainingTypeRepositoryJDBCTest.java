@@ -1,8 +1,8 @@
 package repository;
 
+import entities.model.User;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.repository.trainingtype.implementation.TrainingTypeRepositoryJDBC;
-import entities.model.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

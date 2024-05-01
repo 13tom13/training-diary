@@ -15,7 +15,7 @@
 </form>
 
 <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Предотвращаем отправку формы по умолчанию
 
         // Создаем объект JSON
@@ -25,28 +25,25 @@
         };
 
         // Отправляем POST-запрос на сервер
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("POST", "/training-diary/login", true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // xhr.send(JSON.stringify(formData));
+
+
         fetch("/training-diary/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json" // Устанавливаем заголовок Content-Type на application/json
             },
             body: JSON.stringify(formData) // Преобразуем объект JSON в строку JSON
+        }).then(response => {
+            if (response.redirected) {
+                // Перенаправляем пользователя на указанный URL
+                window.location.href = response.url;
+            }
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json(); // Если ответ успешный, возвращаем JSON
-                }
-                throw new Error("Authorization failed");
-            })
-            .then(data => {
-                // Обработка успешного ответа
-                console.log("User logged in:", data);
-                window.location.href = data.redirectUrl; // Используем полученную ссылку для перенаправления
-            })
-            .catch(error => {
-                // Обработка ошибки
-                console.error("Authorization failed:", error.message);
-            });
+
     });
 </script>
 </body>

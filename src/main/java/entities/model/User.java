@@ -15,9 +15,8 @@ public class User {
     private String email; // Электронная почта пользователя
     private String password; // Пароль пользователя
     private List<Rights> rights = new ArrayList<>(); // Права пользователя
-
     private List<Roles> roles = new ArrayList<>(); // Роли пользователя
-    private boolean isActive = true; // Активность пользователя
+    private boolean active= true; // Активность пользователя
 
     /**
      * Конструктор с параметрами.
@@ -34,7 +33,7 @@ public class User {
         this.password = password;
     }
 
-    public User(long id, String firstName, String lastName, String email, String password, List<Rights> rights, List<Roles> roles) {
+    public User(long id, String firstName, String lastName, String email, String password, List<Rights> rights, List<Roles> roles, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,6 +41,7 @@ public class User {
         this.password = password;
         this.rights = rights;
         this.roles = roles;
+        this.active = active;
     }
 
     /**
@@ -179,9 +179,10 @@ public class User {
      *
      * @return {@code true}, если пользователь активен, в противном случае {@code false}
      */
-    public boolean isActive() {
-        return isActive;
+    public boolean GetActive() {
+        return active;
     }
+
 
     /**
      * Устанавливает статус активности пользователя.
@@ -189,7 +190,7 @@ public class User {
      * @param active Новый статус активности пользователя
      */
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     /**
@@ -199,7 +200,7 @@ public class User {
      */
     @Override
     public String toString() {
-        String status = isActive ? "active" : "deactivate";
+        String status = active ? "active" : "deactivate";
         return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | роли: "
                 + roles.toString() + " | права: " + rights.toString() + " | (" + status + ")";
     }

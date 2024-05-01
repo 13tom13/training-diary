@@ -1,15 +1,15 @@
 package config.initializer;
 
 import in.controller.authorization.AuthorizationController;
-import in.controller.authorization.implementation.AuthorizationControllerImpl;
+import in.controller.authorization.implementation.AuthorizationControllerConsole;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
-import in.controller.training.implementation.TrainingControllerImpl;
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
+import in.controller.training.implementation.TrainingControllerConsole;
+import in.controller.training.implementation.TrainingStatisticsControllerConsole;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
-import in.controller.users.implementation.AdminControllerImpl;
-import in.controller.users.implementation.UserControllerImpl;
+import in.controller.users.implementation.AdminControllerConsole;
+import in.controller.users.implementation.UserControllerConsole;
 
 /**
  * Класс ControllerInitializer отвечает за инициализацию различных контроллеров,
@@ -32,7 +32,7 @@ public class ControllerInitializer {
      * @return Экземпляр UserController.
      */
     public UserController getUserController() {
-        return new UserControllerImpl(serviceInitializer.getUserService());
+        return new UserControllerConsole(serviceInitializer.getUserService());
     }
 
     /**
@@ -41,7 +41,7 @@ public class ControllerInitializer {
      * @return Экземпляр AuthorizationController.
      */
     public AuthorizationController getAuthorizationController() {
-        return new AuthorizationControllerImpl(serviceInitializer.getAuthorizationService());
+        return new AuthorizationControllerConsole(serviceInitializer.getAuthorizationService());
     }
 
     /**
@@ -50,7 +50,7 @@ public class ControllerInitializer {
      * @return Экземпляр TrainingController.
      */
     public TrainingController getTrainingController() {
-        return new TrainingControllerImpl(serviceInitializer.getTrainingService());
+        return new TrainingControllerConsole(serviceInitializer.getTrainingService());
     }
 
     /**
@@ -59,7 +59,7 @@ public class ControllerInitializer {
      * @return Экземпляр TrainingStatisticsController.
      */
     public TrainingStatisticsController getTrainingStatisticsController() {
-        return new TrainingStatisticsControllerImpl(serviceInitializer.getTrainingStatisticsService());
+        return new TrainingStatisticsControllerConsole(serviceInitializer.getTrainingStatisticsService());
     }
 
     /**
@@ -68,7 +68,7 @@ public class ControllerInitializer {
      * @return Экземпляр AdminController.
      */
     public AdminController getAdminController() {
-        return new AdminControllerImpl(serviceInitializer.getUserRepository());
+        return new AdminControllerConsole(serviceInitializer.getUserRepository());
     }
 }
 

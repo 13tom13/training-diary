@@ -1,10 +1,11 @@
 package service;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.implementation.AuthorizationServiceImpl;
-import entities.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +38,7 @@ public class AuthorizationServiceImplTest extends TestUtil {
         when(userRepository.getUserByEmail(TEST_EMAIL)).thenReturn(Optional.of(activeUser));
 
         // Act
-        User loggedInUser = authorizationService.login(TEST_EMAIL, TEST_PASSWORD);
+        UserDTO loggedInUser = authorizationService.login(TEST_EMAIL, TEST_PASSWORD);
 
         // Assert
         assertNotNull(loggedInUser);

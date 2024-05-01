@@ -1,8 +1,8 @@
 package controller;
 
-import in.controller.training.implementation.TrainingStatisticsControllerImpl;
-import exceptions.security.rights.NoStatisticsRightsException;
 import entities.model.User;
+import in.controller.training.implementation.TrainingStatisticsControllerConsole;
+import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class TrainingStatisticsControllerImplTest extends TestUtil {
+public class TrainingStatisticsControllerConsoleTest extends TestUtil {
 
     @Mock
     private TrainingStatisticsServiceImp trainingStatisticsServiceMock;
 
     @InjectMocks
-    private TrainingStatisticsControllerImpl trainingStatisticsController;
+    private TrainingStatisticsControllerConsole trainingStatisticsController;
     private User testUser;
     private final Date startDate = new Date(2024, 1, 1);
     private final Date endDate = new Date(2024, 12, 31);

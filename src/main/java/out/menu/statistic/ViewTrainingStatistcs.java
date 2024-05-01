@@ -1,7 +1,8 @@
 package out.menu.statistic;
 
+
+import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
-import entities.model.User;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -15,19 +16,19 @@ import static utils.Utils.getDateFromString;
 public class ViewTrainingStatistcs {
 
     private final TrainingStatisticsController trainingStatisticsController;
-    private final User user;
+    private final UserDTO userDTO;
     private final Scanner scanner;
 
     /**
      * Конструктор класса ViewTrainingStatistcs.
      *
      * @param trainingStatisticsController Контроллер статистики тренировок.
-     * @param user                          Пользователь, для которого отображается статистика.
+     * @param userDTO                          Пользователь, для которого отображается статистика.
      * @param scanner                       Сканер для ввода данных.
      */
-    public ViewTrainingStatistcs(TrainingStatisticsController trainingStatisticsController, User user, Scanner scanner) {
+    public ViewTrainingStatistcs(TrainingStatisticsController trainingStatisticsController, UserDTO userDTO, Scanner scanner) {
         this.trainingStatisticsController = trainingStatisticsController;
-        this.user = user;
+        this.userDTO = userDTO;
         this.scanner = scanner;
     }
 
@@ -37,7 +38,7 @@ public class ViewTrainingStatistcs {
     public void statisticMenu() {
         boolean start = true;
         while (start) {
-            System.out.printf("\nСтатистика пользователя: %s %s!\n", user.getFirstName(), user.getLastName());
+            System.out.printf("\nСтатистика пользователя: %s %s!\n", userDTO.getFirstName(), userDTO.getLastName());
             System.out.println("Выберите действие:");
             System.out.println("1. Всего тренировок");
             System.out.println("2. Всего тренировок за период");
@@ -53,7 +54,7 @@ public class ViewTrainingStatistcs {
                     case 3 -> printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
                     case 4 -> printPeriodTrainingStatistics(trainingStatisticsController::getCaloriesBurnedPerPeriod);
                     case 5 -> {
-                        System.out.println("Выход из меню статистики пользователя " + user.getEmail());
+                        System.out.println("Выход из меню статистики пользователя " + userDTO.getEmail());
                         start = false;
                     }
                     default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
@@ -69,7 +70,7 @@ public class ViewTrainingStatistcs {
      * Метод для вывода общей статистики всех тренировок пользователя.
      */
     private void printTotalTrainingStatistics() {
-        int result = trainingStatisticsController.getAllTrainingStatistics(user);
+        int result = trainingStatisticsController.getAllTrainingStatistics(userDTO);
         if (result != 0) {
             System.out.println("Всего тренировок пользователя: " + result);
         } else {
@@ -82,7 +83,7 @@ public class ViewTrainingStatistcs {
      *
      * @param statisticsFunction Функция для получения статистики за период.
      */
-    private void printPeriodTrainingStatistics(TriFunction<User, Date, Date, Integer> statisticsFunction) {
+    private void printPeriodTrainingStatistics(TriFunction<UserDTO, Date, Date, Integer> statisticsFunction) {
         System.out.println("Введите начало периода (дд.мм.гг):");
         String stringStartDate = scanner.nextLine();
         Date startDate;
@@ -103,7 +104,7 @@ public class ViewTrainingStatistcs {
             return; // Выйти из метода, если дата некорректна
         }
 
-        int result = statisticsFunction.apply(user, startDate, endDate);
+        int result = statisticsFunction.apply(userDTO, startDate, endDate);
         if (result == -1) {
             System.err.println("Ошибка");
             return;

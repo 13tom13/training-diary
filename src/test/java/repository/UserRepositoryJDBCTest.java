@@ -1,9 +1,9 @@
 package repository;
 
+import entities.model.User;
 import exceptions.RepositoryException;
 import in.repository.user.UserRepository;
 import in.repository.user.implementation.UserRepositoryJDBC;
-import entities.model.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,9 @@
 package in.service.training;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import exceptions.RepositoryException;
 import entities.model.Training;
-import entities.model.User;
 
 import java.util.Date;
 import java.util.TreeMap;
@@ -16,32 +17,32 @@ public interface TrainingRetrievalService {
     /**
      * Получает все тренировки для указанного пользователя.
      *
-     * @param user пользователь, для которого запрашиваются тренировки
+     * @param userDTO пользователь, для которого запрашиваются тренировки
      * @return отображение даты на множество тренировок
      * @throws SecurityException если возникла ошибка безопасности
      */
-    TreeMap<Date, TreeSet<Training>> getAllTrainings(User user) throws SecurityException;
+    TreeMap<Date, TreeSet<Training>> getAllTrainings(UserDTO userDTO) throws SecurityException;
 
     /**
      * Получает тренировки для указанного пользователя на указанную дату.
      *
-     * @param user пользователь, для которого запрашиваются тренировки
+     * @param userDTO пользователь, для которого запрашиваются тренировки
      * @param data дата тренировки
      * @return множество тренировок на указанную дату
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TreeSet<Training> getTrainingsByUserIDAndData(User user, Date data) throws RepositoryException, SecurityException;
+    TreeSet<Training> getTrainingsByUserIDAndData(UserDTO userDTO, Date data) throws RepositoryException, SecurityException;
 
     /**
      * Получает тренировку по электронной почте пользователя, дате и названию.
      *
-     * @param user          пользователь, для которого запрашивается тренировка
+     * @param userDTO          пользователь, для которого запрашивается тренировка
      * @param trainingData  дата тренировки
      * @param trainingName  название тренировки
      * @return тренировка
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    Training getTrainingByUserIDAndDataAndName(User user, Date trainingData, String trainingName) throws RepositoryException, SecurityException;
+    Training getTrainingByUserIDAndDataAndName(UserDTO userDTO, Date trainingData, String trainingName) throws RepositoryException, SecurityException;
 }

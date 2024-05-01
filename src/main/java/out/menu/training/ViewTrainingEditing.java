@@ -1,8 +1,9 @@
 package out.menu.training;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import in.controller.training.TrainingController;
 import entities.model.Training;
-import entities.model.User;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class ViewTrainingEditing {
 
     private final TrainingController trainingController;
     private final ViewTrainingAdded viewTrainingAdded;
-    private final User user;
+    private final UserDTO userDTO;
     private final Scanner scanner;
 
     private Training training;
@@ -28,15 +29,15 @@ public class ViewTrainingEditing {
      *
      * @param trainingController Контроллер тренировок.
      * @param viewTrainingAdded Представление добавления тренировок.
-     * @param user              Пользователь.
+     * @param userDTO              Пользователь.
      * @param scanner           Сканер для ввода данных.
      */
     public ViewTrainingEditing(TrainingController trainingController,
                                ViewTrainingAdded viewTrainingAdded,
-                               User user, Scanner scanner) {
+                               UserDTO userDTO, Scanner scanner) {
         this.trainingController = trainingController;
         this.viewTrainingAdded = viewTrainingAdded;
-        this.user = user;
+        this.userDTO = userDTO;
         this.scanner = scanner;
     }
 
@@ -54,7 +55,7 @@ public class ViewTrainingEditing {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
             return; // Выйти из метода, если дата некорректна
         }
-        trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(user, trainingDate);
+        trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
             System.out.println("Тренировки на " + getFormattedDate(trainingDate) + ":");
             for (Training training : trainingsFromDay) {
@@ -62,7 +63,7 @@ public class ViewTrainingEditing {
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            training = trainingController.getTrainingByUserEmailAndDateAndName(user, trainingDate, trainingName);
+            training = trainingController.getTrainingByUserEmailAndDateAndName(userDTO, trainingDate, trainingName);
         }
     }
 
@@ -97,7 +98,7 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        training  = trainingController.changeNameTraining(user, training, newName);
+                        training  = trainingController.changeNameTraining(userDTO, training, newName);
                     }
                     case 2 -> {
                         System.out.println();
@@ -106,7 +107,7 @@ public class ViewTrainingEditing {
 
                         try {
                             Date newDate = getDateFromString(stringDate);
-                            training = trainingController.changeDateTraining(user, training, newDate);
+                            training = trainingController.changeDateTraining(userDTO, training, newDate);
                         } catch (ParseException e) {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
                         }
@@ -115,13 +116,13 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        training = trainingController.changeDurationTraining(user, training, newDuration);
+                        training = trainingController.changeDurationTraining(userDTO, training, newDuration);
                     }
                     case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        training = trainingController.changeCaloriesTraining(user, training, newCalories);
+                        training = trainingController.changeCaloriesTraining(userDTO, training, newCalories);
                     }
                     case 5 -> viewTrainingAdded.addTrainingAdditional(training);
                     case 6 -> {

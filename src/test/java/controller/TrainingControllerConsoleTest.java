@@ -1,14 +1,14 @@
 package controller;
 
+import entities.model.User;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
-import in.controller.training.implementation.TrainingControllerImpl;
+import in.controller.training.implementation.TrainingControllerConsole;
 import in.service.training.TrainingService;
 import entities.model.Training;
-import entities.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,13 +25,13 @@ import static org.mockito.Mockito.*;
 import static testutil.TestUtil.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TrainingControllerImplTest {
+public class TrainingControllerConsoleTest {
 
     @Mock
     private TrainingService trainingServiceMock;
 
     @InjectMocks
-    private TrainingControllerImpl trainingController;
+    private TrainingControllerConsole trainingController;
 
     private User testUser;
 

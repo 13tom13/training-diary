@@ -1,9 +1,13 @@
 package in.controller.users.implementation;
 
+import entities.dto.UserDTO;
+import entities.model.User;
+import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
 import entities.model.Rights;
-import entities.model.User;
 import in.repository.user.UserRepository;
+import servlet.mappers.UserMapper;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -12,16 +16,16 @@ import java.util.Optional;
  * Реализация интерфейса {@link AdminController}.
  * Этот класс предоставляет методы для администрирования пользователей.
  */
-public class AdminControllerImpl implements AdminController {
+public class AdminControllerConsole implements AdminController {
 
     private final UserRepository userRepository;
 
     /**
-     * Конструктор класса AdminControllerImpl.
+     * Конструктор класса AdminControllerConsole.
      *
      * @param userRepository репозиторий пользователей, используемый этим контроллером.
      */
-    public AdminControllerImpl(UserRepository userRepository) {
+    public AdminControllerConsole(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -42,31 +46,40 @@ public class AdminControllerImpl implements AdminController {
      * @return объект пользователя, если он существует, в противном случае null
      */
     @Override
-    public User getUser(String email) {
+    public UserDTO getUser(String email) throws UserNotFoundException {
         Optional<User> userOptional = userRepository.getUserByEmail(email);
-        return userOptional.orElse(null);
+        // Проверка, найден ли пользователь
+        if (userOptional.isPresent()) {
+            // Если пользователь найден, мапим его в UserDTO и возвращаем
+            return UserMapper.INSTANCE.userToUserDTO(userOptional.get());
+        } else {
+            // Если пользователь не найден, выбрасываем исключение UserNotFoundException
+            throw new UserNotFoundException(email);
+        }
     }
 
     /**
      * Изменяет имя пользователя.
      *
-     * @param user    объект пользователя
+     * @param userDTO    объект пользователя
      * @param newName новое имя пользователя
      */
     @Override
-    public void changeUserName(User user, String newName) {
-        user.setFirstName(newName);
+    public void changeUserName(UserDTO userDTO, String newName) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        user.setFirstName(userDTO.getFirstName());
         userRepository.updateUser(user);
     }
 
     /**
      * Изменяет фамилию пользователя.
      *
-     * @param user        объект пользователя
+     * @param userDTO        объект пользователя
      * @param newLastName новая фамилия пользователя
      */
     @Override
-    public void changeUserLastName(User user, String newLastName) {
+    public void changeUserLastName(UserDTO userDTO, String newLastName) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setLastName(newLastName);
         userRepository.updateUser(user);
     }
@@ -74,11 +87,12 @@ public class AdminControllerImpl implements AdminController {
     /**
      * Изменяет пароль пользователя.
      *
-     * @param user        объект пользователя
+     * @param userDTO        объект пользователя
      * @param newPassword новый пароль пользователя
      */
     @Override
-    public void changeUserPassword(User user, String newPassword) {
+    public void changeUserPassword(UserDTO userDTO, String newPassword) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setPassword(newPassword);
         userRepository.updateUser(user);
     }
@@ -86,22 +100,24 @@ public class AdminControllerImpl implements AdminController {
     /**
      * Изменяет активность пользователя.
      *
-     * @param user объект пользователя
+     * @param userDTO объект пользователя
      */
     @Override
-    public void changeUserActive(User user) {
-        user.setActive(!user.isActive());
+    public void changeUserActive(UserDTO userDTO) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        user.setActive(!userDTO.isActive());
         userRepository.updateUser(user);
     }
 
     /**
      * Изменяет права пользователя.
      *
-     * @param user       объект пользователя
+     * @param userDTO       объект пользователя
      * @param userRights новые права пользователя
      */
     @Override
-    public void changeUserRights(User user, List<Rights> userRights) {
+    public void changeUserRights(UserDTO userDTO, List<Rights> userRights) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setRights(userRights);
         userRepository.updateUser(user);
     }
@@ -109,10 +125,11 @@ public class AdminControllerImpl implements AdminController {
     /**
      * Удаляет пользователя.
      *
-     * @param user объект пользователя для удаления
+     * @param userDTO объект пользователя для удаления
      */
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(UserDTO userDTO) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         userRepository.deleteUser(user);
     }
 

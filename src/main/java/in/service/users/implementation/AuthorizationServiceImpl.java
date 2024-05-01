@@ -1,10 +1,12 @@
 package in.service.users.implementation;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
-import entities.model.User;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
+import servlet.mappers.UserMapper;
 
 import java.util.Optional;
 
@@ -34,12 +36,13 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @throws NotActiveUserException    если пользователь не активен
      */
     @Override
-    public User login(String email, String password) throws AuthorizationException, NotActiveUserException {
-        Optional<User> user = userRepository.getUserByEmail(email);
-        if (user.isPresent()) {
-            if (user.get().getPassword().equals(password)) {
-                if (user.get().isActive()){
-                    return user.get();
+    public UserDTO login(String email, String password) throws AuthorizationException, NotActiveUserException {
+        Optional<User> userFromDB = userRepository.getUserByEmail(email);
+        if (userFromDB.isPresent()) {
+            if (userFromDB.get().getPassword().equals(password)) {
+                if (userFromDB.get().GetActive()){
+                    UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(userFromDB.get());
+                    return userDTO;
                 } else {
                     throw new NotActiveUserException();
                 }

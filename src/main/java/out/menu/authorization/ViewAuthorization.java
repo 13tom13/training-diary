@@ -2,13 +2,13 @@ package out.menu.authorization;
 
 import entities.dto.AuthorizationDTO;
 import entities.dto.RegistrationDTO;
+import entities.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
-import entities.model.User;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
 
@@ -26,16 +26,17 @@ public class ViewAuthorization {
     private final TrainingStatisticsController trainingStatisticsController;
     private final Scanner scanner;
 
-    private User user;
+    private UserDTO userDTO;
 
     /**
      * Конструктор класса ViewAuthorization.
-     * @param authorizationController Контроллер авторизации.
-     * @param adminController Контроллер администратора.
-     * @param userController Контроллер пользователя.
-     * @param trainingController Контроллер тренировок.
+     *
+     * @param authorizationController      Контроллер авторизации.
+     * @param adminController              Контроллер администратора.
+     * @param userController               Контроллер пользователя.
+     * @param trainingController           Контроллер тренировок.
      * @param trainingStatisticsController Контроллер статистики тренировок.
-     * @param scanner Сканер для ввода данных.
+     * @param scanner                      Сканер для ввода данных.
      */
     public ViewAuthorization(AuthorizationController authorizationController, AdminController adminController,
                              UserController userController, TrainingController trainingController,
@@ -58,12 +59,12 @@ public class ViewAuthorization {
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
         try {
-            user = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
+            userDTO = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
             if (hisRole("ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
             } else if (hisRole("USER")) {
-                ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
+                ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, userDTO, scanner);
                 viewUserAccount.userAccountMenu();
             }
         } catch (AuthorizationException e) {
@@ -72,7 +73,7 @@ public class ViewAuthorization {
     }
 
     private boolean hisRole(String roleName) {
-        return user.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
+        return userDTO.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
     }
 
     /**
