@@ -1,5 +1,6 @@
 package in.service.training.implementation;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import entities.model.Training;
 import exceptions.security.rights.NoStatisticsRightsException;
@@ -37,9 +38,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     @Override
     public int getAllTrainingStatistics(UserDTO userDTO) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
-            TreeMap<Date, TreeSet<Training>> allTrainings = trainingService.getAllTrainings(userDTO);
+            TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
             int totalTrainings = 0;
-            for (TreeSet<Training> trainingsOnDate : allTrainings.values()) {
+            for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
                 totalTrainings += trainingsOnDate.size();
             }
             return totalTrainings;
@@ -62,9 +63,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalTrainings;
-            List<Training> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
+            List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
             totalTrainings = trainings.size();
-
             return totalTrainings;
         } else {
             throw new NoStatisticsRightsException();
@@ -84,9 +84,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalDuration = 0;
-            List<Training> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
-            for (Training training : trainings) {
-                totalDuration += training.getDuration();
+            List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
+            for (TrainingDTO trainingDTO : trainings) {
+                totalDuration += trainingDTO.getDuration();
             }
             return totalDuration;
         } else {
@@ -98,9 +98,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalCaloriesBurned = 0;
-            List<Training> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
-            for (Training training : trainings) {
-                totalCaloriesBurned += training.getCaloriesBurned();
+            List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
+            for (TrainingDTO trainingDTO : trainings) {
+                totalCaloriesBurned += trainingDTO.getCaloriesBurned();
             }
             return totalCaloriesBurned;
         } else {
@@ -108,21 +108,21 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
         }
     }
 
-    private List<Training> getTrainingsInPeriod(UserDTO userDTO, Date startDate, Date endDate) {
-        TreeMap<Date, TreeSet<Training>> allTrainings = trainingService.getAllTrainings(userDTO);
-        List<Training> trainingsInPeriod = new ArrayList<>();
-        for (TreeSet<Training> trainingsOnDate : allTrainings.values()) {
-            for (Training training : trainingsOnDate) {
-                if (isTrainingInPeriod(training, startDate, endDate)) {
-                    trainingsInPeriod.add(training);
+    private List<TrainingDTO> getTrainingsInPeriod(UserDTO userDTO, Date startDate, Date endDate) {
+        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
+        List<TrainingDTO> trainingsInPeriod = new ArrayList<>();
+        for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
+            for (TrainingDTO trainingDTO : trainingsOnDate) {
+                if (isTrainingInPeriod(trainingDTO, startDate, endDate)) {
+                    trainingsInPeriod.add(trainingDTO);
                 }
             }
         }
         return trainingsInPeriod;
     }
 
-    private boolean isTrainingInPeriod(Training training, Date startDate, Date endDate) {
-        Date trainingDate = training.getDate();
+    private boolean isTrainingInPeriod(TrainingDTO trainingDTO, Date startDate, Date endDate) {
+        Date trainingDate = trainingDTO.getDate();
         return trainingDate.compareTo(startDate) >= 0 && trainingDate.compareTo(endDate) <= 0;
     }
 }

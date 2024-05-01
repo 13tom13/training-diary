@@ -1,5 +1,6 @@
 package in.controller.training.implementation;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
@@ -8,7 +9,6 @@ import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 import in.service.training.TrainingService;
-import entities.model.Training;
 import utils.Logger;
 
 import java.util.Date;
@@ -41,7 +41,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Словарь, содержащий тренировки, сгруппированные по дате
      */
     @Override
-    public TreeMap<Date, TreeSet<Training>> getAllTrainings(UserDTO userDTO) {
+    public TreeMap<Date, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
         return trainingService.getAllTrainings(userDTO);
     }
 
@@ -61,20 +61,14 @@ public class TrainingControllerConsole implements TrainingController {
      * Сохраняет тренировку пользователя.
      *
      * @param userDTO     Пользователь
-     * @param training Тренировка для сохранения
+     * @param trainingDTO Тренировка для сохранения
      * @return {@code true}, если тренировка сохранена успешно, в противном случае {@code false}
      */
     @Override
-    public boolean saveTraining(UserDTO userDTO, Training training) {
-        try {
-            trainingService.saveTraining(userDTO, training);
-            logger.logAction(userDTO.getEmail(), "save training " + training.getName() + " " + training.getDate());
-            return true;
-        } catch (RepositoryException | InvalidDateFormatException | NoWriteRightsException e) {
-            logger.logError(userDTO.getEmail(), e.getMessage());
-            System.err.println(e.getMessage());
-            return false;
-        }
+    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+            trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
+            logger.logAction(userDTO.getEmail(), "save training " + trainingDTO.getName() + " " + trainingDTO.getDate());
+            return trainingDTO;
     }
 
     /**
@@ -112,14 +106,14 @@ public class TrainingControllerConsole implements TrainingController {
     /**
      * Получает все тренировки пользователя на определенную дату.
      *
-     * @param userDTO         Пользователь
+     * @param userDTO      Пользователь
      * @param trainingDate Дата тренировки
      * @return Множество тренировок пользователя на указанную дату
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(UserDTO userDTO, Date trainingDate) {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, Date trainingDate) {
         try {
-            return trainingService.getTrainingsByUserIDAndData(userDTO, trainingDate);
+            return trainingService.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         } catch (RepositoryException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
@@ -130,149 +124,149 @@ public class TrainingControllerConsole implements TrainingController {
     /**
      * Получает тренировку пользователя по указанной дате и названию.
      *
-     * @param userDTO         Пользователь
+     * @param userDTO      Пользователь
      * @param trainingDate Дата тренировки
      * @param trainingName Название тренировки
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public Training getTrainingByUserEmailAndDateAndName(UserDTO userDTO, Date trainingDate, String trainingName) {
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, Date trainingDate, String trainingName) {
         try {
-            return trainingService.getTrainingByUserIDAndDataAndName(userDTO, trainingDate, trainingName);
+            return trainingService.getTrainingByUserEmailAndDataAndName(userDTO, trainingDate, trainingName);
         } catch (RepositoryException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
-            return new Training();
+            return new TrainingDTO();
         }
     }
 
     /**
      * Добавляет дополнительную информацию к тренировке.
      *
-     * @param userDTO            Пользователь
-     * @param training        Тренировка, к которой добавляется информация
+     * @param userDTO         Пользователь
+     * @param trainingDTO     Тренировка, к которой добавляется информация
      * @param additionalName  Название дополнительной информации
      * @param additionalValue Значение дополнительной информации
      * @return Тренировка, с добавленной дополнительной информацией
      */
     @Override
-    public Training addTrainingAdditional(UserDTO userDTO, Training training, String additionalName, String additionalValue) {
+    public TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) {
         try {
-            training = trainingService.addTrainingAdditional(userDTO, training, additionalName, additionalValue);
+            trainingDTO = trainingService.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
             logger.logAction(userDTO.getEmail(), String.format("add training additional %s %s (%s %s)",
-                    additionalName, additionalValue, training.getName(), training.getDate()));
+                    additionalName, additionalValue, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | NoWriteRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 
     /**
      * Удаляет дополнительную информацию из тренировки.
      *
-     * @param userDTO           Пользователь
-     * @param training       Тренировка, из которой удаляется информация
+     * @param userDTO        Пользователь
+     * @param trainingDTO    Тренировка, из которой удаляется информация
      * @param additionalName Название дополнительной информации для удаления
      * @return Тренировка, с удаленной информацией
      */
     @Override
-    public Training removeTrainingAdditional(UserDTO userDTO, Training training, String additionalName) {
+    public TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) {
         try {
-            training = trainingService.removeTrainingAdditional(userDTO, training, additionalName);
+            trainingDTO = trainingService.removeTrainingAdditional(userDTO, trainingDTO, additionalName);
             logger.logAction(userDTO.getEmail(), String.format("remove training additional %s (%s %s)",
-                    additionalName, training.getName(), training.getDate()));
+                    additionalName, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 
     /**
      * Изменяет название тренировки.
      *
      * @param userDTO     Пользователь
-     * @param training Тренировка, название которой изменяется
-     * @param newName  Новое название тренировки
+     * @param trainingDTO Тренировка, название которой изменяется
+     * @param newName     Новое название тренировки
      * @return Тренировка, с измененным названием
      */
     @Override
-    public Training changeNameTraining(UserDTO userDTO, Training training, String newName) {
+    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) {
         try {
-            training = trainingService.changeNameTraining(userDTO, training, newName);
+            trainingDTO = trainingService.changeNameTraining(userDTO, trainingDTO, newName);
 
             logger.logAction(userDTO.getEmail(),
-                    String.format("change training name %s (%s %s)", newName, training.getName(), training.getDate()));
+                    String.format("change training name %s (%s %s)", newName, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 
     /**
      * Изменяет дату тренировки.
      *
      * @param userDTO     Пользователь
-     * @param training Тренировка, дата которой изменяется
-     * @param newDate  Новая дата тренировки
+     * @param trainingDTO Тренировка, дата которой изменяется
+     * @param newDate     Новая дата тренировки
      * @return Тренировка, с измененной датой
      */
     @Override
-    public Training changeDateTraining(UserDTO userDTO, Training training, Date newDate) {
+    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) {
         try {
-            training = trainingService.changeDateTraining(userDTO, training, newDate);
+            trainingDTO = trainingService.changeDateTraining(userDTO, trainingDTO, newDate);
             logger.logAction(userDTO.getEmail(),
-                    String.format("change training date %s (%s %s)", newDate, training.getName(), training.getDate()));
+                    String.format("change training date %s (%s %s)", newDate, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | InvalidDateFormatException | NoEditRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 
     /**
      * Изменяет продолжительность тренировки.
      *
-     * @param userDTO        Пользователь
-     * @param training    Тренировка, продолжительность которой изменяется
+     * @param userDTO     Пользователь
+     * @param trainingDTO Тренировка, продолжительность которой изменяется
      * @param newDuration Новая продолжительность тренировки
      * @return Тренировка, с измененной продолжительностью
      */
     @Override
-    public Training changeDurationTraining(UserDTO userDTO, Training training, String newDuration) {
+    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) {
         int newDurationInt = Integer.parseInt(newDuration);
         try {
-            training = trainingService.changeDurationTraining(userDTO, training, newDurationInt);
+            trainingDTO = trainingService.changeDurationTraining(userDTO, trainingDTO, newDurationInt);
             logger.logAction(userDTO.getEmail(),
-                    String.format("change training duration %s (%s %s)", newDuration, training.getName(), training.getDate()));
+                    String.format("change training duration %s (%s %s)", newDuration, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param userDTO        Пользователь
-     * @param training    Тренировка, количество калорий на которой изменяется
+     * @param userDTO     Пользователь
+     * @param trainingDTO Тренировка, количество калорий на которой изменяется
      * @param newCalories Новое количество сожженных калорий
      * @return Тренировка, с измененным количеством сожженных калорий
      */
     @Override
-    public Training changeCaloriesTraining(UserDTO userDTO, Training training, String newCalories) {
+    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) {
         int newCaloriesInt = Integer.parseInt(newCalories);
         try {
-            training = trainingService.changeCaloriesTraining(userDTO, training, newCaloriesInt);
+            trainingDTO = trainingService.changeCaloriesTraining(userDTO, trainingDTO, newCaloriesInt);
             logger.logAction(userDTO.getEmail(),
-                    String.format("change training calories %s (%s %s)", newCaloriesInt, training.getName(), training.getDate()));
+                    String.format("change training calories %s (%s %s)", newCaloriesInt, trainingDTO.getName(), trainingDTO.getDate()));
         } catch (RepositoryException | NoEditRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return training;
+        return trainingDTO;
     }
 }

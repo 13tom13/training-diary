@@ -1,6 +1,7 @@
 package out.menu.training;
 
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 import entities.model.Training;
@@ -35,20 +36,20 @@ public class ViewTraining {
      * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
      */
     public void viewAllTraining(UserDTO userDTO) {
-        TreeMap<Date, TreeSet<Training>> allTraining = trainingController.getAllTrainings(userDTO);
+        TreeMap<Date, TreeSet<TrainingDTO>> allTraining = trainingController.getAllTrainings(userDTO);
         if (allTraining.isEmpty()) {
             System.out.println("Список тренировок пуст");
             return;
         }
 
-        for (Map.Entry<Date, TreeSet<Training>> entry : allTraining.entrySet()) {
+        for (Map.Entry<Date, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
 
             String currentDate = getFormattedDate(entry.getKey());
-            TreeSet<Training> trainingsOnDate = entry.getValue();
+            TreeSet<TrainingDTO> trainingsOnDate = entry.getValue();
 
             System.out.println("\n" + "=====" + currentDate + "=====");
 
-            for (Training training : trainingsOnDate) {
+            for (TrainingDTO training : trainingsOnDate) {
                 System.out.println(training);
                 System.out.println("--------------------------------------------------");
             }

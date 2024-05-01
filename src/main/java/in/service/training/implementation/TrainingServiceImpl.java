@@ -1,6 +1,8 @@
 package in.service.training.implementation;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
+import entities.model.Training;
 import entities.model.User;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
@@ -10,13 +12,10 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
-import entities.model.Training;
+import servlet.mappers.TrainingMapper;
 import servlet.mappers.UserMapper;
 
-import java.util.Date;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import static utils.Utils.hisRight;
 
@@ -43,10 +42,21 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public TreeMap<Date, TreeSet<Training>> getAllTrainings(UserDTO userDTO) {
+    public TreeMap<Date, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-        return trainingRepository.getAllTrainingsByUserID(user);
+        TreeMap<Date, TreeSet<Training>> allUserTrainings = trainingRepository.getAllTrainingsByUserEmail(user);
+        TreeMap<Date, TreeSet<TrainingDTO>> allTrainingsDTO = new TreeMap<>();
+
+        for (Map.Entry<Date, TreeSet<Training>> entry : allUserTrainings.entrySet()) {
+            Date date = entry.getKey();
+            TreeSet<Training> trainings = entry.getValue();
+            TreeSet<TrainingDTO> trainingDTOs = TrainingSetToTrainingDTOSet(trainings);
+            allTrainingsDTO.put(date, trainingDTOs);
+        }
+
+        return allTrainingsDTO;
     }
+
 
     /**
      * {@inheritDoc}
@@ -61,31 +71,47 @@ public class TrainingServiceImpl implements TrainingService {
      * {@inheritDoc}
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserIDAndData(UserDTO userDTO, Date data) throws RepositoryException {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, Date data) throws RepositoryException {
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-        return trainingRepository.getTrainingsByUserIDAndData(user, data);
+        TreeSet<Training> trainingsByUserEmailAndData = trainingRepository.getTrainingsByUserEmailAndData(user, data);
+        return TrainingSetToTrainingDTOSet(trainingsByUserEmailAndData);
+    }
+
+    private static TreeSet<TrainingDTO> TrainingSetToTrainingDTOSet(TreeSet<Training> trainings) {
+        TreeSet<TrainingDTO> trainingDTOs = new TreeSet<>();
+        for (Training training : trainings) {
+            TrainingDTO trainingDTO = TrainingMapper.INSTANCE.trainingToTrainingDTO(training);
+            trainingDTOs.add(trainingDTO);
+        }
+        return trainingDTOs;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Training getTrainingByUserIDAndDataAndName(UserDTO userDTO, Date trainingData, String trainingName) throws RepositoryException {
+    public TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, Date trainingData, String trainingName) throws RepositoryException {
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-        return trainingRepository.getTrainingByUserIDlAndDataAndName(user, trainingData, trainingName);
+        Training training = trainingRepository.getTrainingByUserEmailAndDataAndName(user, trainingData, trainingName);
+        return TrainingMapper.INSTANCE.trainingToTrainingDTO(training);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void saveTraining(UserDTO userDTO, Training training) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         if (hisRight(userDTO, "WRITE")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            trainingRepository.saveTraining(user, training);
+            Training training = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingFromDB = trainingRepository.saveTraining(user, training);
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(trainingFromDB);
         } else {
             throw new NoWriteRightsException();
         }
+
     }
 
     /**
@@ -105,8 +131,9 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public boolean deleteTraining(UserDTO userDTO, Date date, String name) throws RepositoryException, InvalidDateFormatException, NoDeleteRightsException {
         if (hisRight(userDTO, "DELETE")) {
-            Training training = getTrainingByUserIDAndDataAndName(userDTO, date, name);
+            TrainingDTO trainingDTO = getTrainingByUserEmailAndDataAndName(userDTO, date, name);
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
+            Training training = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
             return trainingRepository.deleteTraining(user, training);
         } else {
             throw new NoDeleteRightsException();
@@ -121,20 +148,22 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training addTrainingAdditional(UserDTO userDTO, Training training, String additionalName, String additionalValue) throws RepositoryException, NoWriteRightsException {
+    public TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) throws RepositoryException, NoWriteRightsException {
+
         if (hisRight(userDTO, "WRITE")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForAdditional = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForAdditional = getTrainingForChange(user, trainingDTO);
             if (!trainingForAdditional.getAdditions().containsKey(additionalName)) {
                 trainingForAdditional.addAdditional(additionalName, additionalValue);
-                training = trainingRepository.updateTraining(user, training, trainingForAdditional);
+                OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForAdditional);
+                return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
             } else {
                 throw new RepositoryException("Дополнительное поле с именем " + additionalName + " уже существует");
             }
         } else {
             throw new NoWriteRightsException();
         }
-        return training;
     }
 
     /**
@@ -143,18 +172,19 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training removeTrainingAdditional(UserDTO userDTO, Training training, String additionalName) throws RepositoryException, NoEditRightsException {
+    public TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) throws RepositoryException, NoEditRightsException {
         if (hisRight(userDTO, "EDIT")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForRemoval = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForRemoval = getTrainingForChange(user, trainingDTO);
             if (trainingForRemoval.getAdditions().containsKey(additionalName)) {
                 trainingForRemoval.removeAdditional(additionalName);
-                training = trainingRepository.updateTraining(user, training, trainingForRemoval);
+                OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForRemoval);
             }
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
         } else {
             throw new NoEditRightsException();
         }
-        return training;
     }
 
     /**
@@ -163,16 +193,17 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training changeNameTraining(UserDTO userDTO, Training training, String newName) throws RepositoryException, NoEditRightsException {
+    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException, NoEditRightsException {
         if (hisRight(userDTO, "EDIT")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForChange = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForChange = getTrainingForChange(user, trainingDTO);
             trainingForChange.setName(newName);
-            training = trainingRepository.updateTraining(user, training, trainingForChange);
+            OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForChange);
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
         } else {
             throw new NoEditRightsException();
         }
-        return training;
     }
 
     /**
@@ -181,16 +212,17 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training changeDateTraining(UserDTO userDTO, Training training, Date newDate) throws RepositoryException, NoEditRightsException {
+    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) throws RepositoryException, NoEditRightsException {
         if (hisRight(userDTO, "EDIT")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForChange = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForChange = getTrainingForChange(user, trainingDTO);
             trainingForChange.setDate(newDate);
-            training = trainingRepository.updateTraining(user, training, trainingForChange);
+            OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForChange);
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
         } else {
             throw new NoEditRightsException();
         }
-        return training;
     }
 
     /**
@@ -199,16 +231,17 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training changeDurationTraining(UserDTO userDTO, Training training, int newDuration) throws RepositoryException, NoEditRightsException {
+    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, int newDuration) throws RepositoryException, NoEditRightsException {
         if (hisRight(userDTO, "EDIT")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForChange = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForChange = getTrainingForChange(user, trainingDTO);
             trainingForChange.setDuration(newDuration);
-            training = trainingRepository.updateTraining(user, training, trainingForChange);
+            OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForChange);
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
         } else {
             throw new NoEditRightsException();
         }
-        return training;
     }
 
     /**
@@ -217,20 +250,21 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public Training changeCaloriesTraining(UserDTO userDTO, Training training, int newCalories) throws RepositoryException, NoEditRightsException {
+    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, int newCalories) throws RepositoryException, NoEditRightsException {
         if (hisRight(userDTO, "EDIT")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-            Training trainingForChange = getTrainingForChange(user, training);
+            Training OldTraining = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
+            Training trainingForChange = getTrainingForChange(user, trainingDTO);
             trainingForChange.setCaloriesBurned(newCalories);
-            training = trainingRepository.updateTraining(user, training, trainingForChange);
+            OldTraining = trainingRepository.updateTraining(user, OldTraining, trainingForChange);
+            return TrainingMapper.INSTANCE.trainingToTrainingDTO(OldTraining);
         } else {
             throw new NoEditRightsException();
         }
-        return training;
     }
 
-    private Training getTrainingForChange(User user, Training training) throws RepositoryException {
-        return trainingRepository.getTrainingByUserIDlAndDataAndName(user, training.getDate(), training.getName());
+    private Training getTrainingForChange(User user, TrainingDTO trainingDTO) throws RepositoryException {
+        return trainingRepository.getTrainingByUserEmailAndDataAndName(user, trainingDTO.getDate(), trainingDTO.getName());
     }
 
 }

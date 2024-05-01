@@ -24,13 +24,6 @@
             password: document.getElementById("password").value
         };
 
-        // Отправляем POST-запрос на сервер
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("POST", "/training-diary/login", true);
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        // xhr.send(JSON.stringify(formData));
-
-
         fetch("/training-diary/login", {
             method: "POST",
             headers: {

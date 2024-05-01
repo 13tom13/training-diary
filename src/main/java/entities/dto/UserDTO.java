@@ -23,56 +23,66 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(long id, String firstName, String lastName, String email, List<Rights> rights, List<Roles> roles, boolean isActive) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.rights = rights;
-        this.roles = roles;
-        this.isActive = isActive;
-    }
-
-
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public List<Rights> getRights() {
         return rights;
+    }
+
+    public void setRights(List<Rights> rights) {
+        this.rights = rights;
     }
 
     public List<Roles> getRoles() {
         return roles;
     }
 
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
+    }
+
     public boolean isActive() {
         return isActive;
     }
 
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
 
     @Override
     public String toString() {
-        return "User{" +
-               "id=" + id +
-               ", firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", email='" + email + '\'' +
-               ", rights=" + rights +
-               ", roles=" + roles +
-               ", isActive=" + isActive +
-               '}';
+        String status = isActive ? "active" : "deactivate";
+        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | роли: "
+               + roles.toString() + " | права: " + rights.toString() + " | (" + status + ")";
     }
 }

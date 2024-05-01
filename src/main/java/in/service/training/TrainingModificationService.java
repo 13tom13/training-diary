@@ -1,13 +1,12 @@
 package in.service.training;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.User;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
-import entities.model.Training;
 
 import java.util.Date;
 
@@ -20,12 +19,13 @@ public interface TrainingModificationService {
      * Сохраняет новую тренировку для указанного пользователя.
      *
      * @param userDTO     пользователь, для которого сохраняется тренировка
-     * @param training новая тренировка
-     * @throws RepositoryException          если возникла ошибка доступа к хранилищу
-     * @throws InvalidDateFormatException  если указана некорректная дата тренировки
-     * @throws NoWriteRightsException      если у пользователя нет прав на запись
+     * @param trainingDTO новая тренировка
+     * @return
+     * @throws RepositoryException        если возникла ошибка доступа к хранилищу
+     * @throws InvalidDateFormatException если указана некорректная дата тренировки
+     * @throws NoWriteRightsException     если у пользователя нет прав на запись
      */
-    void saveTraining(UserDTO userDTO, Training training) throws RepositoryException, InvalidDateFormatException, NoWriteRightsException;
+    TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws RepositoryException, InvalidDateFormatException, NoWriteRightsException;
 
     /**
      * Удаляет тренировку для указанного пользователя по указанной дате и имени.
@@ -44,8 +44,8 @@ public interface TrainingModificationService {
     /**
      * Добавляет дополнительную информацию к тренировке.
      *
-     * @param userDTO            пользователь, для которого добавляется дополнительная информация
-     * @param training        тренировка, к которой добавляется информация
+     * @param userDTO         пользователь, для которого добавляется дополнительная информация
+     * @param trainingDTO     тренировка, к которой добавляется информация
      * @param additionalName  имя дополнительной информации
      * @param additionalValue значение дополнительной информации
      * @return измененная тренировка
@@ -53,69 +53,69 @@ public interface TrainingModificationService {
      * @throws SecurityException      если возникла ошибка безопасности
      * @throws NoWriteRightsException если у пользователя нет прав на запись
      */
-    Training addTrainingAdditional(UserDTO userDTO, Training training, String additionalName, String additionalValue) throws RepositoryException, SecurityException, NoWriteRightsException;
+    TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) throws RepositoryException, SecurityException, NoWriteRightsException;
 
     /**
      * Удаляет дополнительную информацию из тренировки.
      *
-     * @param userDTO           пользователь, для которого удаляется дополнительная информация
-     * @param training       тренировка, из которой удаляется информация
+     * @param userDTO        пользователь, для которого удаляется дополнительная информация
+     * @param trainingDTO    тренировка, из которой удаляется информация
      * @param additionalName имя дополнительной информации
      * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws SecurityException     если возникла ошибка безопасности
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    Training removeTrainingAdditional(UserDTO userDTO, Training training, String additionalName) throws RepositoryException, SecurityException, NoEditRightsException;
+    TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) throws RepositoryException, SecurityException, NoEditRightsException;
 
     /**
      * Изменяет название тренировки.
      *
      * @param userDTO     пользователь, для которого изменяется название тренировки
-     * @param training тренировка, у которой изменяется название
-     * @param newName  новое название тренировки
+     * @param trainingDTO тренировка, у которой изменяется название
+     * @param newName     новое название тренировки
      * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws SecurityException     если возникла ошибка безопасности
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    Training changeNameTraining(UserDTO userDTO, Training training, String newName) throws RepositoryException, SecurityException, NoEditRightsException;
+    TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException, SecurityException, NoEditRightsException;
 
     /**
      * Изменяет дату тренировки.
      *
      * @param userDTO     пользователь, для которого изменяется дата тренировки
-     * @param training тренировка, у которой изменяется дата
-     * @param newDate  новая дата тренировки
+     * @param trainingDTO тренировка, у которой изменяется дата
+     * @param newDate     новая дата тренировки
      * @return измененная тренировка
      * @throws RepositoryException        если возникла ошибка доступа к хранилищу
      * @throws InvalidDateFormatException если указана некорректная дата тренировки
      * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoEditRightsException      если у пользователя нет прав на редактирование
      */
-    Training changeDateTraining(UserDTO userDTO, Training training, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
+    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
 
     /**
      * Изменяет длительность тренировки.
      *
-     * @param userDTO        пользователь, для которого изменяется длительность тренировки
-     * @param training    тренировка, у которой изменяется длительность
+     * @param userDTO     пользователь, для которого изменяется длительность тренировки
+     * @param trainingDTO тренировка, у которой изменяется длительность
      * @param newDuration новая длительность тренировки
      * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    Training changeDurationTraining(UserDTO userDTO, Training training, int newDuration) throws RepositoryException, NoEditRightsException;
+    TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, int newDuration) throws RepositoryException, NoEditRightsException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param userDTO        пользователь, для которого изменяется количество сожженных калорий
-     * @param training    тренировка, у которой изменяется количество сожженных калорий
+     * @param userDTO     пользователь, для которого изменяется количество сожженных калорий
+     * @param trainingDTO тренировка, у которой изменяется количество сожженных калорий
      * @param newCalories новое количество сожженных калорий
      * @return измененная тренировка
      * @throws RepositoryException   если возникла ошибка доступа к хранилищу
      * @throws NoEditRightsException если у пользователя нет прав на редактирование
      */
-    Training changeCaloriesTraining(UserDTO userDTO, Training training, int newCalories) throws RepositoryException, NoEditRightsException;
+    TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, int newCalories) throws RepositoryException, NoEditRightsException;
 }

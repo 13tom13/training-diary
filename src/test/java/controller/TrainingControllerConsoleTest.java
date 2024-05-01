@@ -1,6 +1,6 @@
 package controller;
 
-import entities.model.User;
+import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -33,7 +33,7 @@ public class TrainingControllerConsoleTest {
     @InjectMocks
     private TrainingControllerConsole trainingController;
 
-    private User testUser;
+    private UserDTO testUser;
 
     private final String testTrainingName = "Test Training";
 
@@ -44,9 +44,11 @@ public class TrainingControllerConsoleTest {
     @BeforeEach
     public void setUp() {
         // Создание тестового пользователя
-        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testUser = new UserDTO();
+        testUser.setFirstName(TEST_FIRST_NAME);
+        testUser.setLastName(TEST_LAST_NAME);
+        testUser.setEmail(TEST_EMAIL);
         testTraining  = new Training(testTrainingName, TEST_DATE, 60, 200);
-
     }
 
 
@@ -95,7 +97,7 @@ public class TrainingControllerConsoleTest {
         TreeSet<Training> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingsByUserIDAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
+        when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
 
         // Act
         TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
@@ -107,7 +109,7 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingByUserIDAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingServiceMock.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act

@@ -1,5 +1,6 @@
 package out.menu.training;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import entities.model.User;
 import in.controller.training.TrainingController;
@@ -22,7 +23,7 @@ public class ViewTrainingEditing {
     private final UserDTO userDTO;
     private final Scanner scanner;
 
-    private Training training;
+    private TrainingDTO trainingDTO;
 
     /**
      * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
@@ -45,7 +46,7 @@ public class ViewTrainingEditing {
      * Получает тренировку для редактирования.
      */
     private void getTrainingForEditing() {
-        TreeSet<Training> trainingsFromDay;
+        TreeSet<TrainingDTO> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
         String stringDate = scanner.nextLine();
         Date trainingDate;
@@ -58,12 +59,12 @@ public class ViewTrainingEditing {
         trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
             System.out.println("Тренировки на " + getFormattedDate(trainingDate) + ":");
-            for (Training training : trainingsFromDay) {
+            for (TrainingDTO training : trainingsFromDay) {
                 System.out.println(training);
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            training = trainingController.getTrainingByUserEmailAndDateAndName(userDTO, trainingDate, trainingName);
+            trainingDTO = trainingController.getTrainingByUserEmailAndDateAndName(userDTO, trainingDate, trainingName);
         }
     }
 
@@ -74,14 +75,14 @@ public class ViewTrainingEditing {
     public void editingTraining() {
         getTrainingForEditing();
         boolean startView = false;
-        if (training != null && training.getName() != null) {
+        if (trainingDTO != null && trainingDTO.getName() != null) {
             startView = true;
         } else {
             System.out.println("Тренировка не найдена.");
         }
         while (startView) {
             System.out.println();
-            System.out.printf("Редактирование тренировки:\n%s", training);
+            System.out.printf("Редактирование тренировки:\n%s", trainingDTO);
             System.out.println();
             System.out.println("Выберите действие:");
             System.out.println("1. изменить название");
@@ -98,7 +99,7 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        training  = trainingController.changeNameTraining(userDTO, training, newName);
+                        trainingDTO  = trainingController.changeNameTraining(userDTO, trainingDTO, newName);
                     }
                     case 2 -> {
                         System.out.println();
@@ -107,7 +108,7 @@ public class ViewTrainingEditing {
 
                         try {
                             Date newDate = getDateFromString(stringDate);
-                            training = trainingController.changeDateTraining(userDTO, training, newDate);
+                            trainingDTO = trainingController.changeDateTraining(userDTO, trainingDTO, newDate);
                         } catch (ParseException e) {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
                         }
@@ -116,15 +117,15 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        training = trainingController.changeDurationTraining(userDTO, training, newDuration);
+                        trainingDTO = trainingController.changeDurationTraining(userDTO, trainingDTO, newDuration);
                     }
                     case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        training = trainingController.changeCaloriesTraining(userDTO, training, newCalories);
+                        trainingDTO = trainingController.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
                     }
-                    case 5 -> viewTrainingAdded.addTrainingAdditional(training);
+                    case 5 -> viewTrainingAdded.addTrainingAdditional(trainingDTO);
                     case 6 -> {
                         System.out.println("Выход из меню изменения тренировки.");
                         startView = false;

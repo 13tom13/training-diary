@@ -25,4 +25,10 @@ public class Utils {
     }
 
 
+    public static boolean hisRole(UserDTO userDTO, String roleName) {
+        return userDTO.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
+    }
+
+
+
 }

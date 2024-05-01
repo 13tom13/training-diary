@@ -1,5 +1,6 @@
 package controller;
 
+import entities.dto.UserDTO;
 import entities.model.User;
 import in.controller.training.implementation.TrainingStatisticsControllerConsole;
 import exceptions.security.rights.NoStatisticsRightsException;
@@ -27,13 +28,16 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
 
     @InjectMocks
     private TrainingStatisticsControllerConsole trainingStatisticsController;
-    private User testUser;
+    private UserDTO testUser;
     private final Date startDate = new Date(2024, 1, 1);
     private final Date endDate = new Date(2024, 12, 31);
 
     @BeforeEach
     public void setUp() {
-        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testUser = new UserDTO();
+        testUser.setFirstName(TEST_FIRST_NAME);
+        testUser.setLastName(TEST_LAST_NAME);
+        testUser.setEmail(TEST_EMAIL);
     }
 
     @Test

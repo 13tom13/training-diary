@@ -14,6 +14,8 @@ import out.menu.account.ViewUserAccount;
 
 import java.util.Scanner;
 
+import static utils.Utils.hisRole;
+
 /**
  * Класс ViewAuthorization представляет собой меню для авторизации и регистрации пользователей.
  */
@@ -60,10 +62,10 @@ public class ViewAuthorization {
         String authPassword = scanner.nextLine();
         try {
             userDTO = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
-            if (hisRole("ADMIN")) {
+            if (hisRole(userDTO,"ADMIN")) {
                 ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
                 viewAdminAccount.adminAccountMenu();
-            } else if (hisRole("USER")) {
+            } else if (hisRole(userDTO,"USER")) {
                 ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, userDTO, scanner);
                 viewUserAccount.userAccountMenu();
             }
@@ -72,9 +74,6 @@ public class ViewAuthorization {
         }
     }
 
-    private boolean hisRole(String roleName) {
-        return userDTO.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
-    }
 
     /**
      * Метод для регистрации нового пользователя.

@@ -1,7 +1,10 @@
 package out.menu.training;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.User;
+import exceptions.InvalidDateFormatException;
+import exceptions.RepositoryException;
+import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 import entities.model.Training;
 
@@ -23,7 +26,7 @@ public class ViewTrainingAdded {
      * Создает экземпляр ViewTrainingAdded с заданным контроллером тренировок, пользователем и сканером.
      *
      * @param trainingController Контроллер тренировок.
-     * @param userDTO               Пользователь.
+     * @param userDTO            Пользователь.
      * @param scanner            Сканер для ввода данных.
      */
     public ViewTrainingAdded(TrainingController trainingController, UserDTO userDTO, Scanner scanner) {
@@ -37,7 +40,6 @@ public class ViewTrainingAdded {
      */
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
-        System.out.print("Название: ");
         String name = chooseTrainingType();
 
         // Просим пользователя ввести дату до тех пор, пока он не введет корректную дату
@@ -78,11 +80,16 @@ public class ViewTrainingAdded {
             }
         }
 
-        Training training = new Training(name, date, duration, caloriesBurned);
-        if (trainingController.saveTraining(userDTO, training)) {
-            addTrainingAdditional(training);
+        TrainingDTO trainingDTO = new TrainingDTO(name, date, duration, caloriesBurned);
+        try {
+            TrainingDTO savedTraining = trainingController.saveTraining(userDTO, trainingDTO);
+            addTrainingAdditional(savedTraining);
             System.out.println("Тренировка успешно сохранена.");
+        } catch (InvalidDateFormatException | NoWriteRightsException | RepositoryException e) {
+            System.err.println(e.getMessage());
         }
+
+
     }
 
 
@@ -144,8 +151,8 @@ public class ViewTrainingAdded {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
             return; // Выйти из метода, если дата некорректна
         }
-        TreeSet<Training> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
-        for (Training training : trainingsFromDay) {
+        TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
+        for (TrainingDTO training : trainingsFromDay) {
             System.out.println(training);
         }
         System.out.print("Название: ");
@@ -159,11 +166,11 @@ public class ViewTrainingAdded {
     /**
      * Метод для добавления дополнительной информации о тренировке.
      */
-    public void addTrainingAdditional(Training training) {
+    public void addTrainingAdditional(TrainingDTO trainingDTO) {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
-            if (!training.getAdditions().isEmpty()) {
+            if (trainingDTO.getAdditions() != null && !trainingDTO.getAdditions().isEmpty()) {
                 System.out.println("2. Удалить дополнительную информацию?");
             }
             System.out.println("3. Выход");
@@ -177,17 +184,17 @@ public class ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-                        training = trainingController.addTrainingAdditional(userDTO, training, additionalName, additionalValue);
+                        trainingDTO = trainingController.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
                     }
                     case 2 -> {
-                        if (!training.getAdditions().isEmpty()) {
-                            for (Map.Entry<String, String> entry : training.getAdditions().entrySet()) {
+                        if (!trainingDTO.getAdditions().isEmpty()) {
+                            for (Map.Entry<String, String> entry : trainingDTO.getAdditions().entrySet()) {
                                 System.out.println(entry.getKey() + " - " + entry.getValue());
                             }
                             System.out.println("Введите название дополнительной информации для удаления:");
 
                             String additionalNameForRemove = scanner.nextLine();
-                            training = trainingController.removeTrainingAdditional(userDTO, training, additionalNameForRemove);
+                            trainingDTO = trainingController.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
                         }
                     }
                     case 3 -> {

@@ -36,7 +36,11 @@ public class AdminControllerConsoleTest {
     @BeforeEach
     public void setUp() {
         testUsers = new ArrayList<>();
-        testUserDTO = new UserDTO(1L, "John", "Doe", "john@example.com", null, null, true);
+        testUserDTO = new UserDTO();
+        testUserDTO.setFirstName("John");
+        testUserDTO.setLastName("Doe");
+        testUserDTO.setEmail("john@example.com");
+        testUserDTO.setActive(true);
     }
 
     @Test

@@ -47,7 +47,7 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, newTraining);
 
         // Получаем все тренировки пользователя
-        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserID(user);
+        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
 
         // Проверяем, что тренировка успешно сохранена
         Assertions.assertTrue(userTrainings.containsValue(new TreeSet<>(Set.of(newTraining))));
@@ -67,7 +67,7 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, training2);
 
         // Получаем все тренировки пользователя
-        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserID(user);
+        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
 
         // Проверяем, что количество тренировок равно 2
         assertEquals(2, userTrainings.size());
@@ -84,7 +84,7 @@ public class TrainingRepositoryJDBCTest {
     }
 
     @Test
-    void testGetTrainingByUserIDlAndDataAndName() throws RepositoryException {
+    void testGetTrainingByUserEmailAndDataAndName() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка на указанную дату с указанным именем
         Date date = TEST_DATE;
         String trainingName = "Ходьба";
@@ -94,14 +94,14 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, expectedTraining);
 
         // Получаем тренировку пользователя по указанным параметрам
-        Training actualTraining = repository.getTrainingByUserIDlAndDataAndName(user, date, trainingName);
+        Training actualTraining = repository.getTrainingByUserEmailAndDataAndName(user, date, trainingName);
 
         // Проверяем, что полученная тренировка соответствует ожидаемой
         assertEquals(expectedTraining, actualTraining);
 
         // Проверяем, что метод выбрасывает исключение, если тренировка не найдена
         String nonExistentTrainingName = "Плавание"; // Несуществующее имя тренировки
-        assertThrows(RepositoryException.class, () -> repository.getTrainingByUserIDlAndDataAndName(user, date, nonExistentTrainingName));
+        assertThrows(RepositoryException.class, () -> repository.getTrainingByUserEmailAndDataAndName(user, date, nonExistentTrainingName));
     }
 
 
@@ -120,7 +120,7 @@ public class TrainingRepositoryJDBCTest {
         Assertions.assertTrue(isDeleted);
 
         // Проверяем, что тренировка больше не существует в базе данных
-        assertThrows(RepositoryException.class, () -> repository.getTrainingByUserIDlAndDataAndName(user, TEST_DATE, "Running"));
+        assertThrows(RepositoryException.class, () -> repository.getTrainingByUserEmailAndDataAndName(user, TEST_DATE, "Running"));
 
         // Проверяем, что метод выбрасывает исключение, если тренировка для удаления не найдена
         assertThrows(RepositoryException.class, () -> repository.deleteTraining(user, training));
@@ -142,7 +142,7 @@ public class TrainingRepositoryJDBCTest {
         repository.updateTraining(user, oldTraining, newTraining);
 
         // Получаем обновленную тренировку из базы данных
-        Training updatedTraining = repository.getTrainingByUserIDlAndDataAndName(user, newTraining.getDate(), newTrainingName);
+        Training updatedTraining = repository.getTrainingByUserEmailAndDataAndName(user, newTraining.getDate(), newTrainingName);
 
         // Проверяем, что тренировка успешно обновлена
         assertNotNull(updatedTraining);
@@ -166,7 +166,7 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, trainingWithAdditionalInfo);
 
         // Получаем сохраненную дополнительную информацию из базы данных
-        Training savedTraining = repository.getTrainingByUserIDlAndDataAndName(user, TEST_DATE, trainingName);
+        Training savedTraining = repository.getTrainingByUserEmailAndDataAndName(user, TEST_DATE, trainingName);
         HashMap<String, String> savedAdditionalInfo = savedTraining.getAdditions();
 
         // Проверяем, что дополнительная информация успешно сохранена

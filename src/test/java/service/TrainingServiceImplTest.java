@@ -81,7 +81,7 @@ public class TrainingServiceImplTest extends TestUtil {
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
@@ -94,7 +94,7 @@ public class TrainingServiceImplTest extends TestUtil {
     @Test
     public void testAddTrainingAdditional_Successful() throws RepositoryException, NoWriteRightsException {
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
@@ -111,7 +111,7 @@ public class TrainingServiceImplTest extends TestUtil {
         testTraining.addAdditional(testAdditionalName, "additionalValue");
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
@@ -126,7 +126,7 @@ public class TrainingServiceImplTest extends TestUtil {
     public void testChangeNameTraining_Successful() throws RepositoryException, NoEditRightsException {
 
         // Configure mock behavior
-        when(trainingRepository.getTrainingByUserIDlAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingRepository.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
                 .thenReturn(testTraining);
 
         // Act

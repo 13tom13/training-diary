@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static utils.Utils.getFormattedDate;
+
 /**
  * Класс, представляющий тренировку.
  */
@@ -226,16 +228,10 @@ public class Training implements Comparable<Training> {
      *
      * @return Строковое представление тренировки
      */
-    /**
-     * Возвращает строковое представление тренировки.
-     *
-     * @return Строковое представление тренировки
-     */
     @Override
     public String toString() {
         // Форматирование даты в строку в формате "dd.MM.yy"
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
-        String formattedDate = dateFormat.format(date);
+        String formattedDate = getFormattedDate(date);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Тренировка: ").append(name)

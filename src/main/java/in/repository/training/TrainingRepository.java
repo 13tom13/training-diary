@@ -19,7 +19,7 @@ public interface TrainingRepository {
      * @param user электронная почта пользователя
      * @return отображение даты на множество тренировок
      */
-    TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserID(User user);
+    TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserEmail(User user);
 
     /**
      * Получить тренировки для указанного пользователя на указанную дату.
@@ -29,7 +29,7 @@ public interface TrainingRepository {
      * @return множество тренировок на указанную дату
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    TreeSet<Training> getTrainingsByUserIDAndData(User user, Date trainingDate) throws RepositoryException;
+    TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) throws RepositoryException;
 
     /**
      * Получить тренировку по электронной почте пользователя, дате и названию.
@@ -40,16 +40,17 @@ public interface TrainingRepository {
      * @return тренировка
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    Training getTrainingByUserIDlAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException;
+    Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException;
 
     /**
      * Сохранить новую тренировку для указанного пользователя.
      *
-     * @param user  пользователь
+     * @param user        пользователь
      * @param newTraining новая тренировка
+     * @return
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
-    void saveTraining(User user, Training newTraining) throws RepositoryException;
+    Training saveTraining(User user, Training newTraining) throws RepositoryException;
 
     /**
      * Удалить указанную тренировку для указанного пользователя.

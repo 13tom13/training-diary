@@ -35,20 +35,20 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @return TreeMap, содержащий все тренировки пользователя
      */
     @Override
-    public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserID(User user) {
+    public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
         TreeMap<Date, TreeSet<Training>> userTrainingMap = new TreeMap<>();
         String sql = """
-                SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
-                       ta.key AS addition_key, ta.value AS addition_value
-                FROM main.trainings t
-                JOIN relations.user_trainings ut ON t.id = ut.training_id
-                JOIN main.users u ON u.id = ut.user_id
-                LEFT JOIN main.training_additions ta ON t.id = ta.training_id
-                WHERE u.id = ?
-                """;
+            SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
+                   ta.key AS addition_key, ta.value AS addition_value
+            FROM main.trainings t
+            JOIN relations.user_trainings ut ON t.id = ut.training_id
+            JOIN main.users u ON u.id = ut.user_id
+            LEFT JOIN main.training_additions ta ON t.id = ta.training_id
+            WHERE u.email = ?
+            """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, user.getId());
+            statement.setString(1, user.getEmail());
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Получаем данные о тренировке из ResultSet
@@ -66,6 +66,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     }
 
 
+
     /**
      * Получает тренировки пользователя по его адресу электронной почты и дате тренировки.
      * Если пользователь с указанным адресом не найден или тренировка на указанную дату отсутствует,
@@ -77,19 +78,19 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserIDAndData(User user, Date trainingDate) throws RepositoryException {
+    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) throws RepositoryException {
         TreeSet<Training> trainingsOnDate = new TreeSet<>();
         String sql = """
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned
                 FROM main.trainings t
                 JOIN relations.user_trainings ut ON t.id = ut.training_id
                 JOIN main.users u ON u.id = ut.user_id
-                WHERE u.id = ? AND t.date = ?
+                WHERE u.email = ? AND t.date = ?
                 """;
 
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, user.getId());
+            statement.setString(1, user.getEmail());
             statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -121,7 +122,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public Training getTrainingByUserIDlAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
+    public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
         String sql = """
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
                        ta.key AS addition_key, ta.value AS addition_value
@@ -129,11 +130,11 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 JOIN relations.user_trainings ut ON t.id = ut.training_id
                 JOIN main.users u ON u.id = ut.user_id
                 LEFT JOIN main.training_additions ta ON t.id = ta.training_id
-                WHERE u.id = ? AND t.date = ? AND t.name = ?
+                WHERE u.email = ? AND t.date = ? AND t.name = ?
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, user.getId());
+            statement.setString(1, user.getEmail());
             statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
             statement.setString(3, trainingName);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -156,10 +157,11 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      *
      * @param user        пользователь, для которого сохраняется тренировка
      * @param newTraining новая тренировка пользователя
+     * @return
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public void saveTraining(User user, Training newTraining) throws RepositoryException {
+    public Training saveTraining(User user, Training newTraining) throws RepositoryException {
         String sqlInsertTraining = """
                 INSERT INTO main.trainings (name, date, duration, calories_burned)
                 VALUES (?, ?, ?, ?)
@@ -199,6 +201,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
         } catch (SQLException e) {
             throw new RepositoryException("Ошибка сохранения тренировки " + e.getMessage());
         }
+        return newTraining;
     }
 
 
@@ -399,7 +402,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     }
 
 
-    public HashMap<String, String> getTrainingAdditionals(long trainingID) throws RepositoryException {
+    private HashMap<String, String> getTrainingAdditionals(long trainingID) throws RepositoryException {
         HashMap<String, String> additionals = new HashMap<>();
 
         String sql = """
