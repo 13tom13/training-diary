@@ -1,13 +1,13 @@
 package database;
 
+import entities.model.Roles;
+import entities.model.Training;
 import entities.model.User;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
-import entities.model.Roles;
-import entities.model.Training;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 /**
@@ -21,7 +21,7 @@ public class CollectionsMigrations {
     /**
      * Создает новый экземпляр класса CollectionsMigrations.
      *
-     * @param userRepository    репозиторий пользователей
+     * @param userRepository     репозиторий пользователей
      * @param trainingRepository репозиторий тренировок
      */
     public CollectionsMigrations(UserRepository userRepository, TrainingRepository trainingRepository) {
@@ -72,9 +72,10 @@ public class CollectionsMigrations {
         HashMap<String, String> additions = new HashMap<>();
         additions.put("comment", "Это дополнительная информация о тренировке");
 
-        Training training1 = new Training("Кардио", new Date(2024,4,15), 90, 560, additions);
-        Training training2 = new Training("Силовая", new Date(2024,4,13), 60, 450, additions);
-        Training training3 = new Training("Гибкость", new Date(2024,4,10), 45, 300, additions);
+        Training training1 = new Training("Кардио", LocalDate.of(2024, 4, 15), 90, 560, additions);
+        Training training2 = new Training("Силовая", LocalDate.of(2024, 4, 13), 60, 450, additions);
+        Training training3 = new Training("Гибкость", LocalDate.of(2024, 4, 10), 45, 300, additions);
+
 
         try {
             trainingRepository.saveTraining(user, training1);

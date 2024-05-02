@@ -4,7 +4,7 @@ import exceptions.RepositoryException;
 import entities.model.Training;
 import entities.model.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -19,7 +19,7 @@ public interface TrainingRepository {
      * @param user электронная почта пользователя
      * @return отображение даты на множество тренировок
      */
-    TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserEmail(User user);
+    TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(User user);
 
     /**
      * Получить тренировки для указанного пользователя на указанную дату.
@@ -29,7 +29,7 @@ public interface TrainingRepository {
      * @return множество тренировок на указанную дату
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) throws RepositoryException;
+    TreeSet<Training> getTrainingsByUserEmailAndData(User user, LocalDate trainingDate) throws RepositoryException;
 
     /**
      * Получить тренировку по электронной почте пользователя, дате и названию.
@@ -40,7 +40,7 @@ public interface TrainingRepository {
      * @return тренировка
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException;
+    Training getTrainingByUserEmailAndDataAndName(User user, LocalDate trainingDate, String trainingName) throws RepositoryException;
 
     /**
      * Сохранить новую тренировку для указанного пользователя.

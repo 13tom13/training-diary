@@ -5,6 +5,7 @@ import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
 import entities.model.Training;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -19,7 +20,7 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * Значениями являются TreeMap, где ключами являются даты тренировок,
      * а значениями являются сами тренировки пользователя, совершенные в указанные даты.
      */
-    private final Map<Long, TreeMap<Date, TreeSet<Training>>> userTrainingMap;
+    private final Map<Long, TreeMap<LocalDate, TreeSet<Training>>> userTrainingMap;
 
     /**
      * Создает новый экземпляр класса TrainingRepositoryCollections.
@@ -37,7 +38,7 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * @return TreeMap, содержащий все тренировки пользователя
      */
     @Override
-    public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
+    public TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
         return userTrainingMap.getOrDefault(user.getId(), new TreeMap<>());
     }
 
@@ -52,8 +53,8 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) throws RepositoryException {
-        TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
+    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, LocalDate trainingDate) throws RepositoryException {
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(trainingDate);
             if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
@@ -75,8 +76,8 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
-        TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
+    public Training getTrainingByUserEmailAndDataAndName(User user, LocalDate trainingDate, String trainingName) throws RepositoryException {
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(trainingDate);
             if (trainingsOnDate != null && !trainingsOnDate.isEmpty()) {
@@ -101,12 +102,12 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      *
      * @param user        пользователь, для которого нужно сохранить тренировку
      * @param newTraining новая тренировка пользователя
-     * @return
+     * @return новая тренировка пользователя
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
     @Override
     public Training saveTraining(User user, Training newTraining) throws RepositoryException {
-        TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.computeIfAbsent(user.getId(), k -> new TreeMap<>());
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.computeIfAbsent(user.getId(), k -> new TreeMap<>());
         TreeSet<Training> trainingsOnDate = userTrainings.computeIfAbsent(newTraining.getDate(), k -> new TreeSet<>());
         if (!trainingsOnDate.add(newTraining)) {
             throw new RepositoryException("Тренировка с именем " + newTraining.getName() + " на дату " + newTraining.getDate() + " уже существует");
@@ -128,7 +129,7 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      */
     @Override
     public boolean deleteTraining(User user, Training training) throws RepositoryException {
-        TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(training.getDate());
             if (trainingsOnDate != null) {
@@ -160,7 +161,7 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      */
     @Override
     public Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
-        TreeMap<Date, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(oldTraining.getDate());
             if (trainingsOnDate != null) {

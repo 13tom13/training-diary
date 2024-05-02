@@ -16,11 +16,12 @@ import java.io.IOException;
 
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
+import static utils.Utils.getObjectMapper;
 
 public class SaveTrainingType extends HttpServlet {
 
     private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public SaveTrainingType() {
         try {

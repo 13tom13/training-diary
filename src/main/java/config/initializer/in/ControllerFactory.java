@@ -41,7 +41,7 @@ public class ControllerFactory {
         userController = new UserControllerHTTP();
         authorizationController = new AuthorizationControllerHTTP();
         trainingController = new TrainingControllerHTTP();
-        trainingStatisticsController = new TrainingStatisticsControllerConsole(getTrainingStatisticsService());
+        trainingStatisticsController = new TrainingStatisticsControllerConsole();
         adminController = new AdminControllerConsole(getUserRepository());
     }
 

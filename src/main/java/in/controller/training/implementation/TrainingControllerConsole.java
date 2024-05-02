@@ -11,6 +11,7 @@ import in.controller.training.TrainingController;
 import in.service.training.TrainingService;
 import utils.Logger;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -41,7 +42,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Словарь, содержащий тренировки, сгруппированные по дате
      */
     @Override
-    public TreeMap<Date, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
+    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
         return trainingService.getAllTrainings(userDTO);
     }
 
@@ -91,7 +92,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return {@code true}, если тренировка удалена успешно, в противном случае {@code false}
      */
     @Override
-    public boolean deleteTraining(UserDTO userDTO, Date date, String name) {
+    public boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) {
         try {
             boolean result = trainingService.deleteTraining(userDTO, date, name);
             logger.logAction(userDTO.getEmail(), "delete training " + name + " " + date);
@@ -111,7 +112,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Множество тренировок пользователя на указанную дату
      */
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, Date trainingDate) {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate trainingDate) {
         try {
             return trainingService.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         } catch (RepositoryException e) {
@@ -130,7 +131,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, Date trainingDate, String trainingName) {
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, LocalDate trainingDate, String trainingName) {
         try {
             return trainingService.getTrainingByUserEmailAndDataAndName(userDTO, trainingDate, trainingName);
         } catch (RepositoryException e) {
@@ -214,7 +215,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с измененной датой
      */
     @Override
-    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) {
+    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) {
         try {
             trainingDTO = trainingService.changeDateTraining(userDTO, trainingDTO, newDate);
             logger.logAction(userDTO.getEmail(),

@@ -1,12 +1,14 @@
 package in.controller.training.implementation;
 
+import config.initializer.in.ServiceFactory;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
 import exceptions.security.rights.NoStatisticsRightsException;
 import utils.Logger;
 import in.service.training.TrainingStatisticsService;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 /**
  * Реализация контроллера статистики тренировок.
@@ -19,10 +21,9 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
 
     /**
      * Конструктор контроллера статистики тренировок.
-     * @param trainingStatisticsService Сервис статистики тренировок
      */
-    public TrainingStatisticsControllerConsole(TrainingStatisticsService trainingStatisticsService) {
-        this.trainingStatisticsService = trainingStatisticsService;
+    public TrainingStatisticsControllerConsole() {
+        this.trainingStatisticsService = ServiceFactory.getTrainingStatisticsService();
         logger = Logger.getInstance();
     }
 
@@ -31,7 +32,7 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
      * @param userDTO Пользователь
      * @return Статистика всех тренировок
      */
-    public int getAllTrainingStatistics(UserDTO userDTO) {
+    public Integer getAllTrainingStatistics(UserDTO userDTO) {
         try {
             int result = trainingStatisticsService.getAllTrainingStatistics(userDTO);
             logger.logAction(userDTO.getEmail(), "get all training statistics");
@@ -49,7 +50,7 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
      * @param endDate Конечная дата периода
      * @return Статистика всех тренировок за указанный период
      */
-    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) {
+    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),
@@ -68,7 +69,7 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
      * @param endDate Конечная дата периода
      * @return Статистика продолжительности тренировок за указанный период
      */
-    public int getDurationStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) {
+    public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getDurationStatisticsPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),
@@ -88,7 +89,7 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
      * @return Статистика сжигания калорий за указанный период
      * @throws RuntimeException если возникает ошибка доступа к статистике
      */
-    public int getCaloriesBurnedPerPeriod(UserDTO userDTO, Date startDate, Date endDate) {
+    public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getCaloriesBurnedPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),

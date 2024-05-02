@@ -4,6 +4,7 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.RepositoryException;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -20,7 +21,7 @@ public interface TrainingRetrievalService {
      * @return отображение даты на множество тренировок
      * @throws SecurityException если возникла ошибка безопасности
      */
-    TreeMap<Date, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) throws SecurityException;
+    TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) throws SecurityException;
 
     /**
      * Получает тренировки для указанного пользователя на указанную дату.
@@ -31,7 +32,7 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, Date data) throws RepositoryException, SecurityException;
+    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate data) throws RepositoryException, SecurityException;
 
     /**
      * Получает тренировку по электронной почте пользователя, дате и названию.
@@ -43,5 +44,5 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, Date trainingData, String trainingName) throws RepositoryException, SecurityException;
+    TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, LocalDate trainingData, String trainingName) throws RepositoryException, SecurityException;
 }

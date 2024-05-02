@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +48,7 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, newTraining);
 
         // Получаем все тренировки пользователя
-        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
 
         // Проверяем, что тренировка успешно сохранена
         Assertions.assertTrue(userTrainings.containsValue(new TreeSet<>(Set.of(newTraining))));
@@ -57,8 +58,8 @@ public class TrainingRepositoryJDBCTest {
     @Test
     void testGetAllTrainingsByUserID() throws RepositoryException {
         // Предположим, что у пользователя есть две тренировки
-        Date date = TEST_DATE;
-        Date nextDay = new Date(date.getTime() + 24 * 60 * 60 * 1000); // Добавляем один день
+        LocalDate date = TEST_DATE;
+        LocalDate nextDay = date.plusDays(1); // Добавляем один день
         Training training1 = new Training("Силовая", date, 60, 300);
         Training training2 = new Training("Велосипед", nextDay, 45, 200);
 
@@ -67,17 +68,17 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, training2);
 
         // Получаем все тренировки пользователя
-        TreeMap<Date, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
+        TreeMap<LocalDate, TreeSet<Training>> userTrainings = repository.getAllTrainingsByUserEmail(user);
 
         // Проверяем, что количество тренировок равно 2
         assertEquals(2, userTrainings.size());
 
         // Проверяем, что тренировки отсортированы по дате
-        Set<Date> dates = userTrainings.keySet();
-        Date prevDate = null;
-        for (Date currentDate : dates) {
+        Set<LocalDate> dates = userTrainings.keySet();
+        LocalDate prevDate = null;
+        for (LocalDate currentDate : dates) {
             if (prevDate != null) {
-                Assertions.assertTrue(prevDate.before(currentDate));
+                assertTrue(prevDate.isBefore(currentDate));
             }
             prevDate = currentDate;
         }
@@ -86,7 +87,7 @@ public class TrainingRepositoryJDBCTest {
     @Test
     void testGetTrainingByUserEmailAndDataAndName() throws RepositoryException {
         // Предположим, что у пользователя есть тренировка на указанную дату с указанным именем
-        Date date = TEST_DATE;
+        LocalDate date = TEST_DATE;
         String trainingName = "Ходьба";
         Training expectedTraining = new Training(trainingName, date, 60, 300);
 
@@ -133,7 +134,7 @@ public class TrainingRepositoryJDBCTest {
         String oldTrainingName = "Лежание";
         String newTrainingName = "Стояние";
         Training oldTraining = new Training(oldTrainingName, TEST_DATE, 60, 300);
-        Training newTraining = new Training(newTrainingName, new Date(TEST_DATE.getTime() + 48 * 60 * 60 * 1000), 45, 200);
+        Training newTraining = new Training(newTrainingName, TEST_DATE.plusDays(1), 45, 200);
 
         // Сохраняем старую тренировку
         repository.saveTraining(user, oldTraining);

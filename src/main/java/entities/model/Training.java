@@ -1,7 +1,11 @@
 package entities.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -13,9 +17,10 @@ import static utils.Utils.getFormattedDate;
 public class Training implements Comparable<Training> {
 
     private Long id;
-
     private String name; // Название тренировки
-    private Date date; // Дата тренировки
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate date; // Дата тренировки
     private int duration; // Продолжительность тренировки в минутах
     private int caloriesBurned; // Количество сожженных калорий
 
@@ -36,7 +41,7 @@ public class Training implements Comparable<Training> {
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
      */
-    public Training(long id, String name, Date date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+    public Training(long id, String name, LocalDate date, int duration, int caloriesBurned, HashMap<String, String> additions) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -44,7 +49,6 @@ public class Training implements Comparable<Training> {
         this.caloriesBurned = caloriesBurned;
         this.additions = additions;
     }
-
 
 
     /**
@@ -55,7 +59,7 @@ public class Training implements Comparable<Training> {
      * @param duration       Продолжительность тренировки в минутах
      * @param caloriesBurned Количество сожженных калорий
      */
-    public Training(String name, Date date, int duration, int caloriesBurned) {
+    public Training(String name, LocalDate date, int duration, int caloriesBurned) {
         this.name = name;
         this.date = date;
         this.duration = duration;
@@ -63,7 +67,7 @@ public class Training implements Comparable<Training> {
         this.additions = new HashMap<>();
     }
 
-    public Training(String name, Date date, int caloriesBurned, int duration,HashMap<String, String> additions) {
+    public Training(String name, LocalDate date, int caloriesBurned, int duration, HashMap<String, String> additions) {
         this.additions = additions;
         this.caloriesBurned = caloriesBurned;
         this.duration = duration;
@@ -84,7 +88,7 @@ public class Training implements Comparable<Training> {
      *
      * @param date Дата тренировки в формате строки
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -93,7 +97,7 @@ public class Training implements Comparable<Training> {
      *
      * @return Дата тренировки
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -161,7 +165,6 @@ public class Training implements Comparable<Training> {
     }
 
 
-
     /**
      * Добавляет дополнительные данные к тренировке.
      *
@@ -207,10 +210,7 @@ public class Training implements Comparable<Training> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Training training = (Training) o;
-        return duration == training.duration &&
-                caloriesBurned == training.caloriesBurned &&
-                Objects.equals(name, training.name) &&
-                Objects.equals(date, training.date);
+        return duration == training.duration && caloriesBurned == training.caloriesBurned && Objects.equals(name, training.name) && Objects.equals(date, training.date);
     }
 
     /**
@@ -234,10 +234,8 @@ public class Training implements Comparable<Training> {
         String formattedDate = getFormattedDate(date);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Тренировка: ").append(name)
-                .append(" | Дата: ").append(formattedDate) // Вывод отформатированной даты
-                .append(" | Продолжительность: ").append(duration).append(" мин")
-                .append(" | Сожжено калорий: ").append(caloriesBurned).append(" kcal");
+        stringBuilder.append("Тренировка: ").append(name).append(" | Дата: ").append(formattedDate) // Вывод отформатированной даты
+                .append(" | Продолжительность: ").append(duration).append(" мин").append(" | Сожжено калорий: ").append(caloriesBurned).append(" kcal");
 
         if (!additions.isEmpty()) {
             stringBuilder.append("\nДополнительная информация:");

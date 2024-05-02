@@ -5,8 +5,7 @@ import config.initializer.in.ControllerFactory;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
 
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import static utils.Utils.getDateFromString;
@@ -23,7 +22,7 @@ public class ViewTrainingStatistcs {
     /**
      * Конструктор класса ViewTrainingStatistcs.
      *
-     * @param userDTO                          Пользователь, для которого отображается статистика.
+     * @param userDTO Пользователь, для которого отображается статистика.
      */
     public ViewTrainingStatistcs(UserDTO userDTO) {
         this.trainingStatisticsController = ControllerFactory.getInstance().getTrainingStatisticsController();
@@ -48,8 +47,10 @@ public class ViewTrainingStatistcs {
                 scanner.nextLine();
                 switch (choice) {
                     case 1 -> printTotalTrainingStatistics();
-                    case 2 -> printPeriodTrainingStatistics(trainingStatisticsController::getAllTrainingStatisticsPerPeriod);
-                    case 3 -> printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
+                    case 2 ->
+                            printPeriodTrainingStatistics(trainingStatisticsController::getAllTrainingStatisticsPerPeriod);
+                    case 3 ->
+                            printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
                     case 4 -> printPeriodTrainingStatistics(trainingStatisticsController::getCaloriesBurnedPerPeriod);
                     case 5 -> {
                         System.out.println("Выход из меню статистики пользователя " + userDTO.getEmail());
@@ -81,26 +82,15 @@ public class ViewTrainingStatistcs {
      *
      * @param statisticsFunction Функция для получения статистики за период.
      */
-    private void printPeriodTrainingStatistics(TriFunction<UserDTO, Date, Date, Integer> statisticsFunction) {
+    private void printPeriodTrainingStatistics(TriFunction<UserDTO, LocalDate, LocalDate, Integer> statisticsFunction) {
         System.out.println("Введите начало периода (дд.мм.гг):");
         String stringStartDate = scanner.nextLine();
-        Date startDate;
-        try {
-            startDate = getDateFromString(stringStartDate);
-        } catch (ParseException e) {
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-            return; // Выйти из метода, если дата некорректна
-        }
+        LocalDate startDate = getDateFromString(stringStartDate);
+        ;
 
         System.out.println("Введите конец периода (дд.мм.гг):");
         String stringEndDate = scanner.nextLine();
-        Date endDate;
-        try {
-            endDate = getDateFromString(stringEndDate);
-        } catch (ParseException e) {
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-            return; // Выйти из метода, если дата некорректна
-        }
+        LocalDate endDate = getDateFromString(stringEndDate);
 
         int result = statisticsFunction.apply(userDTO, startDate, endDate);
         if (result == -1) {

@@ -6,6 +6,8 @@ import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -43,10 +45,10 @@ public class ViewTrainingEditing {
         TreeSet<TrainingDTO> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
         String stringDate = scanner.nextLine();
-        Date trainingDate;
+        LocalDate trainingDate;
         try {
             trainingDate = getDateFromString(stringDate);
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
             return; // Выйти из метода, если дата некорректна
         }
@@ -101,9 +103,9 @@ public class ViewTrainingEditing {
                         String stringDate = scanner.nextLine();
 
                         try {
-                            Date newDate = getDateFromString(stringDate);
+                            LocalDate newDate = getDateFromString(stringDate);
                             trainingDTO = trainingController.changeDateTraining(userDTO, trainingDTO, newDate);
-                        } catch (ParseException e) {
+                        } catch (DateTimeParseException e) {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
                         }
                     }

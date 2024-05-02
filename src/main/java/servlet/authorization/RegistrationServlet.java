@@ -14,11 +14,12 @@ import java.util.stream.Collectors;
 
 import static config.initializer.in.ServiceFactory.getUserService;
 import static servlet.utils.ServletUtils.getRequestBody;
+import static utils.Utils.getObjectMapper;
 
 public class RegistrationServlet extends HttpServlet {
 
     private final UserService userService;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public RegistrationServlet() {
         try {
@@ -27,7 +28,6 @@ public class RegistrationServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        this.objectMapper = new ObjectMapper();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

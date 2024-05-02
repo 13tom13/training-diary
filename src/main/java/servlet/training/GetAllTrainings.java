@@ -1,6 +1,7 @@
 package servlet.training;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import entities.dto.UserDTO;
 import in.service.training.TrainingService;
 import jakarta.servlet.ServletException;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -18,11 +20,12 @@ import entities.dto.TrainingDTO;
 import static config.initializer.in.ServiceFactory.getTrainingService;
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;
+import static utils.Utils.getObjectMapper;
 
 public class GetAllTrainings extends HttpServlet {
 
     private final TrainingService trainingService;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public GetAllTrainings() {
         try {
@@ -31,8 +34,6 @@ public class GetAllTrainings extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // Создаем экземпляр сервиса
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class GetAllTrainings extends HttpServlet {
         // Преобразуем JSON в объект UserDTO
         UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
         // Получаем все тренировки пользователя через сервис
-        TreeMap<Date, TreeSet<TrainingDTO>> allTraining = trainingService.getAllTrainings(userDTO);
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingService.getAllTrainings(userDTO);
 
         // Преобразуем данные в JSON и отправляем как ответ
        writeJsonResponse(response, allTraining, HttpServletResponse.SC_OK);

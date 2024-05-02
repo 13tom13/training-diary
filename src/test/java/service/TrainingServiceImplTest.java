@@ -23,6 +23,7 @@ import servlet.mappers.TrainingMapper;
 import servlet.mappers.UserMapper;
 import testutil.TestUtil;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
@@ -87,7 +88,7 @@ public class TrainingServiceImplTest extends TestUtil {
 
 
         // Act
-        TreeMap<Date, TreeSet<TrainingDTO>> actualTrainings = trainingService.getAllTrainings(testUser);
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> actualTrainings = trainingService.getAllTrainings(testUser);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);

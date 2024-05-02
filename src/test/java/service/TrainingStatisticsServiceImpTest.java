@@ -14,8 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import out.menu.statistic.TriFunction;
 import testutil.TestUtil;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
@@ -34,8 +37,8 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     private TrainingStatisticsServiceImp trainingStatisticsService;
 
     private UserDTO testUser;
-    private final Date startDate = new Date(2024,1,1);
-    private final Date endDate = new Date(2024,12,31);
+    private final LocalDate startDate = LocalDate.of(2024, 1, 1);
+    private final LocalDate endDate = LocalDate.of(2024, 12, 31);
 
     private int totalTestTrainings;
 
@@ -58,9 +61,9 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {
         // Arrange
-        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
-        allTrainings.put(new Date(2024,1,1), new TreeSet<>());
-        allTrainings.put(new Date(2024,1,2), new TreeSet<>());
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
+        allTrainings.put(LocalDate.of(2024, 1, 1), new TreeSet<>());
+        allTrainings.put(LocalDate.of(2024, 1, 2), new TreeSet<>());
 
         // Configure mock behavior
         when(trainingService.getAllTrainings(testUser)).thenReturn(allTrainings);
@@ -79,7 +82,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         when(trainingService.getAllTrainings(testUser)).thenReturn(getMockTrainingData());
 
         // Act
-        int totalTrainings = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(testUser, startDate, endDate);
+        Integer totalTrainings = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(totalTestTrainings, totalTrainings);
@@ -92,7 +95,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         when(trainingService.getAllTrainings(testUser)).thenReturn(getMockTrainingData());
 
         // Act
-        int totalDuration = trainingStatisticsService.getDurationStatisticsPerPeriod(testUser, startDate, endDate);
+        Integer totalDuration = trainingStatisticsService.getDurationStatisticsPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(totalTestDuration, totalDuration);
@@ -106,15 +109,15 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
         when(trainingService.getAllTrainings(testUser)).thenReturn(getMockTrainingData());
 
         // Act
-        int totalCaloriesBurned = trainingStatisticsService.getCaloriesBurnedPerPeriod(testUser, startDate, endDate);
+        Integer totalCaloriesBurned = trainingStatisticsService.getCaloriesBurnedPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(totalTestCaloriesBurned, totalCaloriesBurned);
     }
 
 
-    private TreeMap<Date, TreeSet<TrainingDTO>> getMockTrainingData() {
-        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
+    private TreeMap<LocalDate, TreeSet<TrainingDTO>> getMockTrainingData() {
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
         TreeSet<TrainingDTO> trainings = new TreeSet<>();
         trainings.add(new TrainingDTO("Test Training 1", TEST_DATE, 60, 200));
         trainings.add(new TrainingDTO("Test Training 2", TEST_DATE, 45, 150));

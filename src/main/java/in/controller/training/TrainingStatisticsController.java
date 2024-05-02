@@ -2,7 +2,8 @@ package in.controller.training;
 
 import entities.dto.UserDTO;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 /**
  * Интерфейс контроллера статистики тренировок.
@@ -15,7 +16,7 @@ public interface TrainingStatisticsController {
      * @param userDTO пользователь, для которого запрашивается статистика
      * @return общая статистика по всем тренировкам пользователя
      */
-    int getAllTrainingStatistics(UserDTO userDTO);
+    Integer getAllTrainingStatistics(UserDTO userDTO);
 
     /**
      * Получает общую статистику по всем тренировкам пользователя за определенный период.
@@ -25,7 +26,7 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return общая статистика по всем тренировкам пользователя за указанный период
      */
-    Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate);
+    Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 
     /**
      * Получает статистику по длительности тренировок пользователя за определенный период.
@@ -35,7 +36,7 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return статистика по длительности тренировок пользователя за указанный период
      */
-    int getDurationStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate);
+    Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 
     /**
      * Получает статистику по сожженным калориям пользователем за определенный период.
@@ -45,5 +46,5 @@ public interface TrainingStatisticsController {
      * @param endDate   конечная дата периода
      * @return статистика по сожженным калориям пользователем за указанный период
      */
-    int getCaloriesBurnedPerPeriod(UserDTO userDTO, Date startDate, Date endDate);
+    Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 }

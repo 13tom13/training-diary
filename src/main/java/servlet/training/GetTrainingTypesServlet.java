@@ -15,11 +15,12 @@ import java.util.stream.Collectors;
 
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;
+import static utils.Utils.getObjectMapper;
 
 public class GetTrainingTypesServlet extends HttpServlet {
 
     private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public GetTrainingTypesServlet() {
         try {

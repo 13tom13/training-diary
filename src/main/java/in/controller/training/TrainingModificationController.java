@@ -7,6 +7,7 @@ import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ public interface TrainingModificationController {
      * @param name имя тренировки
      * @return true, если тренировка успешно удалена, в противном случае false
      */
-    boolean deleteTraining(UserDTO userDTO, Date date, String name);
+    boolean deleteTraining(UserDTO userDTO, LocalDate date, String name);
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -72,7 +73,7 @@ public interface TrainingModificationController {
      * @param newDate     новая дата тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate);
+    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate);
 
     /**
      * Изменяет продолжительность тренировки.

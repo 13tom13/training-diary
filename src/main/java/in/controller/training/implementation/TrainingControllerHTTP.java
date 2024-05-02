@@ -13,10 +13,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 
 import static config.ApplicationConfig.getRootURL;
 import static utils.HTTP.*;
+import static utils.Utils.getObjectMapper;
 
 public class TrainingControllerHTTP implements TrainingController {
 
@@ -29,7 +31,7 @@ public class TrainingControllerHTTP implements TrainingController {
     private final String saveTrainingTypesServletPath = "/training/savetrainingtypes";
     private final String DeleteTrainingServletPath = "/training/deletetraining";
     private final String addTrainingAdditionalServletPath = "/training/addtrainingadditional";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     @Override
     public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
@@ -47,7 +49,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public boolean deleteTraining(UserDTO userDTO, Date date, String name) {
+    public boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) {
         try {
             String userForDelete = URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
             String dateForDelete = objectMapper.writeValueAsString(date);
@@ -91,7 +93,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) {
+    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) {
         return null;
     }
 
@@ -106,7 +108,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TreeMap<Date, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
+    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
         try {
             // Формируем URL запроса с параметрами
             String urlWithParams = rootURL + getAllTrainingsServletPath + "?user=" + URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
@@ -115,7 +117,7 @@ public class TrainingControllerHTTP implements TrainingController {
             String jsonResponse = sendGetRequest(urlWithParams);
 
             // Преобразуем JSON в TreeMap<Date, TreeSet<TrainingDTO>>
-            TypeReference<TreeMap<Date, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {};
+            TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {};
             return objectMapper.readValue(jsonResponse, typeRef);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -123,7 +125,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, Date trainingDate) {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate trainingDate) {
         try {
             String userEmailForGet = URLEncoder.encode(objectMapper.writeValueAsString(userDTO.getEmail()), StandardCharsets.UTF_8);
             String dateForGet = URLEncoder.encode(objectMapper.writeValueAsString(trainingDate), StandardCharsets.UTF_8);
@@ -138,7 +140,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, Date trainingDate, String trainingName) {
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, LocalDate trainingDate, String trainingName) {
         try {
             String userEmailForGet = URLEncoder.encode(objectMapper.writeValueAsString(userDTO.getEmail()), StandardCharsets.UTF_8);
             String dateForGet = URLEncoder.encode(objectMapper.writeValueAsString(trainingDate), StandardCharsets.UTF_8);

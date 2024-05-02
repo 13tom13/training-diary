@@ -1,52 +1,36 @@
 package utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class Utils {
     public static final String DATE_FORMAT = "dd.MM.yy";
 
-    public static Date getDateFromString(String dateString) throws ParseException {
-        // Парсинг строки в формате "дд.мм.гг" в объект Date
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        return dateFormat.parse(dateString);
 
+    public static ObjectMapper getObjectMapper() {
+        return JsonMapper.builder()
+                .findAndAddModules()
+                .build();
     }
 
-    public static Date UnixStringToDate(String unixString) throws ParseException {
-        long milliseconds = Long.parseLong(unixString);
-        Date date = new Date(milliseconds);
-        System.out.println(date);
-        return date;
-//        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-//        String dateString = dateFormat.format(date);
-//        return dateFormat.parse(dateString);
+    public static LocalDate getDateFromString(String dateString) throws DateTimeParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return LocalDate.parse(dateString, formatter);
     }
 
-    public static Date formatDate(String inputDate) {
-        long milliseconds = Long.parseLong(inputDate);
-        Date dateUnix = new Date(milliseconds);
-        DateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        DateFormat outputDateFormat = new SimpleDateFormat("dd.MM.yy");
 
-        try {
-            Date formUnixDate = inputDateFormat.parse(inputDateFormat.format(dateUnix));
-            String formattedDateString = outputDateFormat.format(formUnixDate);
-            return outputDateFormat.parse(formattedDateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
-    public static String getFormattedDate(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        return dateFormat.format(date);
+    public static String getFormattedDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return formatter.format(date);
     }
 
     public static boolean hisRight(UserDTO userDTO, String rightsName) {
@@ -59,14 +43,14 @@ public class Utils {
     }
 
 
-    public static void printAllTraining(TreeMap<Date, TreeSet<TrainingDTO>> allTraining) {
+    public static void printAllTraining(TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining) {
         if (allTraining.isEmpty()) {
             System.out.println("Список тренировок пуст");
             return;
         }
 
-        for (Map.Entry<Date, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
-            String currentDate = getFormattedDate(entry.getKey());
+        for (Map.Entry<LocalDate, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
+            LocalDate currentDate = entry.getKey();
             TreeSet<TrainingDTO> trainingsOnDate = entry.getValue();
 
             System.out.println("\n" + "=====" + currentDate + "=====");

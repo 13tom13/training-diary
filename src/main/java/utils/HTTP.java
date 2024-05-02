@@ -8,9 +8,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import static utils.Utils.getObjectMapper;
+
 public class HTTP {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = getObjectMapper();
 
     public static String sendPostRequest(String servletUrl, String jsonRequestBody) throws IOException {
         HttpURLConnection connection = null;

@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -68,13 +69,13 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<Date, TreeSet<TrainingDTO>> expectedTrainings = new TreeMap<>();
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> expectedTrainings = new TreeMap<>();
 
         // Configure mock behavior
         when(trainingServiceMock.getAllTrainings(testUser)).thenReturn(expectedTrainings);
 
         // Act
-        TreeMap<Date, TreeSet<TrainingDTO>> actualTrainings = trainingController.getAllTrainings(testUser);
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> actualTrainings = trainingController.getAllTrainings(testUser);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -160,7 +161,7 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testChangeDateTraining_Successful() throws RepositoryException, InvalidDateFormatException, NoEditRightsException {
         // Arrange
-        Date newDate = new Date(2024, 4, 19);
+        LocalDate newDate = LocalDate.of(2024, 4, 19);
         when(trainingServiceMock.changeDateTraining(testUser, testTraining, newDate))
                 .thenReturn(testTraining);
 

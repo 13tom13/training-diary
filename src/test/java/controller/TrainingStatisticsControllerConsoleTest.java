@@ -1,7 +1,6 @@
 package controller;
 
 import entities.dto.UserDTO;
-import entities.model.User;
 import in.controller.training.implementation.TrainingStatisticsControllerConsole;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
@@ -11,8 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import out.menu.statistic.TriFunction;
 import testutil.TestUtil;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,8 +31,8 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
     @InjectMocks
     private TrainingStatisticsControllerConsole trainingStatisticsController;
     private UserDTO testUser;
-    private final Date startDate = new Date(2024, 1, 1);
-    private final Date endDate = new Date(2024, 12, 31);
+    private final LocalDate startDate = LocalDate.of(2024, 1, 1);
+    private final LocalDate endDate = LocalDate.of(2024, 12, 31);
 
     @BeforeEach
     public void setUp() {
@@ -62,7 +64,7 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
                 .thenReturn(expectedStatistics);
 
         // Act
-        int actualStatistics = trainingStatisticsController.getAllTrainingStatisticsPerPeriod(testUser, startDate, endDate);
+        Integer actualStatistics = trainingStatisticsController.getAllTrainingStatisticsPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(expectedStatistics, actualStatistics);
@@ -77,7 +79,7 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
                 .thenReturn(expectedStatistics);
 
         // Act
-        int actualStatistics = trainingStatisticsController.getDurationStatisticsPerPeriod(testUser, startDate, endDate);
+        Integer actualStatistics = trainingStatisticsController.getDurationStatisticsPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(expectedStatistics, actualStatistics);
@@ -92,7 +94,7 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
                 .thenReturn(expectedStatistics);
 
         // Act
-        int actualStatistics = trainingStatisticsController.getCaloriesBurnedPerPeriod(testUser, startDate, endDate);
+        Integer actualStatistics = trainingStatisticsController.getCaloriesBurnedPerPeriod(testUser, startDate, endDate);
 
         // Assert
         assertEquals(expectedStatistics, actualStatistics);

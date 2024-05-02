@@ -8,6 +8,7 @@ import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -39,7 +40,7 @@ public interface TrainingModificationService {
      * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    boolean deleteTraining(UserDTO userDTO, Date date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -93,7 +94,7 @@ public interface TrainingModificationService {
      * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoEditRightsException      если у пользователя нет прав на редактирование
      */
-    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, Date newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
+    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException, InvalidDateFormatException, NoEditRightsException;
 
     /**
      * Изменяет длительность тренировки.

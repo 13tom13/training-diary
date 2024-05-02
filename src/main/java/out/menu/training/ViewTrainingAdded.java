@@ -9,6 +9,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import static utils.Utils.getDateFromString;
@@ -25,7 +27,7 @@ public class ViewTrainingAdded {
     /**
      * Создает экземпляр ViewTrainingAdded с заданным контроллером тренировок, пользователем и сканером.
      *
-     * @param userDTO            Пользователь.
+     * @param userDTO Пользователь.
      */
     public ViewTrainingAdded(UserDTO userDTO) {
         this.trainingController = ControllerFactory.getInstance().getTrainingController();
@@ -38,16 +40,14 @@ public class ViewTrainingAdded {
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
         String name = chooseTrainingType();
-
-        // Просим пользователя ввести дату до тех пор, пока он не введет корректную дату
-        Date date = null;
+        LocalDate date = null;
         while (date == null) {
             System.out.print("Дата (дд.мм.гг): ");
             String stringDate = scanner.nextLine();
             try {
                 date = getDateFromString(stringDate);
-            } catch (ParseException e) {
-                System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+            } catch (DateTimeParseException e) {
+                System.out.println("Неверный формат даты. Попробуйте еще раз.");
             }
         }
 
@@ -139,12 +139,12 @@ public class ViewTrainingAdded {
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
         String stringDate = scanner.nextLine();
-        Date trainingDate;
+        LocalDate trainingDate = null;
         try {
-            trainingDate = getDateFromString(stringDate);
-        } catch (ParseException e) {
+           trainingDate = getDateFromString(stringDate);
+        } catch (DateTimeParseException e){
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-            return; // Выйти из метода, если дата некорректна
+            return;
         }
         TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         for (TrainingDTO training : trainingsFromDay) {
@@ -205,4 +205,4 @@ public class ViewTrainingAdded {
     }
 
 
-    }
+}

@@ -1,9 +1,11 @@
 package entities.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import entities.model.Training;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -13,8 +15,9 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
 
     private Long id;
     private String name;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yy")
-    private Date date;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate date;
     private int duration;
     private int caloriesBurned;
     private HashMap<String, String> additions;
@@ -23,7 +26,7 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
         this.additions = new HashMap<>();
     }
 
-    public TrainingDTO(String name, Date date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+    public TrainingDTO(String name, LocalDate date, int duration, int caloriesBurned, HashMap<String, String> additions) {
         this.name = name;
         this.date = date;
         this.duration = duration;
@@ -31,7 +34,7 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
         this.additions = additions;
     }
 
-    public TrainingDTO(String name, Date date, int duration, int caloriesBurned) {
+    public TrainingDTO(String name, LocalDate date, int duration, int caloriesBurned) {
         this(name, date, duration, caloriesBurned, new HashMap<>());
     }
 
@@ -51,11 +54,11 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

@@ -11,18 +11,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static config.initializer.in.ServiceFactory.getTrainingService;
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
-import static utils.Utils.formatDate;
 import static utils.Utils.getDateFromString;
+import static utils.Utils.getObjectMapper;
+
 
 public class DeleteTrainingServlet extends HttpServlet {
 
     private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public DeleteTrainingServlet() {
         this.trainingService = getTrainingService(); // Инициализируйте ваш сервис тренировок здесь
@@ -33,7 +33,7 @@ public class DeleteTrainingServlet extends HttpServlet {
         String userJson = getJsonParamFromRequest(request, "user");
         UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
         String dateString = request.getParameter("date");
-        Date date = formatDate(dateString);
+        LocalDate date = getDateFromString(dateString);
         System.out.println(dateString);
         System.out.println(date);
 

@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
 import static config.initializer.in.ServiceFactory.getAuthorizationService;
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
+import static utils.Utils.getObjectMapper;
 
 public class LoginServlet extends HttpServlet {
 
     private final AuthorizationService authorizationService;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     public LoginServlet() throws SQLException {
         try {
@@ -29,8 +30,6 @@ public class LoginServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        this.objectMapper = new ObjectMapper();
-        // Замените на ваш реальный сервис
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

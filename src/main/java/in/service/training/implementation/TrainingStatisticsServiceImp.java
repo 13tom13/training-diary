@@ -2,11 +2,11 @@ package in.service.training.implementation;
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.Training;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
 import in.service.training.TrainingStatisticsService;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static utils.Utils.hisRight;
@@ -36,9 +36,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
     @Override
-    public int getAllTrainingStatistics(UserDTO userDTO) throws NoStatisticsRightsException {
+    public Integer getAllTrainingStatistics(UserDTO userDTO) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
-            TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
+            TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
             int totalTrainings = 0;
             for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
                 totalTrainings += trainingsOnDate.size();
@@ -60,7 +60,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
     @Override
-    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
+    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalTrainings;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
@@ -81,7 +81,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      * @throws NoStatisticsRightsException если у пользователя нет прав на просмотр статистики
      */
     @Override
-    public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
+    public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalDuration = 0;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
@@ -95,7 +95,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     }
 
     @Override
-    public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, Date startDate, Date endDate) throws NoStatisticsRightsException {
+    public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
         if (hisRight(userDTO, "STATISTICS")) {
             int totalCaloriesBurned = 0;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
@@ -108,8 +108,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
         }
     }
 
-    private List<TrainingDTO> getTrainingsInPeriod(UserDTO userDTO, Date startDate, Date endDate) {
-        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
+    private List<TrainingDTO> getTrainingsInPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
         List<TrainingDTO> trainingsInPeriod = new ArrayList<>();
         for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
             for (TrainingDTO trainingDTO : trainingsOnDate) {
@@ -121,9 +121,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
         return trainingsInPeriod;
     }
 
-    private boolean isTrainingInPeriod(TrainingDTO trainingDTO, Date startDate, Date endDate) {
-        Date trainingDate = trainingDTO.getDate();
-        return trainingDate.compareTo(startDate) >= 0 && trainingDate.compareTo(endDate) <= 0;
+    private boolean isTrainingInPeriod(TrainingDTO trainingDTO, LocalDate startDate, LocalDate endDate) {
+        LocalDate trainingDate = trainingDTO.getDate();
+        return !trainingDate.isBefore(startDate) && !trainingDate.isAfter(endDate);
     }
 }
-

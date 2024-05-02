@@ -6,7 +6,7 @@ import in.repository.training.TrainingRepository;
 import entities.model.Training;
 
 import java.sql.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -35,8 +35,8 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @return TreeMap, содержащий все тренировки пользователя
      */
     @Override
-    public TreeMap<Date, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
-        TreeMap<Date, TreeSet<Training>> userTrainingMap = new TreeMap<>();
+    public TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
+        TreeMap<LocalDate, TreeSet<Training>> userTrainingMap = new TreeMap<>();
         String sql = """
             SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
                    ta.key AS addition_key, ta.value AS addition_value
@@ -52,7 +52,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Получаем данные о тренировке из ResultSet
-                    Date date = resultSet.getDate("date");
+                    LocalDate date = resultSet.getDate("date").toLocalDate();
                     // Создаем объект Training из ResultSet
                     Training training = getTraining(resultSet);
                     // Добавляем тренировку в TreeMap, используя дату в качестве ключа
@@ -78,7 +78,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, Date trainingDate) throws RepositoryException {
+    public TreeSet<Training> getTrainingsByUserEmailAndData(User user, LocalDate trainingDate) throws RepositoryException {
         TreeSet<Training> trainingsOnDate = new TreeSet<>();
         String sql = """
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned
@@ -91,7 +91,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
-            statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
+            statement.setDate(2, Date.valueOf(trainingDate));
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     // Создаем объект Training из ResultSet
@@ -122,7 +122,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
+    public Training getTrainingByUserEmailAndDataAndName(User user, LocalDate trainingDate, String trainingName) throws RepositoryException {
         String sql = """
             SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
                    ta.key AS addition_key, ta.value AS addition_value
@@ -134,7 +134,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
-            statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
+            statement.setDate(2, Date.valueOf(trainingDate));
             statement.setString(3, trainingName);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -157,7 +157,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      *
      * @param user        пользователь, для которого сохраняется тренировка
      * @param newTraining новая тренировка пользователя
-     * @return
+     * @return новая тренировка пользователя
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
     @Override
@@ -175,7 +175,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
             // Вставка новой тренировки
             statementTraining.setString(1, newTraining.getName());
-            statementTraining.setDate(2, new java.sql.Date(newTraining.getDate().getTime()));
+            statementTraining.setDate(2, Date.valueOf(newTraining.getDate()));
             statementTraining.setInt(3, newTraining.getDuration());
             statementTraining.setInt(4, newTraining.getCaloriesBurned());
             int rowsAffected = statementTraining.executeUpdate();
@@ -308,7 +308,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             connection.setAutoCommit(false); // Начинаем транзакцию
             try {
                 updateStatement.setString(1, newTraining.getName());
-                updateStatement.setDate(2, new java.sql.Date(newTraining.getDate().getTime()));
+                updateStatement.setDate(2, Date.valueOf(newTraining.getDate()));
                 updateStatement.setInt(3, newTraining.getDuration());
                 updateStatement.setInt(4, newTraining.getCaloriesBurned());
                 updateStatement.setLong(5, oldTraining.getId()); // Предполагается, что у oldTraining есть id
@@ -391,7 +391,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     private Training getTraining(ResultSet resultSet) throws SQLException, RepositoryException {
         long id = resultSet.getLong("training_id");
         String name = resultSet.getString("name");
-        Date date = resultSet.getDate("date");
+        LocalDate date = resultSet.getDate("date").toLocalDate();
         int duration = resultSet.getInt("duration");
         int caloriesBurned = resultSet.getInt("calories_burned");
 

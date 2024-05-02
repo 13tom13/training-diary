@@ -6,6 +6,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static config.ApplicationConfig.*;
@@ -40,7 +41,7 @@ public abstract class TestUtil {
     /**
      * Тестовая дата.
      */
-    public static final Date TEST_DATE = new Date(2024, 4, 10);
+    public static final LocalDate TEST_DATE = LocalDate.of(2024, 4, 10);
 
     private static final String databaseName = getTestDatabaseName();
     private static final String username = getTestDbUsername();
