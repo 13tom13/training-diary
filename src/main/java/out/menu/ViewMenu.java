@@ -1,13 +1,7 @@
 package out.menu;
 
-import in.controller.authorization.AuthorizationController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.users.AdminController;
-import in.controller.users.UserController;
 import out.menu.authorization.ViewAuthorization;
-import out.menu.authorization.implementation.ViewAuthorizationController;
-import out.menu.authorization.implementation.ViewAuthorizationHTTP;
+import out.menu.authorization.implementation.ViewAuthorizationByHTTP;
 
 import java.util.Scanner;
 
@@ -18,24 +12,14 @@ public class ViewMenu {
 
     private final ViewAuthorization viewAuthorization;
 
+    private final Scanner scanner = new Scanner(System.in);
+
     /**
      * Конструктор класса ViewMenu.
-     *
-     * @param adminController              Контроллер администратора.
-     * @param userController               Контроллер пользователя.
-     * @param trainingController           Контроллер тренировок.
-     * @param trainingStatisticsController Контроллер статистики тренировок.
      */
-    public ViewMenu(AuthorizationController authorizationController,
-            AdminController adminController,
-                    UserController userController,
-                    TrainingController trainingController,
-                    TrainingStatisticsController trainingStatisticsController) {
-        Scanner scanner = new Scanner(System.in);
-//        this.viewAuthorization = new ViewAuthorizationController(authorizationController, adminController, userController,
-//                trainingController, trainingStatisticsController, scanner);
-        this.viewAuthorization = new ViewAuthorizationHTTP(adminController, userController,
-                trainingController, trainingStatisticsController, scanner);
+    public ViewMenu() {
+//      this.viewAuthorization = new ViewAuthorizationByController();
+        this.viewAuthorization = new ViewAuthorizationByHTTP();
     }
 
     /**
@@ -61,7 +45,6 @@ public class ViewMenu {
      */
     public void processMainMenuChoice() {
         viewWelcomeMessage();
-        Scanner scanner = new Scanner(System.in);
         boolean startMenu = true;
         while (startMenu) {
             viewMainMenu();

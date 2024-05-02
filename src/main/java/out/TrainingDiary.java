@@ -17,12 +17,8 @@ public class TrainingDiary {
      */
     public TrainingDiary() {
         this.logo();
-        ControllerFactory controllerFactory = ControllerFactory.getInstance();
-        this.viewMenu = new ViewMenu(controllerFactory.getAuthorizationController(),
-                controllerFactory.getAdminController(),
-                controllerFactory.getUserController(),
-                controllerFactory.getTrainingController(),
-                controllerFactory.getTrainingStatisticsController());
+        ControllerFactory.getInstance();
+        this.viewMenu = new ViewMenu();
     }
 
     /**

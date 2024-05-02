@@ -1,4 +1,4 @@
-package out.menu.training.viewtraining;
+package out.menu.training.viewTraining;
 
 import entities.dto.UserDTO;
 

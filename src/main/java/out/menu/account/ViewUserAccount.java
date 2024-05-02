@@ -1,13 +1,11 @@
 package out.menu.account;
 
 import entities.dto.UserDTO;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import out.menu.training.viewtraining.ViewTraining;
-import out.menu.training.viewtraining.implementation.ViewTrainingConsole;
-import out.menu.training.viewtraining.implementation.ViewTrainingHTTP;
+import out.menu.training.ViewTrainingAdded.ViewTrainingAdded;
+import out.menu.training.ViewTrainingAdded.implementation.ViewTrainingAddedByController;
+import out.menu.training.viewTraining.ViewTraining;
+import out.menu.training.viewTraining.implementation.ViewTrainingByHTTP;
 import utils.Logger;
-import out.menu.training.ViewTrainingAdded;
 import out.menu.training.ViewTrainingEditing;
 import out.menu.statistic.ViewTrainingStatistcs;
 
@@ -21,25 +19,22 @@ public class ViewUserAccount {
     private final ViewTrainingAdded viewTrainingAdded;
     private final ViewTrainingEditing viewTrainingEditing;
     private final ViewTrainingStatistcs viewTrainingStatistcs;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
     private final UserDTO userDTO;
     private static final Logger logger = Logger.getInstance();
 
     /**
      * Конструктор класса ViewUserAccount.
-     * @param trainingController Контроллер тренировок.
-     * @param trainingStatisticsController Контроллер статистики тренировок.
      * @param userDTO Пользователь.
-     * @param scanner Сканер для ввода данных.
      */
-    public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, UserDTO userDTO, Scanner scanner) {
-        this.viewTrainingStatistcs = new ViewTrainingStatistcs(trainingStatisticsController, userDTO, scanner);
-//        this.viewTrainingConsole = new ViewTrainingConsole(trainingController);
-        this.viewTraining = new ViewTrainingHTTP();
-        this.viewTrainingAdded = new ViewTrainingAdded(trainingController, userDTO, scanner);
-        this.viewTrainingEditing = new ViewTrainingEditing(trainingController, viewTrainingAdded, userDTO, scanner);
-        this.scanner = scanner;
+    public ViewUserAccount(UserDTO userDTO) {
         this.userDTO = userDTO;
+//        this.viewTrainingConsole = new ViewTrainingByController();
+        this.viewTraining = new ViewTrainingByHTTP();
+        this.viewTrainingAdded = new ViewTrainingAddedByController(userDTO);
+        this.viewTrainingEditing = new ViewTrainingEditing(userDTO, viewTrainingAdded);
+        this.viewTrainingStatistcs = new ViewTrainingStatistcs(userDTO);
+
     }
 
     /**

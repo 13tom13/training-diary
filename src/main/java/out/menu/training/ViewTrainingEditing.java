@@ -1,8 +1,10 @@
 package out.menu.training;
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
+import out.menu.training.ViewTrainingAdded.ViewTrainingAdded;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -17,27 +19,22 @@ import static utils.Utils.*;
 public class ViewTrainingEditing {
 
     private final TrainingController trainingController;
-    private final ViewTrainingAdded viewTrainingAdded;
+    private final ViewTrainingAdded viewTrainingAddedByController;
     private final UserDTO userDTO;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     private TrainingDTO trainingDTO;
 
     /**
      * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
      *
-     * @param trainingController Контроллер тренировок.
-     * @param viewTrainingAdded Представление добавления тренировок.
-     * @param userDTO              Пользователь.
-     * @param scanner           Сканер для ввода данных.
+     * @param viewTrainingAddedByController  Представление добавления тренировок.
+     * @param userDTO            Пользователь.
      */
-    public ViewTrainingEditing(TrainingController trainingController,
-                               ViewTrainingAdded viewTrainingAdded,
-                               UserDTO userDTO, Scanner scanner) {
-        this.trainingController = trainingController;
-        this.viewTrainingAdded = viewTrainingAdded;
+    public ViewTrainingEditing(UserDTO userDTO, ViewTrainingAdded viewTrainingAddedByController) {
+        this.trainingController = ControllerFactory.getInstance().getTrainingController();
+        this.viewTrainingAddedByController = viewTrainingAddedByController;
         this.userDTO = userDTO;
-        this.scanner = scanner;
     }
 
     /**
@@ -97,7 +94,7 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        trainingDTO  = trainingController.changeNameTraining(userDTO, trainingDTO, newName);
+                        trainingDTO = trainingController.changeNameTraining(userDTO, trainingDTO, newName);
                     }
                     case 2 -> {
                         System.out.println();
@@ -123,7 +120,7 @@ public class ViewTrainingEditing {
                         String newCalories = scanner.nextLine();
                         trainingDTO = trainingController.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
                     }
-                    case 5 -> viewTrainingAdded.addTrainingAdditional(trainingDTO);
+                    case 5 -> viewTrainingAddedByController.addTrainingAdditional(trainingDTO);
                     case 6 -> {
                         System.out.println("Выход из меню изменения тренировки.");
                         startView = false;

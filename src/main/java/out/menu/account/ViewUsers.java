@@ -1,11 +1,12 @@
 package out.menu.account;
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.UserDTO;
 import entities.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
-import in.controller.training.TrainingController;
-import out.menu.training.viewtraining.implementation.ViewTrainingConsole;
+import out.menu.training.viewTraining.ViewTraining;
+import out.menu.training.viewTraining.implementation.ViewTrainingByController;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,22 +22,18 @@ import static utils.Logger.LOGS_PATH;
 public class ViewUsers {
 
     private final AdminController adminController;
-    private final ViewTrainingConsole viewTrainingConsole;
+    private final ViewTraining viewTraining;
     private final ViewUsersEdition viewUsersEdition;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewUsers.
      *
-     * @param adminController    Контроллер администратора.
-     * @param trainingController Контроллер тренировок.
-     * @param scanner            Сканер для ввода данных.
      */
-    public ViewUsers(AdminController adminController, TrainingController trainingController, Scanner scanner) {
-        this.adminController = adminController;
-        this.viewTrainingConsole = new ViewTrainingConsole(trainingController);
-        this.viewUsersEdition = new ViewUsersEdition(adminController, scanner);
-        this.scanner = scanner;
+    public ViewUsers() {
+        this.adminController = ControllerFactory.getInstance().getAdminController();
+        this.viewTraining = new ViewTrainingByController();
+        this.viewUsersEdition = new ViewUsersEdition();
     }
 
     /**
@@ -84,7 +81,7 @@ public class ViewUsers {
                 scanner.nextLine();
                 switch (choice) {
                     case 1 -> viewUsersEdition.userEdition(userDTO);
-                    case 2 -> viewTrainingConsole.viewAllTraining(userDTO);
+                    case 2 -> viewTraining.viewAllTraining(userDTO);
                     case 3 -> viewLogsUser(userDTO);
                     case 4 -> {
                         System.out.println("Выход из просмотра пользователя " + userDTO.getEmail());

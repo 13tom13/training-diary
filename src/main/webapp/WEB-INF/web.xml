@@ -17,6 +17,10 @@
     <servlet-name>allTrainings</servlet-name>
     <servlet-class>servlet.training.ViewTrainingServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>saveTraining</servlet-name>
+    <servlet-class>servlet.training.SaveTrainingServlet</servlet-class>
+  </servlet>
 
   <!-- Отображение сервлетов на URL -->
   <servlet-mapping>
@@ -30,5 +34,9 @@
   <servlet-mapping>
     <servlet-name>allTrainings</servlet-name>
     <url-pattern>/training/alltrainings</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>saveTraining</servlet-name>
+    <url-pattern>/training/savetraining</url-pattern>
   </servlet-mapping>
 </web-app>

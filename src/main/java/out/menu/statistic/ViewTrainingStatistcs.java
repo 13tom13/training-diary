@@ -1,6 +1,7 @@
 package out.menu.statistic;
 
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
 
@@ -17,19 +18,16 @@ public class ViewTrainingStatistcs {
 
     private final TrainingStatisticsController trainingStatisticsController;
     private final UserDTO userDTO;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewTrainingStatistcs.
      *
-     * @param trainingStatisticsController Контроллер статистики тренировок.
      * @param userDTO                          Пользователь, для которого отображается статистика.
-     * @param scanner                       Сканер для ввода данных.
      */
-    public ViewTrainingStatistcs(TrainingStatisticsController trainingStatisticsController, UserDTO userDTO, Scanner scanner) {
-        this.trainingStatisticsController = trainingStatisticsController;
+    public ViewTrainingStatistcs(UserDTO userDTO) {
+        this.trainingStatisticsController = ControllerFactory.getInstance().getTrainingStatisticsController();
         this.userDTO = userDTO;
-        this.scanner = scanner;
     }
 
     /**

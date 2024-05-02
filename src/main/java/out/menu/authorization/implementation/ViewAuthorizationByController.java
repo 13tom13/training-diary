@@ -1,13 +1,11 @@
 package out.menu.authorization.implementation;
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.AuthorizationDTO;
 import entities.dto.RegistrationDTO;
 import entities.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.users.AdminController;
 import in.controller.users.UserController;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
@@ -18,36 +16,21 @@ import java.util.Scanner;
 import static utils.Utils.hisRole;
 
 /**
- * Класс ViewAuthorizationController представляет собой меню для авторизации и регистрации пользователей.
+ * Класс ViewAuthorizationByController представляет собой меню для авторизации и регистрации пользователей.
  */
-public class ViewAuthorizationController implements ViewAuthorization {
+public class ViewAuthorizationByController implements ViewAuthorization {
 
     private final AuthorizationController authorizationController;
-    private final AdminController adminController;
     private final UserController userController;
-    private final TrainingController trainingController;
-    private final TrainingStatisticsController trainingStatisticsController;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Конструктор класса ViewAuthorizationController.
+     * Конструктор класса ViewAuthorizationByController.
      *
-     * @param authorizationController      Контроллер авторизации.
-     * @param adminController              Контроллер администратора.
-     * @param userController               Контроллер пользователя.
-     * @param trainingController           Контроллер тренировок.
-     * @param trainingStatisticsController Контроллер статистики тренировок.
-     * @param scanner                      Сканер для ввода данных.
      */
-    public ViewAuthorizationController(AuthorizationController authorizationController, AdminController adminController,
-                                       UserController userController, TrainingController trainingController,
-                                       TrainingStatisticsController trainingStatisticsController, Scanner scanner) {
-        this.authorizationController = authorizationController;
-        this.adminController = adminController;
-        this.userController = userController;
-        this.trainingController = trainingController;
-        this.trainingStatisticsController = trainingStatisticsController;
-        this.scanner = scanner;
+    public ViewAuthorizationByController() {
+        this.authorizationController = ControllerFactory.getInstance().getAuthorizationController();
+        this.userController = ControllerFactory.getInstance().getUserController();
     }
 
     /**
@@ -62,10 +45,10 @@ public class ViewAuthorizationController implements ViewAuthorization {
         try {
             UserDTO userDTO = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
             if (hisRole(userDTO,"ADMIN")) {
-                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
+                ViewAdminAccount viewAdminAccount = new ViewAdminAccount();
                 viewAdminAccount.adminAccountMenu();
             } else if (hisRole(userDTO,"USER")) {
-                ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, userDTO, scanner);
+                ViewUserAccount viewUserAccount = new ViewUserAccount(userDTO);
                 viewUserAccount.userAccountMenu();
             }
         } catch (AuthorizationException e) {

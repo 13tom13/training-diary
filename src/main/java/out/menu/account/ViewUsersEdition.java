@@ -1,5 +1,6 @@
 package out.menu.account;
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.UserDTO;
 import entities.model.User;
 import in.controller.users.AdminController;
@@ -14,17 +15,13 @@ import java.util.Scanner;
 public class ViewUsersEdition {
 
     private final AdminController adminController;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewUsersEdition.
-     *
-     * @param adminController Контроллер администратора.
-     * @param scanner         Сканер для ввода данных.
      */
-    public ViewUsersEdition(AdminController adminController, Scanner scanner) {
-        this.scanner = scanner;
-        this.adminController = adminController;
+    public ViewUsersEdition() {
+        this.adminController = ControllerFactory.getInstance().getAdminController();
     }
 
     /**

@@ -1,11 +1,11 @@
-package out.menu.training.viewtraining.implementation;
+package out.menu.training.viewTraining.implementation;
 
 
+import config.initializer.in.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
-import out.menu.training.viewtraining.ViewTraining;
-import utils.Utils;
+import out.menu.training.viewTraining.ViewTraining;
 
 import java.util.Date;
 import java.util.TreeMap;
@@ -16,17 +16,15 @@ import static utils.Utils.printAllTraining;
 /**
  * Представляет класс для просмотра тренировок пользователя.
  */
-public class ViewTrainingConsole implements ViewTraining {
+public class ViewTrainingByController implements ViewTraining {
 
     private final TrainingController trainingController;
 
     /**
-     * Создает экземпляр ViewTrainingConsole с заданным контроллером тренировок.
-     *
-     * @param trainingController Контроллер тренировок.
+     * Создает экземпляр ViewTrainingByController с заданным контроллером тренировок.
      */
-    public ViewTrainingConsole(TrainingController trainingController) {
-        this.trainingController = trainingController;
+    public ViewTrainingByController() {
+        this.trainingController = ControllerFactory.getInstance().getTrainingController();
     }
 
     /**

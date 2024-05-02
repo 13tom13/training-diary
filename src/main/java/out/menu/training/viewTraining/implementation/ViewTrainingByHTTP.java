@@ -1,10 +1,10 @@
-package out.menu.training.viewtraining.implementation;
+package out.menu.training.viewTraining.implementation;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import out.menu.training.viewtraining.ViewTraining;
+import out.menu.training.viewTraining.ViewTraining;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,19 +18,19 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static config.ApplicationConfig.getRootURL;
+import static utils.HTTP.sendGetRequest;
 import static utils.Utils.printAllTraining;
 
 /**
  * Представляет класс для просмотра тренировок пользователя через HTTP.
  */
-public class ViewTrainingHTTP implements ViewTraining {
+public class ViewTrainingByHTTP implements ViewTraining {
 
     private final String rootUrl = getRootURL();
     private final String servletPath = "/training/alltrainings";
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();;
 
-    public ViewTrainingHTTP() {
-        this.objectMapper = new ObjectMapper();
+    public ViewTrainingByHTTP() {
     }
 
     /**
@@ -58,35 +58,7 @@ public class ViewTrainingHTTP implements ViewTraining {
         }
     }
 
-    /**
-     * Отправляет GET-запрос по указанному URL и возвращает ответ в виде строки.
-     *
-     * @param urlWithParams URL с параметрами запроса.
-     * @return Ответ на GET-запрос в виде строки.
-     * @throws IOException если возникает ошибка ввода-вывода при отправке запроса или получении ответа.
-     */
-    private String sendGetRequest(String urlWithParams) throws IOException {
-        URL url = new URL(urlWithParams);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
 
-        int statusCode = connection.getResponseCode();
-        if (statusCode == HttpURLConnection.HTTP_OK) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                return response.toString();
-            } finally {
-                connection.disconnect();
-            }
-        } else {
-            throw new IOException("Ошибка при получении данных: " + statusCode);
-
-        }
-    }
 
 }
 
