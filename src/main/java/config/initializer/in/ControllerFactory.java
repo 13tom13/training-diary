@@ -1,4 +1,4 @@
-package config.initializer;
+package config.initializer.in;
 
 import in.controller.authorization.AuthorizationController;
 import in.controller.authorization.implementation.AuthorizationControllerConsole;
@@ -11,19 +11,41 @@ import in.controller.users.UserController;
 import in.controller.users.implementation.AdminControllerConsole;
 import in.controller.users.implementation.UserControllerConsole;
 
-/**
- * Класс ControllerInitializer отвечает за инициализацию различных контроллеров,
- * используемых в приложении.
- */
-public class ControllerInitializer {
+import static config.initializer.in.RepositoryFactory.getUserRepository;
+import static config.initializer.in.ServiceFactory.*;
 
-    private final ServiceInitializer serviceInitializer;
+/**
+ * Фабричный класс для инициализации контроллеров приложения.
+ */
+public class ControllerFactory {
+
+    private static final ControllerFactory instance;
+
+    private final UserController userController;
+    private final AuthorizationController authorizationController;
+    private final TrainingController trainingController;
+    private final TrainingStatisticsController trainingStatisticsController;
+    private final AdminController adminController;
+
+    static {
+        instance = new ControllerFactory();
+    }
+
+    private ControllerFactory() {
+        userController = new UserControllerConsole(getUserService());
+        authorizationController = new AuthorizationControllerConsole(getAuthorizationService());
+        trainingController = new TrainingControllerConsole(getTrainingService());
+        trainingStatisticsController = new TrainingStatisticsControllerConsole(getTrainingStatisticsService());
+        adminController = new AdminControllerConsole(getUserRepository());
+    }
 
     /**
-     * Конструирует новый объект ControllerInitializer.
+     * Получает экземпляр фабрики контроллеров.
+     *
+     * @return Экземпляр фабрики контроллеров.
      */
-    public ControllerInitializer() {
-        serviceInitializer = new ServiceInitializer();
+    public static ControllerFactory getInstance() {
+        return instance;
     }
 
     /**
@@ -32,7 +54,7 @@ public class ControllerInitializer {
      * @return Экземпляр UserController.
      */
     public UserController getUserController() {
-        return new UserControllerConsole(serviceInitializer.getUserService());
+        return userController;
     }
 
     /**
@@ -41,7 +63,7 @@ public class ControllerInitializer {
      * @return Экземпляр AuthorizationController.
      */
     public AuthorizationController getAuthorizationController() {
-        return new AuthorizationControllerConsole(serviceInitializer.getAuthorizationService());
+        return authorizationController;
     }
 
     /**
@@ -50,7 +72,7 @@ public class ControllerInitializer {
      * @return Экземпляр TrainingController.
      */
     public TrainingController getTrainingController() {
-        return new TrainingControllerConsole(serviceInitializer.getTrainingService());
+        return trainingController;
     }
 
     /**
@@ -59,7 +81,7 @@ public class ControllerInitializer {
      * @return Экземпляр TrainingStatisticsController.
      */
     public TrainingStatisticsController getTrainingStatisticsController() {
-        return new TrainingStatisticsControllerConsole(serviceInitializer.getTrainingStatisticsService());
+        return trainingStatisticsController;
     }
 
     /**
@@ -68,7 +90,6 @@ public class ControllerInitializer {
      * @return Экземпляр AdminController.
      */
     public AdminController getAdminController() {
-        return new AdminControllerConsole(serviceInitializer.getUserRepository());
+        return adminController;
     }
 }
-

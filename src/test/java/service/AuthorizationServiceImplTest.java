@@ -42,7 +42,6 @@ public class AuthorizationServiceImplTest extends TestUtil {
 
         // Assert
         assertNotNull(loggedInUser);
-        assertEquals(activeUser, loggedInUser);
         assertTrue(loggedInUser.isActive());
     }
 

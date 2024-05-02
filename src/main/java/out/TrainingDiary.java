@@ -1,7 +1,9 @@
 package out;
 
-import config.initializer.ControllerInitializer;
+import config.initializer.in.ControllerFactory;
 import out.menu.ViewMenu;
+
+import static config.initializer.in.ControllerFactory.*;
 
 /**
  * Класс TrainingDiary представляет собой приложение для ведения тренировочного дневника.
@@ -15,12 +17,12 @@ public class TrainingDiary {
      */
     public TrainingDiary() {
         this.logo();
-        ControllerInitializer controllerInitializer = new ControllerInitializer();
-        this.viewMenu = new ViewMenu(controllerInitializer.getAuthorizationController(),
-                controllerInitializer.getAdminController(),
-                controllerInitializer.getUserController(),
-                controllerInitializer.getTrainingController(),
-                controllerInitializer.getTrainingStatisticsController());
+        ControllerFactory controllerFactory = ControllerFactory.getInstance();
+        this.viewMenu = new ViewMenu(controllerFactory.getAuthorizationController(),
+                controllerFactory.getAdminController(),
+                controllerFactory.getUserController(),
+                controllerFactory.getTrainingController(),
+                controllerFactory.getTrainingStatisticsController());
     }
 
     /**
@@ -30,24 +32,24 @@ public class TrainingDiary {
         viewMenu.processMainMenuChoice();
     }
 
-    private void logo(){
+    private void logo() {
         System.out.println("""
-          1111111    333333333333333   TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     MMMMMMMM               MMMMMMMM  1111111    333333333333333   
-         1::::::1   3:::::::::::::::33 T:::::::::::::::::::::T   OO:::::::::OO   M:::::::M             M:::::::M 1::::::1   3:::::::::::::::33 
-        1:::::::1   3::::::33333::::::3T:::::::::::::::::::::T OO:::::::::::::OO M::::::::M           M::::::::M1:::::::1   3::::::33333::::::3
-        111:::::1   3333333     3:::::3T:::::TT:::::::TT:::::TO:::::::OOO:::::::OM:::::::::M         M:::::::::M111:::::1   3333333     3:::::3
-           1::::1               3:::::3TTTTTT  T:::::T  TTTTTTO::::::O   O::::::OM::::::::::M       M::::::::::M   1::::1               3:::::3
-           1::::1               3:::::3        T:::::T        O:::::O     O:::::OM:::::::::::M     M:::::::::::M   1::::1               3:::::3
-           1::::1       33333333:::::3         T:::::T        O:::::O     O:::::OM:::::::M::::M   M::::M:::::::M   1::::1       33333333:::::3 
-           1::::l       3:::::::::::3          T:::::T        O:::::O     O:::::OM::::::M M::::M M::::M M::::::M   1::::l       3:::::::::::3  
-           1::::l       33333333:::::3         T:::::T        O:::::O     O:::::OM::::::M  M::::M::::M  M::::::M   1::::l       33333333:::::3 
-           1::::l               3:::::3        T:::::T        O:::::O     O:::::OM::::::M   M:::::::M   M::::::M   1::::l               3:::::3
-           1::::l               3:::::3        T:::::T        O:::::O     O:::::OM::::::M    M:::::M    M::::::M   1::::l               3:::::3
-           1::::l               3:::::3        T:::::T        O::::::O   O::::::OM::::::M     MMMMM     M::::::M   1::::l               3:::::3
-        111::::::1113333333     3:::::3      TT:::::::TT      O:::::::OOO:::::::OM::::::M               M::::::M111::::::1113333333     3:::::3
-        1::::::::::13::::::33333::::::3      T:::::::::T       OO:::::::::::::OO M::::::M               M::::::M1::::::::::13::::::33333::::::3
-        1::::::::::13:::::::::::::::33       T:::::::::T         OO:::::::::OO   M::::::M               M::::::M1::::::::::13:::::::::::::::33 
-        111111111111 333333333333333         TTTTTTTTTTT           OOOOOOOOO     MMMMMMMM               MMMMMMMM111111111111 333333333333333   
-        """);
+                  1111111    333333333333333   TTTTTTTTTTTTTTTTTTTTTTT     OOOOOOOOO     MMMMMMMM               MMMMMMMM  1111111    333333333333333   
+                 1::::::1   3:::::::::::::::33 T:::::::::::::::::::::T   OO:::::::::OO   M:::::::M             M:::::::M 1::::::1   3:::::::::::::::33 
+                1:::::::1   3::::::33333::::::3T:::::::::::::::::::::T OO:::::::::::::OO M::::::::M           M::::::::M1:::::::1   3::::::33333::::::3
+                111:::::1   3333333     3:::::3T:::::TT:::::::TT:::::TO:::::::OOO:::::::OM:::::::::M         M:::::::::M111:::::1   3333333     3:::::3
+                   1::::1               3:::::3TTTTTT  T:::::T  TTTTTTO::::::O   O::::::OM::::::::::M       M::::::::::M   1::::1               3:::::3
+                   1::::1               3:::::3        T:::::T        O:::::O     O:::::OM:::::::::::M     M:::::::::::M   1::::1               3:::::3
+                   1::::1       33333333:::::3         T:::::T        O:::::O     O:::::OM:::::::M::::M   M::::M:::::::M   1::::1       33333333:::::3 
+                   1::::l       3:::::::::::3          T:::::T        O:::::O     O:::::OM::::::M M::::M M::::M M::::::M   1::::l       3:::::::::::3  
+                   1::::l       33333333:::::3         T:::::T        O:::::O     O:::::OM::::::M  M::::M::::M  M::::::M   1::::l       33333333:::::3 
+                   1::::l               3:::::3        T:::::T        O:::::O     O:::::OM::::::M   M:::::::M   M::::::M   1::::l               3:::::3
+                   1::::l               3:::::3        T:::::T        O:::::O     O:::::OM::::::M    M:::::M    M::::::M   1::::l               3:::::3
+                   1::::l               3:::::3        T:::::T        O::::::O   O::::::OM::::::M     MMMMM     M::::::M   1::::l               3:::::3
+                111::::::1113333333     3:::::3      TT:::::::TT      O:::::::OOO:::::::OM::::::M               M::::::M111::::::1113333333     3:::::3
+                1::::::::::13::::::33333::::::3      T:::::::::T       OO:::::::::::::OO M::::::M               M::::::M1::::::::::13::::::33333::::::3
+                1::::::::::13:::::::::::::::33       T:::::::::T         OO:::::::::OO   M::::::M               M::::::M1::::::::::13:::::::::::::::33 
+                111111111111 333333333333333         TTTTTTTTTTT           OOOOOOOOO     MMMMMMMM               MMMMMMMM111111111111 333333333333333   
+                """);
     }
 }

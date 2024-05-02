@@ -5,8 +5,7 @@ import entities.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
 import in.controller.training.TrainingController;
-import out.menu.training.ViewTraining;
-import servlet.mappers.UserMapper;
+import out.menu.training.viewtraining.implementation.ViewTrainingConsole;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,7 +21,7 @@ import static utils.Logger.LOGS_PATH;
 public class ViewUsers {
 
     private final AdminController adminController;
-    private final ViewTraining viewTraining;
+    private final ViewTrainingConsole viewTrainingConsole;
     private final ViewUsersEdition viewUsersEdition;
     private final Scanner scanner;
 
@@ -35,7 +34,7 @@ public class ViewUsers {
      */
     public ViewUsers(AdminController adminController, TrainingController trainingController, Scanner scanner) {
         this.adminController = adminController;
-        this.viewTraining = new ViewTraining(trainingController);
+        this.viewTrainingConsole = new ViewTrainingConsole(trainingController);
         this.viewUsersEdition = new ViewUsersEdition(adminController, scanner);
         this.scanner = scanner;
     }
@@ -85,7 +84,7 @@ public class ViewUsers {
                 scanner.nextLine();
                 switch (choice) {
                     case 1 -> viewUsersEdition.userEdition(userDTO);
-                    case 2 -> viewTraining.viewAllTraining(userDTO);
+                    case 2 -> viewTrainingConsole.viewAllTraining(userDTO);
                     case 3 -> viewLogsUser(userDTO);
                     case 4 -> {
                         System.out.println("Выход из просмотра пользователя " + userDTO.getEmail());

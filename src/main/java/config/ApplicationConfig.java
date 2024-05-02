@@ -36,6 +36,9 @@ public class ApplicationConfig {
         CollectionsMigrations collectionsMigrations = new CollectionsMigrations(userRepository, trainingRepository);
         collectionsMigrations.runMigrations();
     }
+    public static String getApplicationURL() {
+        return PROPERTIES.getProperty("application.url");
+    }
 
     public static String getApplicationProfile() {
         return PROPERTIES.getProperty("application.profile");

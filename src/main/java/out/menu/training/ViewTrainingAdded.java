@@ -6,7 +6,6 @@ import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
-import entities.model.Training;
 
 import java.text.ParseException;
 import java.util.*;

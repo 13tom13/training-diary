@@ -2,9 +2,7 @@ package out.menu.training;
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.User;
 import in.controller.training.TrainingController;
-import entities.model.Training;
 
 import java.text.ParseException;
 import java.util.Date;

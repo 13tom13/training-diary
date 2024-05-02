@@ -1,14 +1,15 @@
 package out.menu.account;
 
 import entities.dto.UserDTO;
-import entities.model.User;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
+import out.menu.training.viewtraining.ViewTraining;
+import out.menu.training.viewtraining.implementation.ViewTrainingConsole;
+import out.menu.training.viewtraining.implementation.ViewTrainingHTTP;
 import utils.Logger;
 import out.menu.training.ViewTrainingAdded;
 import out.menu.training.ViewTrainingEditing;
 import out.menu.statistic.ViewTrainingStatistcs;
-import out.menu.training.ViewTraining;
 
 import java.util.Scanner;
 
@@ -33,7 +34,8 @@ public class ViewUserAccount {
      */
     public ViewUserAccount(TrainingController trainingController, TrainingStatisticsController trainingStatisticsController, UserDTO userDTO, Scanner scanner) {
         this.viewTrainingStatistcs = new ViewTrainingStatistcs(trainingStatisticsController, userDTO, scanner);
-        this.viewTraining = new ViewTraining(trainingController);
+//        this.viewTrainingConsole = new ViewTrainingConsole(trainingController);
+        this.viewTraining = new ViewTrainingHTTP();
         this.viewTrainingAdded = new ViewTrainingAdded(trainingController, userDTO, scanner);
         this.viewTrainingEditing = new ViewTrainingEditing(trainingController, viewTrainingAdded, userDTO, scanner);
         this.scanner = scanner;

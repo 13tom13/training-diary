@@ -45,8 +45,8 @@ To change this template use File | Settings | File Templates.
             <p class="display-6">Добро пожаловать в тренировочный дневник!</p>
             <p class="lead">(развертывания с помощью сервера Tomcat 10)</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a type="button" class="btn btn-primary btn-lg px-4 gap-3" href="templates/authorization/authorization.html">Авторизация</a>
-                <a type="button" class="btn btn-outline-secondary btn-lg px-4" href="/training-diary/registration">Регистрация</a>
+<%--                <a type="button" class="btn btn-primary btn-lg px-4 gap-3" href="templates/authorization/authorization.html">Авторизация</a>--%>
+<%--                <a type="button" class="btn btn-outline-secondary btn-lg px-4" href="/training-diary/registration">Регистрация</a>--%>
             </div>
         </div>
     </div>

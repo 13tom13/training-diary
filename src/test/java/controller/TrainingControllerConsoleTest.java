@@ -1,6 +1,8 @@
 package controller;
 
+import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
+import entities.model.Training;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -8,7 +10,6 @@ import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.implementation.TrainingControllerConsole;
 import in.service.training.TrainingService;
-import entities.model.Training;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ public class TrainingControllerConsoleTest {
 
     private final String testAdditionalName = "additionalName";
 
-    private Training testTraining;
+    private TrainingDTO testTraining;
 
     @BeforeEach
     public void setUp() {
@@ -48,35 +49,32 @@ public class TrainingControllerConsoleTest {
         testUser.setFirstName(TEST_FIRST_NAME);
         testUser.setLastName(TEST_LAST_NAME);
         testUser.setEmail(TEST_EMAIL);
-        testTraining  = new Training(testTrainingName, TEST_DATE, 60, 200);
+        testTraining = new TrainingDTO(testTrainingName, TEST_DATE, 60, 200);
     }
 
 
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
-        // Arrange
-        Training training = new Training(testTrainingName, TEST_DATE, 60, 200);
-
         // Configure mock behavior
-        doNothing().when(trainingServiceMock).saveTraining(testUser, training);
+        doNothing().when(trainingServiceMock).saveTraining(testUser, testTraining);
 
         // Act
-        trainingController.saveTraining(testUser, training);
+        trainingController.saveTraining(testUser, testTraining);
 
         // Assert
-        verify(trainingServiceMock).saveTraining(testUser, training);
+        verify(trainingServiceMock).saveTraining(testUser, testTraining);
     }
 
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<Date, TreeSet<Training>> expectedTrainings = new TreeMap<>();
+        TreeMap<Date, TreeSet<TrainingDTO>> expectedTrainings = new TreeMap<>();
 
         // Configure mock behavior
         when(trainingServiceMock.getAllTrainings(testUser)).thenReturn(expectedTrainings);
 
         // Act
-        TreeMap<Date, TreeSet<Training>> actualTrainings = trainingController.getAllTrainings(testUser);
+        TreeMap<Date, TreeSet<TrainingDTO>> actualTrainings = trainingController.getAllTrainings(testUser);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -94,13 +92,13 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testGetTrainingsByUserEmailAndData_ReturnsTrainings() throws RepositoryException {
         // Arrange
-        TreeSet<Training> expectedTrainings = new TreeSet<>();
+        TreeSet<TrainingDTO> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
         when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
 
         // Act
-        TreeSet<Training> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
+        TreeSet<TrainingDTO> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -113,7 +111,7 @@ public class TrainingControllerConsoleTest {
                 .thenReturn(testTraining);
 
         // Act
-        Training actualTraining = trainingController
+        TrainingDTO actualTraining = trainingController
                 .getTrainingByUserEmailAndDateAndName(testUser, TEST_DATE, testTrainingName);
 
         // Assert

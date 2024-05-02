@@ -1,11 +1,10 @@
-package out.menu.training;
+package out.menu.training.viewtraining.implementation;
 
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
-import entities.model.Training;
-import entities.model.User;
+import out.menu.training.viewtraining.ViewTraining;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,16 +16,16 @@ import static utils.Utils.getFormattedDate;
 /**
  * Представляет класс для просмотра тренировок пользователя.
  */
-public class ViewTraining {
+public class ViewTrainingConsole implements ViewTraining {
 
     private final TrainingController trainingController;
 
     /**
-     * Создает экземпляр ViewTraining с заданным контроллером тренировок.
+     * Создает экземпляр ViewTrainingConsole с заданным контроллером тренировок.
      *
      * @param trainingController Контроллер тренировок.
      */
-    public ViewTraining(TrainingController trainingController) {
+    public ViewTrainingConsole(TrainingController trainingController) {
         this.trainingController = trainingController;
     }
 

@@ -4,19 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.AuthorizationDTO;
 import entities.dto.UserDTO;
 import exceptions.security.AuthorizationException;
-import in.repository.user.implementation.UserRepositoryJDBC;
 import in.service.users.AuthorizationService;
-import in.service.users.implementation.AuthorizationServiceImpl;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
+
+import static config.initializer.in.ServiceFactory.getAuthorizationService;
 
 public class LoginServlet extends HttpServlet {
 
@@ -26,12 +23,11 @@ public class LoginServlet extends HttpServlet {
     public LoginServlet() throws SQLException {
         try {
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/training-diary", "user", "password");
-            this.authorizationService = new AuthorizationServiceImpl(new UserRepositoryJDBC(connection));
-            this.objectMapper = new ObjectMapper();
+            this.authorizationService = getAuthorizationService();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        this.objectMapper = new ObjectMapper();
         // Замените на ваш реальный сервис
     }
 
@@ -46,14 +42,16 @@ public class LoginServlet extends HttpServlet {
         try {
             // Пытаемся выполнить аутентификацию
             UserDTO userDTO = authorizationService.login(email, password);
-            HttpSession session = request.getSession(true);
-            String jsonUserDTO = objectMapper.writeValueAsString(userDTO);
-            session.setAttribute("user", jsonUserDTO);
-            System.out.println("session user: " + session.getAttribute("user"));
-            response.setStatus(HttpServletResponse.SC_FOUND); // Код 302 - Found (перенаправление)
-            response.setHeader("Location", "/training-diary/templates/account/account.jsp");
+            String jsonResponse = objectMapper.writeValueAsString(userDTO);
+            request.getSession().setAttribute("user", jsonResponse);// Преобразуем UserDTO в JSON
+            response.setContentType("application/json"); // Устанавливаем тип контента как JSON
+            response.setCharacterEncoding("UTF-8"); // Устанавливаем кодировку
+            response.getWriter().write(jsonResponse); // Отправляем JSON-строку как ответ
+            response.setStatus(HttpServletResponse.SC_OK); // Устанавливаем статус ответа как 200 OK
         } catch (AuthorizationException e) {
-            throw new RuntimeException(e);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Устанавливаем статус ответа как 401 Unauthorized
+            response.getWriter().write("Authorization failed"); // Отправляем сообщение об ошибке как ответ
         }
     }
 }
+

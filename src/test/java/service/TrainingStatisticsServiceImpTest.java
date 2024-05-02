@@ -1,5 +1,7 @@
 package service;
 
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
 import entities.model.User;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
@@ -14,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -30,7 +33,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     @InjectMocks
     private TrainingStatisticsServiceImp trainingStatisticsService;
 
-    private User testUser;
+    private UserDTO testUser;
     private final Date startDate = new Date(2024,1,1);
     private final Date endDate = new Date(2024,12,31);
 
@@ -42,14 +45,20 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        testUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        testUser = new UserDTO();
+        testUser.setFirstName(TEST_FIRST_NAME);
+        testUser.setLastName(TEST_LAST_NAME);
+        testUser.setEmail(TEST_EMAIL);
+        testUser.setRights(new ArrayList<>());
+        testUser.setRoles(new ArrayList<>());
+        testUser.setActive(true);
         testUser.getRights().add(new Rights(4L,"STATISTICS"));
     }
 
     @Test
     public void testGetAllTrainingStatistics() throws NoStatisticsRightsException {
         // Arrange
-        TreeMap<Date, TreeSet<Training>> allTrainings = new TreeMap<>();
+        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
         allTrainings.put(new Date(2024,1,1), new TreeSet<>());
         allTrainings.put(new Date(2024,1,2), new TreeSet<>());
 
@@ -104,15 +113,15 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
     }
 
 
-    private TreeMap<Date, TreeSet<Training>> getMockTrainingData() {
-        TreeMap<Date, TreeSet<Training>> allTrainings = new TreeMap<>();
-        TreeSet<Training> trainings = new TreeSet<>();
-        trainings.add(new Training("Test Training 1", TEST_DATE, 60, 200));
-        trainings.add(new Training("Test Training 2", TEST_DATE, 45, 150));
-        trainings.add(new Training("Test Training 3", TEST_DATE, 90, 300));
+    private TreeMap<Date, TreeSet<TrainingDTO>> getMockTrainingData() {
+        TreeMap<Date, TreeSet<TrainingDTO>> allTrainings = new TreeMap<>();
+        TreeSet<TrainingDTO> trainings = new TreeSet<>();
+        trainings.add(new TrainingDTO("Test Training 1", TEST_DATE, 60, 200));
+        trainings.add(new TrainingDTO("Test Training 2", TEST_DATE, 45, 150));
+        trainings.add(new TrainingDTO("Test Training 3", TEST_DATE, 90, 300));
         allTrainings.put(TEST_DATE, trainings);
         totalTestTrainings = trainings.size();
-        for (Training training : trainings) {
+        for (TrainingDTO training : trainings) {
             totalTestDuration += training.getDuration();
             totalTestCaloriesBurned += training.getCaloriesBurned();
         }

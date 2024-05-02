@@ -6,6 +6,8 @@ import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
 import out.menu.authorization.ViewAuthorization;
+import out.menu.authorization.implementation.ViewAuthorizationController;
+import out.menu.authorization.implementation.ViewAuthorizationHTTP;
 
 import java.util.Scanner;
 
@@ -18,19 +20,21 @@ public class ViewMenu {
 
     /**
      * Конструктор класса ViewMenu.
-     * @param authorizationController Контроллер авторизации.
-     * @param adminController Контроллер администратора.
-     * @param userController Контроллер пользователя.
-     * @param trainingController Контроллер тренировок.
+     *
+     * @param adminController              Контроллер администратора.
+     * @param userController               Контроллер пользователя.
+     * @param trainingController           Контроллер тренировок.
      * @param trainingStatisticsController Контроллер статистики тренировок.
      */
     public ViewMenu(AuthorizationController authorizationController,
-                    AdminController adminController,
+            AdminController adminController,
                     UserController userController,
                     TrainingController trainingController,
                     TrainingStatisticsController trainingStatisticsController) {
         Scanner scanner = new Scanner(System.in);
-        this.viewAuthorization = new ViewAuthorization(authorizationController, adminController, userController,
+//        this.viewAuthorization = new ViewAuthorizationController(authorizationController, adminController, userController,
+//                trainingController, trainingStatisticsController, scanner);
+        this.viewAuthorization = new ViewAuthorizationHTTP(adminController, userController,
                 trainingController, trainingStatisticsController, scanner);
     }
 

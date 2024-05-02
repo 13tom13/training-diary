@@ -11,6 +11,7 @@ public class DatabaseConnection {
     private static final String PASSWORD = getDbPassword();
 
     public static Connection getConnection() throws SQLException {
+        System.out.println("Connecting to database...");
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 }
