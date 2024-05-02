@@ -15,11 +15,35 @@
   </servlet>
   <servlet>
     <servlet-name>allTrainings</servlet-name>
-    <servlet-class>servlet.training.ViewTrainingServlet</servlet-class>
+    <servlet-class>servlet.training.GetAllTrainings</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>getTrainingByUserEmailAndDate</servlet-name>
+    <servlet-class>servlet.training.GetTrainingByUserEmailAndDate</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>getTrainingByUserEmailAndDateAndName</servlet-name>
+    <servlet-class>servlet.training.GetTrainingByUserEmailAndDateAndName</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>saveTraining</servlet-name>
     <servlet-class>servlet.training.SaveTrainingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>deleteTraining</servlet-name>
+    <servlet-class>servlet.training.DeleteTrainingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>getTrainingTypes</servlet-name>
+    <servlet-class>servlet.training.GetTrainingTypesServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>saveTrainingTypeServlet</servlet-name>
+    <servlet-class>servlet.training.SaveTrainingType</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>addTrainingAdditional</servlet-name>
+    <servlet-class>servlet.training.AddTrainingAdditionalServlet</servlet-class>
   </servlet>
 
   <!-- Отображение сервлетов на URL -->
@@ -36,7 +60,31 @@
     <url-pattern>/training/alltrainings</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>getTrainingByUserEmailAndDate</servlet-name>
+    <url-pattern>/training/gettrainingbyuseremailanddate</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>getTrainingByUserEmailAndDateAndName</servlet-name>
+    <url-pattern>/training/getraining</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>saveTraining</servlet-name>
     <url-pattern>/training/savetraining</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>deleteTraining</servlet-name>
+    <url-pattern>/training/deletetraining</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>getTrainingTypes</servlet-name>
+    <url-pattern>/training/gettrainingtypes</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>saveTrainingTypeServlet</servlet-name>
+    <url-pattern>/training/savetrainingtypes</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>addTrainingAdditional</servlet-name>
+    <url-pattern>/training/addtrainingadditional</url-pattern>
   </servlet-mapping>
 </web-app>

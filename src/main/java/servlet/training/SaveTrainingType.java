@@ -1,31 +1,28 @@
 package servlet.training;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.initializer.in.ServiceFactory;
-import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import exceptions.InvalidDateFormatException;
-import exceptions.RepositoryException;
-import exceptions.security.rights.NoWriteRightsException;
 import in.service.training.TrainingService;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 
-public class SaveTrainingServlet extends HttpServlet {
+public class SaveTrainingType extends HttpServlet {
 
     private final TrainingService trainingService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public SaveTrainingServlet() {
+    public SaveTrainingType() {
         try {
             Class.forName("org.postgresql.Driver");
             this.trainingService = ServiceFactory.getTrainingService();
@@ -44,20 +41,19 @@ public class SaveTrainingServlet extends HttpServlet {
 
             // Извлекаем объекты userDTO и trainingDTO из JSON
             JSONObject userJsonObject = jsonRequest.getJSONObject("userDTO");
-            JSONObject trainingJsonObject = jsonRequest.getJSONObject("trainingDTO");
+            JSONObject trainingJsonObject = jsonRequest.getJSONObject("customTrainingType");
 
             // Преобразуем JSON объекты в объекты Java с помощью Jackson
             UserDTO userDTO = objectMapper.readValue(userJsonObject.toString(), UserDTO.class);
-            TrainingDTO trainingDTO = objectMapper.readValue(trainingJsonObject.toString(), TrainingDTO.class);
+            String customTrainingType = trainingJsonObject.toString();
 
             // Пример сохранения тренировки
-            trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
-            writeJsonResponse(response, trainingDTO, HttpServletResponse.SC_OK);
-        } catch (InvalidDateFormatException | RepositoryException | NoWriteRightsException e) {
+            trainingService.saveTrainingType(userDTO, customTrainingType);
+            writeJsonResponse(response,customTrainingType, HttpServletResponse.SC_OK);
+        } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error saving training: " + e.getMessage());
         }
+
     }
-
-
 }

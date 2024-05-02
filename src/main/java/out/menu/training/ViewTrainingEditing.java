@@ -4,7 +4,6 @@ import config.initializer.in.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
-import out.menu.training.ViewTrainingAdded.ViewTrainingAdded;
 
 import java.text.ParseException;
 import java.util.Date;

@@ -124,15 +124,14 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     @Override
     public Training getTrainingByUserEmailAndDataAndName(User user, Date trainingDate, String trainingName) throws RepositoryException {
         String sql = """
-                SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
-                       ta.key AS addition_key, ta.value AS addition_value
-                FROM main.trainings t
-                JOIN relations.user_trainings ut ON t.id = ut.training_id
-                JOIN main.users u ON u.id = ut.user_id
-                LEFT JOIN main.training_additions ta ON t.id = ta.training_id
-                WHERE u.email = ? AND t.date = ? AND t.name = ?
-                """;
-
+            SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
+                   ta.key AS addition_key, ta.value AS addition_value
+            FROM main.trainings t
+            JOIN relations.user_trainings ut ON t.id = ut.training_id
+            JOIN main.users u ON u.id = ut.user_id
+            LEFT JOIN main.training_additions ta ON t.id = ta.training_id
+            WHERE u.email = ? AND t.date = ? AND t.name = ?
+            """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
             statement.setDate(2, new java.sql.Date(trainingDate.getTime()));
@@ -148,6 +147,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             throw new RepositoryException("Ошибка при получении тренировки по адресу электронной почты " + user.getEmail() + " и дате " + trainingDate + " и имени " + trainingName);
         }
     }
+
 
 
     /**

@@ -1,7 +1,6 @@
 package out.menu;
 
 import out.menu.authorization.ViewAuthorization;
-import out.menu.authorization.implementation.ViewAuthorizationByHTTP;
 
 import java.util.Scanner;
 
@@ -18,8 +17,7 @@ public class ViewMenu {
      * Конструктор класса ViewMenu.
      */
     public ViewMenu() {
-//      this.viewAuthorization = new ViewAuthorizationByController();
-        this.viewAuthorization = new ViewAuthorizationByHTTP();
+      this.viewAuthorization = new ViewAuthorization();
     }
 
     /**

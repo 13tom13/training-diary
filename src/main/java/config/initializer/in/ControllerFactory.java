@@ -2,14 +2,17 @@ package config.initializer.in;
 
 import in.controller.authorization.AuthorizationController;
 import in.controller.authorization.implementation.AuthorizationControllerConsole;
+import in.controller.authorization.implementation.AuthorizationControllerHTTP;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.training.implementation.TrainingControllerConsole;
+import in.controller.training.implementation.TrainingControllerHTTP;
 import in.controller.training.implementation.TrainingStatisticsControllerConsole;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
 import in.controller.users.implementation.AdminControllerConsole;
 import in.controller.users.implementation.UserControllerConsole;
+import in.controller.users.implementation.UserControllerHTTP;
 
 import static config.initializer.in.RepositoryFactory.getUserRepository;
 import static config.initializer.in.ServiceFactory.*;
@@ -32,9 +35,12 @@ public class ControllerFactory {
     }
 
     private ControllerFactory() {
-        userController = new UserControllerConsole(getUserService());
-        authorizationController = new AuthorizationControllerConsole(getAuthorizationService());
-        trainingController = new TrainingControllerConsole(getTrainingService());
+//        userController = new UserControllerConsole(getUserService());
+//        authorizationController = new AuthorizationControllerConsole(getAuthorizationService());
+//        trainingController = new TrainingControllerConsole(getTrainingService());
+        userController = new UserControllerHTTP();
+        authorizationController = new AuthorizationControllerHTTP();
+        trainingController = new TrainingControllerHTTP();
         trainingStatisticsController = new TrainingStatisticsControllerConsole(getTrainingStatisticsService());
         adminController = new AdminControllerConsole(getUserRepository());
     }

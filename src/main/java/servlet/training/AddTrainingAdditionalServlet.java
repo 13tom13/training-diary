@@ -12,20 +12,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 
-public class SaveTrainingServlet extends HttpServlet {
+public class AddTrainingAdditionalServlet extends HttpServlet {
 
     private final TrainingService trainingService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public SaveTrainingServlet() {
+    public AddTrainingAdditionalServlet() {
         try {
             Class.forName("org.postgresql.Driver");
             this.trainingService = ServiceFactory.getTrainingService();
@@ -38,26 +36,25 @@ public class SaveTrainingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String requestBody = getRequestBody(request);
-
             // Преобразуем строку запроса в JSONObject
             JSONObject jsonRequest = new JSONObject(requestBody);
 
             // Извлекаем объекты userDTO и trainingDTO из JSON
             JSONObject userJsonObject = jsonRequest.getJSONObject("userDTO");
             JSONObject trainingJsonObject = jsonRequest.getJSONObject("trainingDTO");
+            String additionalNameJsonString = jsonRequest.getString("additionalName");
+            String additionalValueJsonString = jsonRequest.getString("additionalValue");
 
             // Преобразуем JSON объекты в объекты Java с помощью Jackson
             UserDTO userDTO = objectMapper.readValue(userJsonObject.toString(), UserDTO.class);
             TrainingDTO trainingDTO = objectMapper.readValue(trainingJsonObject.toString(), TrainingDTO.class);
 
             // Пример сохранения тренировки
-            trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
+            trainingDTO = trainingService.addTrainingAdditional(userDTO, trainingDTO, additionalNameJsonString, additionalValueJsonString);
             writeJsonResponse(response, trainingDTO, HttpServletResponse.SC_OK);
-        } catch (InvalidDateFormatException | RepositoryException | NoWriteRightsException e) {
+        } catch (RepositoryException | NoWriteRightsException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error saving training: " + e.getMessage());
         }
     }
-
-
 }

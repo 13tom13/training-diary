@@ -2,6 +2,8 @@ package in.controller.users;
 
 import entities.dto.RegistrationDTO;
 
+import java.io.IOException;
+
 /**
  * Интерфейс контроллера пользователей.
  */
@@ -12,6 +14,6 @@ public interface UserController {
      *
      * @param registrationDTO
      */
-    void createNewUser(RegistrationDTO registrationDTO);
+    void createNewUser(RegistrationDTO registrationDTO) throws IOException;
 }
 

@@ -1,13 +1,11 @@
 package out.menu.account;
 
 import entities.dto.UserDTO;
-import out.menu.training.ViewTrainingAdded.ViewTrainingAdded;
-import out.menu.training.ViewTrainingAdded.implementation.ViewTrainingAddedByController;
-import out.menu.training.viewTraining.ViewTraining;
-import out.menu.training.viewTraining.implementation.ViewTrainingByHTTP;
-import utils.Logger;
-import out.menu.training.ViewTrainingEditing;
 import out.menu.statistic.ViewTrainingStatistcs;
+import out.menu.training.ViewTrainingAdded;
+import out.menu.training.ViewTrainingEditing;
+import out.menu.training.ViewTraining;
+import utils.Logger;
 
 import java.util.Scanner;
 
@@ -25,13 +23,13 @@ public class ViewUserAccount {
 
     /**
      * Конструктор класса ViewUserAccount.
+     *
      * @param userDTO Пользователь.
      */
     public ViewUserAccount(UserDTO userDTO) {
         this.userDTO = userDTO;
-//        this.viewTrainingConsole = new ViewTrainingByController();
-        this.viewTraining = new ViewTrainingByHTTP();
-        this.viewTrainingAdded = new ViewTrainingAddedByController(userDTO);
+        this.viewTraining = new ViewTraining();
+        this.viewTrainingAdded = new ViewTrainingAdded(userDTO);
         this.viewTrainingEditing = new ViewTrainingEditing(userDTO, viewTrainingAdded);
         this.viewTrainingStatistcs = new ViewTrainingStatistcs(userDTO);
 

@@ -1,7 +1,5 @@
-package out.menu.training.ViewTrainingAdded.implementation;
+package out.menu.training;
 
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import config.initializer.in.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
@@ -9,41 +7,34 @@ import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
-import out.menu.training.ViewTrainingAdded.ViewTrainingAdded;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
-import static config.ApplicationConfig.getRootURL;
-import static utils.HTTP.sendPostRequest;
 import static utils.Utils.getDateFromString;
 
 /**
  * Представляет класс для добавления и удаления тренировок пользователя.
  */
-public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
+public class ViewTrainingAdded {
 
+    private final TrainingController trainingController;
     private final UserDTO userDTO;
     private final Scanner scanner = new Scanner(System.in);
-
-    private final String rootURL = getRootURL();
-    private final String saveTrainingServletPath = "/training/savetraining";
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Создает экземпляр ViewTrainingAdded с заданным контроллером тренировок, пользователем и сканером.
      *
      * @param userDTO            Пользователь.
      */
-    public ViewTrainingAddedByHTTP(UserDTO userDTO) {
+    public ViewTrainingAdded(UserDTO userDTO) {
+        this.trainingController = ControllerFactory.getInstance().getTrainingController();
         this.userDTO = userDTO;
     }
 
     /**
      * Метод для добавления тренировки.
      */
-    @Override
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
         String name = chooseTrainingType();
@@ -88,14 +79,14 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
 
         TrainingDTO trainingDTO = new TrainingDTO(name, date, duration, caloriesBurned);
         try {
-            String requestURL = rootURL + saveTrainingServletPath;
-            String savedTraining = sendPostRequest(requestURL, trainingDTO.toString());
-            trainingDTO = objectMapper.readValue(savedTraining, TrainingDTO.class);
-            addTrainingAdditional(trainingDTO);
+            TrainingDTO savedTraining = trainingController.saveTraining(userDTO, trainingDTO);
+            addTrainingAdditional(savedTraining);
             System.out.println("Тренировка успешно сохранена.");
-        } catch (IOException e) {
+        } catch (InvalidDateFormatException | NoWriteRightsException | RepositoryException e) {
             System.err.println(e.getMessage());
         }
+
+
     }
 
     /**
@@ -103,12 +94,10 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
      *
      * @return Выбранный тип тренировки.
      */
-    @Override
     public String chooseTrainingType() {
         System.out.println("Выберите тип тренировки:");
 
-        List<String> trainingTypes = null;
-//                trainingController.getTrainingTypes(userDTO);
+        List<String> trainingTypes = trainingController.getTrainingTypes(userDTO);
 
         for (int i = 0; i < trainingTypes.size(); i++) {
             System.out.println((i + 1) + ". " + trainingTypes.get(i));
@@ -130,7 +119,7 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
                     scanner.nextLine(); // Очистка буфера
                     System.out.print("Введите свой тип тренировки: ");
                     String customTrainingType = scanner.nextLine();
-//                    trainingController.saveTrainingType(userDTO, customTrainingType);
+                    trainingController.saveTrainingType(userDTO, customTrainingType);
                     System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
                     return customTrainingType;
                 } else {
@@ -147,7 +136,6 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
     /**
      * Метод для удаления тренировки.
      */
-    @Override
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
         String stringDate = scanner.nextLine();
@@ -158,22 +146,20 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
             return; // Выйти из метода, если дата некорректна
         }
-        TreeSet<TrainingDTO> trainingsFromDay = null;
-//                trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
+        TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         for (TrainingDTO training : trainingsFromDay) {
             System.out.println(training);
         }
         System.out.print("Название: ");
         String name = scanner.nextLine();
-//        if (trainingController.deleteTraining(userDTO, trainingDate, name)) {
-//            System.out.println("Тренировка успешно удалена.");
-//        }
+        if (trainingController.deleteTraining(userDTO, trainingDate, name)) {
+            System.out.println("Тренировка успешно удалена.");
+        }
     }
 
     /**
      * Метод для добавления дополнительной информации о тренировке.
      */
-    @Override
     public void addTrainingAdditional(TrainingDTO trainingDTO) {
         boolean startAdd = true;
         while (startAdd) {
@@ -192,7 +178,7 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-//                        trainingDTO = trainingController.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
+                        trainingDTO = trainingController.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
                     }
                     case 2 -> {
                         if (!trainingDTO.getAdditions().isEmpty()) {
@@ -202,7 +188,7 @@ public class ViewTrainingAddedByHTTP implements ViewTrainingAdded {
                             System.out.println("Введите название дополнительной информации для удаления:");
 
                             String additionalNameForRemove = scanner.nextLine();
-//                            trainingDTO = trainingController.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
+                            trainingDTO = trainingController.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
                         }
                     }
                     case 3 -> {

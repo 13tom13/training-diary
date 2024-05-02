@@ -3,7 +3,6 @@ package servlet.training;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.UserDTO;
 import in.service.training.TrainingService;
-import in.service.training.implementation.TrainingServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +16,15 @@ import java.util.TreeSet;
 import entities.dto.TrainingDTO;
 
 import static config.initializer.in.ServiceFactory.getTrainingService;
+import static servlet.utils.ServletUtils.getJsonParamFromRequest;
+import static servlet.utils.ServletUtils.writeJsonResponse;
 
-public class ViewTrainingServlet extends HttpServlet {
+public class GetAllTrainings extends HttpServlet {
 
     private final TrainingService trainingService;
     private final ObjectMapper objectMapper;
 
-    public ViewTrainingServlet() {
+    public GetAllTrainings() {
         try {
             Class.forName("org.postgresql.Driver");
             this.trainingService = getTrainingService();
@@ -34,17 +35,11 @@ public class ViewTrainingServlet extends HttpServlet {
         this.objectMapper = new ObjectMapper();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Получаем JSON-строку атрибута "user" из сессии
-        String userJson = request.getParameter("user");
-
-        // Проверяем, есть ли атрибут "userJson" в сессии
-        if (userJson == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Пользователь не аутентифицирован");
-            return;
-        }
+        // Получаем JSON-строку из параметра "user"
+        String userJson = getJsonParamFromRequest(request, "user");
 
         // Преобразуем JSON в объект UserDTO
         UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
@@ -52,10 +47,6 @@ public class ViewTrainingServlet extends HttpServlet {
         TreeMap<Date, TreeSet<TrainingDTO>> allTraining = trainingService.getAllTrainings(userDTO);
 
         // Преобразуем данные в JSON и отправляем как ответ
-        String jsonResponse = objectMapper.writeValueAsString(allTraining);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK); // 200
-        response.getWriter().write(jsonResponse);
+       writeJsonResponse(response, allTraining, HttpServletResponse.SC_OK);
     }
 }

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import static config.initializer.in.ServiceFactory.getAuthorizationService;
+import static servlet.utils.ServletUtils.getRequestBody;
+import static servlet.utils.ServletUtils.writeJsonResponse;
 
 public class LoginServlet extends HttpServlet {
 
@@ -34,24 +36,19 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         // Получаем данные из запроса
-        String requestBody = request.getReader().lines()
-                .collect(Collectors.joining(System.lineSeparator()));
+        String requestBody = getRequestBody(request);
         AuthorizationDTO authorizationDTO = objectMapper.readValue(requestBody, AuthorizationDTO.class);
         String email = authorizationDTO.getEmail();
         String password = authorizationDTO.getPassword();
         try {
             // Пытаемся выполнить аутентификацию
             UserDTO userDTO = authorizationService.login(email, password);
-            String jsonResponse = objectMapper.writeValueAsString(userDTO);
-            request.getSession().setAttribute("user", jsonResponse);// Преобразуем UserDTO в JSON
-            response.setContentType("application/json"); // Устанавливаем тип контента как JSON
-            response.setCharacterEncoding("UTF-8"); // Устанавливаем кодировку
-            response.getWriter().write(jsonResponse); // Отправляем JSON-строку как ответ
-            response.setStatus(HttpServletResponse.SC_OK); // Устанавливаем статус ответа как 200 OK
+            writeJsonResponse(response,userDTO, HttpServletResponse.SC_OK);
         } catch (AuthorizationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Устанавливаем статус ответа как 401 Unauthorized
             response.getWriter().write("Authorization failed"); // Отправляем сообщение об ошибке как ответ
         }
     }
+
 }
 

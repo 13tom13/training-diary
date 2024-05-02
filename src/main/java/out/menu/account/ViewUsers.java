@@ -5,8 +5,7 @@ import entities.dto.UserDTO;
 import entities.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
-import out.menu.training.viewTraining.ViewTraining;
-import out.menu.training.viewTraining.implementation.ViewTrainingByController;
+import out.menu.training.ViewTraining;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -32,7 +31,7 @@ public class ViewUsers {
      */
     public ViewUsers() {
         this.adminController = ControllerFactory.getInstance().getAdminController();
-        this.viewTraining = new ViewTrainingByController();
+        this.viewTraining = new ViewTraining();
         this.viewUsersEdition = new ViewUsersEdition();
     }
 

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static config.initializer.in.ServiceFactory.getUserService;
+import static servlet.utils.ServletUtils.getRequestBody;
 
 public class RegistrationServlet extends HttpServlet {
 
@@ -32,8 +33,7 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         // Получаем данные из запроса
-        String requestBody = request.getReader().lines()
-                .collect(Collectors.joining(System.lineSeparator()));
+        String requestBody = getRequestBody(request);
         RegistrationDTO registrationDTO = objectMapper.readValue(requestBody, RegistrationDTO.class);
 
         try {
