@@ -1,11 +1,9 @@
 package out.menu.authorization.implementation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.AuthorizationDTO;
 import entities.dto.RegistrationDTO;
 import entities.dto.UserDTO;
-import in.controller.authorization.AuthorizationController;
 import in.controller.training.TrainingController;
 import in.controller.training.TrainingStatisticsController;
 import in.controller.users.AdminController;
@@ -23,7 +21,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-import static config.ApplicationConfig.getApplicationURL;
+import static config.ApplicationConfig.getRootURL;
 import static utils.Utils.hisRole;
 
 /**
@@ -31,7 +29,7 @@ import static utils.Utils.hisRole;
  */
 public class ViewAuthorizationHTTP implements ViewAuthorization {
 
-    private final String url = getApplicationURL();
+    private final String rootURL = getRootURL();
 
     private final AdminController adminController;
     private final UserController userController;
@@ -72,7 +70,7 @@ public class ViewAuthorizationHTTP implements ViewAuthorization {
         AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
 
         // Отправка POST запроса на сервлет
-        String servletUrl = url + "/login";
+        String servletUrl = rootURL + "/login";
         try {
             // Преобразование объекта AuthorizationDTO в JSON
             String requestBody = objectMapper.writeValueAsString(authorizationDTO);
@@ -119,7 +117,7 @@ public class ViewAuthorizationHTTP implements ViewAuthorization {
             return;
         }
 
-        String servletUrl = url + "/registration";
+        String servletUrl = rootURL + "/registration";
         try {
             String response = sendPostRequest(servletUrl, requestBody);
             System.out.println("Ответ от сервера: " + response);

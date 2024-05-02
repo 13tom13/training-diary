@@ -37,7 +37,7 @@ public class ViewTrainingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Получаем JSON-строку атрибута "user" из сессии
-        String userJson = (String) request.getSession().getAttribute("user");
+        String userJson = request.getParameter("user");
 
         // Проверяем, есть ли атрибут "userJson" в сессии
         if (userJson == null) {

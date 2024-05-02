@@ -5,13 +5,13 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 import out.menu.training.viewtraining.ViewTraining;
+import utils.Utils;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import static utils.Utils.getFormattedDate;
+import static utils.Utils.printAllTraining;
 
 /**
  * Представляет класс для просмотра тренировок пользователя.
@@ -36,22 +36,6 @@ public class ViewTrainingConsole implements ViewTraining {
      */
     public void viewAllTraining(UserDTO userDTO) {
         TreeMap<Date, TreeSet<TrainingDTO>> allTraining = trainingController.getAllTrainings(userDTO);
-        if (allTraining.isEmpty()) {
-            System.out.println("Список тренировок пуст");
-            return;
-        }
-
-        for (Map.Entry<Date, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
-
-            String currentDate = getFormattedDate(entry.getKey());
-            TreeSet<TrainingDTO> trainingsOnDate = entry.getValue();
-
-            System.out.println("\n" + "=====" + currentDate + "=====");
-
-            for (TrainingDTO training : trainingsOnDate) {
-                System.out.println(training);
-                System.out.println("--------------------------------------------------");
-            }
-        }
+        printAllTraining(allTraining);
     }
 }

@@ -1,5 +1,6 @@
 package entities.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import entities.model.Training;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
 
     private Long id;
     private String name;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yy")
     private Date date;
     private int duration;
     private int caloriesBurned;
