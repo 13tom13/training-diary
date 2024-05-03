@@ -12,7 +12,6 @@ import in.service.training.TrainingService;
 import utils.Logger;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -92,7 +91,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return {@code true}, если тренировка удалена успешно, в противном случае {@code false}
      */
     @Override
-    public boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) {
+    public boolean deleteTraining(UserDTO userDTO, String date, String name) {
         try {
             boolean result = trainingService.deleteTraining(userDTO, date, name);
             logger.logAction(userDTO.getEmail(), "delete training " + name + " " + date);
@@ -112,7 +111,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Множество тренировок пользователя на указанную дату
      */
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate trainingDate) {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
         try {
             return trainingService.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         } catch (RepositoryException e) {
@@ -131,7 +130,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, LocalDate trainingDate, String trainingName) {
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) {
         try {
             return trainingService.getTrainingByUserEmailAndDataAndName(userDTO, trainingDate, trainingName);
         } catch (RepositoryException e) {

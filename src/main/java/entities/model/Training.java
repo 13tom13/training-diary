@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 
-import static utils.Utils.getFormattedDate;
+import static utils.Utils.getStringFromDate;
 
 /**
  * Класс, представляющий тренировку.
@@ -231,7 +231,7 @@ public class Training implements Comparable<Training> {
     @Override
     public String toString() {
         // Форматирование даты в строку в формате "dd.MM.yy"
-        String formattedDate = getFormattedDate(date);
+        String formattedDate = getStringFromDate(date);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Тренировка: ").append(name).append(" | Дата: ").append(formattedDate) // Вывод отформатированной даты

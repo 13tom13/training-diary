@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static config.initializer.in.ServiceFactory.getTrainingService;
@@ -30,18 +32,15 @@ public class DeleteTrainingServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userJson = getJsonParamFromRequest(request, "user");
-        UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
+        String userJson = request.getParameter("user");
         String dateString = request.getParameter("date");
-        LocalDate date = getDateFromString(dateString);
-        System.out.println(dateString);
-        System.out.println(date);
-
-
         String trainingName = request.getParameter("name");
 
+        UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
+        String decodedDate = URLDecoder.decode(dateString.replaceAll("\"", ""), StandardCharsets.UTF_8);
+        String decodedTrainingName = URLDecoder.decode(trainingName.replaceAll("\"", ""), StandardCharsets.UTF_8);
         try {
-            boolean success = trainingService.deleteTraining(userDTO, date, trainingName);
+            boolean success = trainingService.deleteTraining(userDTO, decodedDate, decodedTrainingName);
             // Отправка ответа в формате JSON
             response.setContentType("application/json");
             if (success) {

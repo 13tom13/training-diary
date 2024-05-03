@@ -84,10 +84,10 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
         // Act
-        trainingController.deleteTraining(testUser, TEST_DATE, testTrainingName);
+        trainingController.deleteTraining(testUser, String.valueOf(TEST_DATE), testTrainingName);
 
         // Assert
-        verify(trainingServiceMock).deleteTraining(testUser, TEST_DATE, testTrainingName);
+        verify(trainingServiceMock).deleteTraining(testUser, String.valueOf(TEST_DATE), testTrainingName);
     }
 
     @Test
@@ -96,10 +96,10 @@ public class TrainingControllerConsoleTest {
         TreeSet<TrainingDTO> expectedTrainings = new TreeSet<>();
 
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, TEST_DATE)).thenReturn(expectedTrainings);
+        when(trainingServiceMock.getTrainingsByUserEmailAndData(testUser, String.valueOf(TEST_DATE))).thenReturn(expectedTrainings);
 
         // Act
-        TreeSet<TrainingDTO> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, TEST_DATE);
+        TreeSet<TrainingDTO> actualTrainings = trainingController.getTrainingsByUserEmailAndData(testUser, String.valueOf(TEST_DATE));
 
         // Assert
         assertEquals(expectedTrainings, actualTrainings);
@@ -108,12 +108,12 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testGetTrainingByUserEmailAndDataAndName_ReturnsTraining() throws RepositoryException {
         // Configure mock behavior
-        when(trainingServiceMock.getTrainingByUserEmailAndDataAndName(testUser, TEST_DATE, testTrainingName))
+        when(trainingServiceMock.getTrainingByUserEmailAndDataAndName(testUser, String.valueOf(TEST_DATE), testTrainingName))
                 .thenReturn(testTraining);
 
         // Act
         TrainingDTO actualTraining = trainingController
-                .getTrainingByUserEmailAndDateAndName(testUser, TEST_DATE, testTrainingName);
+                .getTrainingByUserEmailAndDateAndName(testUser, String.valueOf(TEST_DATE), testTrainingName);
 
         // Assert
         assertEquals(testTraining, actualTraining);

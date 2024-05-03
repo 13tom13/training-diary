@@ -40,7 +40,7 @@ public interface TrainingModificationService {
      * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    boolean deleteTraining(UserDTO userDTO, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.

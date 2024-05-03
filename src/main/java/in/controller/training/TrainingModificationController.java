@@ -8,7 +8,6 @@ import exceptions.security.rights.NoWriteRightsException;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * Интерфейс, определяющий методы для модификации тренировок.
@@ -32,7 +31,7 @@ public interface TrainingModificationController {
      * @param name имя тренировки
      * @return true, если тренировка успешно удалена, в противном случае false
      */
-    boolean deleteTraining(UserDTO userDTO, LocalDate date, String name);
+    boolean deleteTraining(UserDTO userDTO, String date, String name);
 
     /**
      * Добавляет дополнительную информацию к тренировке.

@@ -5,10 +5,8 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.TreeSet;
 
@@ -29,8 +27,8 @@ public class ViewTrainingEditing {
     /**
      * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
      *
-     * @param viewTrainingAddedByController  Представление добавления тренировок.
-     * @param userDTO            Пользователь.
+     * @param viewTrainingAddedByController Представление добавления тренировок.
+     * @param userDTO                       Пользователь.
      */
     public ViewTrainingEditing(UserDTO userDTO, ViewTrainingAdded viewTrainingAddedByController) {
         this.trainingController = ControllerFactory.getInstance().getTrainingController();
@@ -44,17 +42,14 @@ public class ViewTrainingEditing {
     private void getTrainingForEditing() {
         TreeSet<TrainingDTO> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
-        String stringDate = scanner.nextLine();
-        LocalDate trainingDate;
-        try {
-            trainingDate = getDateFromString(stringDate);
-        } catch (DateTimeParseException e) {
+        String trainingDate = scanner.nextLine();
+        if (isValidDateFormat(trainingDate)) {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
-            return; // Выйти из метода, если дата некорректна
+            return;
         }
         trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
-            System.out.println("Тренировки на " + getFormattedDate(trainingDate) + ":");
+            System.out.println("Тренировки на " + trainingDate + ":");
             for (TrainingDTO training : trainingsFromDay) {
                 System.out.println(training);
             }

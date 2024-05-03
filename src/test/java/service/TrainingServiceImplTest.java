@@ -103,7 +103,7 @@ public class TrainingServiceImplTest extends TestUtil {
                 .thenReturn(trainingForRepository);
 
         // Act
-        trainingService.deleteTraining(testUser, TEST_DATE, testTrainingName);
+        trainingService.deleteTraining(testUser, String.valueOf(TEST_DATE), testTrainingName);
 
         // Assert
         verify(trainingRepository).deleteTraining(UserForRepository, trainingForRepository);

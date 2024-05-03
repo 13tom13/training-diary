@@ -87,7 +87,13 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 JOIN main.users u ON u.id = ut.user_id
                 WHERE u.email = ? AND t.date = ?
                 """;
-
+//        System.out.println("LocalDate from rep: " + trainingDate);
+//        Date date = Date.valueOf(trainingDate);
+//        System.out.println("sql Date from rep: " + date);
+//        System.out.println("compare date: " + date.compareTo( Date.valueOf(trainingDate)));
+//        LocalDate example = LocalDate.of(2024, 4, 24);
+//        System.out.println("example date: " + example);
+//        System.out.println("compare to date example: " + date.compareTo( Date.valueOf(example)));
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());

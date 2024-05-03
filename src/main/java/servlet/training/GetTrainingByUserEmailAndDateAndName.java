@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static config.initializer.in.ServiceFactory.getTrainingService;
@@ -43,10 +45,10 @@ public class GetTrainingByUserEmailAndDateAndName extends HttpServlet {
             String name = request.getParameter("name");
             // Преобразуем JSON в объекты UserDTO
             UserDTO userDTO = objectMapper.readValue(userEmailJson, UserDTO.class);
-            LocalDate parsedDate = getDateFromString(date);
-            TrainingDTO allTraining = trainingService.getTrainingByUserEmailAndDataAndName(userDTO, parsedDate, name);
+            String decodedDate = URLDecoder.decode(date.replaceAll("\"", ""), StandardCharsets.UTF_8);
+            TrainingDTO training = trainingService.getTrainingByUserEmailAndDataAndName(userDTO, decodedDate, name);
             // Преобразуем данные в JSON и отправляем как ответ
-            writeJsonResponse(response, allTraining, HttpServletResponse.SC_OK);
+            writeJsonResponse(response, training, HttpServletResponse.SC_OK);
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
         }

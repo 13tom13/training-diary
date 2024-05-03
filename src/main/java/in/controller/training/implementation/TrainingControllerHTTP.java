@@ -11,6 +11,7 @@ import in.controller.training.TrainingController;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -49,10 +50,10 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public boolean deleteTraining(UserDTO userDTO, LocalDate date, String name) {
+    public boolean deleteTraining(UserDTO userDTO, String date, String name) {
         try {
             String userForDelete = URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
-            String dateForDelete = objectMapper.writeValueAsString(date);
+            String dateForDelete = URLEncoder.encode(objectMapper.writeValueAsString(date), StandardCharsets.UTF_8);
             String nameForDelete = URLEncoder.encode(objectMapper.writeValueAsString(name), StandardCharsets.UTF_8);
 
             String urlWithParams = rootURL + DeleteTrainingServletPath + "?user=" + userForDelete + "&date=" + dateForDelete + "&name=" + nameForDelete;
@@ -116,7 +117,7 @@ public class TrainingControllerHTTP implements TrainingController {
             // Отправляем GET-запрос
             String jsonResponse = sendGetRequest(urlWithParams);
 
-            // Преобразуем JSON в TreeMap<Date, TreeSet<TrainingDTO>>
+            // Преобразуем JSON в TreeMap<LocalDate, TreeSet<TrainingDTO>>
             TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {};
             return objectMapper.readValue(jsonResponse, typeRef);
         } catch (IOException e) {
@@ -125,11 +126,10 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate trainingDate) {
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
         try {
             String userEmailForGet = URLEncoder.encode(objectMapper.writeValueAsString(userDTO.getEmail()), StandardCharsets.UTF_8);
             String dateForGet = URLEncoder.encode(objectMapper.writeValueAsString(trainingDate), StandardCharsets.UTF_8);
-
             String urlWithParams = rootURL + getTrainingsByUserEmailAndDate + "?userEmail=" + userEmailForGet + "&date=" + dateForGet;
             String jsonResponse = sendGetRequest(urlWithParams);
             TypeReference<TreeSet<TrainingDTO>> typeRef = new TypeReference<>(){};
@@ -140,7 +140,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, LocalDate trainingDate, String trainingName) {
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) {
         try {
             String userEmailForGet = URLEncoder.encode(objectMapper.writeValueAsString(userDTO.getEmail()), StandardCharsets.UTF_8);
             String dateForGet = URLEncoder.encode(objectMapper.writeValueAsString(trainingDate), StandardCharsets.UTF_8);

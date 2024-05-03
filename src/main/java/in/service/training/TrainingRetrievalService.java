@@ -32,7 +32,7 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, LocalDate data) throws RepositoryException, SecurityException;
+    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String data) throws RepositoryException, SecurityException;
 
     /**
      * Получает тренировку по электронной почте пользователя, дате и названию.
@@ -44,5 +44,5 @@ public interface TrainingRetrievalService {
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, LocalDate trainingData, String trainingName) throws RepositoryException, SecurityException;
+    TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, String trainingData, String trainingName) throws RepositoryException, SecurityException;
 }

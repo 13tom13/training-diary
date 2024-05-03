@@ -53,7 +53,6 @@ public class HTTP {
             URL url = new URL(urlWithParams);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-
             int statusCode = connection.getResponseCode();
             if (statusCode == HttpURLConnection.HTTP_OK) {
                 return sendResponse(connection);
@@ -73,7 +72,6 @@ public class HTTP {
             URL url = new URL(urlWithParams);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("DELETE");
-
             int statusCode = connection.getResponseCode();
             if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
                 return statusCode;

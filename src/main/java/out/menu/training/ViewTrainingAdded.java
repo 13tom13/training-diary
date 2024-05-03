@@ -14,6 +14,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import static utils.Utils.getDateFromString;
+import static utils.Utils.isValidDateFormat;
 
 /**
  * Представляет класс для добавления и удаления тренировок пользователя.
@@ -45,7 +46,7 @@ public class ViewTrainingAdded {
             System.out.print("Дата (дд.мм.гг): ");
             String stringDate = scanner.nextLine();
             try {
-                date = getDateFromString(stringDate);
+                date = LocalDate.parse(stringDate);
             } catch (DateTimeParseException e) {
                 System.out.println("Неверный формат даты. Попробуйте еще раз.");
             }
@@ -138,14 +139,11 @@ public class ViewTrainingAdded {
      */
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
-        String stringDate = scanner.nextLine();
-        LocalDate trainingDate = null;
-        try {
-           trainingDate = getDateFromString(stringDate);
-        } catch (DateTimeParseException e){
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-            return;
-        }
+        String trainingDate = scanner.nextLine();
+           if (!isValidDateFormat(trainingDate)){
+               System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+               return;
+           }
         TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         for (TrainingDTO training : trainingsFromDay) {
             System.out.println(training);
