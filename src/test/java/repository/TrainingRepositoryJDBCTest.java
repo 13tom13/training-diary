@@ -115,10 +115,7 @@ public class TrainingRepositoryJDBCTest {
         repository.saveTraining(user, training);
 
         // Удаляем тренировку
-        boolean isDeleted = repository.deleteTraining(user, training);
-
-        // Проверяем, что метод возвращает true, если удаление прошло успешно
-        Assertions.assertTrue(isDeleted);
+        repository.deleteTraining(user, training);
 
         // Проверяем, что тренировка больше не существует в базе данных
         assertThrows(RepositoryException.class, () -> repository.getTrainingByUserEmailAndDataAndName(user, TEST_DATE, "Running"));

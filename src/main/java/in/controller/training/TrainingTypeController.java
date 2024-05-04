@@ -4,6 +4,7 @@ package in.controller.training;
 
 import entities.dto.UserDTO;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface TrainingTypeController {
      * @param userDTO пользователь, для которого нужно получить список типов тренировок
      * @return список типов тренировок пользователя
      */
-    List<String> getTrainingTypes(UserDTO userDTO);
+    List<String> getTrainingTypes(UserDTO userDTO) throws IOException;
 
     /**
      * Сохраняет новый тип тренировки для указанного пользователя.
@@ -25,5 +26,5 @@ public interface TrainingTypeController {
      * @param userDTO               пользователь, для которого нужно сохранить новый тип тренировки
      * @param customTrainingType новый тип тренировки для сохранения
      */
-    void saveTrainingType(UserDTO userDTO, String customTrainingType);
+    void saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException;
 }

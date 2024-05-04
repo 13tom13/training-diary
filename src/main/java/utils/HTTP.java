@@ -66,7 +66,7 @@ public class HTTP {
         }
     }
 
-    public static int sendDeleteRequest(String urlWithParams) throws IOException {
+        public static Integer sendDeleteRequest(String urlWithParams) throws IOException {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(urlWithParams);
@@ -76,7 +76,7 @@ public class HTTP {
             if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
                 return statusCode;
             } else {
-                throw new IOException("Ошибка при удалении данных: " + statusCode);
+                throw new IOException("Ошибка при получении данных: " + statusCode);
             }
         } finally {
             if (connection != null) {
@@ -84,8 +84,6 @@ public class HTTP {
             }
         }
     }
-
-
 
 
     private static void sendRequest(HttpURLConnection connection, String jsonRequestBody) throws IOException {

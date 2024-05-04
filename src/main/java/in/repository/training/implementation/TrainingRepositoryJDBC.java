@@ -218,11 +218,10 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      *
      * @param user     пользователь, для которого удаляется тренировка
      * @param training тренировка для удаления
-     * @return true, если тренировка для удаления найдена, иначе false
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public boolean deleteTraining(User user, Training training) throws RepositoryException {
+    public void deleteTraining(User user, Training training) throws RepositoryException {
         String sqlDeleteUserTraining = """
                 DELETE FROM relations.user_trainings
                 WHERE user_id = ? AND training_id = ?
@@ -257,7 +256,6 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 connection.commit();
 
                 // Возвращаем true, если удаление прошло успешно
-                return true;
             } catch (SQLException e) {
                 // Откатываем транзакцию в случае ошибки
                 connection.rollback();

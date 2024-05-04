@@ -27,11 +27,10 @@ public interface TrainingModificationController {
      * Удаляет тренировку пользователя по указанной дате и имени.
      *
      * @param userDTO пользователь, для которого удаляется тренировка
-     * @param date дата тренировки
-     * @param name имя тренировки
-     * @return true, если тренировка успешно удалена, в противном случае false
+     * @param date    дата тренировки
+     * @param name    имя тренировки
      */
-    boolean deleteTraining(UserDTO userDTO, String date, String name);
+    void deleteTraining(UserDTO userDTO, String date, String name);
 
     /**
      * Добавляет дополнительную информацию к тренировке.

@@ -1,9 +1,7 @@
 package out;
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import out.menu.ViewMenu;
-
-import static config.initializer.in.ControllerFactory.*;
 
 /**
  * Класс TrainingDiary представляет собой приложение для ведения тренировочного дневника.

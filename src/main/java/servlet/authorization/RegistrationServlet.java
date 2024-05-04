@@ -10,9 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
-import static config.initializer.in.ServiceFactory.getUserService;
+import static config.initializer.ServiceFactory.getUserService;
 import static servlet.utils.ServletUtils.getRequestBody;
 import static utils.Utils.getObjectMapper;
 

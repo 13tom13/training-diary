@@ -21,12 +21,11 @@ public interface TrainingModificationService {
      *
      * @param userDTO     пользователь, для которого сохраняется тренировка
      * @param trainingDTO новая тренировка
-     * @return
+     * @return новая тренировка
      * @throws RepositoryException        если возникла ошибка доступа к хранилищу
-     * @throws InvalidDateFormatException если указана некорректная дата тренировки
      * @throws NoWriteRightsException     если у пользователя нет прав на запись
      */
-    TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws RepositoryException, InvalidDateFormatException, NoWriteRightsException;
+    TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws RepositoryException, NoWriteRightsException;
 
     /**
      * Удаляет тренировку для указанного пользователя по указанной дате и имени.
@@ -34,13 +33,10 @@ public interface TrainingModificationService {
      * @param userDTO пользователь, для которого удаляется тренировка
      * @param date дата тренировки
      * @param name название тренировки
-     * @return true, если тренировка успешно удалена, в противном случае false
      * @throws RepositoryException        если возникла ошибка доступа к хранилищу
-     * @throws InvalidDateFormatException если указана некорректная дата тренировки
-     * @throws SecurityException          если возникла ошибка безопасности
      * @throws NoDeleteRightsException    если у пользователя нет прав на удаление
      */
-    boolean deleteTraining(UserDTO userDTO, String date, String name) throws RepositoryException, InvalidDateFormatException, SecurityException, NoDeleteRightsException;
+    void deleteTraining(UserDTO userDTO, String date, String name) throws RepositoryException, NoDeleteRightsException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.

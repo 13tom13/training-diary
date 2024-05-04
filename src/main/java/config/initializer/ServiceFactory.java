@@ -1,4 +1,4 @@
-package config.initializer.in;
+package config.initializer;
 
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
@@ -11,7 +11,7 @@ import in.service.training.implementation.TrainingServiceImpl;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import in.service.users.implementation.UserServiceImpl;
 
-import static config.initializer.in.RepositoryFactory.*;
+import static config.initializer.RepositoryFactory.*;
 
 /**
  * Фабричный класс для инициализации сервисов и их зависимостей.

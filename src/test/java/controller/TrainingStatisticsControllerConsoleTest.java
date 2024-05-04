@@ -1,8 +1,11 @@
 package controller;
 
+import config.initializer.ServiceFactory;
 import entities.dto.UserDTO;
-import in.controller.training.implementation.TrainingStatisticsControllerConsole;
+import entities.model.Rights;
+import entities.model.Roles;
 import exceptions.security.rights.NoStatisticsRightsException;
+import in.controller.training.implementation.TrainingStatisticsControllerConsole;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,13 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import out.menu.statistic.TriFunction;
 import testutil.TestUtil;
 
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,6 +42,11 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
         testUser.setFirstName(TEST_FIRST_NAME);
         testUser.setLastName(TEST_LAST_NAME);
         testUser.setEmail(TEST_EMAIL);
+        testUser.setRights(new ArrayList<>());
+        testUser.setRoles(new ArrayList<>());
+        testUser.setActive(true);
+        testUser.getRoles().add(new Roles(2L,"USER"));
+        testUser.getRights().add(new Rights(4L,"STATISTICS"));
     }
 
     @Test
@@ -49,11 +56,12 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
         when(trainingStatisticsServiceMock.getAllTrainingStatistics(testUser)).thenReturn(expectedStatistics);
 
         // Act
-        int actualStatistics = trainingStatisticsController.getAllTrainingStatistics(testUser);
-
         // Assert
-        assertEquals(expectedStatistics, actualStatistics);
-        verify(trainingStatisticsServiceMock).getAllTrainingStatistics(testUser);
+        assertDoesNotThrow(() -> {
+            int actualStatistics = trainingStatisticsController.getAllTrainingStatistics(testUser);
+            assertEquals(expectedStatistics, actualStatistics);
+        });
+
     }
 
     @Test

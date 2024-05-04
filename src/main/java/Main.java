@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Создание объекта TrainingDiary
-        TrainingDiary trainingDiary = new TrainingDiary();
+        TrainingDiary trainingDiary = new   TrainingDiary();
 
         // Вызов метода start() объекта TrainingDiary
         trainingDiary.start();

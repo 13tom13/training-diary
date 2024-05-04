@@ -1,7 +1,6 @@
 package servlet.training;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import entities.dto.UserDTO;
 import in.service.training.TrainingService;
 import jakarta.servlet.ServletException;
@@ -11,13 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import entities.dto.TrainingDTO;
 
-import static config.initializer.in.ServiceFactory.getTrainingService;
+import static config.initializer.ServiceFactory.getTrainingService;
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getObjectMapper;

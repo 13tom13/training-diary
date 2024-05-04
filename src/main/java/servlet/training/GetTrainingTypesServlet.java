@@ -1,17 +1,15 @@
 package servlet.training;
-import config.initializer.in.ServiceFactory;
+import config.initializer.ServiceFactory;
 import in.service.training.TrainingService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.UserDTO;
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;

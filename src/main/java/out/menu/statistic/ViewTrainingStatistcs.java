@@ -1,7 +1,7 @@
 package out.menu.statistic;
 
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
 

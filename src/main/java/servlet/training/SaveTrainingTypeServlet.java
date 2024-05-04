@@ -1,12 +1,9 @@
 package servlet.training;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.in.ServiceFactory;
+import config.initializer.ServiceFactory;
 import entities.dto.UserDTO;
 import in.service.training.TrainingService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,12 +15,12 @@ import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getObjectMapper;
 
-public class SaveTrainingType extends HttpServlet {
+public class SaveTrainingTypeServlet extends HttpServlet {
 
     private final TrainingService trainingService;
     private final ObjectMapper objectMapper = getObjectMapper();
 
-    public SaveTrainingType() {
+    public SaveTrainingTypeServlet() {
         try {
             Class.forName("org.postgresql.Driver");
             this.trainingService = ServiceFactory.getTrainingService();

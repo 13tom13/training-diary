@@ -1,10 +1,11 @@
 package out.menu.training;
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -18,7 +19,7 @@ import static utils.Utils.*;
 public class ViewTrainingEditing {
 
     private final TrainingController trainingController;
-    private final ViewTrainingAdded viewTrainingAddedByController;
+    private final ViewTrainingAdded viewTrainingAdded;
     private final UserDTO userDTO;
     private final Scanner scanner = new Scanner(System.in);
 
@@ -27,12 +28,12 @@ public class ViewTrainingEditing {
     /**
      * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
      *
-     * @param viewTrainingAddedByController Представление добавления тренировок.
+     * @param viewTrainingAdded Представление добавления тренировок.
      * @param userDTO                       Пользователь.
      */
-    public ViewTrainingEditing(UserDTO userDTO, ViewTrainingAdded viewTrainingAddedByController) {
+    public ViewTrainingEditing(UserDTO userDTO, ViewTrainingAdded viewTrainingAdded) {
         this.trainingController = ControllerFactory.getInstance().getTrainingController();
-        this.viewTrainingAddedByController = viewTrainingAddedByController;
+        this.viewTrainingAdded = viewTrainingAdded;
         this.userDTO = userDTO;
     }
 
@@ -43,7 +44,7 @@ public class ViewTrainingEditing {
         TreeSet<TrainingDTO> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
         String trainingDate = scanner.nextLine();
-        if (isValidDateFormat(trainingDate)) {
+        if (!isValidDateFormat(trainingDate)) {
             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
             return;
         }
@@ -55,7 +56,11 @@ public class ViewTrainingEditing {
             }
             System.out.println("Введите название тренировки: ");
             String trainingName = scanner.nextLine();
-            trainingDTO = trainingController.getTrainingByUserEmailAndDateAndName(userDTO, trainingDate, trainingName);
+            try {
+                trainingDTO = trainingController.getTrainingByUserEmailAndDateAndName(userDTO, trainingDate, trainingName);
+            } catch (IOException e) {
+                System.err.println("Ошибка при получении тренировки для редактирования: " + e.getMessage());
+            }
         }
     }
 
@@ -116,7 +121,7 @@ public class ViewTrainingEditing {
                         String newCalories = scanner.nextLine();
                         trainingDTO = trainingController.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
                     }
-                    case 5 -> viewTrainingAddedByController.addTrainingAdditional(trainingDTO);
+                    case 5 -> viewTrainingAdded.addTrainingAdditional(trainingDTO);
                     case 6 -> {
                         System.out.println("Выход из меню изменения тренировки.");
                         startView = false;

@@ -13,11 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 
-import static config.initializer.in.ServiceFactory.getTrainingService;
+import static config.initializer.ServiceFactory.getTrainingService;
 import static servlet.utils.ServletUtils.writeJsonResponse;
-import static utils.Utils.getDateFromString;
 import static utils.Utils.getObjectMapper;
 
 
@@ -36,21 +34,22 @@ public class GetTrainingByUserEmailAndDateAndName extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Получаем все тренировки пользователя через сервис
         try {
             // Получаем JSON-строку из параметров
             String userEmailJson = request.getParameter("userEmail");
-            String date = request.getParameter("date");
-            String name = request.getParameter("name");
+            String dateJson = request.getParameter("date");
+            String nameJson = request.getParameter("name");
             // Преобразуем JSON в объекты UserDTO
             UserDTO userDTO = objectMapper.readValue(userEmailJson, UserDTO.class);
-            String decodedDate = URLDecoder.decode(date.replaceAll("\"", ""), StandardCharsets.UTF_8);
-            TrainingDTO training = trainingService.getTrainingByUserEmailAndDataAndName(userDTO, decodedDate, name);
+            String decodedDate = objectMapper.readValue(dateJson, String.class);
+            String decodedName = objectMapper.readValue(nameJson, String.class);
+            TrainingDTO training = trainingService.getTrainingByUserEmailAndDataAndName(userDTO, decodedDate, decodedName);
             // Преобразуем данные в JSON и отправляем как ответ
             writeJsonResponse(response, training, HttpServletResponse.SC_OK);
         } catch (RepositoryException e) {
-            throw new RuntimeException(e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

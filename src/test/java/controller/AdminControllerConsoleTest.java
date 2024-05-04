@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,7 +33,7 @@ public class AdminControllerConsoleTest {
     private UserDTO testUserDTO;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         testUsers = new ArrayList<>();
         testUserDTO = new UserDTO();
         testUserDTO.setFirstName("John");
@@ -79,37 +78,26 @@ public class AdminControllerConsoleTest {
     }
 
     @Test
-    public void testChangeUserName() {
+    public void testChangeUserData() {
         // Arrange
         String newName = "Jane";
+        String newLastName = "Smith";
+
+        User user = new User();
+        user.setActive(true);
+        when(userRepositoryMock.getUserByEmail(testUserDTO.getEmail())).thenReturn(Optional.of(user));
 
         // Act
         adminController.changeUserName(testUserDTO, newName);
-
-        // Assert
-        assertEquals(newName, testUserDTO.getFirstName());
-    }
-
-    @Test
-    public void testChangeUserLastName() {
-        // Arrange
-        String newLastName = "Smith";
-
-        // Act
         adminController.changeUserLastName(testUserDTO, newLastName);
-
-        // Assert
-        assertEquals(newLastName, testUserDTO.getLastName());
-    }
-
-    @Test
-    public void testChangeUserActive() {
-        // Act
         adminController.changeUserActive(testUserDTO);
 
         // Assert
-        assertFalse(testUserDTO.isActive());
+        assertEquals(newName, user.getFirstName());
+        assertEquals(newLastName, user.getLastName());
+        assertFalse(user.isActive());
     }
+
 
     @Test
     public void testChangeUserRights() {
@@ -117,11 +105,14 @@ public class AdminControllerConsoleTest {
         List<Rights> newUserRights = new ArrayList<>();
         newUserRights.add(new Rights(1L, "WRITE"));
 
+        User user = new User();
+        when(userRepositoryMock.getUserByEmail(testUserDTO.getEmail())).thenReturn(Optional.of(user));
+
         // Act
         adminController.changeUserRights(testUserDTO, newUserRights);
 
         // Assert
-        assertEquals(newUserRights, testUserDTO.getRights());
+        assertEquals(newUserRights, user.getRights());
     }
 
 }

@@ -124,11 +124,10 @@ public class TrainingRepositoryCollections implements TrainingRepository {
      *
      * @param user     пользователь, для которого нужно удалить тренировку
      * @param training тренировка для удаления
-     * @return {@code true}, если тренировка удалена успешно, в противном случае {@code false}
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
     @Override
-    public boolean deleteTraining(User user, Training training) throws RepositoryException {
+    public void deleteTraining(User user, Training training) throws RepositoryException {
         TreeMap<LocalDate, TreeSet<Training>> userTrainings = userTrainingMap.get(user.getId());
         if (userTrainings != null) {
             TreeSet<Training> trainingsOnDate = userTrainings.get(training.getDate());
@@ -139,7 +138,6 @@ public class TrainingRepositoryCollections implements TrainingRepository {
                 if (trainingsOnDate.isEmpty()) {
                     userTrainings.remove(training.getDate());
                 }
-                return true;
             } else {
                 throw new RepositoryException("На указанную дату " + training.getDate() + " нет тренировок для пользователя с идентификатором " + user.getId());
             }

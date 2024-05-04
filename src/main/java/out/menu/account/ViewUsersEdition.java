@@ -1,8 +1,7 @@
 package out.menu.account;
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.UserDTO;
-import entities.model.User;
 import in.controller.users.AdminController;
 import entities.model.Rights;
 

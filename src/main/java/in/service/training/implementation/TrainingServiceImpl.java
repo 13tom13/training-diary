@@ -4,7 +4,6 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import entities.model.Training;
 import entities.model.User;
-import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
@@ -16,7 +15,10 @@ import servlet.mappers.TrainingMapper;
 import servlet.mappers.UserMapper;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static utils.Utils.getDateFromString;
 import static utils.Utils.hisRight;
@@ -75,12 +77,7 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String date) throws RepositoryException {
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-//        System.out.println("date from servlet: " + date);
         LocalDate convertedDate = getDateFromString(date);
-//        System.out.println(localDate);
-//        System.out.println("convert localDate from servlet: " + localDate);
-//        LocalDate example = LocalDate.of(2024, 4, 24);
-//        System.out.println("date comparison in service: " + example.compareTo(localDate));
         TreeSet<Training> trainingsByUserEmailAndData = trainingRepository.getTrainingsByUserEmailAndData(user, convertedDate);
         return TrainingSetToTrainingDTOSet(trainingsByUserEmailAndData);
     }
@@ -111,7 +108,7 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws NoWriteRightsException, RepositoryException {
         if (hisRight(userDTO, "WRITE")) {
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
             Training training = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
@@ -138,18 +135,15 @@ public class TrainingServiceImpl implements TrainingService {
      * @return
      */
     @Override
-    public boolean deleteTraining(UserDTO userDTO, String date, String name) throws RepositoryException, InvalidDateFormatException, NoDeleteRightsException {
+    public void deleteTraining(UserDTO userDTO, String date, String name) throws RepositoryException, NoDeleteRightsException {
         if (hisRight(userDTO, "DELETE")) {
             TrainingDTO trainingDTO = getTrainingByUserEmailAndDataAndName(userDTO, date, name);
-            System.out.println("deleting training from service: " + trainingDTO);
             User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
             Training training = TrainingMapper.INSTANCE.trainingDTOToTraining(trainingDTO);
-            return trainingRepository.deleteTraining(user, training);
+            trainingRepository.deleteTraining(user, training);
         } else {
             throw new NoDeleteRightsException();
         }
-
-
     }
 
     /**

@@ -1,7 +1,7 @@
 package servlet.training;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.in.ServiceFactory;
+import config.initializer.ServiceFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
@@ -50,9 +50,13 @@ public class SaveTrainingServlet extends HttpServlet {
             TrainingDTO trainingDTO = objectMapper.readValue(trainingJsonObject.toString(), TrainingDTO.class);
 
             // Пример сохранения тренировки
-            trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
+            try {
+                trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
+            } catch (NoWriteRightsException e) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            }
             writeJsonResponse(response, trainingDTO, HttpServletResponse.SC_OK);
-        } catch (InvalidDateFormatException | RepositoryException | NoWriteRightsException e) {
+        } catch (RepositoryException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error saving training: " + e.getMessage());
         }

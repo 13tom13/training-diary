@@ -1,6 +1,6 @@
 package in.controller.training.implementation;
 
-import config.initializer.in.ServiceFactory;
+import config.initializer.ServiceFactory;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingStatisticsController;
 import exceptions.security.rights.NoStatisticsRightsException;
@@ -22,8 +22,8 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
     /**
      * Конструктор контроллера статистики тренировок.
      */
-    public TrainingStatisticsControllerConsole() {
-        this.trainingStatisticsService = ServiceFactory.getTrainingStatisticsService();
+    public TrainingStatisticsControllerConsole(TrainingStatisticsService trainingStatisticsService) {
+        this.trainingStatisticsService = trainingStatisticsService;
         logger = Logger.getInstance();
     }
 

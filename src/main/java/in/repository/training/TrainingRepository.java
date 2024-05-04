@@ -47,7 +47,7 @@ public interface TrainingRepository {
      *
      * @param user        пользователь
      * @param newTraining новая тренировка
-     * @return
+     * @return Сохраненная тренировка
      * @throws RepositoryException если тренировка уже существует или возникла ошибка при доступе к хранилищу
      */
     Training saveTraining(User user, Training newTraining) throws RepositoryException;
@@ -57,10 +57,9 @@ public interface TrainingRepository {
      *
      * @param user     электронная почта пользователя
      * @param training тренировка для удаления
-     * @return true если удаление прошло успешно, иначе false
      * @throws RepositoryException если тренировка для удаления не найдена или возникла ошибка при доступе к хранилищу
      */
-    boolean deleteTraining(User user, Training training) throws RepositoryException;
+    void deleteTraining(User user, Training training) throws RepositoryException;
 
     /**
      * Обновить существующую тренировку для указанного пользователя.

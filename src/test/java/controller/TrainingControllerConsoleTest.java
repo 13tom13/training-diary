@@ -2,7 +2,6 @@ package controller;
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.Training;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 

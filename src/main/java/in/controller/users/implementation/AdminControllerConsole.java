@@ -67,7 +67,7 @@ public class AdminControllerConsole implements AdminController {
     @Override
     public void changeUserName(UserDTO userDTO, String newName) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
-        user.setFirstName(userDTO.getFirstName());
+        user.setFirstName(newName);
         userRepository.updateUser(user);
     }
 

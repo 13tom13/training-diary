@@ -39,11 +39,15 @@
   </servlet>
   <servlet>
     <servlet-name>saveTrainingTypeServlet</servlet-name>
-    <servlet-class>servlet.training.SaveTrainingType</servlet-class>
+    <servlet-class>servlet.training.SaveTrainingTypeServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>addTrainingAdditional</servlet-name>
     <servlet-class>servlet.training.AddTrainingAdditionalServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>removeTrainingAdditional</servlet-name>
+    <servlet-class>servlet.training.RemoveTrainingAdditionalServlet</servlet-class>
   </servlet>
 
   <!-- Отображение сервлетов на URL -->
@@ -86,5 +90,9 @@
   <servlet-mapping>
     <servlet-name>addTrainingAdditional</servlet-name>
     <url-pattern>/training/addtrainingadditional</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>removeTrainingAdditional</servlet-name>
+    <url-pattern>/training/removetrainingadditiona</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -1,6 +1,6 @@
 package out.menu.authorization;
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.AuthorizationDTO;
 import entities.dto.RegistrationDTO;
 import entities.dto.UserDTO;

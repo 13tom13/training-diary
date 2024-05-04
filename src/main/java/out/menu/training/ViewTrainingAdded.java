@@ -1,6 +1,6 @@
 package out.menu.training;
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
@@ -8,7 +8,7 @@ import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 
-import java.text.ParseException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -40,45 +40,18 @@ public class ViewTrainingAdded {
      */
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
-        String name = chooseTrainingType();
-        LocalDate date = null;
-        while (date == null) {
-            System.out.print("Дата (дд.мм.гг): ");
-            String stringDate = scanner.nextLine();
-            try {
-                date = LocalDate.parse(stringDate);
-            } catch (DateTimeParseException e) {
-                System.out.println("Неверный формат даты. Попробуйте еще раз.");
-            }
+        String name;
+        try {
+            name = chooseTrainingType();
+        } catch (IOException e) {
+            System.err.println("Ошибка при получении списка типов тренировок: " + e.getMessage());
+            return;
         }
-
-        int duration = 0;
-        while (duration <= 0) {
-            try {
-                System.out.print("Продолжительность (минуты): ");
-                duration = Integer.parseInt(scanner.nextLine());
-                if (duration <= 0) {
-                    System.err.println("Продолжительность должна быть положительным числом.");
-                }
-            } catch (NumberFormatException e) {
-                System.err.println("Неверный формат продолжительности. Пожалуйста, введите целое число.");
-            }
-        }
-
-        int caloriesBurned = 0;
-        while (caloriesBurned <= 0) {
-            try {
-                System.out.print("Сожженные калории: ");
-                caloriesBurned = Integer.parseInt(scanner.nextLine());
-                if (caloriesBurned <= 0) {
-                    System.err.println("Сожженные калории должны быть положительным числом.");
-                }
-            } catch (NumberFormatException e) {
-                System.err.println("Неверный формат сожженных калорий. Пожалуйста, введите целое число.");
-            }
-        }
-
-        TrainingDTO trainingDTO = new TrainingDTO(name, date, duration, caloriesBurned);
+        String date = enterTrainingDate();
+        int duration = enterTrainingDuration();
+        int caloriesBurned = enterCaloriesBurned();
+        LocalDate convertedDate = getDateFromString(date);
+        TrainingDTO trainingDTO = new TrainingDTO(name, convertedDate, duration, caloriesBurned);
         try {
             TrainingDTO savedTraining = trainingController.saveTraining(userDTO, trainingDTO);
             addTrainingAdditional(savedTraining);
@@ -91,68 +64,24 @@ public class ViewTrainingAdded {
     }
 
     /**
-     * Метод для выбора типа тренировки.
-     *
-     * @return Выбранный тип тренировки.
-     */
-    public String chooseTrainingType() {
-        System.out.println("Выберите тип тренировки:");
-
-        List<String> trainingTypes = trainingController.getTrainingTypes(userDTO);
-
-        for (int i = 0; i < trainingTypes.size(); i++) {
-            System.out.println((i + 1) + ". " + trainingTypes.get(i));
-        }
-
-        System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
-
-        while (true) {
-            try {
-                System.out.print("Ваш выбор: ");
-                int choice = scanner.nextInt();
-
-                if (choice >= 1 && choice <= trainingTypes.size()) {
-                    String selectedTrainingType = trainingTypes.get(choice - 1);
-                    System.out.println("Выбран тип тренировки: " + selectedTrainingType);
-                    scanner.nextLine(); // Очистка буфера
-                    return selectedTrainingType;
-                } else if (choice == trainingTypes.size() + 1) {
-                    scanner.nextLine(); // Очистка буфера
-                    System.out.print("Введите свой тип тренировки: ");
-                    String customTrainingType = scanner.nextLine();
-                    trainingController.saveTrainingType(userDTO, customTrainingType);
-                    System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
-                    return customTrainingType;
-                } else {
-                    System.out.println("Некорректный выбор.");
-                }
-            } catch (InputMismatchException e) {
-                scanner.nextLine(); // Очистка буфера
-                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
-            }
-        }
-
-    }
-
-    /**
      * Метод для удаления тренировки.
      */
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
         String trainingDate = scanner.nextLine();
-           if (!isValidDateFormat(trainingDate)){
-               System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-               return;
-           }
+        if (!isValidDateFormat(trainingDate)) {
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+            return;
+        }
         TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         for (TrainingDTO training : trainingsFromDay) {
             System.out.println(training);
         }
         System.out.print("Название: ");
         String name = scanner.nextLine();
-        if (trainingController.deleteTraining(userDTO, trainingDate, name)) {
-            System.out.println("Тренировка успешно удалена.");
-        }
+        trainingController.deleteTraining(userDTO, trainingDate, name);
+        System.out.println("Тренировка успешно удалена.");
+
     }
 
     /**
@@ -199,6 +128,97 @@ public class ViewTrainingAdded {
                 System.out.println("Неверный ввод. Пожалуйста, введите число.");
                 scanner.nextLine();
             }
+        }
+    }
+
+    /**
+     * Метод для выбора типа тренировки.
+     *
+     * @return Выбранный тип тренировки.
+     */
+    private String chooseTrainingType() throws IOException {
+        System.out.println("Выберите тип тренировки:");
+
+        List<String> trainingTypes = trainingController.getTrainingTypes(userDTO);
+
+        for (int i = 0; i < trainingTypes.size(); i++) {
+            System.out.println((i + 1) + ". " + trainingTypes.get(i));
+        }
+
+        System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
+
+        while (true) {
+            try {
+                System.out.print("Ваш выбор: ");
+                int choice = scanner.nextInt();
+                if (choice >= 1 && choice <= trainingTypes.size()) {
+                    String selectedTrainingType = trainingTypes.get(choice - 1);
+                    System.out.println("Выбран тип тренировки: " + selectedTrainingType);
+                    scanner.nextLine(); // Очистка буфера
+                    return selectedTrainingType;
+                } else if (choice == trainingTypes.size() + 1) {
+                    scanner.nextLine(); // Очистка буфера
+                    System.out.print("Введите свой тип тренировки: ");
+                    String customTrainingType = scanner.nextLine();
+                    trainingController.saveTrainingType(userDTO, customTrainingType);
+                    System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
+                    return customTrainingType;
+                } else {
+                    System.out.println("Некорректный выбор.");
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine(); // Очистка буфера
+                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
+            }
+        }
+
+    }
+
+    private int enterTrainingDuration() {
+        while (true) {
+            int duration;
+            try {
+                System.out.print("Продолжительность (минуты): ");
+                duration = Integer.parseInt(scanner.nextLine());
+                if (duration <= 0) {
+                    System.err.println("Продолжительность должна быть положительным числом.");
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Неверный формат продолжительности. Пожалуйста, введите целое число.");
+                continue;
+            }
+            return duration;
+        }
+    }
+
+    private int enterCaloriesBurned() {
+        int caloriesBurned;
+        while (true) {
+            try {
+                System.out.print("Сожженные калории: ");
+                caloriesBurned = Integer.parseInt(scanner.nextLine());
+                if (caloriesBurned <= 0) {
+                    System.err.println("Сожженные калории должны быть положительным числом.");
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Неверный формат сожженных калорий. Пожалуйста, введите целое число.");
+                continue;
+            }
+            return caloriesBurned;
+        }
+    }
+
+    private String enterTrainingDate() {
+        while (true) {
+            System.out.print("Дата (дд.мм.гг): ");
+            String stringDate = scanner.nextLine();
+            if (!isValidDateFormat(stringDate)) {
+                System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+                continue;
+            }
+            return stringDate;
         }
     }
 

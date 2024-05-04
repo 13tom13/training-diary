@@ -11,9 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.stream.Collectors;
 
-import static config.initializer.in.ServiceFactory.getAuthorizationService;
+import static config.initializer.ServiceFactory.getAuthorizationService;
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getObjectMapper;

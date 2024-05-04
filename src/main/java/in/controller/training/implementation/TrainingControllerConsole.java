@@ -86,21 +86,18 @@ public class TrainingControllerConsole implements TrainingController {
      * Удаляет тренировку пользователя.
      *
      * @param userDTO Пользователь
-     * @param date Дата тренировки
-     * @param name Название тренировки
-     * @return {@code true}, если тренировка удалена успешно, в противном случае {@code false}
+     * @param date    Дата тренировки
+     * @param name    Название тренировки
      */
     @Override
-    public boolean deleteTraining(UserDTO userDTO, String date, String name) {
+    public void deleteTraining(UserDTO userDTO, String date, String name) {
         try {
-            boolean result = trainingService.deleteTraining(userDTO, date, name);
+            trainingService.deleteTraining(userDTO, date, name);
             logger.logAction(userDTO.getEmail(), "delete training " + name + " " + date);
-            return result;
-        } catch (RepositoryException | InvalidDateFormatException | NoDeleteRightsException e) {
+        } catch (RepositoryException | NoDeleteRightsException e) {
             logger.logError(userDTO.getEmail(), e.getMessage());
             System.err.println(e.getMessage());
         }
-        return false;
     }
 
     /**

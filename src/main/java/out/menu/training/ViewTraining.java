@@ -1,13 +1,12 @@
 package out.menu.training;
 
 
-import config.initializer.in.ControllerFactory;
+import config.initializer.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 

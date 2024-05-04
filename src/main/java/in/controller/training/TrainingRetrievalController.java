@@ -1,8 +1,10 @@
 package in.controller.training;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -37,5 +39,5 @@ public interface TrainingRetrievalController {
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName);
+    TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException;
 }

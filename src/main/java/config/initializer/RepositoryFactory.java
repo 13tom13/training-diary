@@ -1,4 +1,4 @@
-package config.initializer.in;
+package config.initializer;
 
 import in.repository.training.implementation.TrainingRepositoryCollections;
 import in.repository.training.implementation.TrainingRepositoryJDBC;
@@ -62,9 +62,7 @@ public class RepositoryFactory {
      * @return Репозиторий пользователей.
      */
     public static UserRepository getUserRepository() {
-        if (userRepository == null) {
-            initialize();
-        }
+        if (userRepository == null) initialize();
         return userRepository;
     }
 

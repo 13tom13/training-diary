@@ -1,10 +1,13 @@
 package servlet.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class ServletUtils {
@@ -31,5 +34,9 @@ public class ServletUtils {
     public static String getRequestBody(HttpServletRequest request) throws IOException {
         return request.getReader().lines()
                 .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    public static String encodeToUrlJson(Object object) throws JsonProcessingException {
+        return URLEncoder.encode(objectMapper.writeValueAsString(object), StandardCharsets.UTF_8);
     }
 }
