@@ -1,13 +1,9 @@
 package servlet.training;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.ServiceFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoEditRightsException;
-import in.service.training.TrainingService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
@@ -16,21 +12,9 @@ import java.io.IOException;
 
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
-import static utils.Utils.getObjectMapper;
 
-public class ChangeDurationTrainingServlet extends HttpServlet {
+public class ChangeDurationTrainingServlet extends TrainingServlet {
 
-    private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = getObjectMapper();
-
-    public ChangeDurationTrainingServlet() {
-        try {
-            Class.forName("org.postgresql.Driver");
-            this.trainingService = ServiceFactory.getTrainingService();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

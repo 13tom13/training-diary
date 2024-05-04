@@ -1,14 +1,10 @@
 package servlet.training;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.ServiceFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoEditRightsException;
-import in.service.training.TrainingService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
@@ -19,21 +15,8 @@ import java.time.LocalDate;
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getDateFromString;
-import static utils.Utils.getObjectMapper;
 
-public class ChangeDateTrainingServlet extends HttpServlet {
-
-    private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = getObjectMapper();
-
-    public ChangeDateTrainingServlet() {
-        try {
-            Class.forName("org.postgresql.Driver");
-            this.trainingService = ServiceFactory.getTrainingService();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+public class ChangeDateTrainingServlet extends TrainingServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

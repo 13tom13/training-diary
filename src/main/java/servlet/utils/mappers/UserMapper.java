@@ -26,7 +26,7 @@ public interface UserMapper {
             @Mapping(target = "email", source = "email"),
             @Mapping(target = "active", source = "active"),
             @Mapping(target = "rights", source = "rights", qualifiedByName = "listToRights"),
-            @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles")
+            @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles"),
     })
     UserDTO userToUserDTO(User user);
 
@@ -37,7 +37,8 @@ public interface UserMapper {
             @Mapping(target = "email", source = "email"),
             @Mapping(target = "active", source = "active"),
             @Mapping(target = "rights", source = "rights", qualifiedByName = "listToRights"),
-            @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles")
+            @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles"),
+            @Mapping(target = "password", ignore = true) // Игнорируем маппинг поля password
     })
     User userDTOToUser(UserDTO userDTO);
 

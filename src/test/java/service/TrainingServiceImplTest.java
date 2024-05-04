@@ -2,17 +2,15 @@ package service;
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
+import entities.model.Rights;
+import entities.model.Training;
 import entities.model.User;
-import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
-import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.implementation.TrainingServiceImpl;
-import entities.model.Rights;
-import entities.model.Training;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,21 +23,19 @@ import testutil.TestUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static utils.Utils.getStringFromDate;
 
 @ExtendWith(MockitoExtension.class)
 public class TrainingServiceImplTest extends TestUtil {
 
     @Mock
     private TrainingRepository trainingRepository;
-
-    @Mock
-    private TrainingTypeRepository trainingTypeRepository;
 
     @InjectMocks
     private TrainingServiceImpl trainingService;
@@ -60,18 +56,17 @@ public class TrainingServiceImplTest extends TestUtil {
         testUser.setRights(new ArrayList<>());
         testUser.setRoles(new ArrayList<>());
         testUser.setActive(true);
-        testUser.getRights().add(new Rights(1L,"WRITE"));
-        testUser.getRights().add(new Rights(2L,"EDIT"));
-        testUser.getRights().add(new Rights(3L,"DELETE"));
+        testUser.getRights().add(new Rights(1L, "WRITE"));
+        testUser.getRights().add(new Rights(2L, "EDIT"));
+        testUser.getRights().add(new Rights(3L, "DELETE"));
         testTraining = new TrainingDTO(testTrainingName, TEST_DATE, 60, 200);
         trainingForRepository = TrainingMapper.INSTANCE.trainingDTOToTraining(testTraining);
         UserForRepository = UserMapper.INSTANCE.userDTOToUser(testUser);
     }
 
     @Test
-    public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+    public void testSaveTraining_Successful() throws NoWriteRightsException, RepositoryException {
         // Arrange
-
 
 
         // Act
@@ -84,7 +79,7 @@ public class TrainingServiceImplTest extends TestUtil {
     @Test
     public void testGetAllTrainings_ReturnsAllTrainings() {
         // Arrange
-        TreeMap<Date, TreeSet<TrainingDTO>> expectedTrainings = new TreeMap<>();
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> expectedTrainings = new TreeMap<>();
 
 
         // Act
@@ -96,14 +91,14 @@ public class TrainingServiceImplTest extends TestUtil {
 
 
     @Test
-    public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
+    public void testDeleteTraining_Successful() throws NoDeleteRightsException, RepositoryException {
 
         // Configure mock behavior
         when(trainingRepository.getTrainingByUserEmailAndDataAndName(UserForRepository, TEST_DATE, testTrainingName))
                 .thenReturn(trainingForRepository);
 
         // Act
-        trainingService.deleteTraining(testUser, String.valueOf(TEST_DATE), testTrainingName);
+        trainingService.deleteTraining(testUser, getStringFromDate(TEST_DATE), testTrainingName);
 
         // Assert
         verify(trainingRepository).deleteTraining(UserForRepository, trainingForRepository);

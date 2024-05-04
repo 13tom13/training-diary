@@ -1,27 +1,14 @@
 package servlet.training;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
-import in.service.training.TrainingService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import static config.initializer.ServiceFactory.getTrainingService;
-import static utils.Utils.getObjectMapper;
 
-
-public class DeleteTrainingServlet extends HttpServlet {
-
-    private final TrainingService trainingService;
-    private final ObjectMapper objectMapper = getObjectMapper();
-
-    public DeleteTrainingServlet() {
-        this.trainingService = getTrainingService(); // Инициализируйте ваш сервис тренировок здесь
-    }
+public class DeleteTrainingServlet extends TrainingServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {

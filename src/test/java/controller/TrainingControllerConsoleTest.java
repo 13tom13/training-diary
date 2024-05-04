@@ -55,12 +55,13 @@ public class TrainingControllerConsoleTest {
     @Test
     public void testSaveTraining_Successful() throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         // Configure mock behavior
-        doNothing().when(trainingServiceMock).saveTraining(testUser, testTraining);
+        when(trainingServiceMock.saveTraining(testUser, testTraining)).thenReturn(testTraining);
 
         // Act
-        trainingController.saveTraining(testUser, testTraining);
+        TrainingDTO result = trainingController.saveTraining(testUser, testTraining);
 
         // Assert
+        assertEquals(testTraining, result); // Проверяем, что результат равен testTraining
         verify(trainingServiceMock).saveTraining(testUser, testTraining);
     }
 
@@ -80,7 +81,7 @@ public class TrainingControllerConsoleTest {
     }
 
     @Test
-    public void testDeleteTraining_Successful() throws InvalidDateFormatException, NoDeleteRightsException, RepositoryException {
+    public void testDeleteTraining_Successful() throws NoDeleteRightsException, RepositoryException {
         // Act
         trainingController.deleteTraining(testUser, String.valueOf(TEST_DATE), testTrainingName);
 
