@@ -61,7 +61,7 @@ public interface TrainingModificationController {
      * @param newName     новое имя тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName);
+    TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет дату тренировки.
@@ -71,7 +71,7 @@ public interface TrainingModificationController {
      * @param newDate     новая дата тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate);
+    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException;
 
     /**
      * Изменяет продолжительность тренировки.
@@ -81,7 +81,7 @@ public interface TrainingModificationController {
      * @param newDuration новая продолжительность тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration);
+    TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
@@ -91,5 +91,5 @@ public interface TrainingModificationController {
      * @param newCalories новое количество сожженных калорий
      * @return измененная тренировка
      */
-    TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories);
+    TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException;
 }

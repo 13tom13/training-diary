@@ -19,8 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import servlet.mappers.TrainingMapper;
-import servlet.mappers.UserMapper;
+import servlet.utils.mappers.TrainingMapper;
+import servlet.utils.mappers.UserMapper;
 import testutil.TestUtil;
 
 import java.time.LocalDate;

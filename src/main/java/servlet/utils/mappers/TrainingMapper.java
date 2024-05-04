@@ -1,4 +1,4 @@
-package servlet.mappers;
+package servlet.utils.mappers;
 
 import entities.dto.TrainingDTO;
 import entities.model.Training;

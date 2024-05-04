@@ -6,7 +6,7 @@ import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
 import entities.model.Rights;
 import in.repository.user.UserRepository;
-import servlet.mappers.UserMapper;
+import servlet.utils.mappers.UserMapper;
 
 
 import java.util.List;

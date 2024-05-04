@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import config.initializer.ServiceFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
-import exceptions.security.rights.NoWriteRightsException;
+import exceptions.security.rights.NoEditRightsException;
 import in.service.training.TrainingService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +18,12 @@ import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getObjectMapper;
 
-public class SaveTrainingServlet extends HttpServlet {
+public class ChangeCaloriesTrainingServlet extends HttpServlet {
 
     private final TrainingService trainingService;
     private final ObjectMapper objectMapper = getObjectMapper();
 
-    public SaveTrainingServlet() {
+    public ChangeCaloriesTrainingServlet() {
         try {
             Class.forName("org.postgresql.Driver");
             this.trainingService = ServiceFactory.getTrainingService();
@@ -45,14 +44,16 @@ public class SaveTrainingServlet extends HttpServlet {
             JSONObject userJsonObject = jsonRequest.getJSONObject("userDTO");
             JSONObject trainingJsonObject = jsonRequest.getJSONObject("trainingDTO");
 
+
             // Преобразуем JSON объекты в объекты Java с помощью Jackson
             UserDTO userDTO = objectMapper.readValue(userJsonObject.toString(), UserDTO.class);
             TrainingDTO trainingDTO = objectMapper.readValue(trainingJsonObject.toString(), TrainingDTO.class);
+            int newCalories = jsonRequest.getInt("newCalories");
 
             // Пример сохранения тренировки
             try {
-                trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
-            } catch (NoWriteRightsException e) {
+                trainingDTO = trainingService.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
+            } catch (NoEditRightsException e) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }
             writeJsonResponse(response, trainingDTO, HttpServletResponse.SC_OK);

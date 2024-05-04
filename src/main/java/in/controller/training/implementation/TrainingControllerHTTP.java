@@ -7,6 +7,7 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
+import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 
@@ -35,6 +36,10 @@ public class TrainingControllerHTTP implements TrainingController {
     private final String saveTrainingTypesServletPath = "/training/savetrainingtypes";
     private final String addTrainingAdditionalServletPath = "/training/addtrainingadditional";
     private final String removeTrainingAdditionalServletPath = "/training/removetrainingadditiona";
+    private final String changeNameTrainingServletPath = "/training/changetraining/name";
+    private final String changeDateTrainingServletPath = "/training/changetraining/date";
+    private final String changeDurationTrainingServletPath = "/training/changetraining/duration";
+    private final String changeCaloriesTrainingServletPath = "/training/changetraining/calories";
     private final ObjectMapper objectMapper = getObjectMapper();
 
     @Override
@@ -121,23 +126,67 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) {
-        return null;
+    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException {
+        try {
+            String requestURL = rootURL + changeNameTrainingServletPath;
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("trainingDTO", trainingDTO);
+            combinedMap.put("newName", newName);
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeTraining, TrainingDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override
-    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) {
-        return null;
+    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException {
+        try {
+            String requestURL = rootURL + changeDateTrainingServletPath;
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("trainingDTO", trainingDTO);
+            combinedMap.put("newDate", getStringFromDate(newDate));
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeTraining, TrainingDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override
-    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) {
-        return null;
+    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException {
+        try {
+            String requestURL = rootURL + changeDurationTrainingServletPath;
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("trainingDTO", trainingDTO);
+            combinedMap.put("newDuration", Integer.parseInt(newDuration));
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeTraining, TrainingDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override
-    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) {
-        return null;
+    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException {
+        try {
+            String requestURL = rootURL + changeCaloriesTrainingServletPath;
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("trainingDTO", trainingDTO);
+            combinedMap.put("newCalories", Integer.parseInt(newCalories));
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeTraining, TrainingDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override

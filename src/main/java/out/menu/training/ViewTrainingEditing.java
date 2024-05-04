@@ -3,6 +3,7 @@ package out.menu.training;
 import config.initializer.ControllerFactory;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
+import exceptions.RepositoryException;
 import in.controller.training.TrainingController;
 
 import java.io.IOException;
@@ -95,7 +96,11 @@ public class ViewTrainingEditing {
                         System.out.println();
                         System.out.println("Введите новое название:");
                         String newName = scanner.nextLine();
-                        trainingDTO = trainingController.changeNameTraining(userDTO, trainingDTO, newName);
+                        try {
+                            trainingDTO = trainingController.changeNameTraining(userDTO, trainingDTO, newName);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка изменении имени тренировки: " + e.getMessage());
+                        }
                     }
                     case 2 -> {
                         System.out.println();
@@ -107,19 +112,29 @@ public class ViewTrainingEditing {
                             trainingDTO = trainingController.changeDateTraining(userDTO, trainingDTO, newDate);
                         } catch (DateTimeParseException e) {
                             System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка изменении даты тренировки: " + e.getMessage());
                         }
                     }
                     case 3 -> {
                         System.out.println();
                         System.out.println("Введите новую продолжительность:");
                         String newDuration = scanner.nextLine();
-                        trainingDTO = trainingController.changeDurationTraining(userDTO, trainingDTO, newDuration);
+                        try {
+                            trainingDTO = trainingController.changeDurationTraining(userDTO, trainingDTO, newDuration);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка изменении продолжительности тренировки: " + e.getMessage());
+                        }
                     }
                     case 4 -> {
                         System.out.println();
                         System.out.println("Введите новое количество сожженных калорий:");
                         String newCalories = scanner.nextLine();
-                        trainingDTO = trainingController.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
+                        try {
+                            trainingDTO = trainingController.changeCaloriesTraining(userDTO, trainingDTO, newCalories);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка изменении потраченных калорий тренировки: " + e.getMessage());
+                        }
                     }
                     case 5 -> viewTrainingAdded.addTrainingAdditional(trainingDTO);
                     case 6 -> {

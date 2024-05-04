@@ -6,7 +6,7 @@ import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
-import servlet.mappers.UserMapper;
+import servlet.utils.mappers.UserMapper;
 
 import java.util.Optional;
 

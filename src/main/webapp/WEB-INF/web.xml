@@ -49,6 +49,22 @@
     <servlet-name>removeTrainingAdditional</servlet-name>
     <servlet-class>servlet.training.RemoveTrainingAdditionalServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>changeNameTraining</servlet-name>
+    <servlet-class>servlet.training.ChangeNameTrainingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>changeDateTraining</servlet-name>
+    <servlet-class>servlet.training.ChangeDateTrainingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>changeDurationTraining</servlet-name>
+    <servlet-class>servlet.training.ChangeDurationTrainingServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>changeCaloriesTrainingServlet</servlet-name>
+    <servlet-class>servlet.training.ChangeCaloriesTrainingServlet</servlet-class>
+  </servlet>
 
   <!-- Отображение сервлетов на URL -->
   <servlet-mapping>
@@ -94,5 +110,21 @@
   <servlet-mapping>
     <servlet-name>removeTrainingAdditional</servlet-name>
     <url-pattern>/training/removetrainingadditiona</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>changeNameTraining</servlet-name>
+    <url-pattern>/training/changetraining/name</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>changeDateTraining</servlet-name>
+    <url-pattern>/training/changetraining/date</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>changeDurationTraining</servlet-name>
+    <url-pattern>/training/changetraining/duration</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>changeCaloriesTrainingServlet</servlet-name>
+    <url-pattern>/training/changetraining/calories</url-pattern>
   </servlet-mapping>
 </web-app>
