@@ -7,7 +7,6 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
-import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 
@@ -36,11 +35,64 @@ public class TrainingControllerHTTP implements TrainingController {
     private final String saveTrainingTypesServletPath = "/training/savetrainingtypes";
     private final String addTrainingAdditionalServletPath = "/training/addtrainingadditional";
     private final String removeTrainingAdditionalServletPath = "/training/removetrainingadditiona";
-    private final String changeNameTrainingServletPath = "/training/changetraining/name";
-    private final String changeDateTrainingServletPath = "/training/changetraining/date";
-    private final String changeDurationTrainingServletPath = "/training/changetraining/duration";
-    private final String changeCaloriesTrainingServletPath = "/training/changetraining/calories";
+    private final String changeNameTrainingServletPath = "/training/edit/name";
+    private final String changeDateTrainingServletPath = "/training/edit/date";
+    private final String changeDurationTrainingServletPath = "/training/edit/duration";
+    private final String changeCaloriesTrainingServletPath = "/training/edit/calories";
     private final ObjectMapper objectMapper = getObjectMapper();
+
+    @Override
+    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
+        try {
+            // Формируем URL запроса с параметрами
+            String urlWithParams = rootURL + getAllTrainingsServletPath + "?user=" + encodeToUrlJson(userDTO);
+
+            // Отправляем GET-запрос
+            String jsonResponse = sendGetRequest(urlWithParams);
+
+            // Преобразуем JSON в TreeMap<LocalDate, TreeSet<TrainingDTO>>
+            TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {
+            };
+            return objectMapper.readValue(jsonResponse, typeRef);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
+        try {
+            String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
+            String dateForGet = encodeToUrlJson(trainingDate);
+            String urlWithParams = rootURL + getTrainingsByUserEmailAndDateServletPath + "?userEmail=" + userEmailForGet + "&date=" + dateForGet;
+            String jsonResponse = sendGetRequest(urlWithParams);
+            TypeReference<TreeSet<TrainingDTO>> typeRef = new TypeReference<>() {
+            };
+            return objectMapper.readValue(jsonResponse, typeRef);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException {
+        String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
+        String dateForGet = encodeToUrlJson(trainingDate);
+        String nameForGet = encodeToUrlJson(trainingName);
+        String urlWithParams = rootURL + getTrainingsByUserEmailAndDateAndNameServletPath +
+                               "?userEmail=" + userEmailForGet + "&date=" + dateForGet + "&name=" + nameForGet;
+        String jsonResponse = sendGetRequest(urlWithParams);
+        return objectMapper.readValue(jsonResponse, TrainingDTO.class);
+    }
+
+    @Override
+    public List<String> getTrainingTypes(UserDTO userDTO) throws IOException {
+        String urlWithParams = rootURL + getTrainingTypesServletPath + "?user=" + URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
+        String jsonResponse = sendGetRequest(urlWithParams);
+        TypeReference<List<String>> typeRef = new TypeReference<>() {
+        };
+        return objectMapper.readValue(jsonResponse, typeRef);
+    }
 
     @Override
     public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
@@ -72,6 +124,18 @@ public class TrainingControllerHTTP implements TrainingController {
         } catch (JsonProcessingException e) {
             System.err.println("Ошибка при конвертации JSON в строку " + e.getMessage());
         }
+    }
+
+    @Override
+    public void saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException {
+        String requestURL = rootURL + saveTrainingTypesServletPath;
+        Map<String, Object> combinedMap = new HashMap<>();
+        combinedMap.put("userDTO", userDTO);
+        combinedMap.put("customTrainingType", customTrainingType);
+        String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+        String savedTraining = sendPostRequest(requestURL, jsonRequestBody);
+        System.out.println(savedTraining);
+
     }
 
     @Override
@@ -187,70 +251,5 @@ public class TrainingControllerHTTP implements TrainingController {
         } catch (IOException e) {
             throw new RepositoryException(e.getMessage());
         }
-    }
-
-    @Override
-    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
-        try {
-            // Формируем URL запроса с параметрами
-            String urlWithParams = rootURL + getAllTrainingsServletPath + "?user=" + encodeToUrlJson(userDTO);
-
-            // Отправляем GET-запрос
-            String jsonResponse = sendGetRequest(urlWithParams);
-
-            // Преобразуем JSON в TreeMap<LocalDate, TreeSet<TrainingDTO>>
-            TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {
-            };
-            return objectMapper.readValue(jsonResponse, typeRef);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
-        try {
-            String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
-            String dateForGet = encodeToUrlJson(trainingDate);
-            String urlWithParams = rootURL + getTrainingsByUserEmailAndDateServletPath + "?userEmail=" + userEmailForGet + "&date=" + dateForGet;
-            String jsonResponse = sendGetRequest(urlWithParams);
-            TypeReference<TreeSet<TrainingDTO>> typeRef = new TypeReference<>() {
-            };
-            return objectMapper.readValue(jsonResponse, typeRef);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException {
-        String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
-        String dateForGet = encodeToUrlJson(trainingDate);
-        String nameForGet = encodeToUrlJson(trainingName);
-        String urlWithParams = rootURL + getTrainingsByUserEmailAndDateAndNameServletPath +
-                               "?userEmail=" + userEmailForGet + "&date=" + dateForGet + "&name=" + nameForGet;
-        String jsonResponse = sendGetRequest(urlWithParams);
-        return objectMapper.readValue(jsonResponse, TrainingDTO.class);
-    }
-
-    @Override
-    public List<String> getTrainingTypes(UserDTO userDTO) throws IOException {
-        String urlWithParams = rootURL + getTrainingTypesServletPath + "?user=" + URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
-        String jsonResponse = sendGetRequest(urlWithParams);
-        TypeReference<List<String>> typeRef = new TypeReference<>() {
-        };
-        return objectMapper.readValue(jsonResponse, typeRef);
-    }
-
-    @Override
-    public void saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException {
-        String requestURL = rootURL + saveTrainingTypesServletPath;
-        Map<String, Object> combinedMap = new HashMap<>();
-        combinedMap.put("userDTO", userDTO);
-        combinedMap.put("customTrainingType", customTrainingType);
-        String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-        String savedTraining = sendPostRequest(requestURL, jsonRequestBody);
-        System.out.println(savedTraining);
-
     }
 }

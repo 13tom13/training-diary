@@ -3,9 +3,9 @@ package config.initializer;
 import in.controller.authorization.AuthorizationController;
 import in.controller.authorization.implementation.AuthorizationControllerHTTP;
 import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
+import in.controller.training.statistics.TrainingStatisticsController;
 import in.controller.training.implementation.TrainingControllerHTTP;
-import in.controller.training.implementation.TrainingStatisticsControllerConsole;
+import in.controller.training.statistics.implementation.TrainingStatisticsControllerHTTP;
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
 import in.controller.users.implementation.AdminControllerConsole;
@@ -34,10 +34,11 @@ public class ControllerFactory {
 //        userController = new UserControllerConsole(getUserService());
 //        authorizationController = new AuthorizationControllerConsole(getAuthorizationService());
 //        trainingController = new TrainingControllerConsole(getTrainingService());
+//        trainingStatisticsController = new TrainingStatisticsControllerConsole(ServiceFactory.getTrainingStatisticsService());
         userController = new UserControllerHTTP();
         authorizationController = new AuthorizationControllerHTTP();
         trainingController = new TrainingControllerHTTP();
-        trainingStatisticsController = new TrainingStatisticsControllerConsole(ServiceFactory.getTrainingStatisticsService());
+        trainingStatisticsController = new TrainingStatisticsControllerHTTP();
         adminController = new AdminControllerConsole(getUserRepository());
     }
 

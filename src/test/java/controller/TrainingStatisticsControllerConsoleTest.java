@@ -1,11 +1,10 @@
 package controller;
 
-import config.initializer.ServiceFactory;
 import entities.dto.UserDTO;
 import entities.model.Rights;
 import entities.model.Roles;
 import exceptions.security.rights.NoStatisticsRightsException;
-import in.controller.training.implementation.TrainingStatisticsControllerConsole;
+import in.controller.training.statistics.implementation.TrainingStatisticsControllerConsole;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

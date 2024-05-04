@@ -3,7 +3,7 @@ package out.menu.statistic;
 
 import config.initializer.ControllerFactory;
 import entities.dto.UserDTO;
-import in.controller.training.TrainingStatisticsController;
+import in.controller.training.statistics.TrainingStatisticsController;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -70,7 +70,7 @@ public class ViewTrainingStatistcs {
      */
     private void printTotalTrainingStatistics() {
         int result = trainingStatisticsController.getAllTrainingStatistics(userDTO);
-        if (result != 0) {
+        if (result > 0) {
             System.out.println("Всего тренировок пользователя: " + result);
         } else {
             System.out.println("Тренировок не обнаружено");
@@ -86,7 +86,6 @@ public class ViewTrainingStatistcs {
         System.out.println("Введите начало периода (дд.мм.гг):");
         String stringStartDate = scanner.nextLine();
         LocalDate startDate = getDateFromString(stringStartDate);
-        ;
 
         System.out.println("Введите конец периода (дд.мм.гг):");
         String stringEndDate = scanner.nextLine();

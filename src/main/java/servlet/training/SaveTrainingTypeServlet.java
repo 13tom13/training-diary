@@ -33,7 +33,7 @@ public class SaveTrainingTypeServlet extends TrainingServlet {
             writeJsonResponse(response, customTrainingType, HttpServletResponse.SC_OK);
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Error saving training: " + e.getMessage());
+            response.getWriter().write("Ошибка сохранения типа тренировки: " + e.getMessage());
         }
 
     }

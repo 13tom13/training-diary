@@ -40,7 +40,7 @@ public class SaveTrainingServlet extends TrainingServlet {
             writeJsonResponse(response, trainingDTO, HttpServletResponse.SC_OK);
         } catch (RepositoryException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Error saving training: " + e.getMessage());
+            response.getWriter().write("Ошибка сохранения тренировки: " + e.getMessage());
         }
     }
 }

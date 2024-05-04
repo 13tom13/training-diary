@@ -1,8 +1,7 @@
-package in.controller.training.implementation;
+package in.controller.training.statistics.implementation;
 
-import config.initializer.ServiceFactory;
 import entities.dto.UserDTO;
-import in.controller.training.TrainingStatisticsController;
+import in.controller.training.statistics.TrainingStatisticsController;
 import exceptions.security.rights.NoStatisticsRightsException;
 import utils.Logger;
 import in.service.training.TrainingStatisticsService;

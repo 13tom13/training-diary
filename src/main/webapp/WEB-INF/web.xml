@@ -50,20 +50,24 @@
     <servlet-class>servlet.training.RemoveTrainingAdditionalServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>changeNameTraining</servlet-name>
-    <servlet-class>servlet.training.ChangeNameTrainingServlet</servlet-class>
+    <servlet-name>TrainingEditServlet</servlet-name>
+    <servlet-class>servlet.training.TrainingEditServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>changeDateTraining</servlet-name>
-    <servlet-class>servlet.training.ChangeDateTrainingServlet</servlet-class>
+    <servlet-name>getAllTrainingStatisticsServlet</servlet-name>
+    <servlet-class>servlet.training.statistics.GetAllTrainingStatisticsServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>changeDurationTraining</servlet-name>
-    <servlet-class>servlet.training.ChangeDurationTrainingServlet</servlet-class>
+    <servlet-name>getAllTrainingStatisticsPerPeriodServlet</servlet-name>
+    <servlet-class>servlet.training.statistics.GetAllTrainingStatisticsPerPeriodServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>changeCaloriesTrainingServlet</servlet-name>
-    <servlet-class>servlet.training.ChangeCaloriesTrainingServlet</servlet-class>
+    <servlet-name>getDurationStatisticsServlet</servlet-name>
+    <servlet-class>servlet.training.statistics.GetDurationStatisticsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>getCaloriesBurnedServlet</servlet-name>
+    <servlet-class>servlet.training.statistics.GetCaloriesBurnedServlet</servlet-class>
   </servlet>
 
   <!-- Отображение сервлетов на URL -->
@@ -112,19 +116,23 @@
     <url-pattern>/training/removetrainingadditiona</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>changeNameTraining</servlet-name>
-    <url-pattern>/training/changetraining/name</url-pattern>
+    <servlet-name>TrainingEditServlet</servlet-name>
+    <url-pattern>/training/edit/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>changeDateTraining</servlet-name>
-    <url-pattern>/training/changetraining/date</url-pattern>
+    <servlet-name>getAllTrainingStatisticsServlet</servlet-name>
+    <url-pattern>/trainingstatistics/getalltrainingstatistics</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>changeDurationTraining</servlet-name>
-    <url-pattern>/training/changetraining/duration</url-pattern>
+    <servlet-name>getAllTrainingStatisticsPerPeriodServlet</servlet-name>
+    <url-pattern>/trainingstatistics/statisticsperperiod</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>changeCaloriesTrainingServlet</servlet-name>
-    <url-pattern>/training/changetraining/calories</url-pattern>
+    <servlet-name>getDurationStatisticsServlet</servlet-name>
+    <url-pattern>/trainingstatistics/statisticsduration</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>getCaloriesBurnedServlet</servlet-name>
+    <url-pattern>/trainingstatistics/statisticscalories</url-pattern>
   </servlet-mapping>
 </web-app>
