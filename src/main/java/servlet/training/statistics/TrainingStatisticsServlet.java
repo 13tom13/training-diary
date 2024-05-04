@@ -37,8 +37,9 @@ public abstract class TrainingStatisticsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Получаем JSON-строку из параметра
         String userJson = getJsonParamFromRequest(request, "user");
-        String startDateJson = getJsonParamFromRequest(request, "startdate");
-        String endDateJson = getJsonParamFromRequest(request, "enddate");
+        String startDateJson = request.getParameter("startdate");
+        String endDateJson = request.getParameter("enddate");
+        System.out.println(startDateJson);
 
         // Преобразуем JSON в объекты
         UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);

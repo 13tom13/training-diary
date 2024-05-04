@@ -64,14 +64,13 @@ public class TrainingStatisticsControllerHTTP implements TrainingStatisticsContr
             String stringStartDate = getStringFromDate(startDate);
             String stringEndDate = getStringFromDate(endDate);
             String urlWithParams = rootURL + Url + "?user="
-                                   + stringUserDTO + "?startdate=" + stringStartDate + "&enddate=" + stringEndDate;
-
+                                   + stringUserDTO + "&startdate=" + stringStartDate + "&enddate=" + stringEndDate;
             // Отправляем GET-запрос
             String jsonResponse = sendGetRequest(urlWithParams);
-
             return objectMapper.readValue(jsonResponse, Integer.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ошибка при обработке данных: " + e.getMessage());
+            return -1;
         }
     }
 }
