@@ -1,18 +1,15 @@
 package utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import static utils.Utils.getObjectMapper;
-
 public class HTTP {
-
-    private static final ObjectMapper OBJECT_MAPPER = getObjectMapper();
 
     public static String sendPostRequest(String servletUrl, String jsonRequestBody) throws IOException {
         HttpURLConnection connection = null;
@@ -21,8 +18,33 @@ public class HTTP {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
 
+            connection.setDoOutput(true);
+            sendRequest(connection, jsonRequestBody);
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                return sendResponse(connection);
+            } else {
+                throw new IOException("HTTP error code: " + responseCode);
+            }
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    public static String sendPutRequest(String servletUrl, String jsonRequestBody) throws IOException {
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(servletUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+
+            connection.setDoOutput(true);
             sendRequest(connection, jsonRequestBody);
 
             int responseCode = connection.getResponseCode();
@@ -66,7 +88,7 @@ public class HTTP {
         }
     }
 
-        public static Integer sendDeleteRequest(String urlWithParams) throws IOException {
+    public static Integer sendDeleteRequest(String urlWithParams) throws IOException {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(urlWithParams);

@@ -20,7 +20,7 @@ import static utils.Utils.getDateFromString;
 public class TrainingEditServlet extends TrainingServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String requestBody = getRequestBody(request);
             JSONObject jsonRequest = new JSONObject(requestBody);
@@ -59,7 +59,7 @@ public class TrainingEditServlet extends TrainingServlet {
             } else {
                 // Если не указан тип изменения, отправляем ошибку
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("Edit type not specified");
+                response.getWriter().write("Не указан тип изменения");
                 return;
             }
 
@@ -70,7 +70,7 @@ public class TrainingEditServlet extends TrainingServlet {
             response.getWriter().write("Ошибка при обработке запроса: " + e.getMessage());
         } catch (NoEditRightsException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("No : " + e.getMessage());
+            response.getWriter().write("Нет прав для изменения: " + e.getMessage());
         } catch (InvalidDateFormatException e) {
             response.getWriter().write("Ошибка при обработке запроса: " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

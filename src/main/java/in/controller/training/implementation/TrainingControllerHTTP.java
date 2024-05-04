@@ -198,7 +198,7 @@ public class TrainingControllerHTTP implements TrainingController {
             combinedMap.put("trainingDTO", trainingDTO);
             combinedMap.put("newName", newName);
             String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            String changeTraining = sendPutRequest(requestURL, jsonRequestBody);
             return objectMapper.readValue(changeTraining, TrainingDTO.class);
         } catch (IOException e) {
             throw new RepositoryException(e.getMessage());
@@ -214,7 +214,7 @@ public class TrainingControllerHTTP implements TrainingController {
             combinedMap.put("trainingDTO", trainingDTO);
             combinedMap.put("newDate", getStringFromDate(newDate));
             String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            String changeTraining = sendPutRequest(requestURL, jsonRequestBody);
             return objectMapper.readValue(changeTraining, TrainingDTO.class);
         } catch (IOException e) {
             throw new RepositoryException(e.getMessage());
@@ -230,7 +230,7 @@ public class TrainingControllerHTTP implements TrainingController {
             combinedMap.put("trainingDTO", trainingDTO);
             combinedMap.put("newDuration", Integer.parseInt(newDuration));
             String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            String changeTraining = sendPutRequest(requestURL, jsonRequestBody);
             return objectMapper.readValue(changeTraining, TrainingDTO.class);
         } catch (IOException e) {
             throw new RepositoryException(e.getMessage());
@@ -246,7 +246,7 @@ public class TrainingControllerHTTP implements TrainingController {
             combinedMap.put("trainingDTO", trainingDTO);
             combinedMap.put("newCalories", Integer.parseInt(newCalories));
             String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-            String changeTraining = sendPostRequest(requestURL, jsonRequestBody);
+            String changeTraining = sendPutRequest(requestURL, jsonRequestBody);
             return objectMapper.readValue(changeTraining, TrainingDTO.class);
         } catch (IOException e) {
             throw new RepositoryException(e.getMessage());
