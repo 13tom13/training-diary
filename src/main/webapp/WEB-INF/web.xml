@@ -69,6 +69,10 @@
     <servlet-name>getCaloriesBurnedServlet</servlet-name>
     <servlet-class>servlet.training.statistics.GetCaloriesBurnedServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>getAllUsersServlet</servlet-name>
+    <servlet-class>servlet.admin.GetAllUsersServlet</servlet-class>
+  </servlet>
 
   <!-- Отображение сервлетов на URL -->
   <servlet-mapping>
@@ -134,5 +138,9 @@
   <servlet-mapping>
     <servlet-name>getCaloriesBurnedServlet</servlet-name>
     <url-pattern>/trainingstatistics/statisticscalories</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>getAllUsersServlet</servlet-name>
+    <url-pattern>/admin/users</url-pattern>
   </servlet-mapping>
 </web-app>

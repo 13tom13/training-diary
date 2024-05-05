@@ -1,10 +1,13 @@
 package in.controller.users;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.dto.UserDTO;
 import entities.model.Rights;
 import entities.model.User;
+import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,7 +28,7 @@ public interface AdminController {
      * @param email Адрес электронной почты пользователя для поиска.
      * @return Пользователь с указанным адресом электронной почты или null, если не найден.
      */
-    UserDTO getUser(String email) throws UserNotFoundException;
+    UserDTO getUser(String email) throws UserNotFoundException, IOException;
 
     /**
      * Изменяет имя пользователя.
@@ -33,7 +36,7 @@ public interface AdminController {
      * @param userDTO     Пользователь, у которого будет изменено имя.
      * @param newName  Новое имя для пользователя.
      */
-    void changeUserName(UserDTO userDTO, String newName);
+    UserDTO changeUserName(UserDTO userDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет фамилию пользователя.
@@ -41,7 +44,7 @@ public interface AdminController {
      * @param userDTO        Пользователь, у которого будет изменена фамилия.
      * @param newLastName Новая фамилия пользователя.
      */
-    void changeUserLastName(UserDTO userDTO, String newLastName);
+    UserDTO changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException;
 
     /**
      * Изменяет пароль пользователя.
@@ -49,14 +52,14 @@ public interface AdminController {
      * @param userDTO         Пользователь, у которого будет изменен пароль.
      * @param newPassword  Новый пароль для пользователя.
      */
-    void changeUserPassword(UserDTO userDTO, String newPassword);
+    UserDTO changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException;
 
     /**
      * Активирует или деактивирует пользователя.
      *
      * @param userDTO  Пользователь, активационный статус которого будет изменен.
      */
-    void changeUserActive(UserDTO userDTO);
+    UserDTO changeUserActive(UserDTO userDTO) throws RepositoryException;
 
     /**
      * Изменяет права пользователя.
@@ -64,7 +67,7 @@ public interface AdminController {
      * @param userDTO         Пользователь, права которого будут изменены.
      * @param userRights   Новые права для пользователя.
      */
-    void changeUserRights(UserDTO userDTO, List<Rights> userRights);
+    UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException;
 
     /**
      * Удаляет пользователя.
@@ -73,5 +76,5 @@ public interface AdminController {
      */
     void deleteUser(UserDTO userDTO);
 
-    List<Rights> getAllRights();
+    List<Rights> getAllRights() throws IOException;
 }

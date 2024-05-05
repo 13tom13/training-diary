@@ -16,7 +16,7 @@ public class User {
     private String password; // Пароль пользователя
     private List<Rights> rights = new ArrayList<>(); // Права пользователя
     private List<Roles> roles = new ArrayList<>(); // Роли пользователя
-    private boolean isActive = true; // Активность пользователя
+    private boolean isActive; // Активность пользователя
 
     /**
      * Конструктор с параметрами.

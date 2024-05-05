@@ -20,7 +20,7 @@ import java.util.*;
 import static config.ApplicationConfig.getRootURL;
 import static servlet.utils.ServletUtils.encodeToUrlJson;
 import static utils.HTTP.*;
-import static utils.Utils.getObjectMapper;
+import static servlet.utils.ServletUtils.getObjectMapper;
 import static utils.Utils.getStringFromDate;
 
 public class TrainingControllerHTTP implements TrainingController {

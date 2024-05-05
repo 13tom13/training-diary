@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static utils.Utils.getDateFromString;
-import static utils.Utils.getObjectMapper;
+import static servlet.utils.ServletUtils.getObjectMapper;
 
 public abstract class TrainingStatisticsServlet extends HttpServlet {
 

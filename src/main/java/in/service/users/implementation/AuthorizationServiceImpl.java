@@ -41,6 +41,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (userFromDB.isPresent()) {
             if (userFromDB.get().getPassword().equals(password)) {
                 if (userFromDB.get().isActive()){
+                    System.out.println(userFromDB.get());
                     return UserMapper.INSTANCE.userToUserDTO(userFromDB.get());
                 } else {
                     throw new NotActiveUserException();

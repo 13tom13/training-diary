@@ -160,19 +160,27 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void updateUser(User user) {
+        System.out.println("user in repository: " + user);
+        System.out.println(user.isActive());
         String sql = """
-                UPDATE main.users SET first_name = ?, last_name = ?, password = ?
+                UPDATE main.users 
+                SET first_name = ?, last_name = ?, password = ?, is_active = ? 
                 WHERE email = ?
-                """;
+                                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
             statement.setString(3, user.getPassword());
-            statement.setString(4, user.getEmail());
-            statement.executeUpdate();
+            statement.setBoolean(4, user.isActive());
+            statement.setString(5, user.getEmail());
+            System.out.println("запрос: " + statement.toString());
+            int i = statement.executeUpdate();
+            System.out.println("rows updated: " + i);
+            System.out.println("user after update: " + getUserByEmail(user.getEmail()));
             updateUserRights(user);
             updateUserRoles(user);
+
         } catch (SQLException e) {
             System.err.println("Ошибка при обновлении пользователя: " + e.getMessage());
         }
@@ -215,6 +223,7 @@ public class UserRepositoryJDBC implements UserRepository {
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
         user.setPassword(resultSet.getString("password"));
+        user.setActive(resultSet.getBoolean("is_active"));
         return user;
     }
 

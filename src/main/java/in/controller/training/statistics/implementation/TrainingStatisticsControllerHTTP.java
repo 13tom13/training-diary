@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import static config.ApplicationConfig.getRootURL;
 import static servlet.utils.ServletUtils.encodeToUrlJson;
 import static utils.HTTP.sendGetRequest;
-import static utils.Utils.getObjectMapper;
+import static servlet.utils.ServletUtils.getObjectMapper;
 import static utils.Utils.getStringFromDate;
 
 public class TrainingStatisticsControllerHTTP implements TrainingStatisticsController {

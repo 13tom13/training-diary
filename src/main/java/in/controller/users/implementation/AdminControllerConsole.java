@@ -65,10 +65,10 @@ public class AdminControllerConsole implements AdminController {
      * @param newName новое имя пользователя
      */
     @Override
-    public void changeUserName(UserDTO userDTO, String newName) {
+    public UserDTO changeUserName(UserDTO userDTO, String newName) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setFirstName(newName);
-        userRepository.updateUser(user);
+        return updateAndGetUser(user);
     }
 
     /**
@@ -78,10 +78,10 @@ public class AdminControllerConsole implements AdminController {
      * @param newLastName новая фамилия пользователя
      */
     @Override
-    public void changeUserLastName(UserDTO userDTO, String newLastName) {
+    public UserDTO changeUserLastName(UserDTO userDTO, String newLastName) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setLastName(newLastName);
-        userRepository.updateUser(user);
+        return updateAndGetUser(user);
     }
 
     /**
@@ -91,10 +91,10 @@ public class AdminControllerConsole implements AdminController {
      * @param newPassword новый пароль пользователя
      */
     @Override
-    public void changeUserPassword(UserDTO userDTO, String newPassword) {
+    public UserDTO changeUserPassword(UserDTO userDTO, String newPassword) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setPassword(newPassword);
-        userRepository.updateUser(user);
+        return updateAndGetUser(user);
     }
 
     /**
@@ -103,10 +103,10 @@ public class AdminControllerConsole implements AdminController {
      * @param userDTO объект пользователя
      */
     @Override
-    public void changeUserActive(UserDTO userDTO) {
+    public UserDTO changeUserActive(UserDTO userDTO) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setActive(!userDTO.isActive());
-        userRepository.updateUser(user);
+        return updateAndGetUser(user);
     }
 
     /**
@@ -116,10 +116,10 @@ public class AdminControllerConsole implements AdminController {
      * @param userRights новые права пользователя
      */
     @Override
-    public void changeUserRights(UserDTO userDTO, List<Rights> userRights) {
+    public UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setRights(userRights);
-        userRepository.updateUser(user);
+        return updateAndGetUser(user);
     }
 
     /**
@@ -136,5 +136,11 @@ public class AdminControllerConsole implements AdminController {
     @Override
     public List<Rights> getAllRights() {
         return userRepository.getAllRights();
+    }
+
+    private UserDTO updateAndGetUser(User user) {
+        userRepository.updateUser(user);
+        User updateUser = userRepository.getUserByEmail(user.getEmail()).get();
+        return UserMapper.INSTANCE.userToUserDTO(updateUser);
     }
 }

@@ -1,21 +1,22 @@
-package servlet.training;
+package servlet.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.ServiceFactory;
-import in.service.training.TrainingService;
+import in.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServlet;
 
+import static config.initializer.RepositoryFactory.getUserRepository;
 import static servlet.utils.ServletUtils.getObjectMapper;
 
-public abstract class TrainingServlet extends HttpServlet {
+public abstract class AdminServlet extends HttpServlet {
 
-    protected final TrainingService trainingService;
+    protected final UserRepository userRepository;
     protected final ObjectMapper objectMapper;
 
-    public TrainingServlet() {
+    public AdminServlet() {
+
         try {
             Class.forName("org.postgresql.Driver");
-            this.trainingService = ServiceFactory.getTrainingService();
+            this.userRepository = getUserRepository();
             this.objectMapper = getObjectMapper();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

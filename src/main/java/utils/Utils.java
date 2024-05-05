@@ -1,7 +1,5 @@
 package utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 
@@ -15,12 +13,6 @@ public class Utils {
     public static final String DATE_FORMAT = "dd.MM.yy";
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
-
-    public static ObjectMapper getObjectMapper() {
-        return JsonMapper.builder()
-                .findAndAddModules()
-                .build();
-    }
 
     public static LocalDate getDateFromString(String dateString) throws DateTimeParseException {
         return LocalDate.parse(dateString, formatter);

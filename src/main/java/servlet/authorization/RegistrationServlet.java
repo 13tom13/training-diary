@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import static config.initializer.ServiceFactory.getUserService;
 import static servlet.utils.ServletUtils.getRequestBody;
-import static utils.Utils.getObjectMapper;
+import static servlet.utils.ServletUtils.getObjectMapper;
 
 public class RegistrationServlet extends HttpServlet {
 

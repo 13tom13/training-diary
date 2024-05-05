@@ -15,7 +15,6 @@ public class GetTrainingByUserEmailAndDate extends TrainingServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Получаем все тренировки пользователя через сервис
         try {
             // Получаем JSON-строку из параметров
             String userEmailJson = request.getParameter("userEmail");

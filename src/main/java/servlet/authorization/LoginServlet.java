@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import static config.initializer.ServiceFactory.getAuthorizationService;
 import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
-import static utils.Utils.getObjectMapper;
+import static servlet.utils.ServletUtils.getObjectMapper;
 
 public class LoginServlet extends HttpServlet {
 

@@ -66,4 +66,5 @@ public class ServiceFactory {
     public static TrainingStatisticsServiceImp getTrainingStatisticsService() {
         return trainingStatisticsService;
     }
+
 }

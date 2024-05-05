@@ -9,6 +9,7 @@ import in.controller.training.statistics.implementation.TrainingStatisticsContro
 import in.controller.users.AdminController;
 import in.controller.users.UserController;
 import in.controller.users.implementation.AdminControllerConsole;
+import in.controller.users.implementation.AdminControllerHTTP;
 import in.controller.users.implementation.UserControllerHTTP;
 
 import static config.initializer.RepositoryFactory.getUserRepository;
@@ -35,11 +36,12 @@ public class ControllerFactory {
 //        authorizationController = new AuthorizationControllerConsole(getAuthorizationService());
 //        trainingController = new TrainingControllerConsole(getTrainingService());
 //        trainingStatisticsController = new TrainingStatisticsControllerConsole(ServiceFactory.getTrainingStatisticsService());
+//        adminController = new AdminControllerConsole(getUserRepository());
         userController = new UserControllerHTTP();
         authorizationController = new AuthorizationControllerHTTP();
         trainingController = new TrainingControllerHTTP();
         trainingStatisticsController = new TrainingStatisticsControllerHTTP();
-        adminController = new AdminControllerConsole(getUserRepository());
+        adminController = new AdminControllerHTTP();
     }
 
     /**

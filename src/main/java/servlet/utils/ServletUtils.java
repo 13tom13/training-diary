@@ -2,6 +2,7 @@ package servlet.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class ServletUtils {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static final ObjectMapper OBJECT_MAPPER = getObjectMapper();
 
     public static String getJsonParamFromRequest(HttpServletRequest request, String param) throws IOException {
         String userJson = request.getParameter(param);
@@ -23,7 +24,7 @@ public class ServletUtils {
     }
 
     public static void writeJsonResponse(HttpServletResponse response, Object responseObject, int status) throws IOException {
-        String jsonResponse = objectMapper.writeValueAsString(responseObject);
+        String jsonResponse = OBJECT_MAPPER.writeValueAsString(responseObject);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(status);
@@ -37,6 +38,12 @@ public class ServletUtils {
     }
 
     public static String encodeToUrlJson(Object object) throws JsonProcessingException {
-        return URLEncoder.encode(objectMapper.writeValueAsString(object), StandardCharsets.UTF_8);
+        return URLEncoder.encode(OBJECT_MAPPER.writeValueAsString(object), StandardCharsets.UTF_8);
+    }
+
+    public static ObjectMapper getObjectMapper() {
+        return JsonMapper.builder()
+                .findAndAddModules()
+                .build();
     }
 }

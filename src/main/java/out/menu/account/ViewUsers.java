@@ -57,6 +57,8 @@ public class ViewUsers {
             userViewMenu(userDTO);
         } catch (UserNotFoundException e) {
             System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Ошибка ввода данных: " + e.getMessage());
         }
     }
 
@@ -74,7 +76,8 @@ public class ViewUsers {
             System.out.println("1. редактировать пользователя");
             System.out.println("2. просмотр тренировок пользователя");
             System.out.println("3. просмотр логов пользователя");
-            System.out.println("4. выход");
+            System.out.println("4. удалить пользователя");
+            System.out.println("5. выход");
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
@@ -83,6 +86,11 @@ public class ViewUsers {
                     case 2 -> viewTraining.viewAllTraining(userDTO);
                     case 3 -> viewLogsUser(userDTO);
                     case 4 -> {
+                        adminController.deleteUser(userDTO);
+                        System.err.println("Пользователь с email: " + userDTO.getEmail() + " удален.");
+                        view = false;
+                    }
+                    case 5 -> {
                         System.out.println("Выход из просмотра пользователя " + userDTO.getEmail());
                         view = false;
                     }
