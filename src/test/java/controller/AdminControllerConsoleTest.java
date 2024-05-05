@@ -40,6 +40,7 @@ public class AdminControllerConsoleTest {
         testUserDTO.setLastName("Doe");
         testUserDTO.setEmail("john@example.com");
         testUserDTO.setActive(true);
+
     }
 
     @Test
@@ -84,7 +85,11 @@ public class AdminControllerConsoleTest {
         String newLastName = "Smith";
 
         User user = new User();
+        user.setFirstName("john");
+        user.setLastName("Doe");
+        user.setEmail("john@example.com");
         user.setActive(true);
+
         when(userRepositoryMock.getUserByEmail(testUserDTO.getEmail())).thenReturn(Optional.of(user));
 
         // Act
@@ -106,6 +111,10 @@ public class AdminControllerConsoleTest {
         newUserRights.add(new Rights(1L, "WRITE"));
 
         User user = new User();
+        user.setFirstName("john");
+        user.setLastName("Doe");
+        user.setEmail("john@example.com");
+        user.setActive(true);
         when(userRepositoryMock.getUserByEmail(testUserDTO.getEmail())).thenReturn(Optional.of(user));
 
         // Act

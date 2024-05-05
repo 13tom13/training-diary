@@ -1,9 +1,6 @@
 package entities.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,12 +11,20 @@ import static utils.Utils.getStringFromDate;
 public class TrainingDTO implements Comparable<TrainingDTO> {
 
     private Long id;
+
+    @NotBlank(message = "Имя тренировки не должно быть пустым")
     private String name;
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+
+    @NotNull(message = "Дата тренировки не должна быть пустой")
+    @PastOrPresent(message = "Дата тренировки должна быть в прошлом или настоящем")
     private LocalDate date;
+
+    @Positive(message = "Продолжительность тренировки должна быть положительной")
     private int duration;
+
+    @PositiveOrZero(message = "Сожженные калории должны быть неотрицательными")
     private int caloriesBurned;
+
     private HashMap<String, String> additions;
 
     public TrainingDTO() {

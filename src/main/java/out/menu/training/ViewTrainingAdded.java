@@ -5,16 +5,16 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
+import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
+import static utils.Utils.enterStringDate;
 import static utils.Utils.getDateFromString;
-import static utils.Utils.isValidDateFormat;
 
 /**
  * Представляет класс для добавления и удаления тренировок пользователя.
@@ -47,7 +47,7 @@ public class ViewTrainingAdded {
             System.err.println("Ошибка при получении списка типов тренировок: " + e.getMessage());
             return;
         }
-        String date = enterTrainingDate();
+        String date = enterStringDate(scanner);
         int duration = enterTrainingDuration();
         int caloriesBurned = enterCaloriesBurned();
         LocalDate convertedDate = getDateFromString(date);
@@ -68,18 +68,20 @@ public class ViewTrainingAdded {
      */
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
-        String trainingDate = scanner.nextLine();
-        if (!isValidDateFormat(trainingDate)) {
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-            return;
-        }
+        String trainingDate = enterStringDate(scanner);
         TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         for (TrainingDTO training : trainingsFromDay) {
             System.out.println(training);
         }
         System.out.print("Название: ");
         String name = scanner.nextLine();
-        trainingController.deleteTraining(userDTO, trainingDate, name);
+        try {
+            trainingController.deleteTraining(userDTO, trainingDate, name);
+        } catch (NoDeleteRightsException e) {
+            System.err.println("нет прав на удаление: " + e.getMessage());
+        } catch (RepositoryException e) {
+            System.err.println("Ошибка при удалении тренировки: " + e.getMessage());
+        }
         System.out.println("Тренировка успешно удалена.");
 
     }
@@ -207,18 +209,6 @@ public class ViewTrainingAdded {
                 continue;
             }
             return caloriesBurned;
-        }
-    }
-
-    private String enterTrainingDate() {
-        while (true) {
-            System.out.print("Дата (дд.мм.гг): ");
-            String stringDate = scanner.nextLine();
-            if (!isValidDateFormat(stringDate)) {
-                System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
-                continue;
-            }
-            return stringDate;
         }
     }
 

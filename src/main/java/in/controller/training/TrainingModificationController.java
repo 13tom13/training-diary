@@ -4,6 +4,7 @@ import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
+import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 
 
@@ -30,7 +31,7 @@ public interface TrainingModificationController {
      * @param date    дата тренировки
      * @param name    имя тренировки
      */
-    void deleteTraining(UserDTO userDTO, String date, String name);
+    void deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.

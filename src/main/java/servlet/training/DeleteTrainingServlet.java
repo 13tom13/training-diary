@@ -22,7 +22,7 @@ public class DeleteTrainingServlet extends TrainingServlet {
             try {
                 trainingService.deleteTraining(userDTO, decodedDate, decodedTrainingName);
             } catch (RepositoryException e) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             } catch (NoDeleteRightsException e) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }

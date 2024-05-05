@@ -6,7 +6,10 @@ import entities.dto.UserDTO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -19,17 +22,8 @@ public class Utils {
     }
 
 
-
     public static String getStringFromDate(LocalDate date) {
         return formatter.format(date);
-    }
-
-    public static boolean isValidDateFormat(String dateString) {
-        // Паттерн для даты в формате "дд.мм.гг"
-        String datePattern = "\\d{2}\\.\\d{2}\\.\\d{2}";
-
-        // Проверяем, соответствует ли строка паттерну
-        return Pattern.matches(datePattern, dateString);
     }
 
     public static boolean hisRight(UserDTO userDTO, String rightsName) {
@@ -59,5 +53,24 @@ public class Utils {
                 System.out.println("--------------------------------------------------");
             }
         }
+    }
+
+    public static String enterStringDate(Scanner scanner) {
+        while (true) {
+            System.out.print("Дата (дд.мм.гг): ");
+            String stringDate = scanner.nextLine();
+            if (isValidDateFormat(stringDate)) {
+                return stringDate;
+            }
+            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+        }
+    }
+
+    private static boolean isValidDateFormat(String dateString) {
+        // Паттерн для даты в формате "дд.мм.гг"
+        String datePattern = "\\d{2}\\.\\d{2}\\.\\d{2}";
+
+        // Проверяем, соответствует ли строка паттерну
+        return Pattern.matches(datePattern, dateString);
     }
 }

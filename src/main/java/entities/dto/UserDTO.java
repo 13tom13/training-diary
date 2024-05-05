@@ -3,6 +3,10 @@ package entities.dto;
 import entities.model.Rights;
 import entities.model.Roles;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 /**
@@ -10,40 +14,51 @@ import java.util.List;
  */
 public class UserDTO {
 
-    private long id; // Идентификатор пользователя
-    private String firstName; // Имя пользователя
-    private String lastName; // Фамилия пользователя
-    private String email; // Электронная почта пользователя
-    private List<Rights> rights; // Список идентификаторов прав пользователя
-    private List<Roles> roles; // Список идентификаторов ролей пользователя
-    private boolean isActive; // Активность пользователя
+    private long id;
 
-    // Конструкторы, геттеры и сеттеры
+    @NotEmpty(message = "Имя не должно быть пустым")
+    private String firstName;
 
-    public UserDTO() {
-    }
+    @NotEmpty(message = "Фамилия не должна быть пустой")
+    private String lastName;
 
-    public UserDTO(String email) {
-        this.email = email;
-    }
+    @Email(message = "Некорректный адрес электронной почты")
+    private String email;
 
-    public long getId() {
-        return id;
-    }
+    @NotNull(message = "Список прав не должен быть пустым")
+    private List<Rights> rights;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @NotNull(message = "Список ролей не должен быть пустым")
+    private List<Roles> roles;
 
-    public String getFirstName() {
-        return firstName;
-    }
+    private boolean isActive;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+        // Конструкторы, геттеры и сеттеры
 
-    public String getLastName() {
+        public UserDTO() {
+        }
+
+        public UserDTO(String email) {
+            this.email = email;
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
         return lastName;
     }
 

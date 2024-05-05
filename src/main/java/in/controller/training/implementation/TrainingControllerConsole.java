@@ -90,14 +90,9 @@ public class TrainingControllerConsole implements TrainingController {
      * @param name    Название тренировки
      */
     @Override
-    public void deleteTraining(UserDTO userDTO, String date, String name) {
-        try {
+    public void deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException {
             trainingService.deleteTraining(userDTO, date, name);
             logger.logAction(userDTO.getEmail(), "delete training " + name + " " + date);
-        } catch (RepositoryException | NoDeleteRightsException e) {
-            logger.logError(userDTO.getEmail(), e.getMessage());
-            System.err.println(e.getMessage());
-        }
     }
 
     /**

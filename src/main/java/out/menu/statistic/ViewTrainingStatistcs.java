@@ -8,6 +8,7 @@ import in.controller.training.statistics.TrainingStatisticsController;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import static utils.Utils.enterStringDate;
 import static utils.Utils.getDateFromString;
 
 /**
@@ -47,10 +48,8 @@ public class ViewTrainingStatistcs {
                 scanner.nextLine();
                 switch (choice) {
                     case 1 -> printTotalTrainingStatistics();
-                    case 2 ->
-                            printPeriodTrainingStatistics(trainingStatisticsController::getAllTrainingStatisticsPerPeriod);
-                    case 3 ->
-                            printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
+                    case 2 -> printPeriodTrainingStatistics(trainingStatisticsController::getAllTrainingStatisticsPerPeriod);
+                    case 3 -> printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
                     case 4 -> printPeriodTrainingStatistics(trainingStatisticsController::getCaloriesBurnedPerPeriod);
                     case 5 -> {
                         System.out.println("Выход из меню статистики пользователя " + userDTO.getEmail());
@@ -84,11 +83,11 @@ public class ViewTrainingStatistcs {
      */
     private void printPeriodTrainingStatistics(TriFunction<UserDTO, LocalDate, LocalDate, Integer> statisticsFunction) {
         System.out.println("Введите начало периода (дд.мм.гг):");
-        String stringStartDate = scanner.nextLine();
+        String stringStartDate = enterStringDate(scanner);
         LocalDate startDate = getDateFromString(stringStartDate);
 
         System.out.println("Введите конец периода (дд.мм.гг):");
-        String stringEndDate = scanner.nextLine();
+        String stringEndDate = enterStringDate(scanner);
         LocalDate endDate = getDateFromString(stringEndDate);
 
         int result = statisticsFunction.apply(userDTO, startDate, endDate);
