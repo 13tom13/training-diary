@@ -1,8 +1,6 @@
 package controller;
 
 import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.Roles;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.controller.training.statistics.implementation.TrainingStatisticsControllerConsole;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
@@ -15,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,15 +34,7 @@ public class TrainingStatisticsControllerConsoleTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO();
-        testUser.setFirstName(TEST_FIRST_NAME);
-        testUser.setLastName(TEST_LAST_NAME);
-        testUser.setEmail(TEST_EMAIL);
-        testUser.setRights(new ArrayList<>());
-        testUser.setRoles(new ArrayList<>());
-        testUser.setActive(true);
-        testUser.getRoles().add(new Roles(2L,"USER"));
-        testUser.getRights().add(new Rights(4L,"STATISTICS"));
+        testUser = createTestUserDTO();
     }
 
     @Test

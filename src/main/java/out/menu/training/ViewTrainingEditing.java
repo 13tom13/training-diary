@@ -44,11 +44,7 @@ public class ViewTrainingEditing {
     private void getTrainingForEditing() {
         TreeSet<TrainingDTO> trainingsFromDay;
         System.out.println("Введите дату тренировки: ");
-        String trainingDate = scanner.nextLine();
-        if (!isValidDateFormat(trainingDate)) {
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате " + DATE_FORMAT);
-            return;
-        }
+        String trainingDate = enterStringDate(scanner);
         trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         if (!trainingsFromDay.isEmpty()) {
             System.out.println("Тренировки на " + trainingDate + ":");

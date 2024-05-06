@@ -1,6 +1,5 @@
 package in.controller.users;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.dto.UserDTO;
 import entities.model.Rights;
 import entities.model.User;
@@ -33,15 +32,15 @@ public interface AdminController {
     /**
      * Изменяет имя пользователя.
      *
-     * @param userDTO     Пользователь, у которого будет изменено имя.
-     * @param newName  Новое имя для пользователя.
+     * @param userDTO Пользователь, у которого будет изменено имя.
+     * @param newName Новое имя для пользователя.
      */
     UserDTO changeUserName(UserDTO userDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет фамилию пользователя.
      *
-     * @param userDTO        Пользователь, у которого будет изменена фамилия.
+     * @param userDTO     Пользователь, у которого будет изменена фамилия.
      * @param newLastName Новая фамилия пользователя.
      */
     UserDTO changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException;
@@ -49,30 +48,30 @@ public interface AdminController {
     /**
      * Изменяет пароль пользователя.
      *
-     * @param userDTO         Пользователь, у которого будет изменен пароль.
-     * @param newPassword  Новый пароль для пользователя.
+     * @param userDTO     Пользователь, у которого будет изменен пароль.
+     * @param newPassword Новый пароль для пользователя.
      */
     UserDTO changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException;
 
     /**
      * Активирует или деактивирует пользователя.
      *
-     * @param userDTO  Пользователь, активационный статус которого будет изменен.
+     * @param userDTO Пользователь, активационный статус которого будет изменен.
      */
     UserDTO changeUserActive(UserDTO userDTO) throws RepositoryException;
 
     /**
      * Изменяет права пользователя.
      *
-     * @param userDTO         Пользователь, права которого будут изменены.
-     * @param userRights   Новые права для пользователя.
+     * @param userDTO    Пользователь, права которого будут изменены.
+     * @param userRights Новые права для пользователя.
      */
     UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException;
 
     /**
      * Удаляет пользователя.
      *
-     * @param userDTO  Пользователь, который будет удален.
+     * @param userDTO Пользователь, который будет удален.
      */
     void deleteUser(UserDTO userDTO);
 

@@ -21,10 +21,10 @@ public class RegistrationDTO {
     @Size(min = 3, message = "Пароль должен содержать как минимум 3 символов")
     private String password;
 
-    public RegistrationDTO(String email, String firstName, String lastName, String password) {
-        this.email = email;
+    public RegistrationDTO(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.password = password;
     }
 

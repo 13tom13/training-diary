@@ -3,6 +3,7 @@ package in.controller.users.implementation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.dto.RegistrationDTO;
 import in.controller.users.UserController;
+import jakarta.validation.ConstraintViolationException;
 
 import java.io.IOException;
 
@@ -18,6 +19,8 @@ public class UserControllerHTTP implements UserController {
 
     @Override
     public void createNewUser(RegistrationDTO registrationDTO) throws IOException {
+        var validate = validator.validate(registrationDTO);
+        if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         String servletUrl = rootURL + registerServletPath;
         String jsonRequestBody = objectMapper.writeValueAsString(registrationDTO);
         String response = sendPostRequest(servletUrl, jsonRequestBody);

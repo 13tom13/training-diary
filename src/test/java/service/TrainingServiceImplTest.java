@@ -17,12 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import servlet.utils.mappers.TrainingMapper;
-import servlet.utils.mappers.UserMapper;
 import testutil.TestUtil;
+import utils.mappers.TrainingMapper;
+import utils.mappers.UserMapper;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -49,17 +48,11 @@ public class TrainingServiceImplTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO();
-        testUser.setFirstName(TEST_FIRST_NAME);
-        testUser.setLastName(TEST_LAST_NAME);
-        testUser.setEmail(TEST_EMAIL);
-        testUser.setRights(new ArrayList<>());
-        testUser.setRoles(new ArrayList<>());
-        testUser.setActive(true);
-        testUser.getRights().add(new Rights(1L, "WRITE"));
-        testUser.getRights().add(new Rights(2L, "EDIT"));
+        testUser = createTestUserDTO();
+        testUser.getRights().add(new Rights(2L, "WRITE"));
         testUser.getRights().add(new Rights(3L, "DELETE"));
-        testTraining = new TrainingDTO(testTrainingName, TEST_DATE, 60, 200);
+        testUser.getRights().add(new Rights(4L, "EDIT"));
+        testTraining = createTestTrainingDTO();
         trainingForRepository = TrainingMapper.INSTANCE.trainingDTOToTraining(testTraining);
         UserForRepository = UserMapper.INSTANCE.userDTOToUser(testUser);
     }

@@ -6,7 +6,10 @@ import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
 import entities.model.Rights;
 import in.repository.user.UserRepository;
-import servlet.utils.mappers.UserMapper;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import utils.ValidatorFactoryProvider;
+import utils.mappers.UserMapper;
 
 
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class AdminControllerConsole implements AdminController {
 
     private final UserRepository userRepository;
+    private final Validator validator = ValidatorFactoryProvider.getValidator();
+
 
     /**
      * Конструктор класса AdminControllerConsole.
@@ -66,6 +71,8 @@ public class AdminControllerConsole implements AdminController {
      */
     @Override
     public UserDTO changeUserName(UserDTO userDTO, String newName) {
+        var validate = validator.validate(userDTO);
+        if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setFirstName(newName);
         return updateAndGetUser(user);
@@ -79,6 +86,8 @@ public class AdminControllerConsole implements AdminController {
      */
     @Override
     public UserDTO changeUserLastName(UserDTO userDTO, String newLastName) {
+        var validate = validator.validate(userDTO);
+        if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setLastName(newLastName);
         return updateAndGetUser(user);
@@ -92,6 +101,8 @@ public class AdminControllerConsole implements AdminController {
      */
     @Override
     public UserDTO changeUserPassword(UserDTO userDTO, String newPassword) {
+        var validate = validator.validate(userDTO);
+        if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setPassword(newPassword);
         return updateAndGetUser(user);

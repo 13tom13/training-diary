@@ -27,16 +27,14 @@ public class UserControllerConsoleTest extends TestUtil {
 
     @Test
     public void testCreateNewUser_Successful() throws ValidationException, RepositoryException {
-        // Set up values for the test
-        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
 
-        // Configure behavior of the userServiceMock object
+        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
         doNothing().when(userServiceMock).saveUser(registrationDTO);
 
-        // Call the method under test
+
         userController.createNewUser(registrationDTO);
 
-        // Verify if userServiceMock.saveUser is called with correct arguments
+
         verify(userServiceMock).saveUser(registrationDTO);
 
         // Assert that no exceptions were thrown during the execution

@@ -1,13 +1,18 @@
 package testutil;
 
 import database.LiquibaseConnectorForTest;
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
+import entities.model.Rights;
+import entities.model.Roles;
 import entities.model.User;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static config.ApplicationConfig.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,7 +36,7 @@ public abstract class TestUtil {
     /**
      * Тестовый email.
      */
-    public static final String TEST_EMAIL = "test@test.com";
+    public static final String TEST_EMAIL = "test@gmail.com";
 
     /**
      * Тестовый пароль.
@@ -41,7 +46,7 @@ public abstract class TestUtil {
     /**
      * Тестовая дата.
      */
-    public static final LocalDate TEST_DATE = LocalDate.of(2024, 4, 10);
+    public static final LocalDate TEST_DATE = LocalDate.now().minusDays(1);
 
     private static final String databaseName = getTestDatabaseName();
     private static final String username = getTestDbUsername();
@@ -62,6 +67,49 @@ public abstract class TestUtil {
             // Удаляем файл журнала
             assertTrue(logFile.delete(), "Failed to delete log file");
         }
+    }
+
+    public static UserDTO createTestUserDTO() {
+        UserDTO testUserDTO = new UserDTO();
+        testUserDTO.setId(1L);
+        testUserDTO.setFirstName("John");
+        testUserDTO.setLastName("Doe");
+        testUserDTO.setEmail("john@example.com");
+        testUserDTO.setActive(true);
+        testUserDTO.setRights(new ArrayList<>());
+        testUserDTO.setRoles(new ArrayList<>());
+        testUserDTO.setActive(true);
+        testUserDTO.getRoles().add(new Roles(2L, "USER"));
+        testUserDTO.getRights().add(new Rights(4L, "STATISTICS"));
+        return testUserDTO;
+    }
+
+    public static TrainingDTO createTestTrainingDTO() {
+        TrainingDTO testTrainingDTO = new TrainingDTO();
+        testTrainingDTO.setId(1L);
+        testTrainingDTO.setName("Test Training");
+        testTrainingDTO.setDate(LocalDate.now().minusDays(1));
+        testTrainingDTO.setDuration(60);
+        testTrainingDTO.setCaloriesBurned(500);
+        testTrainingDTO.setAdditions(new HashMap<>());
+        testTrainingDTO.getAdditions().put("Location", "Gym");
+        testTrainingDTO.getAdditions().put("Weather", "Sunny");
+
+        return testTrainingDTO;
+    }
+
+    public static User createTestUser() {
+        User testUser = new User();
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setEmail("john@example.com");
+        testUser.setActive(true);
+        testUser.setRights(new ArrayList<>());
+        testUser.setRoles(new ArrayList<>());
+        testUser.setActive(true);
+        testUser.getRoles().add(new Roles(2L, "USER"));
+        testUser.getRights().add(new Rights(4L, "STATISTICS"));
+        return testUser;
     }
 
     public static Connection createConnectionToTestDatabase() throws SQLException {

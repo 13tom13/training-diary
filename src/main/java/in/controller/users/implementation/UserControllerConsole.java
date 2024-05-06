@@ -2,9 +2,9 @@ package in.controller.users.implementation;
 
 import entities.dto.RegistrationDTO;
 import exceptions.RepositoryException;
-import exceptions.ValidationException;
 import in.controller.users.UserController;
 import in.service.users.UserService;
+import jakarta.validation.ConstraintViolationException;
 import utils.Logger;
 
 /**
@@ -27,13 +27,16 @@ public class UserControllerConsole implements UserController {
 
     /**
      * Создает нового пользователя.
+     *
      * @param registrationDTO объект, содержащий данные нового пользователя
      */
     public void createNewUser(RegistrationDTO registrationDTO) {
         try {
+            var validate = validator.validate(registrationDTO);
+            if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
             userService.saveUser(registrationDTO);
             logger.logAction(registrationDTO.getEmail(), "created");
-        } catch (ValidationException | RepositoryException e) {
+        } catch (RepositoryException e) {
             System.err.println(e.getMessage());
         }
     }

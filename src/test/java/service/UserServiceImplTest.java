@@ -1,11 +1,10 @@
 package service;
 
 import entities.dto.RegistrationDTO;
-import entities.dto.UserDTO;
 import exceptions.ServiceException;
-import exceptions.ValidationException;
 import in.repository.user.UserRepository;
 import in.service.users.implementation.UserServiceImpl;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,9 +46,12 @@ public class UserServiceImplTest {
 
     @Test
     public void testSaveUser_WithNullFirstName() {
+        // Создаем DTO с нулевым значением firstName
         RegistrationDTO registrationDTO = new RegistrationDTO(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+
         // Act & Assert
-        assertThrows(ValidationException.class, () -> userService.saveUser(registrationDTO));
+        // Используем assertThrows для проверки, что при попытке сохранения пользователя будет вызвано исключение
+        assertThrows(ConstraintViolationException.class, () -> userService.saveUser(registrationDTO));
     }
 
 }

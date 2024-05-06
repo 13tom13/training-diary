@@ -44,10 +44,7 @@ public class TrainingControllerConsoleTest {
     @BeforeEach
     public void setUp() {
         // Создание тестового пользователя
-        testUser = new UserDTO();
-        testUser.setFirstName(TEST_FIRST_NAME);
-        testUser.setLastName(TEST_LAST_NAME);
-        testUser.setEmail(TEST_EMAIL);
+        testUser = createTestUserDTO();
         testTraining = new TrainingDTO(testTrainingName, TEST_DATE, 60, 200);
     }
 

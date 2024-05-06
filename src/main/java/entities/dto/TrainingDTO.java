@@ -1,5 +1,6 @@
 package entities.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import static utils.Utils.getStringFromDate;
 
 public class TrainingDTO implements Comparable<TrainingDTO> {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank(message = "Имя тренировки не должно быть пустым")

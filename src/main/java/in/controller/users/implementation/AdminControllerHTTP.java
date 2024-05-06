@@ -9,6 +9,8 @@ import entities.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
+import jakarta.validation.Validator;
+import utils.ValidatorFactoryProvider;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class AdminControllerHTTP implements AdminController {
     private final String changeUserRightsServletPath = "/admin/user/change/rights";
     private final String getAllRightsServletPath = "/admin/rights";
 
+    private final Validator validator = ValidatorFactoryProvider.getValidator();
 
     @Override
     public List<User> getAllUsers() {

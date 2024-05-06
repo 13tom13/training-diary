@@ -2,7 +2,6 @@ package entities.dto;
 
 import entities.model.Rights;
 import entities.model.Roles;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +13,8 @@ import java.util.List;
  */
 public class UserDTO {
 
-    private long id;
+    //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
     private String firstName;
@@ -33,32 +33,32 @@ public class UserDTO {
 
     private boolean isActive;
 
-        // Конструкторы, геттеры и сеттеры
+    // Конструкторы, геттеры и сеттеры
 
-        public UserDTO() {
-        }
+    public UserDTO() {
+    }
 
-        public UserDTO(String email) {
-            this.email = email;
-        }
+    public UserDTO(String email) {
+        this.email = email;
+    }
 
-        public long getId() {
-            return id;
-        }
+    public long getId() {
+        return id;
+    }
 
-        public void setId(long id) {
-            this.id = id;
-        }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-        public String getFirstName() {
-            return firstName;
-        }
+    public String getFirstName() {
+        return firstName;
+    }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        public String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 

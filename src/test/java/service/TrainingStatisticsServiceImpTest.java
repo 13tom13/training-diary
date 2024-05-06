@@ -2,25 +2,18 @@ package service;
 
 import entities.dto.TrainingDTO;
 import entities.dto.UserDTO;
-import entities.model.User;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
 import in.service.training.implementation.TrainingStatisticsServiceImp;
-import entities.model.Rights;
-import entities.model.Training;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import out.menu.statistic.TriFunction;
 import testutil.TestUtil;
 
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -48,14 +41,7 @@ public class TrainingStatisticsServiceImpTest extends TestUtil {
 
     @BeforeEach
     public void setUp() {
-        testUser = new UserDTO();
-        testUser.setFirstName(TEST_FIRST_NAME);
-        testUser.setLastName(TEST_LAST_NAME);
-        testUser.setEmail(TEST_EMAIL);
-        testUser.setRights(new ArrayList<>());
-        testUser.setRoles(new ArrayList<>());
-        testUser.setActive(true);
-        testUser.getRights().add(new Rights(4L,"STATISTICS"));
+        testUser = createTestUserDTO();
     }
 
     @Test

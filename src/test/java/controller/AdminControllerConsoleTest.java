@@ -19,6 +19,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static testutil.TestUtil.createTestUser;
+import static testutil.TestUtil.createTestUserDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminControllerConsoleTest {
@@ -31,16 +33,13 @@ public class AdminControllerConsoleTest {
 
     private List<User> testUsers;
     private UserDTO testUserDTO;
+    private User user;
 
     @BeforeEach
     void setUp() {
         testUsers = new ArrayList<>();
-        testUserDTO = new UserDTO();
-        testUserDTO.setFirstName("John");
-        testUserDTO.setLastName("Doe");
-        testUserDTO.setEmail("john@example.com");
-        testUserDTO.setActive(true);
-
+        testUserDTO = createTestUserDTO();
+        user = createTestUser();
     }
 
     @Test
@@ -59,7 +58,7 @@ public class AdminControllerConsoleTest {
     public void testGetUser_ReturnsUserDTO_WhenUserExists() throws UserNotFoundException {
         // Arrange
         String userEmail = "john@example.com";
-        when(userRepositoryMock.getUserByEmail(userEmail)).thenReturn(Optional.of(new User()));
+        when(userRepositoryMock.getUserByEmail(userEmail)).thenReturn(Optional.of(user));
 
         // Act
         UserDTO actualUserDTO = adminController.getUser(userEmail);
@@ -84,11 +83,6 @@ public class AdminControllerConsoleTest {
         String newName = "Jane";
         String newLastName = "Smith";
 
-        User user = new User();
-        user.setFirstName("john");
-        user.setLastName("Doe");
-        user.setEmail("john@example.com");
-        user.setActive(true);
 
         when(userRepositoryMock.getUserByEmail(testUserDTO.getEmail())).thenReturn(Optional.of(user));
 

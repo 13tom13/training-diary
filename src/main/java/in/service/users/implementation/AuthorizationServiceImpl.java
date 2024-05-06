@@ -6,13 +6,15 @@ import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
-import servlet.utils.mappers.UserMapper;
+import servlet.utils.annotations.Loggable;
+import utils.mappers.UserMapper;
 
 import java.util.Optional;
 
 /**
  * Реализация сервиса аутентификации пользователей.
  */
+@Loggable
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
@@ -41,7 +43,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (userFromDB.isPresent()) {
             if (userFromDB.get().getPassword().equals(password)) {
                 if (userFromDB.get().isActive()){
-                    System.out.println(userFromDB.get());
                     return UserMapper.INSTANCE.userToUserDTO(userFromDB.get());
                 } else {
                     throw new NotActiveUserException();

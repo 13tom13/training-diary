@@ -160,8 +160,6 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void updateUser(User user) {
-        System.out.println("user in repository: " + user);
-        System.out.println(user.isActive());
         String sql = """
                 UPDATE main.users 
                 SET first_name = ?, last_name = ?, password = ?, is_active = ? 
@@ -176,8 +174,6 @@ public class UserRepositoryJDBC implements UserRepository {
             statement.setString(5, user.getEmail());
             System.out.println("запрос: " + statement.toString());
             int i = statement.executeUpdate();
-            System.out.println("rows updated: " + i);
-            System.out.println("user after update: " + getUserByEmail(user.getEmail()));
             updateUserRights(user);
             updateUserRoles(user);
 

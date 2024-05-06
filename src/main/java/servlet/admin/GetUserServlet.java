@@ -5,7 +5,7 @@ import entities.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import servlet.utils.mappers.UserMapper;
+import utils.mappers.UserMapper;
 
 import java.io.IOException;
 import java.util.Optional;

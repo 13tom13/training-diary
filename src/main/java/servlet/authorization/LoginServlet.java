@@ -8,6 +8,7 @@ import in.service.users.AuthorizationService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import servlet.utils.annotations.Loggable;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import static servlet.utils.ServletUtils.getRequestBody;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 import static servlet.utils.ServletUtils.getObjectMapper;
 
+@Loggable
 public class LoginServlet extends HttpServlet {
 
     private final AuthorizationService authorizationService;

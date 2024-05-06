@@ -1,4 +1,4 @@
-package servlet.utils.mappers;
+package utils.mappers;
 
 import entities.dto.AuthorizationDTO;
 import org.mapstruct.Mapper;

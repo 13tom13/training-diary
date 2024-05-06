@@ -30,13 +30,7 @@ public class AuthorizationControllerTest extends TestUtil {
     @Test
     void loginValidCredentialsReturnsUser() throws AuthorizationException {
         // Arrange
-        UserDTO expectedUser = new UserDTO();
-        expectedUser.setFirstName(TEST_FIRST_NAME);
-        expectedUser.setLastName(TEST_LAST_NAME);
-        expectedUser.setEmail(TEST_EMAIL);
-        expectedUser.setRights(new ArrayList<>());
-        expectedUser.setRoles(new ArrayList<>());
-        expectedUser.setActive(true);
+        UserDTO expectedUser =  createTestUserDTO();
 
         AuthorizationDTO authorizationDTO = new AuthorizationDTO(TEST_EMAIL, TEST_PASSWORD);
 

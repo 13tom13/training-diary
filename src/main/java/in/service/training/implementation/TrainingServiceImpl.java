@@ -11,8 +11,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
-import servlet.utils.mappers.TrainingMapper;
-import servlet.utils.mappers.UserMapper;
+import utils.mappers.TrainingMapper;
+import utils.mappers.UserMapper;
 
 import java.time.LocalDate;
 import java.util.List;
