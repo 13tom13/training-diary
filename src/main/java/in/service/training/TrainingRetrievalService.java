@@ -1,10 +1,11 @@
 package in.service.training;
 
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
 import exceptions.RepositoryException;
-import model.Training;
-import model.User;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -16,32 +17,32 @@ public interface TrainingRetrievalService {
     /**
      * Получает все тренировки для указанного пользователя.
      *
-     * @param user пользователь, для которого запрашиваются тренировки
+     * @param userDTO пользователь, для которого запрашиваются тренировки
      * @return отображение даты на множество тренировок
      * @throws SecurityException если возникла ошибка безопасности
      */
-    TreeMap<String, TreeSet<Training>> getAllTrainings(User user) throws SecurityException;
+    TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) throws SecurityException;
 
     /**
      * Получает тренировки для указанного пользователя на указанную дату.
      *
-     * @param user пользователь, для которого запрашиваются тренировки
-     * @param data дата тренировки
+     * @param userDTO пользователь, для которого запрашиваются тренировки
+     * @param data    дата тренировки
      * @return множество тренировок на указанную дату
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String data) throws RepositoryException, SecurityException;
+    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String data) throws RepositoryException, SecurityException;
 
     /**
      * Получает тренировку по электронной почте пользователя, дате и названию.
      *
-     * @param user          пользователь, для которого запрашивается тренировка
-     * @param trainingData  дата тренировки
-     * @param trainingName  название тренировки
+     * @param userDTO      пользователь, для которого запрашивается тренировка
+     * @param trainingData дата тренировки
+     * @param trainingName название тренировки
      * @return тренировка
      * @throws RepositoryException если возникла ошибка доступа к хранилищу
      * @throws SecurityException   если возникла ошибка безопасности
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, String trainingData, String trainingName) throws RepositoryException, SecurityException;
+    TrainingDTO getTrainingByUserEmailAndDataAndName(UserDTO userDTO, String trainingData, String trainingName) throws RepositoryException, SecurityException;
 }

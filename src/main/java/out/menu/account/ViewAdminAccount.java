@@ -11,17 +11,13 @@ import java.util.Scanner;
 public class ViewAdminAccount {
 
     private final ViewUsers viewUsers;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewAdminAccount.
-     * @param adminController Контроллер администратора.
-     * @param trainingController Контроллер тренировок.
-     * @param scanner Сканер для ввода данных.
      */
-    public ViewAdminAccount(AdminController adminController, TrainingController trainingController, Scanner scanner) {
-        viewUsers = new ViewUsers(adminController, trainingController, scanner);
-        this.scanner = scanner;
+    public ViewAdminAccount() {
+        viewUsers = new ViewUsers();
     }
 
     /**

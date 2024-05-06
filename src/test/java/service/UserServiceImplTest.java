@@ -1,9 +1,10 @@
 package service;
 
+import entities.dto.RegistrationDTO;
 import exceptions.ServiceException;
-import exceptions.ValidationException;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.implementation.UserServiceImpl;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,9 +16,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static testutil.TestUtil.*;
 
-/**
- * Тестовый класс для {@link UserServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
@@ -27,10 +25,7 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    /**
-     * Тест для метода {@link UserServiceImpl#getUserByEmail(String)}.
-     * Проверяет сценарий, когда пользователь не найден.
-     */
+
     @Test
     public void testGetUserByEmail_WhenUserNotFound() {
 
@@ -39,25 +34,24 @@ public class UserServiceImplTest {
                 .isInstanceOf(ServiceException.class); // Проверка на ошибку сервиса
     }
 
-    /**
-     * Тест для метода {@link UserServiceImpl#saveUser(String, String, String, String)}.
-     * Проверяет сценарий, когда все данные пользователя валидны.
-     */
+
     @Test
     public void testSaveUser_WithValidData() {
         // Act & Assert
-        assertThatCode(() -> userService.saveUser(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD))
+        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        assertThatCode(() -> userService.saveUser(registrationDTO))
                 .doesNotThrowAnyException();
     }
 
-    /**
-     * Тест для метода {@link UserServiceImpl#saveUser(String, String, String, String)}.
-     * Проверяет сценарий, когда передано null в качестве имени пользователя.
-     */
+
     @Test
     public void testSaveUser_WithNullFirstName() {
+        // Создаем DTO с нулевым значением firstName
+        RegistrationDTO registrationDTO = new RegistrationDTO(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+
         // Act & Assert
-        assertThrows(ValidationException.class, () -> userService.saveUser(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD));
+        // Используем assertThrows для проверки, что при попытке сохранения пользователя будет вызвано исключение
+        assertThrows(ConstraintViolationException.class, () -> userService.saveUser(registrationDTO));
     }
 
 }

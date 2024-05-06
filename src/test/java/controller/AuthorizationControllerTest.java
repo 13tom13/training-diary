@@ -1,24 +1,23 @@
 package controller;
 
+import entities.dto.AuthorizationDTO;
+import entities.dto.UserDTO;
 import exceptions.security.AuthorizationException;
-import in.controller.authorization.implementation.AuthorizationControllerImpl;
+import in.controller.authorization.implementation.AuthorizationControllerConsole;
 import in.service.users.AuthorizationService;
-import model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
-/**
- * Тестирование класса AuthorizationControllerImpl.
- */
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationControllerTest extends TestUtil {
 
@@ -26,43 +25,36 @@ public class AuthorizationControllerTest extends TestUtil {
     private AuthorizationService authorizationService;
 
     @InjectMocks
-    private AuthorizationControllerImpl authorizationController;
+    private AuthorizationControllerConsole authorizationController;
 
-    /**
-     * Тестирование метода login с правильными учетными данными.
-     *
-     * @throws AuthorizationException если возникла ошибка авторизации
-     */
     @Test
     void loginValidCredentialsReturnsUser() throws AuthorizationException {
         // Arrange
-        User expectedUser = new User(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+        UserDTO expectedUser =  createTestUserDTO();
+
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO(TEST_EMAIL, TEST_PASSWORD);
 
         // Stubbing the service method
-        Mockito.when(authorizationService.login(TEST_EMAIL, TEST_PASSWORD)).thenReturn(expectedUser);
+        when(authorizationService.login(TEST_EMAIL, TEST_PASSWORD)).thenReturn(expectedUser);
 
         // Act
-        User actualUser = authorizationController.login(TEST_EMAIL, TEST_PASSWORD);
+        UserDTO actualUser = authorizationController.login(authorizationDTO);
 
         // Assert
         assertEquals(expectedUser, actualUser);
     }
 
-    /**
-     * Тестирование метода login с неправильными учетными данными.
-     *
-     * @throws AuthorizationException если возникла ошибка авторизации
-     */
     @Test
     void loginInvalidCredentialsThrowsAuthorizationException() throws AuthorizationException {
         // Arrange
-        String password = "wrongpass";
+        String wrongPassword = "wrongpass";
+
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO(TEST_EMAIL, wrongPassword);
 
         // Stubbing the service method to throw an exception
-        Mockito.when(authorizationService.login(TEST_EMAIL, password)).thenThrow(AuthorizationException.class);
+        when(authorizationService.login(TEST_EMAIL, wrongPassword)).thenThrow(AuthorizationException.class);
 
         // Act & Assert
-        assertThrows(AuthorizationException.class, () -> authorizationController.login(TEST_EMAIL, password));
+        assertThrows(AuthorizationException.class, () -> authorizationController.login(authorizationDTO));
     }
 }
-

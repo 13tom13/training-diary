@@ -1,19 +1,19 @@
 package in.service.users.implementation;
 
+import entities.dto.RegistrationDTO;
+import entities.model.User;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
-import exceptions.ValidationException;
-import model.User;
+import in.repository.user.UserRepository;
 import in.service.users.UserService;
-import in.repository.UserRepository;
 
 /**
- * Реализация интерфейса {@link UserService}.
- * Предоставляет методы для работы с пользователями.
+ * Реализация интерфейса {@link UserService}, предоставляющая методы для работы с пользователями.
  */
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
 
     /**
      * Конструктор для создания экземпляра класса UserServiceImpl.
@@ -33,36 +33,24 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByEmail(String email) throws ServiceException {
+
         return userRepository.getUserByEmail(email).orElseThrow(() ->
-                new ServiceException("User not found"));
+                new ServiceException("Пользователь не найден"));
     }
 
     /**
      * Сохраняет нового пользователя.
      *
-     * @param firstName имя пользователя
-     * @param lastName  фамилия пользователя
-     * @param email     электронная почта пользователя
-     * @param password  пароль пользователя
-     * @throws ValidationException если одно из полей пустое или null
+     * @param registrationDTO@throws ValidationException если одно из полей registrationDTO пустое или null
      * @throws RepositoryException если произошла ошибка доступа к репозиторию
      */
     @Override
-    public void saveUser(String firstName, String lastName, String email, String password)
-            throws ValidationException, RepositoryException {
-        if (firstName == null || firstName.isEmpty()) {
-            throw new ValidationException("firstName");
-        } else if (lastName == null || lastName.isEmpty()) {
-            throw new ValidationException("lastName");
-        } else if (email == null || email.isEmpty()) {
-            throw new ValidationException("email");
-        } else if (password == null || password.isEmpty()) {
-            throw new ValidationException("password");
-        } else {
-            User user = new User(firstName, lastName, email, password);
-            userRepository.saveUser(user);
-            System.out.println("saved user: " + user.getEmail() + "\n");
-        }
+    public void saveUser(RegistrationDTO registrationDTO)
+            throws RepositoryException {
+        User user = new User(registrationDTO.getFirstName(),
+                registrationDTO.getLastName(), registrationDTO.getEmail(), registrationDTO.getPassword());
+        userRepository.saveUser(user);
+        System.out.println("Пользователь с электронной почтой: " + user.getEmail() + " успешно сохранен");
+        System.out.println();
     }
-
 }

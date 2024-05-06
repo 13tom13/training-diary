@@ -1,13 +1,20 @@
 package out.menu.training;
 
+import config.initializer.ControllerFactory;
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
+import exceptions.InvalidDateFormatException;
+import exceptions.RepositoryException;
+import exceptions.security.rights.NoDeleteRightsException;
+import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
-import model.Training;
-import model.User;
 
-import java.util.List;
-import java.util.Scanner;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.*;
 
-import static utils.DateValidationService.isValidDateFormat;
+import static utils.Utils.enterStringDate;
+import static utils.Utils.getDateFromString;
 
 /**
  * Представляет класс для добавления и удаления тренировок пользователя.
@@ -15,20 +22,17 @@ import static utils.DateValidationService.isValidDateFormat;
 public class ViewTrainingAdded {
 
     private final TrainingController trainingController;
-    private final User user;
-    private final Scanner scanner;
+    private final UserDTO userDTO;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Создает экземпляр ViewTrainingAdded с заданным контроллером тренировок, пользователем и сканером.
      *
-     * @param trainingController Контроллер тренировок.
-     * @param user               Пользователь.
-     * @param scanner            Сканер для ввода данных.
+     * @param userDTO Пользователь.
      */
-    public ViewTrainingAdded(TrainingController trainingController, User user, Scanner scanner) {
-        this.trainingController = trainingController;
-        this.user = user;
-        this.scanner = scanner;
+    public ViewTrainingAdded(UserDTO userDTO) {
+        this.trainingController = ControllerFactory.getInstance().getTrainingController();
+        this.userDTO = userDTO;
     }
 
     /**
@@ -36,60 +40,27 @@ public class ViewTrainingAdded {
      */
     public void addTraining() {
         System.out.println("Введите данные тренировки:");
-        System.out.print("Название: ");
-        String name = chooseTrainingType();
-        System.out.print("Дата (дд.мм.гг): ");
-        String date = scanner.nextLine();
-        if (isValidDateFormat(date)) {
-            System.out.print("Продолжительность (минуты): ");
-            int duration = Integer.parseInt(scanner.nextLine());
-            System.out.print("Сожженные калории: ");
-            int caloriesBurned = Integer.parseInt(scanner.nextLine());
-            Training training = new Training(name, date, duration, caloriesBurned);
-            if (trainingController.saveTraining(user, training)) {
-                addTrainingAdditional(user, training);
-                System.out.println("Тренировка успешно сохранена.");
-            }
-        } else {
-            System.err.println("Неверный формат даты. Пожалуйста, введите дату в формате дд.мм.гг.");
+        String name;
+        try {
+            name = chooseTrainingType();
+        } catch (IOException e) {
+            System.err.println("Ошибка при получении списка типов тренировок: " + e.getMessage());
+            return;
         }
-    }
-
-    /**
-     * Метод для выбора типа тренировки.
-     *
-     * @return Выбранный тип тренировки.
-     */
-    public String chooseTrainingType() {
-        System.out.println("Выберите тип тренировки:");
-
-        List<String> trainingTypes = trainingController.getTrainingTypes(user);
-
-        for (int i = 0; i < trainingTypes.size(); i++) {
-            System.out.println((i + 1) + ". " + trainingTypes.get(i));
+        String date = enterStringDate(scanner);
+        int duration = enterTrainingDuration();
+        int caloriesBurned = enterCaloriesBurned();
+        LocalDate convertedDate = getDateFromString(date);
+        TrainingDTO trainingDTO = new TrainingDTO(name, convertedDate, duration, caloriesBurned);
+        try {
+            TrainingDTO savedTraining = trainingController.saveTraining(userDTO, trainingDTO);
+            addTrainingAdditional(savedTraining);
+            System.out.println("Тренировка успешно сохранена.");
+        } catch (InvalidDateFormatException | NoWriteRightsException | RepositoryException e) {
+            System.err.println(e.getMessage());
         }
 
-        System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
 
-        System.out.print("Ваш выбор: ");
-        int choice = scanner.nextInt();
-
-        if (choice >= 1 && choice <= trainingTypes.size()) {
-            String selectedTrainingType = trainingTypes.get(choice - 1);
-            System.out.println("Выбран тип тренировки: " + selectedTrainingType);
-            scanner.nextLine();
-            return selectedTrainingType;
-        } else if (choice == trainingTypes.size() + 1) {
-            scanner.nextLine();
-            System.out.print("Введите свой тип тренировки: ");
-            String customTrainingType = scanner.nextLine();
-            trainingController.saveTrainingType(user, customTrainingType);
-            System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
-            return customTrainingType;
-        } else {
-            System.out.println("Некорректный выбор.");
-            return null;
-        }
     }
 
     /**
@@ -97,23 +68,32 @@ public class ViewTrainingAdded {
      */
     public void deleteTraining() {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
-        String date = scanner.nextLine();
+        String trainingDate = enterStringDate(scanner);
+        TreeSet<TrainingDTO> trainingsFromDay = trainingController.getTrainingsByUserEmailAndData(userDTO, trainingDate);
+        for (TrainingDTO training : trainingsFromDay) {
+            System.out.println(training);
+        }
         System.out.print("Название: ");
         String name = scanner.nextLine();
-        trainingController.deleteTraining(user, date, name);
+        try {
+            trainingController.deleteTraining(userDTO, trainingDate, name);
+        } catch (NoDeleteRightsException e) {
+            System.err.println("нет прав на удаление: " + e.getMessage());
+        } catch (RepositoryException e) {
+            System.err.println("Ошибка при удалении тренировки: " + e.getMessage());
+        }
+        System.out.println("Тренировка успешно удалена.");
+
     }
 
     /**
      * Метод для добавления дополнительной информации о тренировке.
-     *
-     * @param user     Пользователь.
-     * @param training Тренировка, для которой добавляется информация.
      */
-    public void addTrainingAdditional(User user, Training training) {
+    public void addTrainingAdditional(TrainingDTO trainingDTO) {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
-            if (!training.getAdditions().isEmpty()) {
+            if (trainingDTO.getAdditions() != null && !trainingDTO.getAdditions().isEmpty()) {
                 System.out.println("2. Удалить дополнительную информацию?");
             }
             System.out.println("3. Выход");
@@ -127,13 +107,17 @@ public class ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-                        trainingController.addTrainingAdditional(user, training, additionalName, additionalValue);
+                        trainingDTO = trainingController.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
                     }
                     case 2 -> {
-                        if (!training.getAdditions().isEmpty()) {
+                        if (!trainingDTO.getAdditions().isEmpty()) {
+                            for (Map.Entry<String, String> entry : trainingDTO.getAdditions().entrySet()) {
+                                System.out.println(entry.getKey() + " - " + entry.getValue());
+                            }
                             System.out.println("Введите название дополнительной информации для удаления:");
+
                             String additionalNameForRemove = scanner.nextLine();
-                            trainingController.removeTrainingAdditional(user, training, additionalNameForRemove);
+                            trainingDTO = trainingController.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
                         }
                     }
                     case 3 -> {
@@ -148,4 +132,85 @@ public class ViewTrainingAdded {
             }
         }
     }
+
+    /**
+     * Метод для выбора типа тренировки.
+     *
+     * @return Выбранный тип тренировки.
+     */
+    private String chooseTrainingType() throws IOException {
+        System.out.println("Выберите тип тренировки:");
+
+        List<String> trainingTypes = trainingController.getTrainingTypes(userDTO);
+
+        for (int i = 0; i < trainingTypes.size(); i++) {
+            System.out.println((i + 1) + ". " + trainingTypes.get(i));
+        }
+
+        System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
+
+        while (true) {
+            try {
+                System.out.print("Ваш выбор: ");
+                int choice = scanner.nextInt();
+                if (choice >= 1 && choice <= trainingTypes.size()) {
+                    String selectedTrainingType = trainingTypes.get(choice - 1);
+                    System.out.println("Выбран тип тренировки: " + selectedTrainingType);
+                    scanner.nextLine(); // Очистка буфера
+                    return selectedTrainingType;
+                } else if (choice == trainingTypes.size() + 1) {
+                    scanner.nextLine(); // Очистка буфера
+                    System.out.print("Введите свой тип тренировки: ");
+                    String customTrainingType = scanner.nextLine();
+                    trainingController.saveTrainingType(userDTO, customTrainingType);
+                    System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
+                    return customTrainingType;
+                } else {
+                    System.out.println("Некорректный выбор.");
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine(); // Очистка буфера
+                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
+            }
+        }
+
+    }
+
+    private int enterTrainingDuration() {
+        while (true) {
+            int duration;
+            try {
+                System.out.print("Продолжительность (минуты): ");
+                duration = Integer.parseInt(scanner.nextLine());
+                if (duration <= 0) {
+                    System.err.println("Продолжительность должна быть положительным числом.");
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Неверный формат продолжительности. Пожалуйста, введите целое число.");
+                continue;
+            }
+            return duration;
+        }
+    }
+
+    private int enterCaloriesBurned() {
+        int caloriesBurned;
+        while (true) {
+            try {
+                System.out.print("Сожженные калории: ");
+                caloriesBurned = Integer.parseInt(scanner.nextLine());
+                if (caloriesBurned <= 0) {
+                    System.err.println("Сожженные калории должны быть положительным числом.");
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Неверный формат сожженных калорий. Пожалуйста, введите целое число.");
+                continue;
+            }
+            return caloriesBurned;
+        }
+    }
+
+
 }

@@ -1,9 +1,12 @@
 package out.menu.account;
 
+import config.initializer.ControllerFactory;
+import entities.dto.UserDTO;
+import exceptions.RepositoryException;
 import in.controller.users.AdminController;
-import model.Rights;
-import model.User;
+import entities.model.Rights;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,67 +16,80 @@ import java.util.Scanner;
 public class ViewUsersEdition {
 
     private final AdminController adminController;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewUsersEdition.
-     *
-     * @param adminController Контроллер администратора.
-     * @param scanner         Сканер для ввода данных.
      */
-    public ViewUsersEdition(AdminController adminController, Scanner scanner) {
-        this.scanner = scanner;
-        this.adminController = adminController;
+    public ViewUsersEdition() {
+        this.adminController = ControllerFactory.getInstance().getAdminController();
     }
 
     /**
      * Метод для редактирования данных пользователя.
      *
-     * @param user Пользователь, данные которого будут редактироваться.
+     * @param userDTO Пользователь, данные которого будут редактироваться.
      */
-    public void userEdition(User user) {
+    public void userEdition(UserDTO userDTO) {
         boolean editing = true;
         while (editing) {
             System.out.println();
-            System.out.println("Редактирование пользователя: " + user);
+            System.out.println("Редактирование пользователя: " + userDTO);
             System.out.println("Выберите действие:");
             System.out.println("1. изменить имя");
             System.out.println("2. изменить фамилию");
             System.out.println("3. изменить пароль");
             System.out.println("4. изменить права");
-            if (user.isActive()) {
+            if (userDTO.isActive()) {
                 System.out.println("5. деактивировать пользователя");
             } else {
                 System.out.println("5. активировать пользователя");
             }
-            System.out.println("6. удалить пользователя");
-            System.out.println("7. выход");
+            System.out.println("6. выход");
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
                     case 1:
                         String newName = getNonEmptyInput("Введите новое имя:");
-                        adminController.changeUserName(user, newName);
+                        try {
+                            userDTO = adminController.changeUserName(userDTO, newName);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка при изменении пользователя: " + e.getMessage());
+                        }
                         break;
                     case 2:
                         String newLastName = getNonEmptyInput("Введите новую фамилию:");
-                        adminController.changeUserLastName(user, newLastName);
+                        try {
+                            userDTO = adminController.changeUserLastName(userDTO, newLastName);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка при изменении пользователя: " + e.getMessage());
+                        }
                         break;
                     case 3:
                         String newPassword = getNonEmptyInput("Введите новый пароль:");
-                        adminController.changeUserPassword(user, newPassword);
+                        try {
+                            userDTO = adminController.changeUserPassword(userDTO, newPassword);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка при изменении пользователя: " + e.getMessage());
+                        }
                         break;
                     case 4:
-                        changeUserRights(user);
+                        try {
+                            changeUserRights(userDTO);
+                        } catch (IOException | RepositoryException e) {
+                            System.err.println("Ошибка при изменении прав пользователя: " + e.getMessage());
+                        }
                         break;
                     case 5:
-                        adminController.changeUserActive(user);
+                        try {
+                            userDTO = adminController.changeUserActive(userDTO);
+                        } catch (RepositoryException e) {
+                            System.err.println("Ошибка при изменении пользователя: " + e.getMessage());
+                        }
                         break;
                     case 6:
-                        adminController.deleteUser(user);
-                    case 7:
-                        System.out.println("Выход из редактирования пользователя " + user.getEmail());
+                        System.out.println("Выход из редактирования пользователя " + userDTO.getEmail());
                         editing = false;
                         break;
                     default:
@@ -108,11 +124,11 @@ public class ViewUsersEdition {
     /**
      * Метод для изменения прав пользователя.
      *
-     * @param user Пользователь, права которого будут изменены.
+     * @param userDTO Пользователь, права которого будут изменены.
      */
-    private void changeUserRights(User user) {
-        List<Rights> userRights = user.getRights();
-        List<Rights> allRights = List.of(Rights.values());
+    private void changeUserRights(UserDTO userDTO) throws IOException, RepositoryException {
+        List<Rights> userRights = userDTO.getRights();
+        List<Rights> allRights = adminController.getAllRights();
 
         // Реализуем выбор добавления, удаления или выхода
         boolean editingRights = true;
@@ -147,7 +163,7 @@ public class ViewUsersEdition {
                         int addIndex = scanner.nextInt();
                         scanner.nextLine();
                         if (addIndex >= 1 && addIndex <= allRights.size() &&
-                                !userRights.contains(allRights.get(addIndex - 1))) {
+                            !userRights.contains(allRights.get(addIndex - 1))) {
                             userRights.add(allRights.get(addIndex - 1));
                         } else {
                             System.out.println("Неверный номер права или право уже добавлено.");
@@ -164,7 +180,7 @@ public class ViewUsersEdition {
                         }
                         break;
                     case 3:
-                        adminController.changeUserRights(user, userRights);
+                        adminController.changeUserRights(userDTO, userRights);
                         editingRights = false;
                         System.out.println("Список прав пользователя обновлен");
                         break;

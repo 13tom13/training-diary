@@ -1,13 +1,16 @@
 package out.menu.training;
 
 
+import config.initializer.ControllerFactory;
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
 import in.controller.training.TrainingController;
-import model.Training;
-import model.User;
 
-import java.util.Map;
+import java.time.LocalDate;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static utils.Utils.printAllTraining;
 
 /**
  * Представляет класс для просмотра тренировок пользователя.
@@ -18,36 +21,18 @@ public class ViewTraining {
 
     /**
      * Создает экземпляр ViewTraining с заданным контроллером тренировок.
-     *
-     * @param trainingController Контроллер тренировок.
      */
-    public ViewTraining(TrainingController trainingController) {
-        this.trainingController = trainingController;
+    public ViewTraining() {
+        this.trainingController = ControllerFactory.getInstance().getTrainingController();
     }
 
     /**
      * Отображает все тренировки пользователя.
      *
-     * @param user Пользователь, чьи тренировки необходимо отобразить.
+     * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
      */
-    public void viewAllTraining(User user) {
-        TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
-        if (allTraining.isEmpty()) {
-            System.out.println("Список тренировок пуст");
-            return;
-        }
-
-        for (Map.Entry<String, TreeSet<Training>> entry : allTraining.entrySet()) {
-
-            String currentDate = entry.getKey();
-            TreeSet<Training> trainingsOnDate = entry.getValue();
-
-            System.out.println("\n" + "=====" + currentDate + "=====");
-
-            for (Training training : trainingsOnDate) {
-                System.out.println(training);
-                System.out.println("--------------------------------------------------");
-            }
-        }
+    public void viewAllTraining(UserDTO userDTO) {
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingController.getAllTrainings(userDTO);
+        printAllTraining(allTraining);
     }
 }

@@ -1,8 +1,11 @@
 package in.controller.training;
 
-import model.Training;
-import model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -14,27 +17,27 @@ public interface TrainingRetrievalController {
     /**
      * Получает все тренировки пользователя.
      *
-     * @param user пользователь, чьи тренировки нужно получить
+     * @param userDTO пользователь, чьи тренировки нужно получить
      * @return структура данных, содержащая все тренировки пользователя
      */
-    TreeMap<String, TreeSet<Training>> getAllTrainings(User user);
+    TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO);
 
     /**
      * Получает тренировки пользователя по указанной дате.
      *
-     * @param user         пользователь, чьи тренировки нужно получить
+     * @param userDTO      пользователь, чьи тренировки нужно получить
      * @param trainingDate дата тренировки, для которой нужно получить список тренировок
      * @return список тренировок пользователя по указанной дате
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, String trainingDate);
+    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate);
 
     /**
      * Получает тренировку пользователя по указанной дате и имени.
      *
-     * @param user         пользователь, чьи тренировки нужно получить
+     * @param userDTO      пользователь, чьи тренировки нужно получить
      * @param trainingDate дата тренировки, для которой нужно получить тренировку
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, String trainingDate, String trainingName);
+    TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException;
 }

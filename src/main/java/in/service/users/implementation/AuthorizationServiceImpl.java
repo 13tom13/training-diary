@@ -1,16 +1,20 @@
 package in.service.users.implementation;
 
+import entities.dto.UserDTO;
+import entities.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
-import model.User;
-import in.repository.UserRepository;
+import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
+import servlet.utils.annotations.Loggable;
+import utils.mappers.UserMapper;
 
 import java.util.Optional;
 
 /**
  * Реализация сервиса аутентификации пользователей.
  */
+@Loggable
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
@@ -34,20 +38,20 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @throws NotActiveUserException    если пользователь не активен
      */
     @Override
-    public User login(String email, String password) throws AuthorizationException, NotActiveUserException {
-        Optional<User> user = userRepository.getUserByEmail(email);
-        if (user.isPresent()) {
-            if (user.get().getPassword().equals(password)) {
-                if (user.get().isActive()){
-                    return user.get();
+    public UserDTO login(String email, String password) throws AuthorizationException, NotActiveUserException {
+        Optional<User> userFromDB = userRepository.getUserByEmail(email);
+        if (userFromDB.isPresent()) {
+            if (userFromDB.get().getPassword().equals(password)) {
+                if (userFromDB.get().isActive()){
+                    return UserMapper.INSTANCE.userToUserDTO(userFromDB.get());
                 } else {
                     throw new NotActiveUserException();
                 }
             } else {
-                throw new AuthorizationException("Wrong password");
+                throw new AuthorizationException("Пароль не верный");
             }
         } else {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException("Пользователь не найден");
         }
     }
 }

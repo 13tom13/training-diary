@@ -1,17 +1,23 @@
 package in.controller.users;
 
+import entities.dto.RegistrationDTO;
+import jakarta.validation.Validator;
+import utils.ValidatorFactoryProvider;
+
+import java.io.IOException;
+
 /**
  * Интерфейс контроллера пользователей.
  */
 public interface UserController {
 
+    Validator validator = ValidatorFactoryProvider.getValidator();
+
     /**
      * Создает нового пользователя с заданными данными.
      *
-     * @param firstName имя нового пользователя
-     * @param lastName  фамилия нового пользователя
-     * @param email     адрес электронной почты нового пользователя
-     * @param password  пароль нового пользователя
+     * @param registrationDTO
      */
-    void createNewUser(String firstName, String lastName, String email, String password);
+    void createNewUser(RegistrationDTO registrationDTO) throws IOException;
 }
+

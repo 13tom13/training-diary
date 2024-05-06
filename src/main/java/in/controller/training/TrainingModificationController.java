@@ -1,7 +1,14 @@
 package in.controller.training;
 
-import model.Training;
-import model.User;
+import entities.dto.TrainingDTO;
+import entities.dto.UserDTO;
+import exceptions.InvalidDateFormatException;
+import exceptions.RepositoryException;
+import exceptions.security.rights.NoDeleteRightsException;
+import exceptions.security.rights.NoWriteRightsException;
+
+
+import java.time.LocalDate;
 
 /**
  * Интерфейс, определяющий методы для модификации тренировок.
@@ -11,73 +18,79 @@ public interface TrainingModificationController {
     /**
      * Сохраняет новую тренировку для пользователя.
      *
-     * @param user     пользователь, для которого сохраняется тренировка
-     * @param training тренировка, которую нужно сохранить
+     * @param userDTO     пользователь, для которого сохраняется тренировка
+     * @param trainingDTO тренировка, которую нужно сохранить
      * @return true, если тренировка успешно сохранена, в противном случае false
      */
-    boolean saveTraining(User user, Training training);
+    TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException;
 
     /**
      * Удаляет тренировку пользователя по указанной дате и имени.
      *
-     * @param user пользователь, для которого удаляется тренировка
-     * @param date дата тренировки
-     * @param name имя тренировки
+     * @param userDTO пользователь, для которого удаляется тренировка
+     * @param date    дата тренировки
+     * @param name    имя тренировки
      */
-    void deleteTraining(User user, String date, String name);
+    void deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
      *
-     * @param user            пользователь, для которого добавляется информация
-     * @param training        тренировка, к которой добавляется информация
+     * @param userDTO         пользователь, для которого добавляется информация
+     * @param trainingDTO     тренировка, к которой добавляется информация
      * @param additionalName  название дополнительной информации
      * @param additionalValue значение дополнительной информации
+     * @return измененная тренировка
      */
-    void addTrainingAdditional(User user, Training training, String additionalName, String additionalValue);
+    TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue);
 
     /**
      * Удаляет дополнительную информацию из тренировки.
      *
-     * @param user           пользователь, для которого удаляется информация
-     * @param training       тренировка, из которой удаляется информация
+     * @param userDTO        пользователь, для которого удаляется информация
+     * @param trainingDTO    тренировка, из которой удаляется информация
      * @param additionalName название дополнительной информации
+     * @return измененная тренировка
      */
-    void removeTrainingAdditional(User user, Training training, String additionalName);
+    TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName);
 
     /**
      * Изменяет имя тренировки.
      *
-     * @param user     пользователь, для которого изменяется имя тренировки
-     * @param training тренировка, у которой изменяется имя
-     * @param newName  новое имя тренировки
+     * @param userDTO     пользователь, для которого изменяется имя тренировки
+     * @param trainingDTO тренировка, у которой изменяется имя
+     * @param newName     новое имя тренировки
+     * @return измененная тренировка
      */
-    void changeNameTraining(User user, Training training, String newName);
+    TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет дату тренировки.
      *
-     * @param user     пользователь, для которого изменяется дата тренировки
-     * @param training тренировка, у которой изменяется дата
-     * @param newDate  новая дата тренировки
+     * @param userDTO     пользователь, для которого изменяется дата тренировки
+     * @param trainingDTO тренировка, у которой изменяется дата
+     * @param newDate     новая дата тренировки
+     * @return измененная тренировка
      */
-    void changeDateTraining(User user, Training training, String newDate);
+    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException;
 
     /**
      * Изменяет продолжительность тренировки.
      *
-     * @param user        пользователь, для которого изменяется продолжительность тренировки
-     * @param training    тренировка, у которой изменяется продолжительность
+     * @param userDTO     пользователь, для которого изменяется продолжительность тренировки
+     * @param trainingDTO тренировка, у которой изменяется продолжительность
      * @param newDuration новая продолжительность тренировки
+     * @return измененная тренировка
      */
-    void changeDurationTraining(User user, Training training, String newDuration);
+    TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param user          пользователь, для которого изменяется количество калорий на тренировке
-     * @param training      тренировка, у которой изменяется количество калорий
-     * @param newCalories   новое количество сожженных калорий
+     * @param userDTO     пользователь, для которого изменяется количество калорий на тренировке
+     * @param trainingDTO тренировка, у которой изменяется количество калорий
+     * @param newCalories новое количество сожженных калорий
+     * @return измененная тренировка
      */
-    void changeCaloriesTraining(User user, Training training, String newCalories);
+    TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException;
 }

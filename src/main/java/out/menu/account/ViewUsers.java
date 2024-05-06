@@ -1,8 +1,10 @@
 package out.menu.account;
 
+import config.initializer.ControllerFactory;
+import entities.dto.UserDTO;
+import entities.model.User;
+import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
-import in.controller.training.TrainingController;
-import model.User;
 import out.menu.training.ViewTraining;
 
 import java.io.BufferedReader;
@@ -21,20 +23,16 @@ public class ViewUsers {
     private final AdminController adminController;
     private final ViewTraining viewTraining;
     private final ViewUsersEdition viewUsersEdition;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Конструктор класса ViewUsers.
      *
-     * @param adminController    Контроллер администратора.
-     * @param trainingController Контроллер тренировок.
-     * @param scanner            Сканер для ввода данных.
      */
-    public ViewUsers(AdminController adminController, TrainingController trainingController, Scanner scanner) {
-        this.adminController = adminController;
-        this.viewTraining = new ViewTraining(trainingController);
-        this.viewUsersEdition = new ViewUsersEdition(adminController, scanner);
-        this.scanner = scanner;
+    public ViewUsers() {
+        this.adminController = ControllerFactory.getInstance().getAdminController();
+        this.viewTraining = new ViewTraining();
+        this.viewUsersEdition = new ViewUsersEdition();
     }
 
     /**
@@ -54,38 +52,46 @@ public class ViewUsers {
     public void viewUser() {
         System.out.println("Введите email пользователя для редактирования:");
         String email = scanner.nextLine();
-        User user = adminController.getUser(email);
-        if (user != null) {
-            userViewMenu(user);
-        } else {
-            System.out.println("Пользователь с email " + email + " не найден.");
+        try {
+            UserDTO userDTO = adminController.getUser(email);
+            userViewMenu(userDTO);
+        } catch (UserNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Ошибка ввода данных: " + e.getMessage());
         }
     }
 
     /**
      * Метод для отображения меню действий с пользователем.
      *
-     * @param user Пользователь, для которого отображается меню.
+     * @param userDTO Пользователь, для которого отображается меню.
      */
-    public void userViewMenu(User user) {
+    public void userViewMenu(UserDTO userDTO) {
         boolean view = true;
         while (view) {
             System.out.println();
-            System.out.println(user);
+            System.out.println(userDTO);
             System.out.println("Выберите действие:");
             System.out.println("1. редактировать пользователя");
             System.out.println("2. просмотр тренировок пользователя");
             System.out.println("3. просмотр логов пользователя");
-            System.out.println("4. выход");
+            System.out.println("4. удалить пользователя");
+            System.out.println("5. выход");
             if (scanner.hasNextInt()) {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case 1 -> viewUsersEdition.userEdition(user);
-                    case 2 -> viewTraining.viewAllTraining(user);
-                    case 3 -> viewLogsUser(user);
+                    case 1 -> viewUsersEdition.userEdition(userDTO);
+                    case 2 -> viewTraining.viewAllTraining(userDTO);
+                    case 3 -> viewLogsUser(userDTO);
                     case 4 -> {
-                        System.out.println("Выход из просмотра пользователя " + user.getEmail());
+                        adminController.deleteUser(userDTO);
+                        System.err.println("Пользователь с email: " + userDTO.getEmail() + " удален.");
+                        view = false;
+                    }
+                    case 5 -> {
+                        System.out.println("Выход из просмотра пользователя " + userDTO.getEmail());
                         view = false;
                     }
                     default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
@@ -100,10 +106,10 @@ public class ViewUsers {
     /**
      * Метод для просмотра логов пользователя.
      *
-     * @param user Пользователь, чьи логи просматриваются.
+     * @param userDTO Пользователь, чьи логи просматриваются.
      */
-    private void viewLogsUser(User user) {
-        String userEmail = user.getEmail();
+    private void viewLogsUser(UserDTO userDTO) {
+        String userEmail = userDTO.getEmail();
         String fileName = LOGS_PATH + "/" + userEmail.replace("@", "_") + ".log";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {

@@ -1,6 +1,6 @@
 package exceptions;
 
-import static utils.DateValidationService.DATE_FORMAT;
+import static utils.Utils.DATE_FORMAT;
 
 /**
  * Класс InvalidDateFormatException представляет исключение, которое выбрасывается при неверном формате даты.
