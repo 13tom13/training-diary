@@ -1,4 +1,4 @@
-package servlet.utils.annotations;
+package utils.annotations;
 
 
 import java.lang.annotation.ElementType;

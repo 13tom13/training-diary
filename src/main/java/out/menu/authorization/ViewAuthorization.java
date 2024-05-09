@@ -6,10 +6,14 @@ import entity.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.users.UserController;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
+import out.messengers.AdminMessenger;
+import out.messengers.AuthorizationMessenger;
+import out.messengers.UserMessenger;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -20,24 +24,14 @@ import static utils.Utils.hisRole;
  * Класс ViewAuthorization представляет собой меню для авторизации и регистрации пользователей.
  */
 @Component
+@RequiredArgsConstructor
 public class ViewAuthorization {
 
-    private final AuthorizationController authorizationController;
-    private final UserController userController;
+    private final AuthorizationMessenger authorizationMessenger;
+    private final UserMessenger userMessenger;
     private final Scanner scanner = new Scanner(System.in);
-    private ViewAdminAccount viewAdminAccount;
-    private ViewUserAccount viewUserAccount;
-
-    /**
-     * Конструктор класса ViewAuthorization.
-     *
-     */
-    @Autowired
-    public ViewAuthorization(AuthorizationController authorizationController, UserController userController) {
-
-        this.authorizationController = authorizationController;
-        this.userController = userController;
-    }
+    private final ViewAdminAccount viewAdminAccount;
+    private final ViewUserAccount viewUserAccount;
 
     /**
      * Метод для авторизации пользователя.
@@ -49,14 +43,16 @@ public class ViewAuthorization {
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
         try {
-            UserDTO userDTO = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
-            if (hisRole(userDTO,"ADMIN")) {
-                viewAdminAccount.adminAccountMenu();
-            } else if (hisRole(userDTO,"USER")) {
-                viewUserAccount.setUserDTO(userDTO);
-                viewUserAccount.userAccountMenu();
-            }
-        } catch (AuthorizationException | IOException e) {
+            AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
+            UserDTO userDTO = authorizationMessenger.login(authorizationDTO);
+            System.out.println("UserDTO from messenger: " + userDTO);
+//            if (hisRole(userDTO,"ADMIN")) {
+//                viewAdminAccount.adminAccountMenu();
+//            } else if (hisRole(userDTO,"USER")) {
+//                viewUserAccount.setUserDTO(userDTO);
+//                viewUserAccount.userAccountMenu();
+//            }
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -77,7 +73,7 @@ public class ViewAuthorization {
         String regPassword = scanner.nextLine();
         RegistrationDTO regDTO = new RegistrationDTO(regEmail, regFirstName, regLastName, regPassword);
         try {
-            userController.createNewUser(regDTO);
+            userMessenger.registration(regDTO);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

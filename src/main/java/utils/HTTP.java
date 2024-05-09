@@ -27,7 +27,7 @@ public class HTTP {
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                 return sendResponse(connection);
             } else {
-                throw new IOException("HTTP error code: " + responseCode);
+                throw new IOException("HTTP error code: " + connection.getResponseMessage());
             }
         } finally {
             if (connection != null) {

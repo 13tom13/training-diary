@@ -1,6 +1,5 @@
 package config;
 
-import config.database.CollectionsMigrations;
 import config.database.LiquibaseConnector;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
@@ -27,15 +26,6 @@ public class ApplicationConfig {
         }
     }
 
-    public static void liquibaseMigrations() {
-        LiquibaseConnector connector = new LiquibaseConnector();
-        connector.runMigrations();
-    }
-
-    public static void collectionsMigrations(UserRepository userRepository, TrainingRepository trainingRepository) {
-        CollectionsMigrations collectionsMigrations = new CollectionsMigrations(userRepository, trainingRepository);
-        collectionsMigrations.runMigrations();
-    }
     public static String getRootURL() {
         return PROPERTIES.getProperty("application.url");
     }

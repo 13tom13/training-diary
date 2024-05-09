@@ -1,12 +1,17 @@
 package config.database;
 
+import jakarta.annotation.PostConstruct;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,19 +19,24 @@ import java.sql.SQLException;
 
 import static config.ApplicationConfig.*;
 
+@Component
 public class LiquibaseConnector {
-    private final String url = getDbUrl();
-    private final String username = getDbUsername();
-    private final String password = getDbPassword();
-    private final String changelogFilePath = getChangeLogFile();
-    private final String schema = getDefaultDbSchema();
 
 
-    public LiquibaseConnector() {
+    private final DataSource dataSource;
+
+    @Value("${liquibase.changelog}")
+    private String changelogFilePath;
+    @Value("${db.default.schema}")
+    private String schema;
+    @Autowired
+    public LiquibaseConnector(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
+    @PostConstruct
     public void runMigrations() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = dataSource.getConnection()) {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             createDefaultSchema(connection, schema);
             database.setLiquibaseSchemaName(schema);
@@ -36,7 +46,6 @@ public class LiquibaseConnector {
             System.out.println("Liquibase update executed successfully.\n");
 
         } catch (SQLException | LiquibaseException e) {
-
             System.out.println("Liquibase update with exception" + e.getMessage());
         }
     }

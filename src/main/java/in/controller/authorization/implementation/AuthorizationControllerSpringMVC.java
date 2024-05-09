@@ -20,14 +20,14 @@ public class AuthorizationControllerSpringMVC implements AuthorizationController
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody AuthorizationDTO authorizationDTO) {
+    public ResponseEntity<?> login(@RequestBody AuthorizationDTO authorizationDTO) {
         String email = authorizationDTO.getEmail();
         String password = authorizationDTO.getPassword();
         try {
             UserDTO userDTO = authorizationService.login(email, password);
             return ResponseEntity.ok(userDTO);
         } catch (AuthorizationException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 }

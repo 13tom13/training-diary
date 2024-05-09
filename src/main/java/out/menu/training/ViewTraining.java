@@ -18,24 +18,24 @@ import static utils.Utils.printAllTraining;
  */
 @Component
 public class ViewTraining {
-
-    private final TrainingController trainingController;
-
-    /**
-     * Создает экземпляр ViewTraining с заданным контроллером тренировок.
-     */
-    @Autowired
-    public ViewTraining(TrainingController trainingController) {
-        this.trainingController = trainingController;
-    }
-
-    /**
-     * Отображает все тренировки пользователя.
-     *
-     * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
-     */
-    public void viewAllTraining(UserDTO userDTO) {
-        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingController.getAllTrainings(userDTO);
-        printAllTraining(allTraining);
-    }
+//
+//    private final TrainingController trainingController;
+//
+//    /**
+//     * Создает экземпляр ViewTraining с заданным контроллером тренировок.
+//     */
+//    @Autowired
+//    public ViewTraining(TrainingController trainingController) {
+//        this.trainingController = trainingController;
+//    }
+//
+//    /**
+//     * Отображает все тренировки пользователя.
+//     *
+//     * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
+//     */
+//    public void viewAllTraining(UserDTO userDTO) {
+//        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingController.getAllTrainings(userDTO);
+//        printAllTraining(allTraining);
+//    }
 }

@@ -1,6 +1,5 @@
 package out;
 
-import config.initializer.ControllerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import out.menu.ViewMenu;

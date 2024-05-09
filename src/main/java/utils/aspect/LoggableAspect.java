@@ -1,4 +1,4 @@
-package servlet.utils.aspect;
+package utils.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class LoggableAspect {
 
-    @Pointcut("within(@servlet.utils.annotations.Loggable *) && execution(* *(..))")
+    @Pointcut("within(@utils.annotations.Loggable *) && execution(* *(..))")
     public void annotatedByLoggable() {}
 
     @Around("annotatedByLoggable()")

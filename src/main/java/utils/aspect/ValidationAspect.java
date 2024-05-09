@@ -1,4 +1,4 @@
-package servlet.utils.aspect;
+package utils.aspect;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.aspectj.lang.ProceedingJoinPoint;

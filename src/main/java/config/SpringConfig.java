@@ -1,5 +1,6 @@
 package config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -7,12 +8,13 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = " ")
+@ComponentScan(basePackages = {"in", "out", "config", "utils"})
 public class SpringConfig implements WebMvcConfigurer {
 
     @Override
@@ -20,5 +22,10 @@ public class SpringConfig implements WebMvcConfigurer {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
                 .indentOutput(true);
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

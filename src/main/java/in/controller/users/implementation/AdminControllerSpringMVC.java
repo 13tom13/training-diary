@@ -22,6 +22,8 @@ import java.util.Optional;
 public class AdminControllerSpringMVC implements AdminController {
 
     private final UserRepository userRepository;
+    
+    private final UserMapper userMapper;
 
     @Override
     @GetMapping("/users")
@@ -35,7 +37,7 @@ public class AdminControllerSpringMVC implements AdminController {
     public ResponseEntity<UserDTO> getUser(@RequestParam("email") String email) {
         Optional<User> userByEmail = userRepository.getUserByEmail(email);
         if (userByEmail.isPresent()) {
-            UserDTO userDTO = UserMapper.INSTANCE.userToUserDTO(userByEmail.get());
+            UserDTO userDTO = userMapper.userToUserDTO(userByEmail.get());
             return ResponseEntity.ok(userDTO);
         } else {
             return ResponseEntity.notFound().build();
@@ -50,7 +52,7 @@ public class AdminControllerSpringMVC implements AdminController {
             User user = userByEmail.get();
             user.setFirstName(newName);
             userRepository.updateUser(user);
-            return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(user));
+            return ResponseEntity.ok(userMapper.userToUserDTO(user));
         }
         return ResponseEntity.notFound().build();
     }
@@ -63,7 +65,7 @@ public class AdminControllerSpringMVC implements AdminController {
             User user = userByEmail.get();
             user.setLastName(newLastName);
             userRepository.updateUser(user);
-            return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(user));
+            return ResponseEntity.ok(userMapper.userToUserDTO(user));
         }
         return ResponseEntity.notFound().build();
     }
@@ -76,7 +78,7 @@ public class AdminControllerSpringMVC implements AdminController {
             User user = userByEmail.get();
             user.setPassword(newPassword);
             userRepository.updateUser(user);
-            return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(user));
+            return ResponseEntity.ok(userMapper.userToUserDTO(user));
         }
         return ResponseEntity.notFound().build();
     }
@@ -89,7 +91,7 @@ public class AdminControllerSpringMVC implements AdminController {
             User user = userByEmail.get();
             user.setActive(!user.isActive());
             userRepository.updateUser(user);
-            return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(user));
+            return ResponseEntity.ok(userMapper.userToUserDTO(user));
         }
         return ResponseEntity.notFound().build();
     }
@@ -102,7 +104,7 @@ public class AdminControllerSpringMVC implements AdminController {
             User user = userByEmail.get();
             user.setRights(userRights);
             userRepository.updateUser(user);
-            return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(user));
+            return ResponseEntity.ok(userMapper.userToUserDTO(user));
         }
         return ResponseEntity.notFound().build();
     }

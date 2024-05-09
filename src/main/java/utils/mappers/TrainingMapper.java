@@ -7,13 +7,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
-@Mapper
+@Component
+@Mapper(componentModel = "spring")
 public interface TrainingMapper {
-
-    TrainingMapper INSTANCE = Mappers.getMapper(TrainingMapper.class);
 
     @Mappings({
             @Mapping(target = "name", source = "name"),

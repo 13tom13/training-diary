@@ -6,9 +6,9 @@ import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import servlet.utils.annotations.Loggable;
+import utils.annotations.Loggable;
 import utils.mappers.UserMapper;
 
 import java.util.Optional;
@@ -18,19 +18,12 @@ import java.util.Optional;
  */
 @Loggable
 @Service
+@RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
 
-    /**
-     * Конструктор для создания объекта класса AuthorizationServiceImpl.
-     *
-     * @param userRepository репозиторий пользователей
-     */
-    @Autowired
-    public AuthorizationServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserMapper userMapper;
 
     /**
      * Вход пользователя в систему.
@@ -47,7 +40,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (userFromDB.isPresent()) {
             if (userFromDB.get().getPassword().equals(password)) {
                 if (userFromDB.get().isActive()){
-                    return UserMapper.INSTANCE.userToUserDTO(userFromDB.get());
+                    return userMapper.userToUserDTO(userFromDB.get());
                 } else {
                     throw new NotActiveUserException();
                 }
