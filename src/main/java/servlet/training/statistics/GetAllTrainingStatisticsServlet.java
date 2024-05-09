@@ -1,6 +1,6 @@
 package servlet.training.statistics;
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.security.rights.NoStatisticsRightsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +12,10 @@ import static servlet.utils.ServletUtils.getJsonParamFromRequest;
 import static servlet.utils.ServletUtils.writeJsonResponse;
 
 public class GetAllTrainingStatisticsServlet extends TrainingStatisticsServlet {
+
+    public GetAllTrainingStatisticsServlet() {
+        super();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

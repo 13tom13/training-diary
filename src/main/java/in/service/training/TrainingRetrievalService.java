@@ -1,11 +1,10 @@
 package in.service.training;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.TreeMap;
 import java.util.TreeSet;
 

@@ -1,7 +1,9 @@
 package out.menu.account;
 
-import entities.dto.UserDTO;
-import out.menu.statistic.ViewTrainingStatistcs;
+import entity.dto.UserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import out.menu.statistic.ViewTrainingStatistics;
 import out.menu.training.ViewTrainingAdded;
 import out.menu.training.ViewTrainingEditing;
 import out.menu.training.ViewTraining;
@@ -12,27 +14,30 @@ import java.util.Scanner;
 /**
  * Класс ViewUserAccount представляет меню для управления аккаунтом пользователя.
  */
+@Component
 public class ViewUserAccount {
     private final ViewTraining viewTraining;
     private final ViewTrainingAdded viewTrainingAdded;
     private final ViewTrainingEditing viewTrainingEditing;
-    private final ViewTrainingStatistcs viewTrainingStatistcs;
+    private final ViewTrainingStatistics viewTrainingStatistics;
     private final Scanner scanner = new Scanner(System.in);
-    private final UserDTO userDTO;
+    private UserDTO userDTO;
     private static final Logger logger = Logger.getInstance();
 
     /**
      * Конструктор класса ViewUserAccount.
      *
-     * @param userDTO Пользователь.
      */
-    public ViewUserAccount(UserDTO userDTO) {
-        this.userDTO = userDTO;
-        this.viewTraining = new ViewTraining();
-        this.viewTrainingAdded = new ViewTrainingAdded(userDTO);
-        this.viewTrainingEditing = new ViewTrainingEditing(userDTO, viewTrainingAdded);
-        this.viewTrainingStatistcs = new ViewTrainingStatistcs(userDTO);
+    @Autowired
+    public ViewUserAccount(ViewTraining viewTraining, ViewTrainingAdded viewTrainingAdded, ViewTrainingEditing viewTrainingEditing, ViewTrainingStatistics viewTrainingStatistics) {
+        this.viewTraining = viewTraining;
+        this.viewTrainingAdded = viewTrainingAdded;
+        this.viewTrainingEditing = viewTrainingEditing;
+        this.viewTrainingStatistics = viewTrainingStatistics;
+    }
 
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     /**
@@ -41,6 +46,7 @@ public class ViewUserAccount {
     public void userAccountMenu() {
         boolean startAccount = true;
         while (startAccount) {
+            viewTrainingStatistics.setUserDTO(userDTO);
             System.out.printf("\nДобро пожаловать %s %s!\n", userDTO.getFirstName(), userDTO.getLastName());
             System.out.println("Выберите действие:");
             System.out.println("1. Просмотр всех тренировок");
@@ -57,7 +63,7 @@ public class ViewUserAccount {
                     case 2 -> viewTrainingAdded.addTraining();
                     case 3 -> viewTrainingAdded.deleteTraining();
                     case 4 -> viewTrainingEditing.editingTraining();
-                    case 5 -> viewTrainingStatistcs.statisticMenu();
+                    case 5 -> viewTrainingStatistics.statisticMenu();
                     case 6 -> {
                         logger.logAction(userDTO.getEmail(), "logout");
                         System.out.println("Выход из аккаунта пользователя " + userDTO.getEmail());

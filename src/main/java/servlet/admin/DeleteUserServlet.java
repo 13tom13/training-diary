@@ -1,7 +1,7 @@
 package servlet.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import entities.model.User;
+import entity.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

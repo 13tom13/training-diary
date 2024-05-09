@@ -1,11 +1,12 @@
 package in.controller.training;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoWriteRightsException;
+import org.springframework.http.ResponseEntity;
 
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public interface TrainingModificationController {
      * @param trainingDTO тренировка, которую нужно сохранить
      * @return true, если тренировка успешно сохранена, в противном случае false
      */
-    TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException;
+    ResponseEntity<?> saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException;
 
     /**
      * Удаляет тренировку пользователя по указанной дате и имени.
@@ -30,8 +31,9 @@ public interface TrainingModificationController {
      * @param userDTO пользователь, для которого удаляется тренировка
      * @param date    дата тренировки
      * @param name    имя тренировки
+     * @return
      */
-    void deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException;
+    ResponseEntity<?> deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
@@ -42,7 +44,7 @@ public interface TrainingModificationController {
      * @param additionalValue значение дополнительной информации
      * @return измененная тренировка
      */
-    TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue);
+    ResponseEntity<?> addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue);
 
     /**
      * Удаляет дополнительную информацию из тренировки.
@@ -52,7 +54,7 @@ public interface TrainingModificationController {
      * @param additionalName название дополнительной информации
      * @return измененная тренировка
      */
-    TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName);
+    ResponseEntity<?> removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName);
 
     /**
      * Изменяет имя тренировки.
@@ -62,7 +64,7 @@ public interface TrainingModificationController {
      * @param newName     новое имя тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException;
+    ResponseEntity<?> changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет дату тренировки.
@@ -72,7 +74,7 @@ public interface TrainingModificationController {
      * @param newDate     новая дата тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException;
+    ResponseEntity<?> changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException;
 
     /**
      * Изменяет продолжительность тренировки.
@@ -82,7 +84,7 @@ public interface TrainingModificationController {
      * @param newDuration новая продолжительность тренировки
      * @return измененная тренировка
      */
-    TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException;
+    ResponseEntity<?> changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
@@ -92,5 +94,5 @@ public interface TrainingModificationController {
      * @param newCalories новое количество сожженных калорий
      * @return измененная тренировка
      */
-    TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException;
+    ResponseEntity<?> changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException;
 }

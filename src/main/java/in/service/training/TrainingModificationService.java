@@ -1,7 +1,7 @@
 package in.service.training;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -9,7 +9,6 @@ import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * Интерфейс для модификации данных о тренировках.

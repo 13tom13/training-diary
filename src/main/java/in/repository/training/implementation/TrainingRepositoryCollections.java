@@ -1,9 +1,9 @@
 package in.repository.training.implementation;
 
-import entities.model.User;
+import entity.model.User;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
-import entities.model.Training;
+import entity.model.Training;
 
 import java.time.LocalDate;
 import java.util.*;

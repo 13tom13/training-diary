@@ -15,7 +15,7 @@ public abstract class TrainingServlet extends HttpServlet {
     public TrainingServlet() {
         try {
             Class.forName("org.postgresql.Driver");
-            this.trainingService = ServiceFactory.getTrainingService();
+            this.trainingService = null;
             this.objectMapper = getObjectMapper();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

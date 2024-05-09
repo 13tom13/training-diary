@@ -1,10 +1,13 @@
 package in.repository.training.implementation;
 
-import entities.model.User;
+import entity.model.Training;
+import entity.model.User;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
-import entities.model.Training;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -15,16 +18,18 @@ import java.util.TreeSet;
  * Реализация интерфейса {@link TrainingRepository} для хранения тренировок.
  * Этот класс обеспечивает методы для сохранения, получения и удаления тренировок пользователя.
  */
+@Repository
+@RequiredArgsConstructor
 public class TrainingRepositoryJDBC implements TrainingRepository {
 
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    /**
-     * Создает новый экземпляр класса TrainingRepositoryCollections.
-     * Инициализирует внутреннюю структуру данных для хранения тренировок пользователей.
-     */
-    public TrainingRepositoryJDBC(Connection connection) {
-        this.connection = connection;
+    private Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -36,16 +41,17 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(User user) {
+        Connection connection = getConnection();
         TreeMap<LocalDate, TreeSet<Training>> userTrainingMap = new TreeMap<>();
         String sql = """
-            SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
-                   ta.key AS addition_key, ta.value AS addition_value
-            FROM main.trainings t
-            JOIN relations.user_trainings ut ON t.id = ut.training_id
-            JOIN main.users u ON u.id = ut.user_id
-            LEFT JOIN main.training_additions ta ON t.id = ta.training_id
-            WHERE u.email = ?
-            """;
+                SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
+                       ta.key AS addition_key, ta.value AS addition_value
+                FROM main.trainings t
+                JOIN relations.user_trainings ut ON t.id = ut.training_id
+                JOIN main.users u ON u.id = ut.user_id
+                LEFT JOIN main.training_additions ta ON t.id = ta.training_id
+                WHERE u.email = ?
+                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
@@ -66,7 +72,6 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     }
 
 
-
     /**
      * Получает тренировки пользователя по его адресу электронной почты и дате тренировки.
      * Если пользователь с указанным адресом не найден или тренировка на указанную дату отсутствует,
@@ -79,6 +84,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public TreeSet<Training> getTrainingsByUserEmailAndData(User user, LocalDate trainingDate) throws RepositoryException {
+        Connection connection = getConnection();
         TreeSet<Training> trainingsOnDate = new TreeSet<>();
         String sql = """
                 SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned
@@ -87,14 +93,6 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
                 JOIN main.users u ON u.id = ut.user_id
                 WHERE u.email = ? AND t.date = ?
                 """;
-//        System.out.println("LocalDate from rep: " + trainingDate);
-//        Date date = Date.valueOf(trainingDate);
-//        System.out.println("sql Date from rep: " + date);
-//        System.out.println("compare date: " + date.compareTo( Date.valueOf(trainingDate)));
-//        LocalDate example = LocalDate.of(2024, 4, 24);
-//        System.out.println("example date: " + example);
-//        System.out.println("compare to date example: " + date.compareTo( Date.valueOf(example)));
-
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
             statement.setDate(2, Date.valueOf(trainingDate));
@@ -129,15 +127,16 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public Training getTrainingByUserEmailAndDataAndName(User user, LocalDate trainingDate, String trainingName) throws RepositoryException {
+        Connection connection = getConnection();
         String sql = """
-            SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
-                   ta.key AS addition_key, ta.value AS addition_value
-            FROM main.trainings t
-            JOIN relations.user_trainings ut ON t.id = ut.training_id
-            JOIN main.users u ON u.id = ut.user_id
-            LEFT JOIN main.training_additions ta ON t.id = ta.training_id
-            WHERE u.email = ? AND t.date = ? AND t.name = ?
-            """;
+                SELECT t.id AS training_id, t.name, t.date, t.duration, t.calories_burned,
+                       ta.key AS addition_key, ta.value AS addition_value
+                FROM main.trainings t
+                JOIN relations.user_trainings ut ON t.id = ut.training_id
+                JOIN main.users u ON u.id = ut.user_id
+                LEFT JOIN main.training_additions ta ON t.id = ta.training_id
+                WHERE u.email = ? AND t.date = ? AND t.name = ?
+                """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
             statement.setDate(2, Date.valueOf(trainingDate));
@@ -155,7 +154,6 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
     }
 
 
-
     /**
      * Сохраняет новую тренировку пользователя.
      * Если для указанного пользователя уже существует тренировка на указанную дату с тем же именем,
@@ -168,6 +166,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public Training saveTraining(User user, Training newTraining) throws RepositoryException {
+        Connection connection = getConnection();
         String sqlInsertTraining = """
                 INSERT INTO main.trainings (name, date, duration, calories_burned)
                 VALUES (?, ?, ?, ?)
@@ -222,6 +221,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public void deleteTraining(User user, Training training) throws RepositoryException {
+        Connection connection = getConnection();
         String sqlDeleteUserTraining = """
                 DELETE FROM relations.user_trainings
                 WHERE user_id = ? AND training_id = ?
@@ -283,6 +283,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
      */
     @Override
     public Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException {
+        Connection connection = getConnection();
         String sqlSelectUser = """
                 SELECT *
                 FROM main.users
@@ -344,6 +345,7 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
 
     public void saveTrainingAdditionals(Training training) throws RepositoryException {
+        Connection connection = getConnection();
         HashMap<String, String> additionals = training.getAdditions();
         if (additionals.isEmpty()) {
             return; // Если дополнительной информации нет, нет смысла сохранять
@@ -352,9 +354,9 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
             // Удаляем существующие записи о дополнительной информации
             deleteTrainingAdditionals(training.getId());
             String insertSql = """
-                   INSERT INTO main.training_additions (training_id, key, value)
-                   VALUES (?, ?, ?)
-                   """;
+                    INSERT INTO main.training_additions (training_id, key, value)
+                    VALUES (?, ?, ?)
+                    """;
             try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
                 connection.setAutoCommit(false);
                 for (String key : additionals.keySet()) {
@@ -378,10 +380,11 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
 
     public void deleteTrainingAdditionals(long trainingId) throws RepositoryException {
+        Connection connection = getConnection();
         String deleteSql = """
-                   DELETE FROM main.training_additions
-                   WHERE training_id = ?
-                   """;
+                DELETE FROM main.training_additions
+                WHERE training_id = ?
+                """;
         try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
             deleteStatement.setLong(1, trainingId);
             deleteStatement.executeUpdate();
@@ -407,13 +410,14 @@ public class TrainingRepositoryJDBC implements TrainingRepository {
 
 
     private HashMap<String, String> getTrainingAdditionals(long trainingID) throws RepositoryException {
+        Connection connection = getConnection();
         HashMap<String, String> additionals = new HashMap<>();
 
         String sql = """
-             SELECT key, value
-             FROM main.training_additions
-             WHERE training_id = ?
-             """;
+                SELECT key, value
+                FROM main.training_additions
+                WHERE training_id = ?
+                """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, trainingID);
             try (ResultSet resultSet = statement.executeQuery()) {

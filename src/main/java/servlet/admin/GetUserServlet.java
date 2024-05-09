@@ -1,7 +1,7 @@
 package servlet.admin;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

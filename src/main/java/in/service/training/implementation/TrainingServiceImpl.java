@@ -1,9 +1,9 @@
 package in.service.training.implementation;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
-import entities.model.Training;
-import entities.model.User;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
+import entity.model.Training;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;
@@ -11,6 +11,8 @@ import exceptions.security.rights.NoWriteRightsException;
 import in.repository.training.TrainingRepository;
 import in.repository.trainingtype.TrainingTypeRepository;
 import in.service.training.TrainingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import utils.mappers.TrainingMapper;
 import utils.mappers.UserMapper;
 
@@ -26,6 +28,7 @@ import static utils.Utils.hisRight;
 /**
  * Реализация сервиса для управления тренировками пользователя.
  */
+@Service
 public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingRepository trainingRepository;
@@ -37,6 +40,7 @@ public class TrainingServiceImpl implements TrainingService {
      * @param trainingRepository     Репозиторий для доступа к тренировкам.
      * @param trainingTypeRepository Репозиторий для доступа к типам тренировок.
      */
+    @Autowired
     public TrainingServiceImpl(TrainingRepository trainingRepository, TrainingTypeRepository trainingTypeRepository) {
         this.trainingRepository = trainingRepository;
         this.trainingTypeRepository = trainingTypeRepository;

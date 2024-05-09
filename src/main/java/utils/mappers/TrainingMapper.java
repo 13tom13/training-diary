@@ -1,7 +1,7 @@
 package utils.mappers;
 
-import entities.dto.TrainingDTO;
-import entities.model.Training;
+import entity.dto.TrainingDTO;
+import entity.model.Training;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

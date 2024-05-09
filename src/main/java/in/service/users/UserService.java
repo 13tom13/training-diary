@@ -1,7 +1,7 @@
 package in.service.users;
 
-import entities.dto.RegistrationDTO;
-import entities.model.User;
+import entity.dto.RegistrationDTO;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import jakarta.validation.Validator;

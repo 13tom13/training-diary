@@ -1,6 +1,7 @@
 package in.controller.training.statistics;
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 
@@ -16,35 +17,35 @@ public interface TrainingStatisticsController {
      * @param userDTO пользователь, для которого запрашивается статистика
      * @return общая статистика по всем тренировкам пользователя
      */
-    Integer getAllTrainingStatistics(UserDTO userDTO);
+    ResponseEntity<?> getAllTrainingStatistics(UserDTO userDTO);
 
     /**
      * Получает общую статистику по всем тренировкам пользователя за определенный период.
      *
-     * @param userDTO      пользователь, для которого запрашивается статистика
+     * @param userDTO   пользователь, для которого запрашивается статистика
      * @param startDate начальная дата периода
      * @param endDate   конечная дата периода
      * @return общая статистика по всем тренировкам пользователя за указанный период
      */
-    Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
+    ResponseEntity<?> getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 
     /**
      * Получает статистику по длительности тренировок пользователя за определенный период.
      *
-     * @param userDTO      пользователь, для которого запрашивается статистика
+     * @param userDTO   пользователь, для которого запрашивается статистика
      * @param startDate начальная дата периода
      * @param endDate   конечная дата периода
      * @return статистика по длительности тренировок пользователя за указанный период
      */
-    Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
+    ResponseEntity<?> getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 
     /**
      * Получает статистику по сожженным калориям пользователем за определенный период.
      *
-     * @param userDTO      пользователь, для которого запрашивается статистика
+     * @param userDTO   пользователь, для которого запрашивается статистика
      * @param startDate начальная дата периода
      * @param endDate   конечная дата периода
      * @return статистика по сожженным калориям пользователем за указанный период
      */
-    Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
+    ResponseEntity<?> getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate);
 }

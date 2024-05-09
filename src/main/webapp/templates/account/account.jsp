@@ -1,5 +1,5 @@
 <%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
-<%@ page import="entities.dto.UserDTO" %>
+<%@ page import="entity.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>

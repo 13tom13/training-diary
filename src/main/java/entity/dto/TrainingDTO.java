@@ -1,4 +1,4 @@
-package entities.dto;
+package entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;

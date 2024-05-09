@@ -1,10 +1,10 @@
 package service;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.Training;
-import entities.model.User;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.Training;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoEditRightsException;

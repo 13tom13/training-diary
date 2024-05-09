@@ -1,11 +1,10 @@
 package servlet.admin;
 
-import entities.model.User;
+import entity.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import static servlet.utils.ServletUtils.writeJsonResponse;

@@ -2,10 +2,10 @@ package in.controller.training;
 
 
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Интерфейс, определяющий методы для работы с типами тренировок.
@@ -18,13 +18,14 @@ public interface TrainingTypeController {
      * @param userDTO пользователь, для которого нужно получить список типов тренировок
      * @return список типов тренировок пользователя
      */
-    List<String> getTrainingTypes(UserDTO userDTO) throws IOException;
+    ResponseEntity<?> getTrainingTypes(UserDTO userDTO) throws IOException;
 
     /**
      * Сохраняет новый тип тренировки для указанного пользователя.
      *
-     * @param userDTO               пользователь, для которого нужно сохранить новый тип тренировки
+     * @param userDTO            пользователь, для которого нужно сохранить новый тип тренировки
      * @param customTrainingType новый тип тренировки для сохранения
+     * @return
      */
-    void saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException;
+    ResponseEntity<Void> saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException;
 }

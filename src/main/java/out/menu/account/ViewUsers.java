@@ -1,10 +1,11 @@
 package out.menu.account;
 
-import config.initializer.ControllerFactory;
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.training.ViewTraining;
 
 import java.io.BufferedReader;
@@ -18,6 +19,7 @@ import static utils.Logger.LOGS_PATH;
 /**
  * Класс ViewUsers представляет меню для просмотра и управления пользователями.
  */
+@Component
 public class ViewUsers {
 
     private final AdminController adminController;
@@ -29,10 +31,11 @@ public class ViewUsers {
      * Конструктор класса ViewUsers.
      *
      */
-    public ViewUsers() {
-        this.adminController = ControllerFactory.getInstance().getAdminController();
-        this.viewTraining = new ViewTraining();
-        this.viewUsersEdition = new ViewUsersEdition();
+    @Autowired
+    public ViewUsers(AdminController adminController, ViewTraining viewTraining, ViewUsersEdition viewUsersEdition) {
+        this.adminController = adminController;
+        this.viewTraining = viewTraining;
+        this.viewUsersEdition = viewUsersEdition;
     }
 
     /**

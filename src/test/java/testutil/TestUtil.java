@@ -1,11 +1,11 @@
 package testutil;
 
 import database.LiquibaseConnectorForTest;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.Roles;
-import entities.model.User;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.Roles;
+import entity.model.User;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.File;

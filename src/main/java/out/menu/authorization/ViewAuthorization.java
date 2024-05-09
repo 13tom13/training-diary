@@ -1,12 +1,13 @@
 package out.menu.authorization;
 
-import config.initializer.ControllerFactory;
-import entities.dto.AuthorizationDTO;
-import entities.dto.RegistrationDTO;
-import entities.dto.UserDTO;
+import entity.dto.AuthorizationDTO;
+import entity.dto.RegistrationDTO;
+import entity.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.AuthorizationController;
 import in.controller.users.UserController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
 
@@ -18,19 +19,24 @@ import static utils.Utils.hisRole;
 /**
  * Класс ViewAuthorization представляет собой меню для авторизации и регистрации пользователей.
  */
+@Component
 public class ViewAuthorization {
 
     private final AuthorizationController authorizationController;
     private final UserController userController;
     private final Scanner scanner = new Scanner(System.in);
+    private ViewAdminAccount viewAdminAccount;
+    private ViewUserAccount viewUserAccount;
 
     /**
      * Конструктор класса ViewAuthorization.
      *
      */
-    public ViewAuthorization() {
-        this.authorizationController = ControllerFactory.getInstance().getAuthorizationController();
-        this.userController = ControllerFactory.getInstance().getUserController();
+    @Autowired
+    public ViewAuthorization(AuthorizationController authorizationController, UserController userController) {
+
+        this.authorizationController = authorizationController;
+        this.userController = userController;
     }
 
     /**
@@ -45,10 +51,9 @@ public class ViewAuthorization {
         try {
             UserDTO userDTO = authorizationController.login(new AuthorizationDTO(authEmail, authPassword));
             if (hisRole(userDTO,"ADMIN")) {
-                ViewAdminAccount viewAdminAccount = new ViewAdminAccount();
                 viewAdminAccount.adminAccountMenu();
             } else if (hisRole(userDTO,"USER")) {
-                ViewUserAccount viewUserAccount = new ViewUserAccount(userDTO);
+                viewUserAccount.setUserDTO(userDTO);
                 viewUserAccount.userAccountMenu();
             }
         } catch (AuthorizationException | IOException e) {

@@ -1,7 +1,7 @@
 package servlet.training;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import jakarta.servlet.http.HttpServletRequest;

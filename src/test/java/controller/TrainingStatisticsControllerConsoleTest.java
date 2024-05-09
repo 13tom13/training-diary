@@ -1,6 +1,6 @@
 package controller;
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.controller.training.statistics.implementation.TrainingStatisticsControllerConsole;
 import in.service.training.implementation.TrainingStatisticsServiceImp;

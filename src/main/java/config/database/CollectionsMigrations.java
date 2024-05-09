@@ -1,8 +1,8 @@
-package database;
+package config.database;
 
-import entities.model.Roles;
-import entities.model.Training;
-import entities.model.User;
+import entity.model.Roles;
+import entity.model.Training;
+import entity.model.User;
 import exceptions.RepositoryException;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;

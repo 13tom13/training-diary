@@ -1,7 +1,6 @@
 package in.service.users;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 
 /**

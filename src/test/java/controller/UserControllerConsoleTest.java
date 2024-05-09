@@ -1,6 +1,6 @@
 package controller;
 
-import entities.dto.RegistrationDTO;
+import entity.dto.RegistrationDTO;
 import in.controller.users.implementation.UserControllerConsole;
 import exceptions.RepositoryException;
 import exceptions.ValidationException;

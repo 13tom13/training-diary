@@ -1,7 +1,7 @@
 package config;
 
-import database.CollectionsMigrations;
-import database.LiquibaseConnector;
+import config.database.CollectionsMigrations;
+import config.database.LiquibaseConnector;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
 

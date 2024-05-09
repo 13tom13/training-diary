@@ -1,7 +1,7 @@
 package utils;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

@@ -1,10 +1,12 @@
-package entities.model;
+package entity.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
@@ -14,8 +16,9 @@ import static utils.Utils.getStringFromDate;
 /**
  * Класс, представляющий тренировку.
  */
+@Entity
+@Table(name = "main.trainings")
 public class Training implements Comparable<Training> {
-
     private Long id;
     private String name; // Название тренировки
     @JsonSerialize(using = LocalDateSerializer.class)

@@ -1,11 +1,14 @@
 package out;
 
 import config.initializer.ControllerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.ViewMenu;
 
 /**
  * Класс TrainingDiary представляет собой приложение для ведения тренировочного дневника.
  */
+@Component
 public class TrainingDiary {
     private final ViewMenu viewMenu;
 
@@ -13,10 +16,10 @@ public class TrainingDiary {
      * Конструктор класса TrainingDiary.
      * Инициализирует объект ViewMenu с помощью контроллеров из ControllerInitializer.
      */
-    public TrainingDiary() {
+    @Autowired
+    public TrainingDiary(ViewMenu viewMenu) {
+        this.viewMenu = viewMenu;
         this.logo();
-        ControllerFactory.getInstance();
-        this.viewMenu = new ViewMenu();
     }
 
     /**

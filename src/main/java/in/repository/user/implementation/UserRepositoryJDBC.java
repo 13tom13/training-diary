@@ -1,27 +1,33 @@
 package in.repository.user.implementation;
 
-import entities.model.User;
+import entity.model.Rights;
+import entity.model.Roles;
+import entity.model.User;
 import exceptions.RepositoryException;
 import in.repository.user.UserRepository;
-import entities.model.Rights;
-import entities.model.Roles;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class UserRepositoryJDBC implements UserRepository {
-    /** Соединение с базой данных. */
-    private final Connection connection;
-
     /**
-     * Конструктор для создания объекта UserRepositoryJDBC с указанным соединением с базой данных.
-     *
-     * @param connection соединение с базой данных
+     * Соединение с базой данных.
      */
-    public UserRepositoryJDBC(Connection connection) {
-        this.connection = connection;
+    private final DataSource dataSource;
+
+    private Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -32,11 +38,12 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public Optional<User> getUserByEmail(String email) {
+        Connection connection = getConnection();
         String sql = """
-             SELECT *
-             FROM main.users
-             WHERE email = ?
-             """;
+                SELECT *
+                FROM main.users
+                WHERE email = ?
+                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
@@ -58,7 +65,7 @@ public class UserRepositoryJDBC implements UserRepository {
                 }
             }
         } catch (SQLException e) {
-            rollbackConnection();
+            rollbackConnection(connection);
             System.err.println("Ошибка при выполнении запроса к базе данных");
         }
         return Optional.empty();
@@ -71,11 +78,12 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public List<User> getAllUsers() {
+        Connection connection = getConnection();
         List<User> users = new ArrayList<>();
         String sql = """
-             SELECT *
-             FROM main.users
-             """;
+                SELECT *
+                FROM main.users
+                """;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
@@ -97,11 +105,12 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public List<Rights> getAllRights() {
+        Connection connection = getConnection();
         List<Rights> rights = new ArrayList<>();
         String sql = """
-             SELECT *
-             FROM permissions.rights
-             """;
+                SELECT *
+                FROM permissions.rights
+                """;
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
@@ -125,10 +134,11 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void saveUser(User user) throws RepositoryException {
+        Connection connection = getConnection();
         String sql = """
-             INSERT INTO main.users (email, first_name, last_name, password)
-             VALUES (?, ?, ?, ?)
-             """;
+                INSERT INTO main.users (email, first_name, last_name, password)
+                VALUES (?, ?, ?, ?)
+                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmail());
@@ -160,6 +170,7 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void updateUser(User user) {
+        Connection connection = getConnection();
         String sql = """
                 UPDATE main.users 
                 SET first_name = ?, last_name = ?, password = ?, is_active = ? 
@@ -189,10 +200,11 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void deleteUser(User user) {
+        Connection connection = getConnection();
         String sql = """
-             DELETE FROM main.users
-             WHERE email = ?
-             """;
+                DELETE FROM main.users
+                WHERE email = ?
+                """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getEmail());
             statement.executeUpdate();
@@ -231,13 +243,14 @@ public class UserRepositoryJDBC implements UserRepository {
      * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
      */
     private List<Rights> getUserRightsById(long userId) throws SQLException {
+        Connection connection = getConnection();
         List<Rights> rights = new ArrayList<>();
         String sql = """
-             SELECT r.id, r.name
-             FROM permissions.rights r
-             INNER JOIN relations.user_rights ur ON r.id = ur.right_id
-             WHERE ur.user_id = ?
-             """;
+                SELECT r.id, r.name
+                FROM permissions.rights r
+                INNER JOIN relations.user_rights ur ON r.id = ur.right_id
+                WHERE ur.user_id = ?
+                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
@@ -261,13 +274,14 @@ public class UserRepositoryJDBC implements UserRepository {
      * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
      */
     private List<Roles> getUserRolesById(long userId) throws SQLException {
+        Connection connection = getConnection();
         List<Roles> roles = new ArrayList<>();
         String sql = """
-             SELECT r.id, r.name
-             FROM permissions.roles r
-             INNER JOIN relations.users_roles ur ON r.id = ur.role_id
-             WHERE ur.user_id = ?
-             """;
+                SELECT r.id, r.name
+                FROM permissions.roles r
+                INNER JOIN relations.users_roles ur ON r.id = ur.role_id
+                WHERE ur.user_id = ?
+                """;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
@@ -313,14 +327,15 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void assignUserRights(User user) throws SQLException {
+        Connection connection = getConnection();
         String sqlSelectRights = """
-                        SELECT id
-                        FROM permissions.rights
-                        """;
+                SELECT id
+                FROM permissions.rights
+                """;
         String sqlInsertRights = """
-                         INSERT INTO relations.user_rights (user_id, right_id)
-                         VALUES (?, ?)
-                         """;
+                INSERT INTO relations.user_rights (user_id, right_id)
+                VALUES (?, ?)
+                """;
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRights);
              PreparedStatement insertStatement = connection.prepareStatement(sqlInsertRights)) {
 
@@ -343,15 +358,16 @@ public class UserRepositoryJDBC implements UserRepository {
      */
     @Override
     public void assignUserRoles(User user) throws SQLException {
+        Connection connection = getConnection();
         String sqlSelectRoles = """
-                        SELECT id
-                        FROM permissions.roles
-                        WHERE name = ?
-                        """;
+                SELECT id
+                FROM permissions.roles
+                WHERE name = ?
+                """;
         String sqlInsertUserRole = """
-                           INSERT INTO relations.users_roles (user_id, role_id)
-                           VALUES (?, ?)
-                           """;
+                INSERT INTO relations.users_roles (user_id, role_id)
+                VALUES (?, ?)
+                """;
 
         try (PreparedStatement selectStatement = connection.prepareStatement(sqlSelectRoles);
              PreparedStatement insertStatement = connection.prepareStatement(sqlInsertUserRole)) {
@@ -382,11 +398,12 @@ public class UserRepositoryJDBC implements UserRepository {
      * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
      */
     private void deleteUserRights(User user) throws SQLException {
+        Connection connection = getConnection();
         long userId = user.getId();
         String sql = """
-             DELETE FROM relations.user_rights
-             WHERE user_id = ?
-             """;
+                DELETE FROM relations.user_rights
+                WHERE user_id = ?
+                """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             statement.executeUpdate();
@@ -400,11 +417,12 @@ public class UserRepositoryJDBC implements UserRepository {
      * @throws SQLException если возникла ошибка при выполнении запроса к базе данных
      */
     private void deleteUserRoles(User user) throws SQLException {
+        Connection connection = getConnection();
         long userId = user.getId();
         String sql = """
-             DELETE FROM relations.users_roles
-             WHERE user_id = ?
-             """;
+                DELETE FROM relations.users_roles
+                WHERE user_id = ?
+                """;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, userId);
             statement.executeUpdate();
@@ -414,7 +432,7 @@ public class UserRepositoryJDBC implements UserRepository {
     /**
      * Отменяет текущую транзакцию и выполняет откат изменений.
      */
-    private void rollbackConnection() {
+    private void rollbackConnection(Connection connection) {
         try {
             if (connection != null) {
                 connection.rollback();

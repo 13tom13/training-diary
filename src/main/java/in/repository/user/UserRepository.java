@@ -1,8 +1,8 @@
 package in.repository.user;
 
-import entities.model.User;
+import entity.model.User;
 import exceptions.RepositoryException;
-import entities.model.Rights;
+import entity.model.Rights;
 
 import java.sql.SQLException;
 import java.util.List;

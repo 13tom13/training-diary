@@ -1,6 +1,6 @@
 package utils.mappers;
 
-import entities.dto.AuthorizationDTO;
+import entity.dto.AuthorizationDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

@@ -1,6 +1,6 @@
 package in.repository.trainingtype.implementation;
 
-import entities.model.User;
+import entity.model.User;
 import in.repository.trainingtype.TrainingTypeRepository;
 
 import java.util.ArrayList;

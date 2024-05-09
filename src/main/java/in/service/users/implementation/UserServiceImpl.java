@@ -1,28 +1,22 @@
 package in.service.users.implementation;
 
-import entities.dto.RegistrationDTO;
-import entities.model.User;
+import entity.dto.RegistrationDTO;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.ServiceException;
 import in.repository.user.UserRepository;
 import in.service.users.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 /**
  * Реализация интерфейса {@link UserService}, предоставляющая методы для работы с пользователями.
  */
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-
-    /**
-     * Конструктор для создания экземпляра класса UserServiceImpl.
-     *
-     * @param userRepository репозиторий пользователей
-     */
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * Получает пользователя по его электронной почте.
@@ -33,7 +27,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByEmail(String email) throws ServiceException {
-
         return userRepository.getUserByEmail(email).orElseThrow(() ->
                 new ServiceException("Пользователь не найден"));
     }
@@ -50,7 +43,5 @@ public class UserServiceImpl implements UserService {
         User user = new User(registrationDTO.getFirstName(),
                 registrationDTO.getLastName(), registrationDTO.getEmail(), registrationDTO.getPassword());
         userRepository.saveUser(user);
-        System.out.println("Пользователь с электронной почтой: " + user.getEmail() + " успешно сохранен");
-        System.out.println();
     }
 }

@@ -1,8 +1,8 @@
 package servlet.training;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoEditRightsException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +18,10 @@ public class RemoveTrainingAdditionalServlet extends TrainingServlet {
 
         try {
             UserDTO userDTO = objectMapper.readValue(userJson, UserDTO.class);
-            TrainingDTO TrainingDTO = objectMapper.readValue(trainingJson, TrainingDTO.class);
+            TrainingDTO trainingDTO = objectMapper.readValue(trainingJson, TrainingDTO.class);
             String decodedAdditionalName = objectMapper.readValue(additionalNameJson, String.class);
             try {
-                trainingService.removeTrainingAdditional(userDTO, TrainingDTO, decodedAdditionalName);
+                trainingService.removeTrainingAdditional(userDTO, trainingDTO, decodedAdditionalName);
                 response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             } catch (RepositoryException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

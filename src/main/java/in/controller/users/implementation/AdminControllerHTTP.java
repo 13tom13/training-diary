@@ -3,13 +3,15 @@ package in.controller.users.implementation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
 import jakarta.validation.Validator;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import utils.ValidatorFactoryProvider;
 
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class AdminControllerHTTP implements AdminController {
     private final Validator validator = ValidatorFactoryProvider.getValidator();
 
     @Override
-    public List<User> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         String servletUrl = rootURL + getAllUsersServletPath;
         try {
             String jsonResponse = sendGetRequest(servletUrl);
@@ -56,7 +58,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public UserDTO getUser(String email) throws UserNotFoundException, JsonProcessingException {
+    public ResponseEntity<UserDTO> getUser(@RequestParam String email) throws UserNotFoundException, JsonProcessingException {
         String userEmailForGet = encodeToUrlJson(email);
         String urlWithParams = rootURL + getUserServletPath + "?userEmail=" + userEmailForGet;
         try {
@@ -68,7 +70,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public void deleteUser(UserDTO userDTO) {
+    public ResponseEntity<Void> deleteUser(UserDTO userDTO) {
         try {
             String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
             String urlWithParams = rootURL + deleteUserServletPath + "?userEmail=" + userEmailForGet;
@@ -80,10 +82,11 @@ public class AdminControllerHTTP implements AdminController {
         } catch (JsonProcessingException e) {
             System.err.println("Ошибка при кодировании данных: " + e.getMessage());
         }
+        return null;
     }
 
     @Override
-    public UserDTO changeUserName(UserDTO userDTO, String newName) throws RepositoryException {
+    public ResponseEntity<UserDTO> changeUserName(UserDTO userDTO, String newName) throws RepositoryException {
         String requestURL = rootURL + changeUserNameServletPath;
         try {
             Map<String, Object> combinedMap = new HashMap<>();
@@ -99,7 +102,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public UserDTO changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException {
+    public ResponseEntity<UserDTO> changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException {
         try {
             String requestURL = rootURL + changeUserLastNameServletPath;
             Map<String, Object> combinedMap = new HashMap<>();
@@ -114,7 +117,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public UserDTO changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException {
+    public ResponseEntity<UserDTO> changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException {
         String requestURL = rootURL + changeUserPasswordServletPath;
         try {
             Map<String, Object> combinedMap = new HashMap<>();
@@ -129,7 +132,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public UserDTO changeUserActive(UserDTO userDTO) throws RepositoryException {
+    public ResponseEntity<UserDTO> changeUserActive(UserDTO userDTO) throws RepositoryException {
         String requestURL = rootURL + changeUserActiveServletPath;
         try {
             Map<String, Object> combinedMap = new HashMap<>();
@@ -143,7 +146,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException {
+    public ResponseEntity<UserDTO> changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException {
         String requestURL = rootURL + changeUserRightsServletPath;
         try {
             Map<String, Object> combinedMap = new HashMap<>();
@@ -158,7 +161,7 @@ public class AdminControllerHTTP implements AdminController {
     }
 
     @Override
-    public List<Rights> getAllRights() throws IOException {
+    public ResponseEntity<List<Rights>> getAllRights() throws IOException {
         String urlWithParams = rootURL + getAllRightsServletPath;
         String jsonResponse = sendGetRequest(urlWithParams);
         TypeReference<List<Rights>> typeRef = new TypeReference<>() {

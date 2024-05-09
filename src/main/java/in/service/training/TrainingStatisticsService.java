@@ -1,6 +1,6 @@
 package in.service.training;
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.security.rights.NoStatisticsRightsException;
 
 import java.time.LocalDate;

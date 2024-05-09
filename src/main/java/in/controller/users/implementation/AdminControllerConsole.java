@@ -1,13 +1,14 @@
 package in.controller.users.implementation;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.AdminController;
-import entities.model.Rights;
+import entity.model.Rights;
 import in.repository.user.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import org.springframework.http.ResponseEntity;
 import utils.ValidatorFactoryProvider;
 import utils.mappers.UserMapper;
 
@@ -40,7 +41,7 @@ public class AdminControllerConsole implements AdminController {
      * @return список всех пользователей
      */
     @Override
-    public List<User> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return userRepository.getAllUsers();
     }
 
@@ -51,7 +52,7 @@ public class AdminControllerConsole implements AdminController {
      * @return объект пользователя, если он существует, в противном случае null
      */
     @Override
-    public UserDTO getUser(String email) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUser(String email) throws UserNotFoundException {
         Optional<User> userOptional = userRepository.getUserByEmail(email);
         // Проверка, найден ли пользователь
         if (userOptional.isPresent()) {
@@ -66,11 +67,11 @@ public class AdminControllerConsole implements AdminController {
     /**
      * Изменяет имя пользователя.
      *
-     * @param userDTO    объект пользователя
+     * @param userDTO объект пользователя
      * @param newName новое имя пользователя
      */
     @Override
-    public UserDTO changeUserName(UserDTO userDTO, String newName) {
+    public ResponseEntity<UserDTO> changeUserName(UserDTO userDTO, String newName) {
         var validate = validator.validate(userDTO);
         if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
@@ -81,11 +82,11 @@ public class AdminControllerConsole implements AdminController {
     /**
      * Изменяет фамилию пользователя.
      *
-     * @param userDTO        объект пользователя
+     * @param userDTO     объект пользователя
      * @param newLastName новая фамилия пользователя
      */
     @Override
-    public UserDTO changeUserLastName(UserDTO userDTO, String newLastName) {
+    public ResponseEntity<UserDTO> changeUserLastName(UserDTO userDTO, String newLastName) {
         var validate = validator.validate(userDTO);
         if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
@@ -96,11 +97,11 @@ public class AdminControllerConsole implements AdminController {
     /**
      * Изменяет пароль пользователя.
      *
-     * @param userDTO        объект пользователя
+     * @param userDTO     объект пользователя
      * @param newPassword новый пароль пользователя
      */
     @Override
-    public UserDTO changeUserPassword(UserDTO userDTO, String newPassword) {
+    public ResponseEntity<UserDTO> changeUserPassword(UserDTO userDTO, String newPassword) {
         var validate = validator.validate(userDTO);
         if (!validate.isEmpty()) throw new ConstraintViolationException(validate);
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
@@ -114,7 +115,7 @@ public class AdminControllerConsole implements AdminController {
      * @param userDTO объект пользователя
      */
     @Override
-    public UserDTO changeUserActive(UserDTO userDTO) {
+    public ResponseEntity<UserDTO> changeUserActive(UserDTO userDTO) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setActive(!userDTO.isActive());
         return updateAndGetUser(user);
@@ -123,11 +124,11 @@ public class AdminControllerConsole implements AdminController {
     /**
      * Изменяет права пользователя.
      *
-     * @param userDTO       объект пользователя
+     * @param userDTO    объект пользователя
      * @param userRights новые права пользователя
      */
     @Override
-    public UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) {
+    public ResponseEntity<UserDTO> changeUserRights(UserDTO userDTO, List<Rights> userRights) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         user.setRights(userRights);
         return updateAndGetUser(user);
@@ -137,15 +138,17 @@ public class AdminControllerConsole implements AdminController {
      * Удаляет пользователя.
      *
      * @param userDTO объект пользователя для удаления
+     * @return
      */
     @Override
-    public void deleteUser(UserDTO userDTO) {
+    public ResponseEntity<Void> deleteUser(UserDTO userDTO) {
         User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
         userRepository.deleteUser(user);
+        return null;
     }
 
     @Override
-    public List<Rights> getAllRights() {
+    public ResponseEntity<List<Rights>> getAllRights() {
         return userRepository.getAllRights();
     }
 

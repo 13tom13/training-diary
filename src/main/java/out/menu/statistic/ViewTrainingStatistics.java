@@ -1,8 +1,7 @@
 package out.menu.statistic;
 
 
-import config.initializer.ControllerFactory;
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import in.controller.training.statistics.TrainingStatisticsController;
 
 import java.time.LocalDate;
@@ -12,21 +11,23 @@ import static utils.Utils.enterStringDate;
 import static utils.Utils.getDateFromString;
 
 /**
- * Класс ViewTrainingStatistcs представляет меню для просмотра статистики тренировок пользователя.
+ * Класс ViewTrainingStatistics представляет меню для просмотра статистики тренировок пользователя.
  */
-public class ViewTrainingStatistcs {
+public class ViewTrainingStatistics {
 
     private final TrainingStatisticsController trainingStatisticsController;
-    private final UserDTO userDTO;
+    private UserDTO userDTO;
     private final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Конструктор класса ViewTrainingStatistcs.
+     * Конструктор класса ViewTrainingStatistics.
      *
-     * @param userDTO Пользователь, для которого отображается статистика.
      */
-    public ViewTrainingStatistcs(UserDTO userDTO) {
-        this.trainingStatisticsController = ControllerFactory.getInstance().getTrainingStatisticsController();
+    public ViewTrainingStatistics(TrainingStatisticsController trainingStatisticsController) {
+        this.trainingStatisticsController = trainingStatisticsController;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
     }
 

@@ -1,10 +1,12 @@
 package in.service.training.implementation;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingService;
 import in.service.training.TrainingStatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,6 +16,7 @@ import static utils.Utils.hisRight;
 /**
  * Реализация сервиса статистики тренировок.
  */
+@Service
 public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
 
     private final TrainingService trainingService;
@@ -23,6 +26,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      *
      * @param trainingService сервис тренировок, используемый для получения информации о тренировках
      */
+    @Autowired
     public TrainingStatisticsServiceImp(TrainingService trainingService) {
         this.trainingService = trainingService;
     }

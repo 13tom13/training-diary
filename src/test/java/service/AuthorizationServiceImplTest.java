@@ -1,7 +1,7 @@
 package service;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;

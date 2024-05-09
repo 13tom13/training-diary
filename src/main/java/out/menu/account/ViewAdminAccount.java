@@ -2,12 +2,15 @@ package out.menu.account;
 
 import in.controller.users.AdminController;
 import in.controller.training.TrainingController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
 /**
  * Класс ViewAdminAccount представляет меню для администратора.
  */
+@Component
 public class ViewAdminAccount {
 
     private final ViewUsers viewUsers;
@@ -16,8 +19,9 @@ public class ViewAdminAccount {
     /**
      * Конструктор класса ViewAdminAccount.
      */
-    public ViewAdminAccount() {
-        viewUsers = new ViewUsers();
+    @Autowired
+    public ViewAdminAccount(ViewUsers viewUsers) {
+        this.viewUsers = viewUsers;
     }
 
     /**

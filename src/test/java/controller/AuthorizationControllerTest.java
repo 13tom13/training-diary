@@ -1,7 +1,7 @@
 package controller;
 
-import entities.dto.AuthorizationDTO;
-import entities.dto.UserDTO;
+import entity.dto.AuthorizationDTO;
+import entity.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.controller.authorization.implementation.AuthorizationControllerConsole;
 import in.service.users.AuthorizationService;
@@ -11,8 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import testutil.TestUtil;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

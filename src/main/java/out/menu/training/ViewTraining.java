@@ -1,10 +1,11 @@
 package out.menu.training;
 
 
-import config.initializer.ControllerFactory;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import in.controller.training.TrainingController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
@@ -15,6 +16,7 @@ import static utils.Utils.printAllTraining;
 /**
  * Представляет класс для просмотра тренировок пользователя.
  */
+@Component
 public class ViewTraining {
 
     private final TrainingController trainingController;
@@ -22,8 +24,9 @@ public class ViewTraining {
     /**
      * Создает экземпляр ViewTraining с заданным контроллером тренировок.
      */
-    public ViewTraining() {
-        this.trainingController = ControllerFactory.getInstance().getTrainingController();
+    @Autowired
+    public ViewTraining(TrainingController trainingController) {
+        this.trainingController = trainingController;
     }
 
     /**

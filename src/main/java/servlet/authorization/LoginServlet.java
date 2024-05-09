@@ -1,33 +1,38 @@
 package servlet.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.dto.AuthorizationDTO;
-import entities.dto.UserDTO;
+import entity.dto.AuthorizationDTO;
+import entity.dto.UserDTO;
 import exceptions.security.AuthorizationException;
 import in.service.users.AuthorizationService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import servlet.utils.annotations.Loggable;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static config.initializer.ServiceFactory.getAuthorizationService;
-import static servlet.utils.ServletUtils.getRequestBody;
-import static servlet.utils.ServletUtils.writeJsonResponse;
-import static servlet.utils.ServletUtils.getObjectMapper;
+import static servlet.utils.ServletUtils.*;
 
 @Loggable
+@Component
 public class LoginServlet extends HttpServlet {
 
-    private final AuthorizationService authorizationService;
-    private final ObjectMapper objectMapper = getObjectMapper();
 
-    public LoginServlet() throws SQLException {
+    private AuthorizationService authorizationService;
+    private ObjectMapper objectMapper = getObjectMapper();
+
+    public LoginServlet() {
+    }
+
+    @Autowired
+    public LoginServlet(AuthorizationService authorizationService) throws SQLException {
+        this.authorizationService = authorizationService;
         try {
             Class.forName("org.postgresql.Driver");
-            this.authorizationService = getAuthorizationService();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +48,7 @@ public class LoginServlet extends HttpServlet {
         try {
             // Пытаемся выполнить аутентификацию
             UserDTO userDTO = authorizationService.login(email, password);
-            writeJsonResponse(response,userDTO, HttpServletResponse.SC_OK);
+            writeJsonResponse(response, userDTO, HttpServletResponse.SC_OK);
         } catch (AuthorizationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Устанавливаем статус ответа как 401 Unauthorized
             response.getWriter().write("Authorization failed"); // Отправляем сообщение об ошибке как ответ

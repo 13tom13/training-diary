@@ -1,25 +1,27 @@
-package entities.model;
+package entity.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
-public class Rights {
+@Entity
+@Table(name = "permissions.roles")
+public class Roles {
+    @Id
     private Long id;
 
     private String name;
 
     private List<User> users;
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    public Rights(Long id, String name) {
+    public Roles(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Rights() {
+    public Roles() {
+
     }
 
     public Long getId() {
@@ -37,4 +39,10 @@ public class Rights {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
+

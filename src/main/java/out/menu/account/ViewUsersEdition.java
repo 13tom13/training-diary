@@ -1,10 +1,11 @@
 package out.menu.account;
 
-import config.initializer.ControllerFactory;
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import in.controller.users.AdminController;
-import entities.model.Rights;
+import entity.model.Rights;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 /**
  * Класс ViewUsersEdition представляет меню для редактирования пользователей.
  */
+@Component
 public class ViewUsersEdition {
 
     private final AdminController adminController;
@@ -21,8 +23,9 @@ public class ViewUsersEdition {
     /**
      * Конструктор класса ViewUsersEdition.
      */
-    public ViewUsersEdition() {
-        this.adminController = ControllerFactory.getInstance().getAdminController();
+    @Autowired
+    public ViewUsersEdition(AdminController adminController) {
+        this.adminController = adminController;
     }
 
     /**

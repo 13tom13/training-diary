@@ -1,7 +1,7 @@
 package servlet.admin;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,7 +58,7 @@ public class UserEditServlet extends AdminServlet {
                         break;
                     case "active":
                         boolean oldActive = user.isActive();
-                        user.setActive(!oldActive);
+                        user.setActive(!user.isActive());
                         builder.append("пользователь ").append(user.isActive() ? "активирован" : "деактивирован");
                         break;
                     default:

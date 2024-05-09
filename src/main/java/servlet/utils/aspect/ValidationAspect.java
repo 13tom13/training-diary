@@ -12,7 +12,7 @@ public class ValidationAspect {
 
     private final Validator validator = ValidatorFactoryProvider.getValidator();
 
-    @Pointcut("execution(* entities.dto.*.*(..))")
+    @Pointcut("execution(* entity.dto.*.*(..))")
     public void dtoMethods() {}
 
     @Around("dtoMethods() && args(dto,..)")

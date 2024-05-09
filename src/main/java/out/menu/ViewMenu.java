@@ -1,5 +1,7 @@
 package out.menu;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
@@ -7,6 +9,7 @@ import java.util.Scanner;
 /**
  * Класс ViewMenu представляет собой меню приложения для управления авторизацией и регистрацией пользователей.
  */
+@Component
 public class ViewMenu {
 
     private final ViewAuthorization viewAuthorization;
@@ -16,8 +19,9 @@ public class ViewMenu {
     /**
      * Конструктор класса ViewMenu.
      */
-    public ViewMenu() {
-      this.viewAuthorization = new ViewAuthorization();
+    @Autowired
+    public ViewMenu(ViewAuthorization viewAuthorization) {
+        this.viewAuthorization = viewAuthorization;
     }
 
     /**

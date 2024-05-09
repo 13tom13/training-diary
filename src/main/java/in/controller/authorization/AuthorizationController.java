@@ -1,8 +1,8 @@
 package in.controller.authorization;
 
-import entities.dto.AuthorizationDTO;
-import entities.dto.UserDTO;
+import entity.dto.AuthorizationDTO;
 import exceptions.security.AuthorizationException;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
@@ -17,5 +17,5 @@ public interface AuthorizationController {
      * @param authorizationDTO@return объект пользователя, который вошел в систему
      * @throws AuthorizationException если произошла ошибка авторизации
      */
-    UserDTO login(AuthorizationDTO authorizationDTO) throws AuthorizationException, IOException;
+    ResponseEntity<?> login(AuthorizationDTO authorizationDTO) throws AuthorizationException, IOException;
 }

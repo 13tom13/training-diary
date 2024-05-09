@@ -1,7 +1,7 @@
-package entities.dto;
+package entity.dto;
 
-import entities.model.Rights;
-import entities.model.Roles;
+import entity.model.Rights;
+import entity.model.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

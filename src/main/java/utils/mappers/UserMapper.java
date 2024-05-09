@@ -1,9 +1,9 @@
 package utils.mappers;
 
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.Roles;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.Roles;
+import entity.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

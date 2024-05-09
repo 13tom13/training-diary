@@ -1,11 +1,13 @@
 package in.service.users.implementation;
 
-import entities.dto.UserDTO;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
 import in.repository.user.UserRepository;
 import in.service.users.AuthorizationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import servlet.utils.annotations.Loggable;
 import utils.mappers.UserMapper;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
  * Реализация сервиса аутентификации пользователей.
  */
 @Loggable
+@Service
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
@@ -24,6 +27,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      *
      * @param userRepository репозиторий пользователей
      */
+    @Autowired
     public AuthorizationServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

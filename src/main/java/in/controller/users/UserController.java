@@ -1,7 +1,8 @@
 package in.controller.users;
 
-import entities.dto.RegistrationDTO;
+import entity.dto.RegistrationDTO;
 import jakarta.validation.Validator;
+import org.springframework.http.ResponseEntity;
 import utils.ValidatorFactoryProvider;
 
 import java.io.IOException;
@@ -17,7 +18,8 @@ public interface UserController {
      * Создает нового пользователя с заданными данными.
      *
      * @param registrationDTO
+     * @return
      */
-    void createNewUser(RegistrationDTO registrationDTO) throws IOException;
+    ResponseEntity<String> createNewUser(RegistrationDTO registrationDTO) throws IOException;
 }
 

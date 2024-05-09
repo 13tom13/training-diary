@@ -1,8 +1,9 @@
 package in.controller.training.statistics.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import in.controller.training.statistics.TrainingStatisticsController;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class TrainingStatisticsControllerHTTP implements TrainingStatisticsContr
 
 
     @Override
-    public Integer getAllTrainingStatistics(UserDTO userDTO) {
+    public ResponseEntity<?> getAllTrainingStatistics(UserDTO userDTO) {
         try {
             // Формируем URL запроса с параметрами
             String urlWithParams = rootURL + getAllTrainingStatisticsServletPath + "?user=" + encodeToUrlJson(userDTO);
@@ -43,17 +44,17 @@ public class TrainingStatisticsControllerHTTP implements TrainingStatisticsContr
     }
 
     @Override
-    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         return getStatisticPerPeriod(getAllTrainingStatisticsPerPeriodServletPath, userDTO, startDate, endDate);
     }
 
     @Override
-    public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         return getStatisticPerPeriod(getDurationStatisticsPerPeriodServletPath, userDTO, startDate, endDate);
     }
 
     @Override
-    public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         return getStatisticPerPeriod(getCaloriesStatisticsPerPeriodServletPath, userDTO, startDate, endDate);
     }
 

@@ -1,8 +1,8 @@
 package controller;
 
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.User;
 import exceptions.UserNotFoundException;
 import in.controller.users.implementation.AdminControllerConsole;
 import in.repository.user.UserRepository;

@@ -1,7 +1,7 @@
 package servlet.training;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 import jakarta.servlet.http.HttpServletRequest;

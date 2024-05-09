@@ -1,13 +1,14 @@
 package out.menu.training;
 
-import config.initializer.ControllerFactory;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,19 +20,23 @@ import static utils.Utils.getDateFromString;
 /**
  * Представляет класс для добавления и удаления тренировок пользователя.
  */
+@Component
 public class ViewTrainingAdded {
 
     private final TrainingController trainingController;
-    private final UserDTO userDTO;
+    private UserDTO userDTO;
     private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Создает экземпляр ViewTrainingAdded с заданным контроллером тренировок, пользователем и сканером.
      *
-     * @param userDTO Пользователь.
      */
-    public ViewTrainingAdded(UserDTO userDTO) {
-        this.trainingController = ControllerFactory.getInstance().getTrainingController();
+    @Autowired
+    public ViewTrainingAdded(TrainingController trainingController) {
+        this.trainingController = trainingController;
+    }
+
+    public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
     }
 

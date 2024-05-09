@@ -3,12 +3,13 @@ package in.controller.training.implementation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -42,7 +43,7 @@ public class TrainingControllerHTTP implements TrainingController {
     private final ObjectMapper objectMapper = getObjectMapper();
 
     @Override
-    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
+    public ResponseEntity<TreeMap<LocalDate, TreeSet<TrainingDTO>>> getAllTrainings(UserDTO userDTO) {
         try {
             // Формируем URL запроса с параметрами
             String urlWithParams = rootURL + getAllTrainingsServletPath + "?user=" + encodeToUrlJson(userDTO);
@@ -60,7 +61,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
+    public ResponseEntity<?> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
         try {
             String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
             String dateForGet = encodeToUrlJson(trainingDate);
@@ -75,7 +76,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException {
+    public ResponseEntity<?> getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException {
         String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
         String dateForGet = encodeToUrlJson(trainingDate);
         String nameForGet = encodeToUrlJson(trainingName);
@@ -86,7 +87,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public List<String> getTrainingTypes(UserDTO userDTO) throws IOException {
+    public ResponseEntity<?> getTrainingTypes(UserDTO userDTO) throws IOException {
         String urlWithParams = rootURL + getTrainingTypesServletPath + "?user=" + URLEncoder.encode(objectMapper.writeValueAsString(userDTO), StandardCharsets.UTF_8);
         String jsonResponse = sendGetRequest(urlWithParams);
         TypeReference<List<String>> typeRef = new TypeReference<>() {
@@ -95,7 +96,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+    public ResponseEntity<?> saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
         try {
             String requestURL = rootURL + saveTrainingServletPath;
             Map<String, Object> combinedMap = new HashMap<>();
@@ -110,7 +111,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public void deleteTraining(UserDTO userDTO, String date, String name) {
+    public ResponseEntity<?> deleteTraining(UserDTO userDTO, String date, String name) {
         try {
             String userForDelete = encodeToUrlJson(userDTO);
             String dateForDelete = encodeToUrlJson(date);
@@ -124,10 +125,11 @@ public class TrainingControllerHTTP implements TrainingController {
         } catch (JsonProcessingException e) {
             System.err.println("Ошибка при конвертации JSON в строку " + e.getMessage());
         }
+        return null;
     }
 
     @Override
-    public void saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException {
+    public ResponseEntity<Void> saveTrainingType(UserDTO userDTO, String customTrainingType) throws IOException {
         String requestURL = rootURL + saveTrainingTypesServletPath;
         Map<String, Object> combinedMap = new HashMap<>();
         combinedMap.put("userDTO", userDTO);
@@ -136,10 +138,11 @@ public class TrainingControllerHTTP implements TrainingController {
         String savedTraining = sendPostRequest(requestURL, jsonRequestBody);
         System.out.println(savedTraining);
 
+        return null;
     }
 
     @Override
-    public TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) {
+    public ResponseEntity<?> addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) {
 
         String requestURL = rootURL + addTrainingAdditionalServletPath;
         Map<String, Object> combinedMap = new HashMap<>();
@@ -163,7 +166,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) {
+    public ResponseEntity<?> removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) {
         try {
             String userForDelete = encodeToUrlJson(userDTO);
             String trainingForDelete = encodeToUrlJson(trainingDTO);
@@ -190,7 +193,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException {
+    public ResponseEntity<?> changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException {
         try {
             String requestURL = rootURL + changeNameTrainingServletPath;
             Map<String, Object> combinedMap = new HashMap<>();
@@ -206,7 +209,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException {
+    public ResponseEntity<?> changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException {
         try {
             String requestURL = rootURL + changeDateTrainingServletPath;
             Map<String, Object> combinedMap = new HashMap<>();
@@ -222,7 +225,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException {
+    public ResponseEntity<?> changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException {
         try {
             String requestURL = rootURL + changeDurationTrainingServletPath;
             Map<String, Object> combinedMap = new HashMap<>();
@@ -238,7 +241,7 @@ public class TrainingControllerHTTP implements TrainingController {
     }
 
     @Override
-    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException {
+    public ResponseEntity<?> changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException {
         try {
             String requestURL = rootURL + changeCaloriesTrainingServletPath;
             Map<String, Object> combinedMap = new HashMap<>();

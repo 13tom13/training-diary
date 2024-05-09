@@ -1,8 +1,7 @@
 package servlet.training.statistics;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import config.initializer.ServiceFactory;
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import exceptions.security.rights.NoStatisticsRightsException;
 import in.service.training.TrainingStatisticsService;
 import jakarta.servlet.http.HttpServlet;
@@ -19,14 +18,16 @@ import static servlet.utils.ServletUtils.getObjectMapper;
 
 public abstract class TrainingStatisticsServlet extends HttpServlet {
 
+
     protected final TrainingStatisticsService trainingStatisticsService;
     protected final ObjectMapper objectMapper;
     protected final static int ERROR_RESPONSE = -1;
 
+
     protected TrainingStatisticsServlet() {
+        this.trainingStatisticsService = null;
         try {
             Class.forName("org.postgresql.Driver");
-            this.trainingStatisticsService = ServiceFactory.getTrainingStatisticsService();
             this.objectMapper = getObjectMapper();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

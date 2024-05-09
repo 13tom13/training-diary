@@ -1,8 +1,8 @@
 package in.controller.training;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public interface TrainingRetrievalController {
      * @param userDTO пользователь, чьи тренировки нужно получить
      * @return структура данных, содержащая все тренировки пользователя
      */
-    TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO);
+    ResponseEntity<TreeMap<LocalDate, TreeSet<TrainingDTO>>> getAllTrainings(UserDTO userDTO);
 
     /**
      * Получает тренировки пользователя по указанной дате.
@@ -29,7 +29,7 @@ public interface TrainingRetrievalController {
      * @param trainingDate дата тренировки, для которой нужно получить список тренировок
      * @return список тренировок пользователя по указанной дате
      */
-    TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate);
+    ResponseEntity<?> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate);
 
     /**
      * Получает тренировку пользователя по указанной дате и имени.
@@ -39,5 +39,5 @@ public interface TrainingRetrievalController {
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException;
+    ResponseEntity<?> getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException;
 }

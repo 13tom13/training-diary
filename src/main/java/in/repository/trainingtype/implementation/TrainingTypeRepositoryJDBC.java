@@ -1,8 +1,12 @@
 package in.repository.trainingtype.implementation;
 
-import entities.model.User;
+import entity.model.User;
 import in.repository.trainingtype.TrainingTypeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,19 +17,20 @@ import java.util.List;
 /**
  * Реализация интерфейса {@link TrainingTypeRepository} для хранения типов тренировок в базе данных.
  */
+@Repository
+@RequiredArgsConstructor
 public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
 
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    /**
-     * Конструктор класса TrainingTypeRepositoryJDBC.
-     * Инициализирует подключение к базе данных.
-     *
-     * @param connection объект Connection для подключения к базе данных
-     */
-    public TrainingTypeRepositoryJDBC(Connection connection) {
-        this.connection = connection;
+    private Connection getConnection()  {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     /**
      * Получает список тренировок для указанного пользователя.
@@ -36,6 +41,7 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      */
     @Override
     public List<String> getTrainingTypes(User user) {
+        Connection connection = getConnection();
         List<String> userTrainingTypes = new ArrayList<>();
         String sql = """
                 SELECT training_type
@@ -68,6 +74,7 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      */
     @Override
     public void saveTrainingType(User user, String trainingType) {
+        Connection connection = getConnection();
         String sql = """
                 INSERT INTO relations.user_training_types (user_id, training_type)
                 VALUES (?, ?)
@@ -87,6 +94,7 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      *
      */
         private List<String> getDefaultTrainingTypes(User user) {
+            Connection connection = getConnection();
             System.out.println(user);
             List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
             String sql = """

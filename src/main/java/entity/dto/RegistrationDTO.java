@@ -1,4 +1,4 @@
-package entities.dto;
+package entity.dto;
 
 import jakarta.validation.constraints.*;
 

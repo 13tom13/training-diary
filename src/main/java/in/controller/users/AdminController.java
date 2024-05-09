@@ -1,10 +1,11 @@
 package in.controller.users;
 
-import entities.dto.UserDTO;
-import entities.model.Rights;
-import entities.model.User;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface AdminController {
      *
      * @return Список всех пользователей.
      */
-    List<User> getAllUsers();
+    ResponseEntity<List<User>> getAllUsers();
 
     /**
      * Получает пользователя по его адресу электронной почты.
@@ -27,7 +28,7 @@ public interface AdminController {
      * @param email Адрес электронной почты пользователя для поиска.
      * @return Пользователь с указанным адресом электронной почты или null, если не найден.
      */
-    UserDTO getUser(String email) throws UserNotFoundException, IOException;
+    ResponseEntity<UserDTO> getUser(String email) throws UserNotFoundException, IOException;
 
     /**
      * Изменяет имя пользователя.
@@ -35,7 +36,7 @@ public interface AdminController {
      * @param userDTO Пользователь, у которого будет изменено имя.
      * @param newName Новое имя для пользователя.
      */
-    UserDTO changeUserName(UserDTO userDTO, String newName) throws RepositoryException;
+    ResponseEntity<UserDTO> changeUserName(UserDTO userDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет фамилию пользователя.
@@ -43,7 +44,7 @@ public interface AdminController {
      * @param userDTO     Пользователь, у которого будет изменена фамилия.
      * @param newLastName Новая фамилия пользователя.
      */
-    UserDTO changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException;
+    ResponseEntity<UserDTO> changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException;
 
     /**
      * Изменяет пароль пользователя.
@@ -51,14 +52,14 @@ public interface AdminController {
      * @param userDTO     Пользователь, у которого будет изменен пароль.
      * @param newPassword Новый пароль для пользователя.
      */
-    UserDTO changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException;
+    ResponseEntity<UserDTO> changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException;
 
     /**
      * Активирует или деактивирует пользователя.
      *
      * @param userDTO Пользователь, активационный статус которого будет изменен.
      */
-    UserDTO changeUserActive(UserDTO userDTO) throws RepositoryException;
+    ResponseEntity<UserDTO> changeUserActive(UserDTO userDTO) throws RepositoryException;
 
     /**
      * Изменяет права пользователя.
@@ -66,14 +67,15 @@ public interface AdminController {
      * @param userDTO    Пользователь, права которого будут изменены.
      * @param userRights Новые права для пользователя.
      */
-    UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException;
+    ResponseEntity<UserDTO> changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException;
 
     /**
      * Удаляет пользователя.
      *
      * @param userDTO Пользователь, который будет удален.
+     * @return
      */
-    void deleteUser(UserDTO userDTO);
+    ResponseEntity<Void> deleteUser(UserDTO userDTO);
 
-    List<Rights> getAllRights() throws IOException;
+    ResponseEntity<List<Rights>> getAllRights() throws IOException;
 }

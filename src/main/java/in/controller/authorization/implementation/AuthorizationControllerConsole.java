@@ -1,9 +1,10 @@
 package in.controller.authorization.implementation;
 
-import entities.dto.AuthorizationDTO;
-import entities.dto.UserDTO;
+import entity.dto.AuthorizationDTO;
+import entity.dto.UserDTO;
 import in.controller.authorization.AuthorizationController;
 import exceptions.security.AuthorizationException;
+import org.springframework.http.ResponseEntity;
 import utils.Logger;
 import in.service.users.AuthorizationService;
 
@@ -33,7 +34,7 @@ public class AuthorizationControllerConsole implements AuthorizationController {
      * @param authorizationDTO@return Объект пользователя, если авторизация прошла успешно.
      * @throws AuthorizationException Если авторизация не удалась.
      */
-    public UserDTO login(AuthorizationDTO authorizationDTO) throws AuthorizationException {
+    public ResponseEntity<?> login(AuthorizationDTO authorizationDTO) throws AuthorizationException {
         UserDTO userDTO = authorizationService.login(authorizationDTO.getEmail(), authorizationDTO.getPassword());
         if (userDTO != null)
             logger.logAction(authorizationDTO.getEmail(), "Вошел в систему");

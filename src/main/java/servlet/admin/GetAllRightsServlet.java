@@ -1,7 +1,6 @@
 package servlet.admin;
 
-import entities.model.Rights;
-import entities.model.User;
+import entity.model.Rights;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;

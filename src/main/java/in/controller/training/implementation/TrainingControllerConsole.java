@@ -1,7 +1,7 @@
 package in.controller.training.implementation;
 
-import entities.dto.TrainingDTO;
-import entities.dto.UserDTO;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
@@ -9,10 +9,10 @@ import exceptions.security.rights.NoEditRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import in.controller.training.TrainingController;
 import in.service.training.TrainingService;
+import org.springframework.http.ResponseEntity;
 import utils.Logger;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -41,7 +41,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Словарь, содержащий тренировки, сгруппированные по дате
      */
     @Override
-    public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) {
+    public ResponseEntity<TreeMap<LocalDate, TreeSet<TrainingDTO>>> getAllTrainings(UserDTO userDTO) {
         return trainingService.getAllTrainings(userDTO);
     }
 
@@ -52,7 +52,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Список типов тренировок
      */
     @Override
-    public List<String> getTrainingTypes(UserDTO userDTO) {
+    public ResponseEntity<?> getTrainingTypes(UserDTO userDTO) {
         return trainingService.getTrainingTypes(userDTO);
     }
 
@@ -65,7 +65,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return {@code true}, если тренировка сохранена успешно, в противном случае {@code false}
      */
     @Override
-    public TrainingDTO saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
+    public ResponseEntity<?> saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException {
             trainingDTO = trainingService.saveTraining(userDTO, trainingDTO);
             logger.logAction(userDTO.getEmail(), "save training " + trainingDTO.getName() + " " + trainingDTO.getDate());
             return trainingDTO;
@@ -74,12 +74,14 @@ public class TrainingControllerConsole implements TrainingController {
     /**
      * Сохраняет пользовательский тип тренировки.
      *
-     * @param userDTO               Пользователь
+     * @param userDTO            Пользователь
      * @param customTrainingType Новый пользовательский тип тренировки
+     * @return
      */
     @Override
-    public void saveTrainingType(UserDTO userDTO, String customTrainingType) {
+    public ResponseEntity<Void> saveTrainingType(UserDTO userDTO, String customTrainingType) {
         trainingService.saveTrainingType(userDTO, customTrainingType);
+        return null;
     }
 
     /**
@@ -88,11 +90,13 @@ public class TrainingControllerConsole implements TrainingController {
      * @param userDTO Пользователь
      * @param date    Дата тренировки
      * @param name    Название тренировки
+     * @return
      */
     @Override
-    public void deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException {
+    public ResponseEntity<?> deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException {
             trainingService.deleteTraining(userDTO, date, name);
             logger.logAction(userDTO.getEmail(), "delete training " + name + " " + date);
+        return null;
     }
 
     /**
@@ -103,7 +107,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Множество тренировок пользователя на указанную дату
      */
     @Override
-    public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
+    public ResponseEntity<?> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) {
         try {
             return trainingService.getTrainingsByUserEmailAndData(userDTO, trainingDate);
         } catch (RepositoryException e) {
@@ -122,7 +126,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка пользователя по указанной дате и названию
      */
     @Override
-    public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) {
+    public ResponseEntity<?> getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) {
         try {
             return trainingService.getTrainingByUserEmailAndDataAndName(userDTO, trainingDate, trainingName);
         } catch (RepositoryException e) {
@@ -142,7 +146,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с добавленной дополнительной информацией
      */
     @Override
-    public TrainingDTO addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) {
+    public ResponseEntity<?> addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue) {
         try {
             trainingDTO = trainingService.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
             logger.logAction(userDTO.getEmail(), String.format("add training additional %s %s (%s %s)",
@@ -163,7 +167,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с удаленной информацией
      */
     @Override
-    public TrainingDTO removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) {
+    public ResponseEntity<?> removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName) {
         try {
             trainingDTO = trainingService.removeTrainingAdditional(userDTO, trainingDTO, additionalName);
             logger.logAction(userDTO.getEmail(), String.format("remove training additional %s (%s %s)",
@@ -184,7 +188,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с измененным названием
      */
     @Override
-    public TrainingDTO changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) {
+    public ResponseEntity<?> changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) {
         try {
             trainingDTO = trainingService.changeNameTraining(userDTO, trainingDTO, newName);
 
@@ -206,7 +210,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с измененной датой
      */
     @Override
-    public TrainingDTO changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) {
+    public ResponseEntity<?> changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) {
         try {
             trainingDTO = trainingService.changeDateTraining(userDTO, trainingDTO, newDate);
             logger.logAction(userDTO.getEmail(),
@@ -227,7 +231,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с измененной продолжительностью
      */
     @Override
-    public TrainingDTO changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) {
+    public ResponseEntity<?> changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) {
         int newDurationInt = Integer.parseInt(newDuration);
         try {
             trainingDTO = trainingService.changeDurationTraining(userDTO, trainingDTO, newDurationInt);
@@ -249,7 +253,7 @@ public class TrainingControllerConsole implements TrainingController {
      * @return Тренировка, с измененным количеством сожженных калорий
      */
     @Override
-    public TrainingDTO changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) {
+    public ResponseEntity<?> changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) {
         int newCaloriesInt = Integer.parseInt(newCalories);
         try {
             trainingDTO = trainingService.changeCaloriesTraining(userDTO, trainingDTO, newCaloriesInt);

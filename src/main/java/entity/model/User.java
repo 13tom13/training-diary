@@ -1,5 +1,8 @@
-package entities.model;
+package entity.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,8 +10,10 @@ import java.util.Objects;
 /**
  * Класс, представляющий пользователя.
  */
+@Entity
+@Table(name = "main.users")
 public class User {
-
+    @Id
     private long id; // Идентификатор пользователя
     private String firstName; // Имя пользователя
     private String lastName; // Фамилия пользователя

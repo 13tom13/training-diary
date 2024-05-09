@@ -1,10 +1,10 @@
 package in.repository.user.implementation;
 
-import entities.model.User;
+import entity.model.User;
 import exceptions.RepositoryException;
 import in.repository.user.UserRepository;
-import entities.model.Rights;
-import entities.model.Roles;
+import entity.model.Rights;
+import entity.model.Roles;
 
 import java.util.*;
 

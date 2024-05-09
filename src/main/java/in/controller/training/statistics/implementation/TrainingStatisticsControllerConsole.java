@@ -1,8 +1,9 @@
 package in.controller.training.statistics.implementation;
 
-import entities.dto.UserDTO;
+import entity.dto.UserDTO;
 import in.controller.training.statistics.TrainingStatisticsController;
 import exceptions.security.rights.NoStatisticsRightsException;
+import org.springframework.http.ResponseEntity;
 import utils.Logger;
 import in.service.training.TrainingStatisticsService;
 
@@ -28,10 +29,11 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
 
     /**
      * Получает статистику всех тренировок пользователя.
+     *
      * @param userDTO Пользователь
      * @return Статистика всех тренировок
      */
-    public Integer getAllTrainingStatistics(UserDTO userDTO) {
+    public ResponseEntity<?> getAllTrainingStatistics(UserDTO userDTO) {
         try {
             int result = trainingStatisticsService.getAllTrainingStatistics(userDTO);
             logger.logAction(userDTO.getEmail(), "get all training statistics");
@@ -44,12 +46,13 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
 
     /**
      * Получает статистику всех тренировок пользователя за определенный период.
-     * @param userDTO Пользователь
+     *
+     * @param userDTO   Пользователь
      * @param startDate Начальная дата периода
-     * @param endDate Конечная дата периода
+     * @param endDate   Конечная дата периода
      * @return Статистика всех тренировок за указанный период
      */
-    public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getAllTrainingStatisticsPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),
@@ -63,12 +66,13 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
 
     /**
      * Получает статистику продолжительности тренировок пользователя за определенный период.
-     * @param userDTO Пользователь
+     *
+     * @param userDTO   Пользователь
      * @param startDate Начальная дата периода
-     * @param endDate Конечная дата периода
+     * @param endDate   Конечная дата периода
      * @return Статистика продолжительности тренировок за указанный период
      */
-    public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getDurationStatisticsPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),
@@ -82,13 +86,14 @@ public class TrainingStatisticsControllerConsole implements TrainingStatisticsCo
 
     /**
      * Получает статистику сжигания калорий пользователя за определенный период.
-     * @param userDTO Пользователь
+     *
+     * @param userDTO   Пользователь
      * @param startDate Начальная дата периода
-     * @param endDate Конечная дата периода
+     * @param endDate   Конечная дата периода
      * @return Статистика сжигания калорий за указанный период
      * @throws RuntimeException если возникает ошибка доступа к статистике
      */
-    public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<?> getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
         try {
             int result = trainingStatisticsService.getCaloriesBurnedPerPeriod(userDTO, startDate, endDate);
             logger.logAction(userDTO.getEmail(),

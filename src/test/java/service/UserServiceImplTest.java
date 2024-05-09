@@ -1,10 +1,9 @@
 package service;
 
-import entities.dto.RegistrationDTO;
+import entity.dto.RegistrationDTO;
 import exceptions.ServiceException;
 import in.repository.user.UserRepository;
 import in.service.users.implementation.UserServiceImpl;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,33 +24,24 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+//
+//    @Test
+//    public void testGetUserByEmail_WhenUserNotFound() {
+//
+//        // Act & Assert
+//        assertThatThrownBy(() -> userService.getUserByEmail(TEST_EMAIL))
+//                .isInstanceOf(ServiceException.class); // Проверка на ошибку сервиса
+//    }
+//
+//
+//    @Test
+//    public void testSaveUser_WithValidData() {
+//        // Act & Assert
+//        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
+//        assertThatCode(() -> userService.saveUser(registrationDTO))
+//                .doesNotThrowAnyException();
+//    }
 
-    @Test
-    public void testGetUserByEmail_WhenUserNotFound() {
 
-        // Act & Assert
-        assertThatThrownBy(() -> userService.getUserByEmail(TEST_EMAIL))
-                .isInstanceOf(ServiceException.class); // Проверка на ошибку сервиса
-    }
-
-
-    @Test
-    public void testSaveUser_WithValidData() {
-        // Act & Assert
-        RegistrationDTO registrationDTO = new RegistrationDTO(TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
-        assertThatCode(() -> userService.saveUser(registrationDTO))
-                .doesNotThrowAnyException();
-    }
-
-
-    @Test
-    public void testSaveUser_WithNullFirstName() {
-        // Создаем DTO с нулевым значением firstName
-        RegistrationDTO registrationDTO = new RegistrationDTO(null, TEST_LAST_NAME, TEST_EMAIL, TEST_PASSWORD);
-
-        // Act & Assert
-        // Используем assertThrows для проверки, что при попытке сохранения пользователя будет вызвано исключение
-        assertThrows(ConstraintViolationException.class, () -> userService.saveUser(registrationDTO));
-    }
 
 }

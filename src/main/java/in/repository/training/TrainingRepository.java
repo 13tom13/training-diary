@@ -1,8 +1,8 @@
 package in.repository.training;
 
 import exceptions.RepositoryException;
-import entities.model.Training;
-import entities.model.User;
+import entity.model.Training;
+import entity.model.User;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
