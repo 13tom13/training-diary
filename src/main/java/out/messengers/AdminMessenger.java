@@ -10,6 +10,8 @@ import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,39 +21,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static utils.ServletUtils.encodeToUrlJson;
 import static utils.HTTP.*;
+import static utils.ServletUtils.encodeToUrlJson;
 
 @Component
 @RequiredArgsConstructor
 public class AdminMessenger {
 
-    @Value("${application.url}")
-    private String rootURL;
+    private String rootURL = "http://localhost:8080/training-diary";
 
     private final ObjectMapper objectMapper;
 
     private final RestTemplate restTemplate;
 
 
-    public  List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         String servletUrl = rootURL + "/admin/users";
-        try {
-            String jsonResponse = sendGetRequest(servletUrl);
-            try {
-                TypeReference<List<User>> typeRef = new TypeReference<>() {
-                };
-                return objectMapper.readValue(jsonResponse, typeRef);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<List<User>> response = restTemplate.exchange(
+                servletUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<User>>() {}
+        );
+        return response.getBody();
     }
 
 
-    public UserDTO getUser (String email) throws UserNotFoundException, JsonProcessingException {
+    public UserDTO getUser(String email) throws UserNotFoundException, JsonProcessingException {
         String userEmailForGet = encodeToUrlJson(email);
         String urlWithParams = rootURL + "/admin/user" + "?userEmail=" + userEmailForGet;
         try {
@@ -91,75 +87,71 @@ public class AdminMessenger {
 
     }
 
-//    public ResponseEntity<UserDTO> changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException {
-//        try {
-//            String changeUserLastNameServletPath = "/admin/user/change/lastname";
-//            String requestURL = rootURL + changeUserLastNameServletPath;
-//            Map<String, Object> combinedMap = new HashMap<>();
-//            combinedMap.put("userDTO", userDTO);
-//            combinedMap.put("newLastName", newLastName);
-//            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-//            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
-//            return objectMapper.readValue(changeUser, UserDTO.class);
-//        } catch (IOException e) {
-//            throw new RepositoryException(e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public ResponseEntity<UserDTO> changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException {
-//        String changeUserPasswordServletPath = "/admin/user/change/password";
-//        String requestURL = rootURL + changeUserPasswordServletPath;
-//        try {
-//            Map<String, Object> combinedMap = new HashMap<>();
-//            combinedMap.put("userDTO", userDTO);
-//            combinedMap.put("newPassword", newPassword);
-//            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-//            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
-//            return objectMapper.readValue(changeUser, UserDTO.class);
-//        } catch (IOException e) {
-//            throw new RepositoryException(e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public ResponseEntity<UserDTO> changeUserActive(UserDTO userDTO) throws RepositoryException {
-//        String changeUserActiveServletPath = "/admin/user/change/active";
-//        String requestURL = rootURL + changeUserActiveServletPath;
-//        try {
-//            Map<String, Object> combinedMap = new HashMap<>();
-//            combinedMap.put("userDTO", userDTO);
-//            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-//            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
-//            return objectMapper.readValue(changeUser, UserDTO.class);
-//        } catch (IOException e) {
-//            throw new RepositoryException(e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public ResponseEntity<UserDTO> changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException {
-//        String changeUserRightsServletPath = "/admin/user/change/rights";
-//        String requestURL = rootURL + changeUserRightsServletPath;
-//        try {
-//            Map<String, Object> combinedMap = new HashMap<>();
-//            combinedMap.put("userDTO", userDTO);
-//            combinedMap.put("userRights", userRights);
-//            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
-//            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
-//            return objectMapper.readValue(changeUser, UserDTO.class);
-//        } catch (IOException e) {
-//            throw new RepositoryException(e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public ResponseEntity<List<Rights>> getAllRights() throws IOException {
-//        String getAllRightsServletPath = "/admin/rights";
-//        String urlWithParams = rootURL + getAllRightsServletPath;
-//        String jsonResponse = sendGetRequest(urlWithParams);
-//        TypeReference<List<Rights>> typeRef = new TypeReference<>() {
-//        };
-//        return objectMapper.readValue(jsonResponse, typeRef);
-//    }
+    public UserDTO changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException {
+        try {
+            String changeUserLastNameServletPath = "/admin/user/change/lastname";
+            String requestURL = rootURL + changeUserLastNameServletPath;
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("newLastName", newLastName);
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeUser, UserDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    public UserDTO changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException {
+        String changeUserPasswordServletPath = "/admin/user/change/password";
+        String requestURL = rootURL + changeUserPasswordServletPath;
+        try {
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("newPassword", newPassword);
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeUser, UserDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    public UserDTO changeUserActive(UserDTO userDTO) throws RepositoryException {
+        String changeUserActiveServletPath = "/admin/user/change/active";
+        String requestURL = rootURL + changeUserActiveServletPath;
+        try {
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeUser, UserDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    public UserDTO changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException {
+        String changeUserRightsServletPath = "/admin/user/change/rights";
+        String requestURL = rootURL + changeUserRightsServletPath;
+        try {
+            Map<String, Object> combinedMap = new HashMap<>();
+            combinedMap.put("userDTO", userDTO);
+            combinedMap.put("userRights", userRights);
+            String jsonRequestBody = objectMapper.writeValueAsString(combinedMap);
+            String changeUser = sendPutRequest(requestURL, jsonRequestBody);
+            return objectMapper.readValue(changeUser, UserDTO.class);
+        } catch (IOException e) {
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    public List<Rights> getAllRights() throws IOException {
+        String getAllRightsServletPath = "/admin/rights";
+        String urlWithParams = rootURL + getAllRightsServletPath;
+        String jsonResponse = sendGetRequest(urlWithParams);
+        TypeReference<List<Rights>> typeRef = new TypeReference<>() {
+        };
+        return objectMapper.readValue(jsonResponse, typeRef);
+    }
 }

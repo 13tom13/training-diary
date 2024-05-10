@@ -141,7 +141,7 @@ public class TrainingControllerSpringMVC implements TrainingController {
     }
 
     @Override
-    @GetMapping("/trainingByDate")
+    @GetMapping("/getTrainingByDate")
     public ResponseEntity<?> getTrainingsByUserEmailAndData(@RequestParam("user") UserDTO userDTO,@RequestParam("date") String trainingDate) {
         try {
             TreeSet<TrainingDTO> allTraining = trainingService.getTrainingsByUserEmailAndData(userDTO, trainingDate);
@@ -152,23 +152,25 @@ public class TrainingControllerSpringMVC implements TrainingController {
     }
 
     @Override
-    @GetMapping
+    @GetMapping("/getTraining")
     public ResponseEntity<?> getTrainingByUserEmailAndDateAndName(@RequestParam("user") UserDTO userDTO,@RequestParam("date") String trainingDate,@RequestParam("name") String trainingName) {
         try {
             TrainingDTO training = trainingService.getTrainingByUserEmailAndDataAndName(userDTO, trainingDate, trainingName);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(training);
         } catch (RepositoryException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
     @Override
+    @GetMapping("/getTrainingTypes")
     public ResponseEntity<?> getTrainingTypes(@RequestParam("user") UserDTO userDTO) {
         List<String> trainingTypes = trainingService.getTrainingTypes(userDTO);
         return ResponseEntity.ok(trainingTypes);
     }
 
     @Override
+    @PostMapping("/saveTrainingTypes")
     public ResponseEntity<Void> saveTrainingType(@RequestParam("user") UserDTO userDTO, @RequestParam("type") String customTrainingType) {
         trainingService.saveTrainingType(userDTO, customTrainingType);
         return ResponseEntity.ok().build();

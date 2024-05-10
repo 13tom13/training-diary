@@ -4,6 +4,7 @@ import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import in.controller.users.AdminController;
 import entity.model.Rights;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,44 +16,37 @@ import java.util.Scanner;
  * Класс ViewUsersEdition представляет меню для редактирования пользователей.
  */
 @Component
+@RequiredArgsConstructor
 public class ViewUsersEdition {
 
-//    private final AdminController adminController;
-//    private final Scanner scanner = new Scanner(System.in);
-//
-//    /**
-//     * Конструктор класса ViewUsersEdition.
-//     */
-//    @Autowired
-//    public ViewUsersEdition(AdminController adminController) {
-//        this.adminController = adminController;
-//    }
-//
-//    /**
-//     * Метод для редактирования данных пользователя.
-//     *
-//     * @param userDTO Пользователь, данные которого будут редактироваться.
-//     */
-//    public void userEdition(UserDTO userDTO) {
-//        boolean editing = true;
-//        while (editing) {
-//            System.out.println();
-//            System.out.println("Редактирование пользователя: " + userDTO);
-//            System.out.println("Выберите действие:");
-//            System.out.println("1. изменить имя");
-//            System.out.println("2. изменить фамилию");
-//            System.out.println("3. изменить пароль");
-//            System.out.println("4. изменить права");
-//            if (userDTO.isActive()) {
-//                System.out.println("5. деактивировать пользователя");
-//            } else {
-//                System.out.println("5. активировать пользователя");
-//            }
-//            System.out.println("6. выход");
-//            if (scanner.hasNextInt()) {
-//                int choice = scanner.nextInt();
-//                scanner.nextLine();
-//                switch (choice) {
+    private final AdminController adminController;
+    private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Метод для редактирования данных пользователя.
+     *
+     * @param userDTO Пользователь, данные которого будут редактироваться.
+     */
+    public void userEdition(UserDTO userDTO) {
+        boolean editing = true;
+        while (editing) {
+            System.out.println();
+            System.out.println("Редактирование пользователя: " + userDTO);
+            System.out.println("Выберите действие:");
+            System.out.println("1. изменить имя");
+            System.out.println("2. изменить фамилию");
+            System.out.println("3. изменить пароль");
+            System.out.println("4. изменить права");
+            if (userDTO.isActive()) {
+                System.out.println("5. деактивировать пользователя");
+            } else {
+                System.out.println("5. активировать пользователя");
+            }
+            System.out.println("6. выход");
+            if (scanner.hasNextInt()) {
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
 //                    case 1:
 //                        String newName = getNonEmptyInput("Введите новое имя:");
 //                        try {
@@ -91,45 +85,45 @@ public class ViewUsersEdition {
 //                            System.err.println("Ошибка при изменении пользователя: " + e.getMessage());
 //                        }
 //                        break;
-//                    case 6:
-//                        System.out.println("Выход из редактирования пользователя " + userDTO.getEmail());
-//                        editing = false;
-//                        break;
-//                    default:
-//                        System.out.println("Неверный выбор. Попробуйте еще раз.");
-//                        break;
-//                }
-//            } else {
-//                System.out.println("Неверный выбор. Попробуйте еще раз.");
-//                scanner.nextLine();
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Метод для получения непустого ввода от пользователя.
-//     *
-//     * @param prompt Сообщение-приглашение для ввода.
-//     * @return Введенная пользователем строка.
-//     */
-//    private String getNonEmptyInput(String prompt) {
-//        String input = "";
-//        while (input.isEmpty()) {
-//            System.out.println(prompt);
-//            input = scanner.nextLine();
-//            if (input.isEmpty()) {
-//                System.out.println("Пожалуйста, введите непустое значение.");
-//            }
-//        }
-//        return input;
-//    }
-//
-//    /**
-//     * Метод для изменения прав пользователя.
-//     *
-//     * @param userDTO Пользователь, права которого будут изменены.
-//     */
-//    private void changeUserRights(UserDTO userDTO) throws IOException, RepositoryException {
+                    case 6:
+                        System.out.println("Выход из редактирования пользователя " + userDTO.getEmail());
+                        editing = false;
+                        break;
+                    default:
+                        System.out.println("Неверный выбор. Попробуйте еще раз.");
+                        break;
+                }
+            } else {
+                System.out.println("Неверный выбор. Попробуйте еще раз.");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    /**
+     * Метод для получения непустого ввода от пользователя.
+     *
+     * @param prompt Сообщение-приглашение для ввода.
+     * @return Введенная пользователем строка.
+     */
+    private String getNonEmptyInput(String prompt) {
+        String input = "";
+        while (input.isEmpty()) {
+            System.out.println(prompt);
+            input = scanner.nextLine();
+            if (input.isEmpty()) {
+                System.out.println("Пожалуйста, введите непустое значение.");
+            }
+        }
+        return input;
+    }
+
+    /**
+     * Метод для изменения прав пользователя.
+     *
+     * @param userDTO Пользователь, права которого будут изменены.
+     */
+    private void changeUserRights(UserDTO userDTO) throws IOException, RepositoryException {
 //        List<Rights> userRights = userDTO.getRights();
 //        List<Rights> allRights = adminController.getAllRights();
 //
@@ -196,5 +190,5 @@ public class ViewUsersEdition {
 //                scanner.nextLine();
 //            }
 //        }
-//    }
+    }
 }

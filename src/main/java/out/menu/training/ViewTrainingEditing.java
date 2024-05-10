@@ -4,6 +4,7 @@ import entity.dto.TrainingDTO;
 import entity.dto.UserDTO;
 import exceptions.RepositoryException;
 import in.controller.training.TrainingController;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import static utils.Utils.*;
  * Представляет класс для редактирования тренировок пользователя.
  */
 @Component
+@RequiredArgsConstructor
 public class ViewTrainingEditing {
 //
 //    private final TrainingController trainingController;
@@ -27,17 +29,6 @@ public class ViewTrainingEditing {
 //    private final Scanner scanner = new Scanner(System.in);
 //
 //    private TrainingDTO trainingDTO;
-//
-//    /**
-//     * Создает экземпляр ViewTrainingEditing с заданным контроллером тренировок, представлением добавления тренировок, пользователем и сканером.
-//     *
-//     * @param viewTrainingAdded Представление добавления тренировок.
-//     */
-//    @Autowired
-//    public ViewTrainingEditing(TrainingController trainingController, ViewTrainingAdded viewTrainingAdded) {
-//        this.trainingController = trainingController;
-//        this.viewTrainingAdded = viewTrainingAdded;
-//    }
 //
 //    public void setUserDTO(UserDTO userDTO) {
 //        this.userDTO = userDTO;

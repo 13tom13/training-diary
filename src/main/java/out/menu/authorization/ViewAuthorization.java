@@ -44,13 +44,12 @@ public class ViewAuthorization {
         String authPassword = scanner.nextLine();
         AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
         UserDTO userDTO = authorizationMessenger.login(authorizationDTO);
-        System.out.println("UserDTO from messenger: " + userDTO);
-//            if (hisRole(userDTO,"ADMIN")) {
-//                viewAdminAccount.adminAccountMenu();
-//            } else if (hisRole(userDTO,"USER")) {
-//                viewUserAccount.setUserDTO(userDTO);
-//                viewUserAccount.userAccountMenu();
-//            }
+            if (hisRole(userDTO,"ADMIN")) {
+                viewAdminAccount.adminAccountMenu();
+            } else if (hisRole(userDTO,"USER")) {
+                viewUserAccount.setUserDTO(userDTO);
+                viewUserAccount.userAccountMenu();
+            }
     }
 
 
