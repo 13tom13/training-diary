@@ -38,7 +38,7 @@ public interface UserMapper {
             @Mapping(target = "active", source = "active"),
             @Mapping(target = "rights", source = "rights", qualifiedByName = "listToRights"),
             @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles"),
-            @Mapping(target = "password", ignore = true) // Игнорируем маппинг поля password
+            @Mapping(target = "password", ignore = true)
     })
     User userDTOToUser(UserDTO userDTO);
 

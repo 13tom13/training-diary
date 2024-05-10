@@ -1,4 +1,4 @@
-package out.messengers;
+package out.messenger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.dto.RegistrationDTO;
@@ -9,11 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-import static utils.HTTP.sendPostRequest;
-
 @Component
 @RequiredArgsConstructor
-public class UserMessenger {
+public class UserHTTPMessenger {
 
     @Value("${application.url}")
     private String rootURL;
@@ -31,10 +29,7 @@ public class UserMessenger {
     public void registration(RegistrationDTO registrationDTO) throws IOException {
         String controllerUrl = rootURL + "/registration";
         String jsonRequestBody = objectMapper.writeValueAsString(registrationDTO);
-
-        // Отправка POST-запроса с использованием RestTemplate
         String response = restTemplate.postForObject(controllerUrl, jsonRequestBody, String.class);
-
         System.out.println("Ответ от сервера: " + response);
     }
 

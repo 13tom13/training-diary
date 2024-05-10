@@ -8,7 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@ComponentScan(basePackages = {"out", "utils"})
+@ComponentScan(basePackages = {"out", "utils", "entity"})
 public class MainConfig {
 
     @Autowired

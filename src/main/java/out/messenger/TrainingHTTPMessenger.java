@@ -1,4 +1,4 @@
-package out.messengers;
+package out.messenger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,20 +6,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.dto.TrainingDTO;
 import entity.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import static utils.HTTP.sendGetRequest;
+
 @Component
 @RequiredArgsConstructor
-public class TrainingMessenger {
+public class TrainingHTTPMessenger {
 
     private final String rootURL = "http://localhost:8080/training-diary";
 
@@ -27,16 +33,24 @@ public class TrainingMessenger {
     private final RestTemplate restTemplate;
 
     public TreeMap<LocalDate, TreeSet<TrainingDTO>> getAllTrainings(UserDTO userDTO) throws RestClientException, JsonProcessingException {
-        String url = rootURL + "/training/AllTrainings?user=" + userDTO.getEmail();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-        String jsonResponse = responseEntity.getBody();
-        TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {
-        };
-        return objectMapper.readValue(jsonResponse, typeRef);
+        String userJson = objectMapper.writeValueAsString(userDTO);
+        System.out.println(userDTO);
+
+        String url = UriComponentsBuilder.fromHttpUrl(rootURL)
+                .path("/training/AllTrainings")
+                .queryParam("user", userJson) // Обратите внимание на эту строку
+                .toUriString();
+        try {
+            String jsonResponse = sendGetRequest(url);
+            TypeReference<TreeMap<LocalDate, TreeSet<TrainingDTO>>> typeRef = new TypeReference<>() {};
+            return objectMapper.readValue(jsonResponse, typeRef);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public TreeSet<TrainingDTO> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate) throws RestClientException, JsonProcessingException {
-        String url = rootURL + "/training/getTrainingByDate?user=" + userDTO.getEmail() + "&date=" + trainingDate;
+        String url = rootURL + "/training/getTrainingByDate?user=" + userDTO + "&date=" + trainingDate;
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String jsonResponse = responseEntity.getBody();
         TypeReference<TreeSet<TrainingDTO>> typeRef = new TypeReference<>() {
@@ -45,7 +59,7 @@ public class TrainingMessenger {
     }
 
     public TrainingDTO getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws RestClientException, JsonProcessingException {
-        String url = rootURL + "/training/getTraining?user=" + userDTO.getEmail() + "&date=" + trainingDate + "&name=" + trainingName;
+        String url = rootURL + "/training/getTraining?user=" + userDTO + "&date=" + trainingDate + "&name=" + trainingName;
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String jsonResponse = responseEntity.getBody();
         return objectMapper.readValue(jsonResponse, TrainingDTO.class);

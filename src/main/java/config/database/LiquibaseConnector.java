@@ -25,10 +25,10 @@ public class LiquibaseConnector {
 
     private final DataSource dataSource;
 
-    @Value("${liquibase.changelog}")
-    private String changelogFilePath;
-    @Value("${db.default.schema}")
-    private String schema;
+
+    private String changelogFilePath = "db/changelog/changelog.xml";
+
+    private String schema = "service";
     @Autowired
     public LiquibaseConnector(DataSource dataSource) {
         this.dataSource = dataSource;

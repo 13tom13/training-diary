@@ -35,26 +35,6 @@ public class Utils {
         return userDTO.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
     }
 
-
-    public static void printAllTraining(TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining) {
-        if (allTraining.isEmpty()) {
-            System.out.println("Список тренировок пуст");
-            return;
-        }
-
-        for (Map.Entry<LocalDate, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
-            LocalDate currentDate = entry.getKey();
-            TreeSet<TrainingDTO> trainingsOnDate = entry.getValue();
-
-            System.out.println("\n" + "=====" + getStringFromDate(currentDate) + "=====");
-
-            for (TrainingDTO training : trainingsOnDate) {
-                System.out.println(training);
-                System.out.println("--------------------------------------------------");
-            }
-        }
-    }
-
     public static String enterStringDate(Scanner scanner) {
         while (true) {
             System.out.print("Дата (дд.мм.гг): ");

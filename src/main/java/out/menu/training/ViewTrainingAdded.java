@@ -1,16 +1,14 @@
 package out.menu.training;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import entity.dto.TrainingDTO;
 import entity.dto.UserDTO;
-import exceptions.InvalidDateFormatException;
-import exceptions.RepositoryException;
-import exceptions.security.rights.NoDeleteRightsException;
-import exceptions.security.rights.NoWriteRightsException;
-import in.controller.training.TrainingController;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import out.messengers.TrainingMessenger;
+import org.springframework.web.client.RestClientException;
+import out.messenger.TrainingHTTPMessenger;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,25 +21,25 @@ import static utils.Utils.getDateFromString;
  * Представляет класс для добавления и удаления тренировок пользователя.
  */
 @Component
-@RequiredArgsConstructor
 public class ViewTrainingAdded {
 
-    private final TrainingMessenger trainingMessenger;
-    private UserDTO userDTO;
+    private final TrainingHTTPMessenger trainingHTTPMessenger;
+
     private final Scanner scanner = new Scanner(System.in);
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    @Autowired
+    public ViewTrainingAdded(TrainingHTTPMessenger trainingHTTPMessenger) {
+        this.trainingHTTPMessenger = trainingHTTPMessenger;
     }
 
     /**
      * Метод для добавления тренировки.
      */
-    public void addTraining() {
+    public void addTraining(UserDTO userDTO) {
         System.out.println("Введите данные тренировки:");
         String name;
         try {
-            name = chooseTrainingType();
+            name = chooseTrainingType(userDTO);
         } catch (IOException e) {
             System.err.println("Ошибка при получении списка типов тренировок: " + e.getMessage());
             return;
@@ -52,11 +50,11 @@ public class ViewTrainingAdded {
         LocalDate convertedDate = getDateFromString(date);
         TrainingDTO trainingDTO = new TrainingDTO(name, convertedDate, duration, caloriesBurned);
         try {
-            TrainingDTO savedTraining = trainingMessenger.saveTraining(userDTO, trainingDTO);
-            addTrainingAdditional(savedTraining);
+            TrainingDTO savedTraining = trainingHTTPMessenger.saveTraining(userDTO, trainingDTO);
+            addTrainingAdditional(userDTO, savedTraining);
             System.out.println("Тренировка успешно сохранена.");
-        } catch (InvalidDateFormatException | NoWriteRightsException | RepositoryException e) {
-            System.err.println(e.getMessage());
+        } catch (JsonProcessingException e) {
+            System.out.println("Ошибка при преобразовании данных: " + e.getMessage());
         }
 
 
@@ -65,30 +63,32 @@ public class ViewTrainingAdded {
     /**
      * Метод для удаления тренировки.
      */
-    public void deleteTraining() {
+    public void deleteTraining(UserDTO userDTO) {
         System.out.print("Введите дату тренировки (дд.мм.гг): ");
         String trainingDate = enterStringDate(scanner);
-        TreeSet<TrainingDTO> trainingsFromDay = trainingMessenger.getTrainingsByUserEmailAndData(userDTO, trainingDate);
-        for (TrainingDTO training : trainingsFromDay) {
-            System.out.println(training);
+        try {
+            TreeSet<TrainingDTO> trainingsFromDay = trainingHTTPMessenger.getTrainingsByUserEmailAndData(userDTO, trainingDate);
+            for (TrainingDTO training : trainingsFromDay) {
+                System.out.println(training);
+            }
+        } catch (JsonProcessingException | RestClientException e) {
+            System.err.println("Ошибка при получении тренировки: " + e.getMessage());
         }
+
         System.out.print("Название: ");
         String name = scanner.nextLine();
         try {
-            trainingMessenger.deleteTraining(userDTO, trainingDate, name);
-        } catch (NoDeleteRightsException e) {
-            System.err.println("нет прав на удаление: " + e.getMessage());
-        } catch (RepositoryException e) {
+            trainingHTTPMessenger.deleteTraining(userDTO, trainingDate, name);
+            System.out.println("Тренировка успешно удалена.");
+        } catch (JsonProcessingException | RestClientException e) {
             System.err.println("Ошибка при удалении тренировки: " + e.getMessage());
         }
-        System.out.println("Тренировка успешно удалена.");
-
     }
 
     /**
      * Метод для добавления дополнительной информации о тренировке.
      */
-    public void addTrainingAdditional(TrainingDTO trainingDTO) {
+    public void addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO) {
         boolean startAdd = true;
         while (startAdd) {
             System.out.println("1. Добавить дополнительную информацию?");
@@ -106,7 +106,11 @@ public class ViewTrainingAdded {
                         String additionalName = scanner.nextLine();
                         System.out.println("Значение:");
                         String additionalValue = scanner.nextLine();
-                        trainingDTO = trainingMessenger.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
+                        try {
+                            trainingDTO = trainingHTTPMessenger.addTrainingAdditional(userDTO, trainingDTO, additionalName, additionalValue);
+                        } catch (JsonProcessingException | RestClientException e) {
+                            System.err.println("Ошибка при добавлении дополнительной информации: " + e.getMessage());
+                        }
                     }
                     case 2 -> {
                         if (!trainingDTO.getAdditions().isEmpty()) {
@@ -116,7 +120,11 @@ public class ViewTrainingAdded {
                             System.out.println("Введите название дополнительной информации для удаления:");
 
                             String additionalNameForRemove = scanner.nextLine();
-                            trainingDTO = trainingMessenger.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
+                            try {
+                                trainingDTO = trainingHTTPMessenger.removeTrainingAdditional(userDTO, trainingDTO, additionalNameForRemove);
+                            } catch (JsonProcessingException e) {
+                                System.err.println("Ошибка при удалении дополнительной информации: " + e.getMessage());
+                            }
                         }
                     }
                     case 3 -> {
@@ -137,17 +145,13 @@ public class ViewTrainingAdded {
      *
      * @return Выбранный тип тренировки.
      */
-    private String chooseTrainingType() throws IOException {
+    private String chooseTrainingType(UserDTO userDTO) throws IOException {
         System.out.println("Выберите тип тренировки:");
-
-        List<String> trainingTypes = trainingMessenger.getTrainingTypes(userDTO);
-
+        List<String> trainingTypes = trainingHTTPMessenger.getTrainingTypes(userDTO);
         for (int i = 0; i < trainingTypes.size(); i++) {
             System.out.println((i + 1) + ". " + trainingTypes.get(i));
         }
-
         System.out.println((trainingTypes.size() + 1) + ". Ввести свой тип тренировки");
-
         while (true) {
             try {
                 System.out.print("Ваш выбор: ");
@@ -161,7 +165,7 @@ public class ViewTrainingAdded {
                     scanner.nextLine(); // Очистка буфера
                     System.out.print("Введите свой тип тренировки: ");
                     String customTrainingType = scanner.nextLine();
-                    trainingMessenger.saveTrainingType(userDTO, customTrainingType);
+                    trainingHTTPMessenger.saveTrainingType(userDTO, customTrainingType);
                     System.out.println("Выбран пользовательский тип тренировки: " + customTrainingType);
                     return customTrainingType;
                 } else {
@@ -172,7 +176,6 @@ public class ViewTrainingAdded {
                 System.out.println("Некорректный ввод. Пожалуйста, введите число.");
             }
         }
-
     }
 
     private int enterTrainingDuration() {

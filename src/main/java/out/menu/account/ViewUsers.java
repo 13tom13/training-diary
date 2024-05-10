@@ -4,9 +4,10 @@ import entity.dto.UserDTO;
 import entity.model.User;
 import exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import out.menu.training.ViewTraining;
-import out.messengers.AdminMessenger;
+import out.messenger.AdminHTTPMessenger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,20 +22,26 @@ import static utils.Logger.LOGS_PATH;
  * Класс ViewUsers представляет меню для просмотра и управления пользователями.
  */
 @Component
-@RequiredArgsConstructor
 public class ViewUsers {
 
-    private final AdminMessenger adminMessenger;
+    private final AdminHTTPMessenger adminHTTPMessenger;
     private final ViewTraining viewTraining;
     private final ViewUsersEdition viewUsersEdition;
     private final Scanner scanner = new Scanner(System.in);
+
+    @Autowired
+    public ViewUsers(AdminHTTPMessenger adminHTTPMessenger, ViewTraining viewTraining, ViewUsersEdition viewUsersEdition) {
+        this.adminHTTPMessenger = adminHTTPMessenger;
+        this.viewTraining = viewTraining;
+        this.viewUsersEdition = viewUsersEdition;
+    }
 
     /**
      * Метод для просмотра всех пользователей.
      */
     public void viewAllUsers() {
         System.out.println("Список всех пользователей:");
-        List<User> allUsers = adminMessenger.getAllUsers();
+        List<User> allUsers = adminHTTPMessenger.getAllUsers();
         for (User user : allUsers) {
             System.out.println(user);
         }
@@ -47,10 +54,10 @@ public class ViewUsers {
         System.out.println("Введите email пользователя для редактирования:");
         String email = scanner.nextLine();
         try {
-            UserDTO userDTO = adminMessenger.getUser(email);
+            UserDTO userDTO = adminHTTPMessenger.getUser(email);
             userViewMenu(userDTO);
         } catch (UserNotFoundException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Пользователь не найден: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Ошибка ввода данных: " + e.getMessage());
         }
@@ -80,7 +87,7 @@ public class ViewUsers {
                     case 2 -> viewTraining.viewAllTraining(userDTO);
                     case 3 -> viewLogsUser(userDTO);
                     case 4 -> {
-                        adminMessenger.deleteUser(userDTO);
+                        adminHTTPMessenger.deleteUser(userDTO);
                         System.err.println("Пользователь с email: " + userDTO.getEmail() + " удален.");
                         view = false;
                     }

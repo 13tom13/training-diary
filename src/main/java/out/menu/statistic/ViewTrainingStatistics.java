@@ -4,7 +4,10 @@ package out.menu.statistic;
 import entity.dto.UserDTO;
 import in.controller.training.statistics.TrainingStatisticsController;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import out.messenger.TrainingStatisticsHTTPMessenger;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -16,21 +19,21 @@ import static utils.Utils.getDateFromString;
  * Класс ViewTrainingStatistics представляет меню для просмотра статистики тренировок пользователя.
  */
 @Component
-@RequiredArgsConstructor
 public class ViewTrainingStatistics {
 
-    private final TrainingStatisticsController trainingStatisticsController;
-    private UserDTO userDTO;
+    private final TrainingStatisticsHTTPMessenger trainingStatisticsHTTPMessenger;
+
     private final Scanner scanner = new Scanner(System.in);
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    @Autowired
+    public ViewTrainingStatistics(TrainingStatisticsHTTPMessenger trainingStatisticsHTTPMessenger) {
+        this.trainingStatisticsHTTPMessenger = trainingStatisticsHTTPMessenger;
     }
 
     /**
      * Метод для отображения главного меню статистики тренировок пользователя.
      */
-    public void statisticMenu() {
+    public void statisticMenu(UserDTO userDTO) {
         boolean start = true;
         while (start) {
             System.out.printf("\nСтатистика пользователя: %s %s!\n", userDTO.getFirstName(), userDTO.getLastName());
@@ -44,10 +47,10 @@ public class ViewTrainingStatistics {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case 1 -> printTotalTrainingStatistics();
-//                    case 2 -> printPeriodTrainingStatistics(trainingStatisticsController::getAllTrainingStatisticsPerPeriod);
-//                    case 3 -> printPeriodTrainingStatistics(trainingStatisticsController::getDurationStatisticsPerPeriod);
-//                    case 4 -> printPeriodTrainingStatistics(trainingStatisticsController::getCaloriesBurnedPerPeriod);
+                    case 1 -> printTotalTrainingStatistics(userDTO);
+                    case 2 -> printPeriodTrainingStatistics(userDTO, trainingStatisticsHTTPMessenger::getAllTrainingStatisticsPerPeriod);
+                    case 3 -> printPeriodTrainingStatistics(userDTO, trainingStatisticsHTTPMessenger::getDurationStatisticsPerPeriod);
+                    case 4 -> printPeriodTrainingStatistics(userDTO, trainingStatisticsHTTPMessenger::getCaloriesBurnedPerPeriod);
                     case 5 -> {
                         System.out.println("Выход из меню статистики пользователя " + userDTO.getEmail());
                         start = false;
@@ -64,13 +67,13 @@ public class ViewTrainingStatistics {
     /**
      * Метод для вывода общей статистики всех тренировок пользователя.
      */
-    private void printTotalTrainingStatistics() {
-//        int result = trainingStatisticsController.getAllTrainingStatistics(userDTO);
-//        if (result > 0) {
-//            System.out.println("Всего тренировок пользователя: " + result);
-//        } else {
-//            System.out.println("Тренировок не обнаружено");
-//        }
+    private void printTotalTrainingStatistics(UserDTO userDTO) {
+        int result = trainingStatisticsHTTPMessenger.getAllTrainingStatistics(userDTO);
+        if (result > 0) {
+            System.out.println("Всего тренировок пользователя: " + result);
+        } else {
+            System.out.println("Тренировок не обнаружено");
+        }
     }
 
     /**
@@ -78,7 +81,7 @@ public class ViewTrainingStatistics {
      *
      * @param statisticsFunction Функция для получения статистики за период.
      */
-    private void printPeriodTrainingStatistics(TriFunction<UserDTO, LocalDate, LocalDate, Integer> statisticsFunction) {
+    private void printPeriodTrainingStatistics(UserDTO userDTO, TriFunction<UserDTO, LocalDate, LocalDate, Integer> statisticsFunction) {
         System.out.println("Введите начало периода (дд.мм.гг):");
         String stringStartDate = enterStringDate(scanner);
         LocalDate startDate = getDateFromString(stringStartDate);

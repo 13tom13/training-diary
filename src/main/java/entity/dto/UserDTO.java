@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class UserDTO {
 
-    //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
@@ -32,8 +31,6 @@ public class UserDTO {
     private List<Roles> roles;
 
     private boolean isActive;
-
-    // Конструкторы, геттеры и сеттеры
 
     public UserDTO() {
     }

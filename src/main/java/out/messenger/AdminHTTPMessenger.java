@@ -1,4 +1,4 @@
-package out.messengers;
+package out.messenger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -9,7 +9,6 @@ import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ import static utils.ServletUtils.encodeToUrlJson;
 
 @Component
 @RequiredArgsConstructor
-public class AdminMessenger {
+public class AdminHTTPMessenger {
 
     private String rootURL = "http://localhost:8080/training-diary";
 

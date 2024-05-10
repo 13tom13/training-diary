@@ -1,4 +1,4 @@
-package out.messengers;
+package out.messenger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class AuthorizationMessenger {
+public class AuthorizationHTTPMessenger {
 
     private final String rootURL = "http://localhost:8080/training-diary";
 
@@ -27,11 +27,10 @@ public class AuthorizationMessenger {
             String jsonRequestBody = objectMapper.writeValueAsString(authorizationDTO);
             HttpEntity<String> requestEntity = new HttpEntity<>(jsonRequestBody, headers);
             ResponseEntity<UserDTO> responseEntity = restTemplate.exchange(requestURL, HttpMethod.POST, requestEntity, UserDTO.class);
-
-            return responseEntity.getBody();
+            UserDTO userDTO = responseEntity.getBody();
+            return userDTO;
         } catch (JsonProcessingException e) {
             return null;
         }
-
     }
 }

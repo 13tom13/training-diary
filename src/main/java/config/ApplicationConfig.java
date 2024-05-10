@@ -3,16 +3,23 @@ package config;
 import config.database.LiquibaseConnector;
 import in.repository.training.TrainingRepository;
 import in.repository.user.UserRepository;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Configuration
+@PropertySource("classpath:application.yml")
 public class ApplicationConfig {
 
     private static final String CONFIG_FILE = "/application.properties";
 
     private static final Properties PROPERTIES = new Properties();
+
 
     static {
         try (InputStream inputStream = ApplicationConfig.class.getResourceAsStream(CONFIG_FILE)) {

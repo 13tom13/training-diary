@@ -1,6 +1,7 @@
 package out.menu.account;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -9,11 +10,15 @@ import java.util.Scanner;
  * Класс ViewAdminAccount представляет меню для администратора.
  */
 @Component
-@RequiredArgsConstructor
 public class ViewAdminAccount {
 
     private final ViewUsers viewUsers;
     private final Scanner scanner = new Scanner(System.in);
+
+    @Autowired
+    public ViewAdminAccount(ViewUsers viewUsers) {
+        this.viewUsers = viewUsers;
+    }
 
     /**
      * Метод для отображения меню для администратора.
