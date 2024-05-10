@@ -1,16 +1,9 @@
 package entity.model;
 
-import jakarta.persistence.Id;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.List;
 
-@Entity
-@Table(name = "permissions.rights")
 public class Rights {
 
-    @Id
     private Long id;
 
     private String name;

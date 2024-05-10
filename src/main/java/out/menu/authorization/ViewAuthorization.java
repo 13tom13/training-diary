@@ -42,19 +42,15 @@ public class ViewAuthorization {
         String authEmail = scanner.nextLine();
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
-        try {
-            AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
-            UserDTO userDTO = authorizationMessenger.login(authorizationDTO);
-            System.out.println("UserDTO from messenger: " + userDTO);
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
+        UserDTO userDTO = authorizationMessenger.login(authorizationDTO);
+        System.out.println("UserDTO from messenger: " + userDTO);
 //            if (hisRole(userDTO,"ADMIN")) {
 //                viewAdminAccount.adminAccountMenu();
 //            } else if (hisRole(userDTO,"USER")) {
 //                viewUserAccount.setUserDTO(userDTO);
 //                viewUserAccount.userAccountMenu();
 //            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
     }
 
 

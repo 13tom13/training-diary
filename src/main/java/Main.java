@@ -1,4 +1,5 @@
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import config.MainConfig;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import out.TrainingDiary;
 
 /**
@@ -12,9 +13,8 @@ public class Main {
      * @param args Аргументы командной строки.
      */
     public static void main(String[] args) {
-        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.scan("config", "util", "in", "out");
-
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+        context.start();
         // Создание объекта TrainingDiary
         TrainingDiary trainingDiary = context.getBean(TrainingDiary.class);
 

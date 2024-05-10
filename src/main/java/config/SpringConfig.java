@@ -23,9 +23,4 @@ public class SpringConfig implements WebMvcConfigurer {
                 .indentOutput(true);
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
     }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }
