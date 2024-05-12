@@ -3,6 +3,7 @@ package out.menu.authorization;
 import entity.dto.AuthorizationDTO;
 import entity.dto.RegistrationDTO;
 import entity.dto.UserDTO;
+import entity.model.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import out.messenger.AuthorizationHTTPMessenger;
 import out.messenger.UserHTTPMessenger;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import static utils.Utils.hisRole;
@@ -47,13 +49,17 @@ public class ViewAuthorization {
         String authEmail = scanner.nextLine();
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
-        AuthorizationDTO authorizationDTO = new AuthorizationDTO(authEmail, authPassword);
+        AuthorizationDTO authorizationDTO = AuthorizationDTO.builder().email(authEmail).password(authPassword).build();
         UserDTO userDTO = authorizationHTTPMessenger.login(authorizationDTO);
-            if (hisRole(userDTO,"ADMIN")) {
-                viewAdminAccount.adminAccountMenu();
-            } else if (hisRole(userDTO,"USER")) {
-                viewUserAccount.userAccountMenu(userDTO);
-            }
+        System.out.println(userDTO);
+        List<Roles> userRoles = authorizationHTTPMessenger.getUserRoles(userDTO);
+        if (hisRole(userRoles, "ADMIN")) {
+            viewAdminAccount.adminAccountMenu();
+        } else if (hisRole(userRoles, "USER")) {
+            viewUserAccount.userAccountMenu(userDTO);
+        } else {
+            System.err.println("Ошибка авторизации");
+        }
     }
 
 
@@ -70,7 +76,8 @@ public class ViewAuthorization {
         String regLastName = scanner.nextLine();
         System.out.println("Введите пароль:");
         String regPassword = scanner.nextLine();
-        RegistrationDTO regDTO = new RegistrationDTO(regEmail, regFirstName, regLastName, regPassword);
+        RegistrationDTO regDTO = RegistrationDTO.builder().email(regEmail)
+                .firstName(regFirstName).lastName(regLastName).password(regPassword).build();
         try {
             userHTTPMessenger.registration(regDTO);
         } catch (IOException e) {

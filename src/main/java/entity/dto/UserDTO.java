@@ -5,15 +5,22 @@ import entity.model.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * DTO для передачи данных о пользователе.
  */
+@Data
+@Builder
 public class UserDTO {
 
-    private Long id;
+    private long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
     private String firstName;
@@ -24,81 +31,26 @@ public class UserDTO {
     @Email(message = "Некорректный адрес электронной почты")
     private String email;
 
-    @NotNull(message = "Список прав не должен быть пустым")
-    private List<Rights> rights;
-
-    @NotNull(message = "Список ролей не должен быть пустым")
-    private List<Roles> roles;
+    private List<Roles> roles = new ArrayList<>();
 
     private boolean isActive;
 
     public UserDTO() {
     }
 
-    public UserDTO(String email) {
-        this.email = email;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public UserDTO(long id, String firstName, String lastName, String email, List<Roles> roles, boolean isActive) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<Rights> getRights() {
-        return rights;
-    }
-
-    public void setRights(List<Rights> rights) {
-        this.rights = rights;
-    }
-
-    public List<Roles> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Roles> roles) {
         this.roles = roles;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
+
 
     @Override
     public String toString() {
         String status = isActive ? "active" : "deactivate";
-        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | роли: "
-               + roles.toString() + " | права: " + rights.toString() + " | (" + status + ")";
+        return "Пользователь: " + firstName + " " + lastName + " | email: " + email + " | (" + status + ")";
     }
 }

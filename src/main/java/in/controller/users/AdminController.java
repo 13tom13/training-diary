@@ -6,6 +6,8 @@ import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,10 +74,16 @@ public interface AdminController {
     /**
      * Удаляет пользователя.
      *
-     * @param userDTO Пользователь, который будет удален.
+     * @param email Пользователь, который будет удален.
      * @return
      */
-    ResponseEntity<Void> deleteUser(UserDTO userDTO);
+    ResponseEntity<Void> deleteUser(String email);
+
+    @GetMapping("/user/rights")
+    ResponseEntity<List<Rights>> getUserRights(@RequestParam("user") long id) throws IOException;
 
     ResponseEntity<List<Rights>> getAllRights() throws IOException;
+
+    @GetMapping("/getUserRoles")
+    ResponseEntity<?> login(@RequestParam("userId") Long userId);
 }

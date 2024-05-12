@@ -5,6 +5,7 @@ import entity.model.Training;
 import entity.model.User;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -19,7 +20,7 @@ public interface TrainingRepository {
      * @param user электронная почта пользователя
      * @return отображение даты на множество тренировок
      */
-    TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(User user);
+    TreeMap<LocalDate, TreeSet<Training>> getAllTrainingsByUserEmail(String email);
 
     /**
      * Получить тренировки для указанного пользователя на указанную дату.
@@ -29,7 +30,7 @@ public interface TrainingRepository {
      * @return множество тренировок на указанную дату
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    TreeSet<Training> getTrainingsByUserEmailAndData(User user, LocalDate trainingDate) throws RepositoryException;
+    TreeSet<Training> getTrainingsByUserEmailAndData(String email, LocalDate trainingDate) throws RepositoryException;
 
     /**
      * Получить тренировку по электронной почте пользователя, дате и названию.
@@ -40,7 +41,7 @@ public interface TrainingRepository {
      * @return тренировка
      * @throws RepositoryException если тренировка не найдена или возникла ошибка при доступе к хранилищу
      */
-    Training getTrainingByUserEmailAndDataAndName(User user, LocalDate trainingDate, String trainingName) throws RepositoryException;
+    Training getTrainingByUserEmailAndDataAndName(String email, LocalDate trainingDate, String trainingName) throws RepositoryException;
 
     /**
      * Сохранить новую тренировку для указанного пользователя.
@@ -64,12 +65,13 @@ public interface TrainingRepository {
     /**
      * Обновить существующую тренировку для указанного пользователя.
      *
-     * @param user        электронная почта пользователя
-     * @param oldTraining старая версия тренировки
-     * @param newTraining новая версия тренировки
+     * @param user             электронная почта пользователя
+     * @param updatingTraining старая версия тренировки
      * @return измененная тренировка
      * @throws RepositoryException если тренировка для обновления не найдена или возникла ошибка при доступе к хранилищу
      */
-    Training updateTraining(User user, Training oldTraining, Training newTraining) throws RepositoryException;
+    Training updateTraining(User user, Training updatingTraining) throws RepositoryException;
+
+    HashMap<String, String> getTrainingAdditions(long trainingID) throws RepositoryException;
 }
 

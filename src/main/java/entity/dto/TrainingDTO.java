@@ -2,6 +2,10 @@ package entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -9,10 +13,12 @@ import java.util.Objects;
 
 import static utils.Utils.getStringFromDate;
 
+@Data
+@Builder
 public class TrainingDTO implements Comparable<TrainingDTO> {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private long id;
 
     @NotBlank(message = "Имя тренировки не должно быть пустым")
     private String name;
@@ -38,60 +44,18 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
         this.date = date;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
-        this.additions = additions;
+        this.additions = (additions == null) ? new HashMap<>() : additions;
     }
 
-    public TrainingDTO(String name, LocalDate date, int duration, int caloriesBurned) {
-        this(name, date, duration, caloriesBurned, new HashMap<>());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public TrainingDTO(long id, String name, LocalDate date, int duration, int caloriesBurned, HashMap<String, String> additions) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
         this.duration = duration;
-    }
-
-    public int getCaloriesBurned() {
-        return caloriesBurned;
-    }
-
-    public void setCaloriesBurned(int caloriesBurned) {
         this.caloriesBurned = caloriesBurned;
+        this.additions = (additions == null) ? new HashMap<>() : additions;
     }
 
-    public HashMap<String, String> getAdditions() {
-        return additions;
-    }
-
-    public void setAdditions(HashMap<String, String> additions) {
-        this.additions = additions;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -120,7 +84,7 @@ public class TrainingDTO implements Comparable<TrainingDTO> {
                 .append(" | Продолжительность: ").append(duration).append(" мин")
                 .append(" | Сожжено калорий: ").append(caloriesBurned).append(" kcal");
 
-        if (!additions.isEmpty()) {
+        if (additions != null && !additions.isEmpty()) {
             stringBuilder.append("\nДополнительная информация:");
             for (String key : additions.keySet()) {
                 stringBuilder.append("\n").append(key).append(": ").append(additions.get(key));

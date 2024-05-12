@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.dto.UserDTO;
 import entity.model.Rights;
+import entity.model.Roles;
 import entity.model.User;
 import exceptions.RepositoryException;
 import exceptions.UserNotFoundException;
@@ -60,7 +61,7 @@ public class AdminHTTPMessenger {
     public void deleteUser(UserDTO userDTO) {
         try {
             String userEmailForGet = encodeToUrlJson(userDTO.getEmail());
-            String urlWithParams = rootURL + "/admin/user/delete" + "?userEmail=" + userEmailForGet;
+            String urlWithParams = rootURL + "/admin/user/delete" + "?email=" + userEmailForGet;
             try {
                 sendDeleteRequest(urlWithParams);
             } catch (IOException e) {
@@ -146,11 +147,19 @@ public class AdminHTTPMessenger {
     }
 
     public List<Rights> getAllRights() throws IOException {
-        String getAllRightsServletPath = "/admin/rights";
+        String getAllRightsServletPath = "/admin/AllRights";
         String urlWithParams = rootURL + getAllRightsServletPath;
         String jsonResponse = sendGetRequest(urlWithParams);
         TypeReference<List<Rights>> typeRef = new TypeReference<>() {
         };
         return objectMapper.readValue(jsonResponse, typeRef);
+    }
+
+    public List<Rights> getUserRights(UserDTO userDTO) {
+        String requestURL = rootURL + "/getUserRights?userId=" + userDTO.getId();
+        ResponseEntity<List<Rights>> responseEntity = restTemplate.exchange(requestURL,
+                HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+                });
+        return responseEntity.getBody();
     }
 }

@@ -1,15 +1,13 @@
 package utils;
 
-import entity.dto.TrainingDTO;
-import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.Roles;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -26,13 +24,13 @@ public class Utils {
         return formatter.format(date);
     }
 
-    public static boolean hisRight(UserDTO userDTO, String rightsName) {
-        return userDTO.getRights().stream().anyMatch(rights -> rights.getName().equals(rightsName));
+    public static boolean hisRight(List<Rights> rights, String rightsName) {
+        return rights.stream().anyMatch(right -> right.getName().equals(rightsName));
     }
 
 
-    public static boolean hisRole(UserDTO userDTO, String roleName) {
-        return userDTO.getRoles().stream().anyMatch(role -> role.getName().equals(roleName));
+    public static boolean hisRole(List<Roles> roles, String roleName) {
+        return roles.stream().anyMatch(role -> role.getName().equals(roleName));
     }
 
     public static String enterStringDate(Scanner scanner) {

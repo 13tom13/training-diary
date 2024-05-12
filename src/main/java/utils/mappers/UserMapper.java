@@ -24,9 +24,8 @@ public interface UserMapper {
             @Mapping(target = "firstName", source = "firstName"),
             @Mapping(target = "lastName", source = "lastName"),
             @Mapping(target = "email", source = "email"),
-            @Mapping(target = "active", source = "active"),
-            @Mapping(target = "rights", source = "rights", qualifiedByName = "listToRights"),
             @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles"),
+            @Mapping(target = "isActive", source = "active"),
     })
     UserDTO userToUserDTO(User user);
 
@@ -35,9 +34,7 @@ public interface UserMapper {
             @Mapping(target = "firstName", source = "firstName"),
             @Mapping(target = "lastName", source = "lastName"),
             @Mapping(target = "email", source = "email"),
-            @Mapping(target = "active", source = "active"),
-            @Mapping(target = "rights", source = "rights", qualifiedByName = "listToRights"),
-            @Mapping(target = "roles", source = "roles", qualifiedByName = "listToRoles"),
+            @Mapping(target = "isActive", source = "active"),
             @Mapping(target = "password", ignore = true)
     })
     User userDTOToUser(UserDTO userDTO);

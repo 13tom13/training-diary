@@ -1,12 +1,12 @@
 package in.controller.training;
 
 import entity.dto.TrainingDTO;
-import entity.dto.UserDTO;
 import exceptions.InvalidDateFormatException;
 import exceptions.RepositoryException;
 import exceptions.security.rights.NoDeleteRightsException;
 import exceptions.security.rights.NoWriteRightsException;
 import org.springframework.http.ResponseEntity;
+import out.messenger.TrainingRequest;
 
 
 import java.time.LocalDate;
@@ -19,80 +19,76 @@ public interface TrainingModificationController {
     /**
      * Сохраняет новую тренировку для пользователя.
      *
-     * @param userDTO     пользователь, для которого сохраняется тренировка
-     * @param trainingDTO тренировка, которую нужно сохранить
      * @return true, если тренировка успешно сохранена, в противном случае false
      */
-    ResponseEntity<?> saveTraining(UserDTO userDTO, TrainingDTO trainingDTO) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException;
+    ResponseEntity<?> saveTraining(TrainingRequest request) throws InvalidDateFormatException, NoWriteRightsException, RepositoryException;
 
     /**
      * Удаляет тренировку пользователя по указанной дате и имени.
      *
-     * @param userDTO пользователь, для которого удаляется тренировка
-     * @param date    дата тренировки
-     * @param name    имя тренировки
+     * @param email пользователь, для которого удаляется тренировка
+     * @param date  дата тренировки
+     * @param name  имя тренировки
      * @return
      */
-    ResponseEntity<?> deleteTraining(UserDTO userDTO, String date, String name) throws NoDeleteRightsException, RepositoryException;
+    ResponseEntity<?> deleteTraining(String email, String date, String name) throws NoDeleteRightsException, RepositoryException;
 
     /**
      * Добавляет дополнительную информацию к тренировке.
      *
-     * @param userDTO         пользователь, для которого добавляется информация
-     * @param trainingDTO     тренировка, к которой добавляется информация
      * @param additionalName  название дополнительной информации
      * @param additionalValue значение дополнительной информации
      * @return измененная тренировка
      */
-    ResponseEntity<?> addTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName, String additionalValue);
+    ResponseEntity<?> addTrainingAdditional(String additionalName, String additionalValue, TrainingRequest trainingRequest);
 
     /**
      * Удаляет дополнительную информацию из тренировки.
      *
-     * @param userDTO        пользователь, для которого удаляется информация
      * @param trainingDTO    тренировка, из которой удаляется информация
+     * @param email          пользователь, для которого удаляется информация
      * @param additionalName название дополнительной информации
      * @return измененная тренировка
      */
-    ResponseEntity<?> removeTrainingAdditional(UserDTO userDTO, TrainingDTO trainingDTO, String additionalName);
+    ResponseEntity<?> removeTrainingAdditional(TrainingDTO trainingDTO, String email, String additionalName);
 
     /**
      * Изменяет имя тренировки.
      *
-     * @param userDTO     пользователь, для которого изменяется имя тренировки
      * @param trainingDTO тренировка, у которой изменяется имя
+     * @param email       пользователь, для которого изменяется имя тренировки
      * @param newName     новое имя тренировки
      * @return измененная тренировка
      */
-    ResponseEntity<?> changeNameTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newName) throws RepositoryException;
+    ResponseEntity<?> changeNameTraining(TrainingDTO trainingDTO, String email, String newName) throws RepositoryException;
 
     /**
      * Изменяет дату тренировки.
      *
-     * @param userDTO     пользователь, для которого изменяется дата тренировки
      * @param trainingDTO тренировка, у которой изменяется дата
+     * @param email       пользователь, для которого изменяется дата тренировки
      * @param newDate     новая дата тренировки
      * @return измененная тренировка
      */
-    ResponseEntity<?> changeDateTraining(UserDTO userDTO, TrainingDTO trainingDTO, LocalDate newDate) throws RepositoryException;
+    ResponseEntity<?> changeDateTraining(TrainingDTO trainingDTO, String email, LocalDate newDate) throws RepositoryException;
 
     /**
      * Изменяет продолжительность тренировки.
      *
-     * @param userDTO     пользователь, для которого изменяется продолжительность тренировки
      * @param trainingDTO тренировка, у которой изменяется продолжительность
+     * @param email       пользователь, для которого изменяется продолжительность тренировки
      * @param newDuration новая продолжительность тренировки
      * @return измененная тренировка
      */
-    ResponseEntity<?> changeDurationTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newDuration) throws RepositoryException;
+    ResponseEntity<?> changeDurationTraining(TrainingDTO trainingDTO, String email, int newDuration) throws RepositoryException;
 
     /**
      * Изменяет количество сожженных калорий на тренировке.
      *
-     * @param userDTO     пользователь, для которого изменяется количество калорий на тренировке
      * @param trainingDTO тренировка, у которой изменяется количество калорий
+     * @param email       пользователь, для которого изменяется количество калорий на тренировке
      * @param newCalories новое количество сожженных калорий
      * @return измененная тренировка
      */
-    ResponseEntity<?> changeCaloriesTraining(UserDTO userDTO, TrainingDTO trainingDTO, String newCalories) throws RepositoryException;
+    ResponseEntity<?> changeCaloriesTraining(TrainingDTO trainingDTO, String email, int newCalories) throws RepositoryException;
 }

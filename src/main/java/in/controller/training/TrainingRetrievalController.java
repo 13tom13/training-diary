@@ -17,27 +17,27 @@ public interface TrainingRetrievalController {
     /**
      * Получает все тренировки пользователя.
      *
-     * @param userDTO пользователь, чьи тренировки нужно получить
+     * @param email email пользователя, чье тренировку нужно получить
      * @return структура данных, содержащая все тренировки пользователя
      */
-    ResponseEntity<TreeMap<LocalDate, TreeSet<TrainingDTO>>> getAllTrainings(UserDTO userDTO);
+    ResponseEntity<TreeMap<LocalDate, TreeSet<TrainingDTO>>> getAllTrainings(String email);
 
     /**
      * Получает тренировки пользователя по указанной дате.
      *
-     * @param userDTO      пользователь, чьи тренировки нужно получить
+     * @param email        email пользователя, чье тренировку нужно получить
      * @param trainingDate дата тренировки, для которой нужно получить список тренировок
      * @return список тренировок пользователя по указанной дате
      */
-    ResponseEntity<?> getTrainingsByUserEmailAndData(UserDTO userDTO, String trainingDate);
+    ResponseEntity<?> getTrainingsByUserEmailAndData(String email, String trainingDate);
 
     /**
      * Получает тренировку пользователя по указанной дате и имени.
      *
-     * @param userDTO      пользователь, чьи тренировки нужно получить
+     * @param email        email пользователя, чье тренировку нужно получить
      * @param trainingDate дата тренировки, для которой нужно получить тренировку
      * @param trainingName имя тренировки, которую нужно получить
      * @return тренировка пользователя по указанной дате и имени
      */
-    ResponseEntity<?> getTrainingByUserEmailAndDateAndName(UserDTO userDTO, String trainingDate, String trainingName) throws IOException;
+    ResponseEntity<?> getTrainingByUserEmailAndDateAndName(String email, String trainingDate, String trainingName) throws IOException;
 }

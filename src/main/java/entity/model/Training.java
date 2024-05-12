@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,8 +18,10 @@ import static utils.Utils.getStringFromDate;
 /**
  * Класс, представляющий тренировку.
  */
+@Data
+@Builder
 public class Training implements Comparable<Training> {
-    private Long id;
+    private long id;
     private String name; // Название тренировки
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -23,7 +29,7 @@ public class Training implements Comparable<Training> {
     private int duration; // Продолжительность тренировки в минутах
     private int caloriesBurned; // Количество сожженных калорий
 
-    private final HashMap<String, String> additions; // Дополнительная информация о тренировке
+    private HashMap<String, String> additions; // Дополнительная информация о тренировке
 
     /**
      * Конструктор по умолчанию.
@@ -31,24 +37,6 @@ public class Training implements Comparable<Training> {
     public Training() {
         this.additions = new HashMap<>();
     }
-
-    /**
-     * Конструктор с параметрами.
-     *
-     * @param name           Название тренировки
-     * @param date           Дата тренировки
-     * @param duration       Продолжительность тренировки в минутах
-     * @param caloriesBurned Количество сожженных калорий
-     */
-    public Training(long id, String name, LocalDate date, int duration, int caloriesBurned, HashMap<String, String> additions) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.duration = duration;
-        this.caloriesBurned = caloriesBurned;
-        this.additions = additions;
-    }
-
 
     /**
      * Конструктор с параметрами (без дополнительной информации).
@@ -66,12 +54,13 @@ public class Training implements Comparable<Training> {
         this.additions = new HashMap<>();
     }
 
-    public Training(String name, LocalDate date, int caloriesBurned, int duration, HashMap<String, String> additions) {
-        this.additions = additions;
-        this.caloriesBurned = caloriesBurned;
-        this.duration = duration;
-        this.date = date;
+    public Training(long id, String name, LocalDate date, int duration, int caloriesBurned, HashMap<String, String> additions) {
+        this.id = id;
         this.name = name;
+        this.date = date;
+        this.duration = duration;
+        this.caloriesBurned = caloriesBurned;
+        this.additions = (additions == null) ? new HashMap<>() : additions;
     }
 
     public void setId(Long id) {
@@ -82,89 +71,7 @@ public class Training implements Comparable<Training> {
         return id;
     }
 
-    /**
-     * Устанавливает дату тренировки.
-     *
-     * @param date Дата тренировки в формате строки
-     */
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    /**
-     * Получает дату тренировки.
-     *
-     * @return Дата тренировки
-     */
-    public LocalDate getDate() {
-        return date;
-    }
-
-    /**
-     * Получает название тренировки.
-     *
-     * @return Название тренировки
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Устанавливает название тренировки.
-     *
-     * @param name Новое название тренировки
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Получает продолжительность тренировки в минутах.
-     *
-     * @return Продолжительность тренировки в минутах
-     */
-    public int getDuration() {
-        return duration;
-    }
-
-    /**
-     * Устанавливает продолжительность тренировки в минутах.
-     *
-     * @param duration Новая продолжительность тренировки в минутах
-     */
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    /**
-     * Получает количество сожженных калорий.
-     *
-     * @return Количество сожженных калорий
-     */
-    public int getCaloriesBurned() {
-        return caloriesBurned;
-    }
-
-    /**
-     * Устанавливает количество сожженных калорий.
-     *
-     * @param caloriesBurned Новое количество сожженных калорий
-     */
-    public void setCaloriesBurned(int caloriesBurned) {
-        this.caloriesBurned = caloriesBurned;
-    }
-
-    /**
-     * Получает дополнительную информацию о тренировке.
-     *
-     * @return Дополнительная информация о тренировке в виде HashMap
-     */
-    public HashMap<String, String> getAdditions() {
-        return additions;
-    }
-
-
-    /**
+   /**
      * Добавляет дополнительные данные к тренировке.
      *
      * @param additionalName  Название дополнительной информации

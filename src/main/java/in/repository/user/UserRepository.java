@@ -1,5 +1,6 @@
 package in.repository.user;
 
+import entity.model.Roles;
 import entity.model.User;
 import exceptions.RepositoryException;
 import entity.model.Rights;
@@ -29,6 +30,10 @@ public interface UserRepository {
     List<User> getAllUsers();
 
     List<Rights> getAllRights();
+
+    List<Rights> getUserRightsById(long userId) throws SQLException;
+
+    List<Roles> getUserRolesById(long userId) throws SQLException;
 
     /**
      * Сохранить пользователя в хранилище.
@@ -67,5 +72,4 @@ public interface UserRepository {
      * @throws SQLException если произошла ошибка при выполнении SQL-запроса
      */
     void assignUserRoles(User user) throws SQLException;
-
 }

@@ -1,6 +1,7 @@
 package in.service.users.implementation;
 
 import entity.dto.UserDTO;
+import entity.model.Roles;
 import entity.model.User;
 import exceptions.security.AuthorizationException;
 import exceptions.security.NotActiveUserException;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import utils.annotations.Loggable;
 import utils.mappers.UserMapper;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,5 +53,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         } else {
             throw new AuthorizationException("Пользователь не найден");
         }
+    }
+
+    @Override
+    public List<Roles> getUserRoles(Long userId) throws SQLException {
+        return userRepository.getUserRolesById(userId);
     }
 }

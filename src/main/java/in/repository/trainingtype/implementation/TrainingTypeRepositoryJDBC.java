@@ -1,9 +1,8 @@
 package in.repository.trainingtype.implementation;
 
-import entity.model.User;
 import in.repository.trainingtype.TrainingTypeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -19,11 +18,12 @@ import java.util.List;
  */
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
 
     private final DataSource dataSource;
 
-    private Connection getConnection()  {
+    private Connection getConnection() {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
@@ -36,26 +36,26 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      * Получает список тренировок для указанного пользователя.
      * Если у пользователя нет собственного списка, возвращает список по умолчанию.
      *
-     * @param user пользователь
+     * @param id пользователь
      * @return список тренировок пользователя
      */
     @Override
-    public List<String> getTrainingTypes(User user) {
-        Connection connection = getConnection();
+    public List<String> getTrainingTypes(long id) {
         List<String> userTrainingTypes = new ArrayList<>();
         String sql = """
                 SELECT training_type
                 FROM relations.user_training_types
                 WHERE user_id = ?
                 """;
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, user.getId());
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 userTrainingTypes.add(resultSet.getString("training_type"));
             }
             if (userTrainingTypes.isEmpty()) {
-                return getDefaultTrainingTypes(user);
+                return getDefaultTrainingTypes(id);
             } else {
                 return userTrainingTypes;
             }
@@ -69,49 +69,46 @@ public class TrainingTypeRepositoryJDBC implements TrainingTypeRepository {
      * Добавляет тип тренировки для указанного пользователя.
      * Если у пользователя еще нет списка тренировок, создает его на основе списка по умолчанию.
      *
-     * @param user         пользователь
+     * @param id           пользователь
      * @param trainingType тип тренировки для добавления
      */
     @Override
-    public void saveTrainingType(User user, String trainingType) {
-        Connection connection = getConnection();
+    public void saveTrainingType(long id, String trainingType) {
         String sql = """
                 INSERT INTO relations.user_training_types (user_id, training_type)
                 VALUES (?, ?)
                 """;
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, user.getId());
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
             statement.setString(2, trainingType);
             statement.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Не удалось добавить тип тренировки");
         }
-
     }
 
     /**
      * Получает список тренировок по умолчанию.
-     *
      */
-        private List<String> getDefaultTrainingTypes(User user) {
-            Connection connection = getConnection();
-            System.out.println(user);
-            List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
-            String sql = """
-                 INSERT INTO relations.user_training_types (user_id, training_type)
-                 VALUES (?, ?)
-                 """;
-            try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
-                for (String trainingType : defaultTrainingTypes) {
-                    insertStatement.setLong(1, user.getId());
-                    insertStatement.setString(2, trainingType);
-                    insertStatement.executeUpdate();
-                }
-            } catch (SQLException e) {
-                System.err.println("Не удалось добавить тип тренировки");
+    private List<String> getDefaultTrainingTypes(long id) {
+        List<String> defaultTrainingTypes = getDefaultTrainingTypeList();
+        String sql = """
+                INSERT INTO relations.user_training_types (user_id, training_type)
+                VALUES (?, ?)
+                """;
+        try (Connection connection = getConnection();
+             PreparedStatement insertStatement = connection.prepareStatement(sql)) {
+            for (String trainingType : defaultTrainingTypes) {
+                insertStatement.setLong(1, id);
+                insertStatement.setString(2, trainingType);
+                insertStatement.executeUpdate();
             }
-            return defaultTrainingTypes;
+        } catch (SQLException e) {
+            System.err.println("Не удалось добавить тип тренировки");
         }
+        return defaultTrainingTypes;
+    }
 
     // Метод для получения списка типов тренировок по умолчанию
     private List<String> getDefaultTrainingTypeList() {

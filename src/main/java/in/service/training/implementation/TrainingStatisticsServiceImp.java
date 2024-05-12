@@ -2,7 +2,9 @@ package in.service.training.implementation;
 
 import entity.dto.TrainingDTO;
 import entity.dto.UserDTO;
+import entity.model.User;
 import exceptions.security.rights.NoStatisticsRightsException;
+import in.repository.user.UserRepository;
 import in.service.training.TrainingService;
 import in.service.training.TrainingStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import static utils.Utils.hisRight;
 public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
 
     private final TrainingService trainingService;
+    private final UserRepository userRepository;
 
     /**
      * Создает новый экземпляр TrainingStatisticsServiceImpl.
@@ -27,8 +30,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      * @param trainingService сервис тренировок, используемый для получения информации о тренировках
      */
     @Autowired
-    public TrainingStatisticsServiceImp(TrainingService trainingService) {
+    public TrainingStatisticsServiceImp(TrainingService trainingService, UserRepository userRepository) {
         this.trainingService = trainingService;
+        this.userRepository = userRepository;
     }
 
 
@@ -41,8 +45,9 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public Integer getAllTrainingStatistics(UserDTO userDTO) throws NoStatisticsRightsException {
-        if (hisRight(userDTO, "STATISTICS")) {
-            TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        if (hisRight(user.getRights(), "STATISTICS")) {
+            TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO.getEmail());
             int totalTrainings = 0;
             for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
                 totalTrainings += trainingsOnDate.size();
@@ -65,7 +70,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public Integer getAllTrainingStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
-        if (hisRight(userDTO, "STATISTICS")) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        if (hisRight(user.getRights(), "STATISTICS")) {
             int totalTrainings;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
             totalTrainings = trainings.size();
@@ -86,7 +92,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
      */
     @Override
     public Integer getDurationStatisticsPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
-        if (hisRight(userDTO, "STATISTICS")) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        if (hisRight(user.getRights(), "STATISTICS")) {
             int totalDuration = 0;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
             for (TrainingDTO trainingDTO : trainings) {
@@ -100,7 +107,8 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
 
     @Override
     public Integer getCaloriesBurnedPerPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) throws NoStatisticsRightsException {
-        if (hisRight(userDTO, "STATISTICS")) {
+        User user = userRepository.getUserByEmail(userDTO.getEmail()).get();
+        if (hisRight(user.getRights(), "STATISTICS")) {
             int totalCaloriesBurned = 0;
             List<TrainingDTO> trainings = getTrainingsInPeriod(userDTO, startDate, endDate);
             for (TrainingDTO trainingDTO : trainings) {
@@ -113,7 +121,7 @@ public class TrainingStatisticsServiceImp implements TrainingStatisticsService {
     }
 
     private List<TrainingDTO> getTrainingsInPeriod(UserDTO userDTO, LocalDate startDate, LocalDate endDate) {
-        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO);
+        TreeMap<LocalDate, TreeSet<TrainingDTO>> allTrainings = trainingService.getAllTrainings(userDTO.getEmail());
         List<TrainingDTO> trainingsInPeriod = new ArrayList<>();
         for (TreeSet<TrainingDTO> trainingsOnDate : allTrainings.values()) {
             for (TrainingDTO trainingDTO : trainingsOnDate) {

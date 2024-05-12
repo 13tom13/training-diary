@@ -1,7 +1,5 @@
 package in.service.training;
 
-import entity.dto.UserDTO;
-
 
 import java.util.List;
 
@@ -13,16 +11,16 @@ public interface TrainingTypeService {
     /**
      * Получает список типов тренировок для указанного пользователя.
      *
-     * @param userDTO  пользователь, для которого получаются типы тренировок
+     * @param id пользователь, для которого получаются типы тренировок
      * @return список типов тренировок
      */
-    List<String> getTrainingTypes(UserDTO userDTO);
+    List<String> getTrainingTypes(long id);
 
     /**
      * Сохраняет пользовательский тип тренировки.
      *
-     * @param userDTO              пользователь, для которого сохраняется тип тренировки
+     * @param id                 пользователь, для которого сохраняется тип тренировки
      * @param customTrainingType пользовательский тип тренировки для сохранения
      */
-    void saveTrainingType(UserDTO userDTO, String customTrainingType);
+    void saveTrainingType(long id, String customTrainingType);
 }

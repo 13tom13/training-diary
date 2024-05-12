@@ -71,44 +71,44 @@ public abstract class TestUtil {
 
     public static UserDTO createTestUserDTO() {
         UserDTO testUserDTO = new UserDTO();
-        testUserDTO.setId(1L);
-        testUserDTO.setFirstName("John");
-        testUserDTO.setLastName("Doe");
-        testUserDTO.setEmail("john@example.com");
-        testUserDTO.setActive(true);
-        testUserDTO.setRights(new ArrayList<>());
-        testUserDTO.setRoles(new ArrayList<>());
-        testUserDTO.setActive(true);
-        testUserDTO.getRoles().add(new Roles(2L, "USER"));
-        testUserDTO.getRights().add(new Rights(4L, "STATISTICS"));
+//        testUserDTO.setId(1L);
+//        testUserDTO.setFirstName("John");
+//        testUserDTO.setLastName("Doe");
+//        testUserDTO.setEmail("john@example.com");
+//        testUserDTO.setActive(true);
+//        testUserDTO.setRights(new ArrayList<>());
+//        testUserDTO.setRoles(new ArrayList<>());
+//        testUserDTO.setActive(true);
+//        testUserDTO.getRoles().add(new Roles(2L, "USER"));
+//        testUserDTO.getRights().add(new Rights(4L, "STATISTICS"));
         return testUserDTO;
     }
 
     public static TrainingDTO createTestTrainingDTO() {
-        TrainingDTO testTrainingDTO = new TrainingDTO();
-        testTrainingDTO.setId(1L);
-        testTrainingDTO.setName("Test Training");
-        testTrainingDTO.setDate(LocalDate.now().minusDays(1));
-        testTrainingDTO.setDuration(60);
-        testTrainingDTO.setCaloriesBurned(500);
-        testTrainingDTO.setAdditions(new HashMap<>());
-        testTrainingDTO.getAdditions().put("Location", "Gym");
-        testTrainingDTO.getAdditions().put("Weather", "Sunny");
+        TrainingDTO testTrainingDTO = TrainingDTO.builder().build();
+//        testTrainingDTO.setId(1L);
+//        testTrainingDTO.setName("Test Training");
+//        testTrainingDTO.setDate(LocalDate.now().minusDays(1));
+//        testTrainingDTO.setDuration(60);
+//        testTrainingDTO.setCaloriesBurned(500);
+//        testTrainingDTO.setAdditions(new HashMap<>());
+//        testTrainingDTO.getAdditions().put("Location", "Gym");
+//        testTrainingDTO.getAdditions().put("Weather", "Sunny");
 
         return testTrainingDTO;
     }
 
     public static User createTestUser() {
         User testUser = new User();
-        testUser.setFirstName("John");
-        testUser.setLastName("Doe");
-        testUser.setEmail("john@example.com");
-        testUser.setActive(true);
-        testUser.setRights(new ArrayList<>());
-        testUser.setRoles(new ArrayList<>());
-        testUser.setActive(true);
-        testUser.getRoles().add(new Roles(2L, "USER"));
-        testUser.getRights().add(new Rights(4L, "STATISTICS"));
+//        testUser.setFirstName("John");
+//        testUser.setLastName("Doe");
+//        testUser.setEmail("john@example.com");
+//        testUser.setActive(true);
+//        testUser.setRights(new ArrayList<>());
+//        testUser.setRoles(new ArrayList<>());
+//        testUser.setActive(true);
+//        testUser.getRoles().add(new Roles(2L, "USER"));
+//        testUser.getRights().add(new Rights(4L, "STATISTICS"));
         return testUser;
     }
 

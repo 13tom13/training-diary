@@ -10,7 +10,5 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 public interface AuthorizationMapper {
 
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "password", source = "password")
     AuthorizationDTO emailAndPasswordToAuthorizationDTO(String email, String password);
 }

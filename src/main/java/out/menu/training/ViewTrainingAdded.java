@@ -3,8 +3,6 @@ package out.menu.training;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import entity.dto.TrainingDTO;
 import entity.dto.UserDTO;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -48,14 +46,16 @@ public class ViewTrainingAdded {
         int duration = enterTrainingDuration();
         int caloriesBurned = enterCaloriesBurned();
         LocalDate convertedDate = getDateFromString(date);
-        TrainingDTO trainingDTO = new TrainingDTO(name, convertedDate, duration, caloriesBurned);
+        TrainingDTO trainingDTO = TrainingDTO.builder().name(name).date(convertedDate)
+                .duration(duration).caloriesBurned(caloriesBurned).build();
         try {
             TrainingDTO savedTraining = trainingHTTPMessenger.saveTraining(userDTO, trainingDTO);
             addTrainingAdditional(userDTO, savedTraining);
             System.out.println("Тренировка успешно сохранена.");
-        } catch (JsonProcessingException e) {
-            System.out.println("Ошибка при преобразовании данных: " + e.getMessage());
+        } catch (RestClientException | JsonProcessingException e) {
+           System.err.println("Ошибка при сохранении тренировки: " + e.getMessage());
         }
+
 
 
     }
@@ -64,7 +64,7 @@ public class ViewTrainingAdded {
      * Метод для удаления тренировки.
      */
     public void deleteTraining(UserDTO userDTO) {
-        System.out.print("Введите дату тренировки (дд.мм.гг): ");
+        System.out.print("Введите дату тренировки: ");
         String trainingDate = enterStringDate(scanner);
         try {
             TreeSet<TrainingDTO> trainingsFromDay = trainingHTTPMessenger.getTrainingsByUserEmailAndData(userDTO, trainingDate);
@@ -73,6 +73,7 @@ public class ViewTrainingAdded {
             }
         } catch (JsonProcessingException | RestClientException e) {
             System.err.println("Ошибка при получении тренировки: " + e.getMessage());
+            return;
         }
 
         System.out.print("Название: ");

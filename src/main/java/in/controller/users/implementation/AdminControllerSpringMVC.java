@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import utils.mappers.UserMapper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,8 +112,8 @@ public class AdminControllerSpringMVC implements AdminController {
 
     @Override
     @DeleteMapping("user/delete")
-    public ResponseEntity<Void> deleteUser(@RequestParam("user") UserDTO userDTO) {
-        Optional<User> userByEmail = userRepository.getUserByEmail(userDTO.getEmail());
+    public ResponseEntity<Void> deleteUser(@RequestParam("email") String email) {
+        Optional<User> userByEmail = userRepository.getUserByEmail(email);
         if (userByEmail.isPresent()) {
             User user = userByEmail.get();
             userRepository.deleteUser(user);
@@ -123,9 +124,29 @@ public class AdminControllerSpringMVC implements AdminController {
     }
 
     @Override
-    @GetMapping("/rights")
+    @GetMapping("/user/rights")
+    public ResponseEntity<List<Rights>> getUserRights(@RequestParam("userId") long id) throws IOException {
+        List<Rights> allRights = userRepository.getAllRights();
+        return ResponseEntity.ok(allRights);
+    }
+
+
+    @Override
+    @GetMapping("/AllRights")
     public ResponseEntity<List<Rights>> getAllRights() throws IOException {
         List<Rights> allRights = userRepository.getAllRights();
         return ResponseEntity.ok(allRights);
     }
+
+    @Override
+    @GetMapping("/getUserRights")
+    public ResponseEntity<?> login(@RequestParam("userId") Long userId) {
+        try {
+            List<Rights> roles = userRepository.getUserRightsById(userId);
+            return ResponseEntity.ok(roles);
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

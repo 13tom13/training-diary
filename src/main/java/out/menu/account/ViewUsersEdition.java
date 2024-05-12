@@ -128,9 +128,8 @@ public class ViewUsersEdition {
      * @param userDTO Пользователь, права которого будут изменены.
      */
     private void changeUserRights(UserDTO userDTO) throws IOException, RepositoryException {
-        List<Rights> userRights = userDTO.getRights();
+        List<Rights> userRights = adminHTTPMessenger.getUserRights(userDTO);
         List<Rights> allRights = adminHTTPMessenger.getAllRights();
-        //TODO: Изменить метод прав пользователя.
         boolean editingRights = true;
         while (editingRights) {
             System.out.println("Текущие права пользователя:");

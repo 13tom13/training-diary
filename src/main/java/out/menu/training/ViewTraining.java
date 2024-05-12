@@ -36,7 +36,6 @@ public class ViewTraining {
      */
     public void viewAllTraining(UserDTO userDTO) {
         try {
-            System.out.println("userDTO id from user all training: " + userDTO.getId());
             TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingHTTPMessenger.getAllTrainings(userDTO);
             printAllTraining(allTraining);
         } catch (JsonProcessingException e) {
