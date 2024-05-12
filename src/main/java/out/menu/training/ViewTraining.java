@@ -1,50 +1,61 @@
 package out.menu.training;
 
 
-import in.controller.training.TrainingController;
-import model.Training;
-import model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import entity.dto.TrainingDTO;
+import entity.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import out.messenger.TrainingHTTPMessenger;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import static utils.Utils.getStringFromDate;
+
 /**
  * Представляет класс для просмотра тренировок пользователя.
  */
+@Component
 public class ViewTraining {
 
-    private final TrainingController trainingController;
+    private final TrainingHTTPMessenger trainingHTTPMessenger;
 
-    /**
-     * Создает экземпляр ViewTraining с заданным контроллером тренировок.
-     *
-     * @param trainingController Контроллер тренировок.
-     */
-    public ViewTraining(TrainingController trainingController) {
-        this.trainingController = trainingController;
+    @Autowired
+    public ViewTraining(TrainingHTTPMessenger trainingHTTPMessenger) {
+        this.trainingHTTPMessenger = trainingHTTPMessenger;
     }
 
     /**
      * Отображает все тренировки пользователя.
      *
-     * @param user Пользователь, чьи тренировки необходимо отобразить.
+     * @param userDTO Пользователь, чьи тренировки необходимо отобразить.
      */
-    public void viewAllTraining(User user) {
-        TreeMap<String, TreeSet<Training>> allTraining = trainingController.getAllTrainings(user);
+    public void viewAllTraining(UserDTO userDTO) {
+        try {
+            TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining = trainingHTTPMessenger.getAllTrainings(userDTO);
+            printAllTraining(allTraining);
+        } catch (JsonProcessingException e) {
+            System.out.println("Не удалось отобразить список тренировок пользователя (" + e.getMessage() + ")");
+        }
+    }
+
+    private void printAllTraining(TreeMap<LocalDate, TreeSet<TrainingDTO>> allTraining) {
         if (allTraining.isEmpty()) {
             System.out.println("Список тренировок пуст");
             return;
         }
 
-        for (Map.Entry<String, TreeSet<Training>> entry : allTraining.entrySet()) {
+        for (Map.Entry<LocalDate, TreeSet<TrainingDTO>> entry : allTraining.entrySet()) {
+            LocalDate currentDate = entry.getKey();
+            TreeSet<TrainingDTO> trainingsOnDate = entry.getValue();
 
-            String currentDate = entry.getKey();
-            TreeSet<Training> trainingsOnDate = entry.getValue();
+            System.out.println("\n" + "=====" + getStringFromDate(currentDate) + "=====");
 
-            System.out.println("\n" + "=====" + currentDate + "=====");
-
-            for (Training training : trainingsOnDate) {
+            for (TrainingDTO training : trainingsOnDate) {
                 System.out.println(training);
                 System.out.println("--------------------------------------------------");
             }

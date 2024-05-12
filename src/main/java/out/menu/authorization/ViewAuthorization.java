@@ -1,48 +1,43 @@
 package out.menu.authorization;
 
-import exceptions.security.AuthorizationException;
-import in.controller.authorization.AuthorizationController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.users.AdminController;
-import in.controller.users.UserController;
-import model.Roles;
-import model.User;
+import entity.dto.AuthorizationDTO;
+import entity.dto.RegistrationDTO;
+import entity.dto.UserDTO;
+import entity.model.Roles;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.account.ViewAdminAccount;
 import out.menu.account.ViewUserAccount;
+import out.messenger.AuthorizationHTTPMessenger;
+import out.messenger.UserHTTPMessenger;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
+
+import static utils.Utils.hisRole;
 
 /**
  * Класс ViewAuthorization представляет собой меню для авторизации и регистрации пользователей.
  */
+@Component
 public class ViewAuthorization {
 
-    private final AuthorizationController authorizationController;
-    private final AdminController adminController;
-    private final UserController userController;
-    private final TrainingController trainingController;
-    private final TrainingStatisticsController trainingStatisticsController;
-    private final Scanner scanner;
+    private final AuthorizationHTTPMessenger authorizationHTTPMessenger;
+    private final UserHTTPMessenger userHTTPMessenger;
 
-    /**
-     * Конструктор класса ViewAuthorization.
-     * @param authorizationController Контроллер авторизации.
-     * @param adminController Контроллер администратора.
-     * @param userController Контроллер пользователя.
-     * @param trainingController Контроллер тренировок.
-     * @param trainingStatisticsController Контроллер статистики тренировок.
-     * @param scanner Сканер для ввода данных.
-     */
-    public ViewAuthorization(AuthorizationController authorizationController, AdminController adminController,
-                             UserController userController, TrainingController trainingController,
-                             TrainingStatisticsController trainingStatisticsController, Scanner scanner) {
-        this.authorizationController = authorizationController;
-        this.adminController = adminController;
-        this.userController = userController;
-        this.trainingController = trainingController;
-        this.trainingStatisticsController = trainingStatisticsController;
-        this.scanner = scanner;
+    private final ViewAdminAccount viewAdminAccount;
+    private final ViewUserAccount viewUserAccount;
+
+    private final Scanner scanner = new Scanner(System.in);
+
+    @Autowired
+    public ViewAuthorization(AuthorizationHTTPMessenger authorizationHTTPMessenger, UserHTTPMessenger userHTTPMessenger, ViewAdminAccount viewAdminAccount, ViewUserAccount viewUserAccount) {
+        this.authorizationHTTPMessenger = authorizationHTTPMessenger;
+        this.userHTTPMessenger = userHTTPMessenger;
+        this.viewAdminAccount = viewAdminAccount;
+        this.viewUserAccount = viewUserAccount;
     }
 
     /**
@@ -54,19 +49,19 @@ public class ViewAuthorization {
         String authEmail = scanner.nextLine();
         System.out.println("Введите пароль:");
         String authPassword = scanner.nextLine();
-        try {
-            User user = authorizationController.login(authEmail, authPassword);
-            if (user.getRoles().contains(Roles.ADMIN)) {
-                ViewAdminAccount viewAdminAccount = new ViewAdminAccount(adminController, trainingController, scanner);
-                viewAdminAccount.adminAccountMenu();
-            } else if (user.getRoles().contains(Roles.USER)) {
-                ViewUserAccount viewUserAccount = new ViewUserAccount(trainingController, trainingStatisticsController, user, scanner);
-                viewUserAccount.userAccountMenu();
-            }
-        } catch (AuthorizationException e) {
-            System.err.println(e.getMessage());
+        AuthorizationDTO authorizationDTO = AuthorizationDTO.builder().email(authEmail).password(authPassword).build();
+        UserDTO userDTO = authorizationHTTPMessenger.login(authorizationDTO);
+        System.out.println(userDTO);
+        List<Roles> userRoles = authorizationHTTPMessenger.getUserRoles(userDTO);
+        if (hisRole(userRoles, "ADMIN")) {
+            viewAdminAccount.adminAccountMenu();
+        } else if (hisRole(userRoles, "USER")) {
+            viewUserAccount.userAccountMenu(userDTO);
+        } else {
+            System.err.println("Ошибка авторизации");
         }
     }
+
 
     /**
      * Метод для регистрации нового пользователя.
@@ -81,6 +76,12 @@ public class ViewAuthorization {
         String regLastName = scanner.nextLine();
         System.out.println("Введите пароль:");
         String regPassword = scanner.nextLine();
-        userController.createNewUser(regFirstName, regLastName, regEmail, regPassword);
+        RegistrationDTO regDTO = RegistrationDTO.builder().email(regEmail)
+                .firstName(regFirstName).lastName(regLastName).password(regPassword).build();
+        try {
+            userHTTPMessenger.registration(regDTO);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

@@ -1,27 +1,23 @@
 package out.menu.account;
 
-import in.controller.users.AdminController;
-import in.controller.training.TrainingController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
 /**
  * Класс ViewAdminAccount представляет меню для администратора.
  */
+@Component
 public class ViewAdminAccount {
 
     private final ViewUsers viewUsers;
-    private final Scanner scanner;
+    private final Scanner scanner = new Scanner(System.in);
 
-    /**
-     * Конструктор класса ViewAdminAccount.
-     * @param adminController Контроллер администратора.
-     * @param trainingController Контроллер тренировок.
-     * @param scanner Сканер для ввода данных.
-     */
-    public ViewAdminAccount(AdminController adminController, TrainingController trainingController, Scanner scanner) {
-        viewUsers = new ViewUsers(adminController, trainingController, scanner);
-        this.scanner = scanner;
+    @Autowired
+    public ViewAdminAccount(ViewUsers viewUsers) {
+        this.viewUsers = viewUsers;
     }
 
     /**

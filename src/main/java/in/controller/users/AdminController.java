@@ -1,8 +1,15 @@
 package in.controller.users;
 
-import model.Rights;
-import model.User;
+import entity.dto.UserDTO;
+import entity.model.Rights;
+import entity.model.User;
+import exceptions.RepositoryException;
+import exceptions.UserNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,7 +22,7 @@ public interface AdminController {
      *
      * @return Список всех пользователей.
      */
-    List<User> getAllUsers();
+    ResponseEntity<List<User>> getAllUsers();
 
     /**
      * Получает пользователя по его адресу электронной почты.
@@ -23,51 +30,60 @@ public interface AdminController {
      * @param email Адрес электронной почты пользователя для поиска.
      * @return Пользователь с указанным адресом электронной почты или null, если не найден.
      */
-    User getUser(String email);
+    ResponseEntity<UserDTO> getUser(String email) throws UserNotFoundException, IOException;
 
     /**
      * Изменяет имя пользователя.
      *
-     * @param user     Пользователь, у которого будет изменено имя.
-     * @param newName  Новое имя для пользователя.
+     * @param userDTO Пользователь, у которого будет изменено имя.
+     * @param newName Новое имя для пользователя.
      */
-    void changeUserName(User user, String newName);
+    ResponseEntity<UserDTO> changeUserName(UserDTO userDTO, String newName) throws RepositoryException;
 
     /**
      * Изменяет фамилию пользователя.
      *
-     * @param user        Пользователь, у которого будет изменена фамилия.
+     * @param userDTO     Пользователь, у которого будет изменена фамилия.
      * @param newLastName Новая фамилия пользователя.
      */
-    void changeUserLastName(User user, String newLastName);
+    ResponseEntity<UserDTO> changeUserLastName(UserDTO userDTO, String newLastName) throws RepositoryException;
 
     /**
      * Изменяет пароль пользователя.
      *
-     * @param user         Пользователь, у которого будет изменен пароль.
-     * @param newPassword  Новый пароль для пользователя.
+     * @param userDTO     Пользователь, у которого будет изменен пароль.
+     * @param newPassword Новый пароль для пользователя.
      */
-    void changeUserPassword(User user, String newPassword);
+    ResponseEntity<UserDTO> changeUserPassword(UserDTO userDTO, String newPassword) throws RepositoryException;
 
     /**
      * Активирует или деактивирует пользователя.
      *
-     * @param user  Пользователь, активационный статус которого будет изменен.
+     * @param userDTO Пользователь, активационный статус которого будет изменен.
      */
-    void changeUserActive(User user);
+    ResponseEntity<UserDTO> changeUserActive(UserDTO userDTO) throws RepositoryException;
 
     /**
      * Изменяет права пользователя.
      *
-     * @param user         Пользователь, права которого будут изменены.
-     * @param userRights   Новые права для пользователя.
+     * @param userDTO    Пользователь, права которого будут изменены.
+     * @param userRights Новые права для пользователя.
      */
-    void changeUserRights(User user, List<Rights> userRights);
+    ResponseEntity<UserDTO> changeUserRights(UserDTO userDTO, List<Rights> userRights) throws RepositoryException;
 
     /**
      * Удаляет пользователя.
      *
-     * @param user  Пользователь, который будет удален.
+     * @param email Пользователь, который будет удален.
+     * @return
      */
-    void deleteUser(User user);
+    ResponseEntity<Void> deleteUser(String email);
+
+    @GetMapping("/user/rights")
+    ResponseEntity<List<Rights>> getUserRights(@RequestParam("user") long id) throws IOException;
+
+    ResponseEntity<List<Rights>> getAllRights() throws IOException;
+
+    @GetMapping("/getUserRoles")
+    ResponseEntity<?> login(@RequestParam("userId") Long userId);
 }

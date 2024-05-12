@@ -1,10 +1,7 @@
 package out.menu;
 
-import in.controller.authorization.AuthorizationController;
-import in.controller.training.TrainingController;
-import in.controller.training.TrainingStatisticsController;
-import in.controller.users.AdminController;
-import in.controller.users.UserController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import out.menu.authorization.ViewAuthorization;
 
 import java.util.Scanner;
@@ -12,26 +9,19 @@ import java.util.Scanner;
 /**
  * Класс ViewMenu представляет собой меню приложения для управления авторизацией и регистрацией пользователей.
  */
+@Component
 public class ViewMenu {
 
     private final ViewAuthorization viewAuthorization;
 
+    private final Scanner scanner = new Scanner(System.in);
+
     /**
      * Конструктор класса ViewMenu.
-     * @param authorizationController Контроллер авторизации.
-     * @param adminController Контроллер администратора.
-     * @param userController Контроллер пользователя.
-     * @param trainingController Контроллер тренировок.
-     * @param trainingStatisticsController Контроллер статистики тренировок.
      */
-    public ViewMenu(AuthorizationController authorizationController,
-                    AdminController adminController,
-                    UserController userController,
-                    TrainingController trainingController,
-                    TrainingStatisticsController trainingStatisticsController) {
-        Scanner scanner = new Scanner(System.in);
-        this.viewAuthorization = new ViewAuthorization(authorizationController, adminController, userController,
-                trainingController, trainingStatisticsController, scanner);
+    @Autowired
+    public ViewMenu(ViewAuthorization viewAuthorization) {
+        this.viewAuthorization = viewAuthorization;
     }
 
     /**
@@ -57,7 +47,6 @@ public class ViewMenu {
      */
     public void processMainMenuChoice() {
         viewWelcomeMessage();
-        Scanner scanner = new Scanner(System.in);
         boolean startMenu = true;
         while (startMenu) {
             viewMainMenu();

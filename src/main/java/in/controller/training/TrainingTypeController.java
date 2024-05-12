@@ -1,8 +1,10 @@
 package in.controller.training;
 
-import model.User;
 
-import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
 
 /**
  * Интерфейс, определяющий методы для работы с типами тренировок.
@@ -12,16 +14,17 @@ public interface TrainingTypeController {
     /**
      * Получает список типов тренировок для указанного пользователя.
      *
-     * @param user пользователь, для которого нужно получить список типов тренировок
+     * @param id пользователь, для которого нужно получить список типов тренировок
      * @return список типов тренировок пользователя
      */
-    List<String> getTrainingTypes(User user);
+    ResponseEntity<?> getTrainingTypes(long id) throws IOException;
 
     /**
      * Сохраняет новый тип тренировки для указанного пользователя.
      *
-     * @param user               пользователь, для которого нужно сохранить новый тип тренировки
+     * @param id                 пользователь, для которого нужно сохранить новый тип тренировки
      * @param customTrainingType новый тип тренировки для сохранения
+     * @return
      */
-    void saveTrainingType(User user, String customTrainingType);
+    ResponseEntity<Void> saveTrainingType(long id, String customTrainingType) throws IOException;
 }
